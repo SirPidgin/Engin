@@ -11,12 +11,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Engine.h" />
-    <ClInclude Include="include\Window.h" />
+    <ClInclude Include="include\Engin\Engin.h" />
+    <ClInclude Include="include\Engin\Renderer\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\Engine.cpp" />
-    <ClCompile Include="source\Window.cpp" />
+    <ClCompile Include="source\Engin.cpp" />
+    <ClCompile Include="source\Renderer\Window.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{49BC93E7-D090-4970-A1E5-529ED78E6274}</ProjectGuid>
@@ -49,9 +49,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IntDir>$(ProjectDir)obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IntDir>$(ProjectDir)obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -70,6 +72,9 @@
       <AdditionalLibraryDirectories>$(ProjectDir)libraries</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2main.lib;SDL2test.lib;SDL2.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
     </Lib>
+    <PostBuildEvent>
+      <Command>XCOPY "$(MSBuildProjectDirectory)\binaries\*.dll" "$(TargetDir)" /D /K /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -92,6 +97,9 @@
       <AdditionalLibraryDirectories>$(ProjectDir)libraries</AdditionalLibraryDirectories>
       <AdditionalDependencies>SDL2main.lib;SDL2test.lib;SDL2.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
     </Lib>
+    <PostBuildEvent>
+      <Command>XCOPY "$(MSBuildProjectDirectory)\binaries\*.dll" "$(TargetDir)" /D /K /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -1,10 +1,9 @@
 #pragma once
-#include <iostream>
 
 namespace Engin
 {
 	void init();
 	void initGlew();
+	int pollEvents();
 	void quit();
-	void helloWorld();
 }
