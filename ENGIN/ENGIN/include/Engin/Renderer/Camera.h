@@ -32,6 +32,9 @@ namespace Engin
 			float zeroToOneInPixels;
 			float posX;
 			float posY;
+			bool DefaultZoomOn;
+
+			int width, height;
 
 			glm::vec3 x_axis;
 			glm::vec3 y_axis;
