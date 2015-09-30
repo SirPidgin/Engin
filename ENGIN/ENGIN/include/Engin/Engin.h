@@ -2,8 +2,14 @@
 
 namespace Engin
 {
+	namespace Renderer
+	{
+		class Window;
+	}
+
 	void init();
 	void initGlew();
-	int pollEvents();
+	int update();
+	void swapWindow(Renderer::Window& window);
 	void quit();
 }

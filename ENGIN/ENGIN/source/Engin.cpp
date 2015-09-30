@@ -4,11 +4,15 @@
 
 #include "Engin\Engin.h"
 
+#include "Engin\Renderer\Window.h"
+
+
 namespace Engin
 {
 	void init()
 	{
 		SDL_Init(SDL_INIT_EVERYTHING);
+		glClearColor(0, 0, 0, 1);
 	}
 
 
@@ -24,7 +28,7 @@ namespace Engin
 	}
 
 
-	int pollEvents()
+	int update()
 	{
 		SDL_Event event;
 		int returnValue = 1;
@@ -37,6 +41,13 @@ namespace Engin
 			}
 		}
 
+		glClear(GL_COLOR_BUFFER_BIT);
+
 		return returnValue;
+	}
+
+	void swapWindow(Renderer::Window& window)
+	{
+		SDL_GL_SwapWindow(window.getWindow());
 	}
 }
