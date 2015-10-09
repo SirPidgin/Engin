@@ -12,8 +12,7 @@ namespace Engin
 			Window() : window(nullptr) {}
 			~Window() {}
 
-			void createWindow(const std::string& title, int x, int y, int w, int h, Uint32 flags);
-			SDL_Window* getWindow();
+			void createWindow(const std::string& title, int x, int y, int w, int h);
 		private:
 			SDL_Window* window;
 		};

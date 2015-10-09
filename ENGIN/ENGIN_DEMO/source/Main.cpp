@@ -11,7 +11,7 @@ int main(int argc, char** argv)
 	Engin::Renderer::Window window;
 	Engin::Renderer::Camera camera;
 
-	window.createWindow("HAHAHAHA", 300, 300, 800, 600, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+	window.createWindow("HAHAHAHA", 300, 300, 800, 600);
 	camera.initCamera(window.getWindow(), 0.0f, 0.0f, 256.0f);
 
 	Engin::initGlew();
