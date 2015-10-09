@@ -45,9 +45,4 @@ namespace Engin
 
 		return returnValue;
 	}
-
-	void swapWindow(Renderer::Window& window)
-	{
-		SDL_GL_SwapWindow(window.getWindow());
-	}
 }

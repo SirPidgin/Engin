@@ -15,7 +15,7 @@ namespace Engin
 			Camera();
 			~Camera();
 
-			void initCamera(SDL_Window* window, float posX, float posY, float zeroToOneInPixels);
+			void initCamera(float windowWidth, float windowHeight, float posX, float posY, float zeroToOneInPixels);
 
 			glm::mat4 getVP();
 			void setPosition(float posX, float posY);
@@ -26,7 +26,6 @@ namespace Engin
 			float getDefaultZoomLevel();
 
 		private:
-			SDL_Window* window;
 			float zoomLevel;
 			float defaultZoomLevel;
 			float zeroToOneInPixels;
@@ -34,7 +33,7 @@ namespace Engin
 			float posY;
 			bool DefaultZoomOn;
 
-			int width, height;
+			float windowWidth, windowHeight;
 
 			glm::vec3 x_axis;
 			glm::vec3 y_axis;

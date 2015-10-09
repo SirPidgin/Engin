@@ -12,13 +12,13 @@ int main(int argc, char** argv)
 	Engin::Renderer::Camera camera;
 
 	window.createWindow("HAHAHAHA", 300, 300, 800, 600);
-	camera.initCamera(window.getWindow(), 0.0f, 0.0f, 256.0f);
+	camera.initCamera(800, 600, 0.0f, 0.0f, 256.0f);
 
 	Engin::initGlew();
 
 	while (Engin::update())
 	{
-		Engin::swapWindow(window);
+		window.swapWindow();
 	}
 	
 	Engin::quit();

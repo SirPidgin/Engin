@@ -10,6 +10,5 @@ namespace Engin
 	void init();
 	void initGlew();
 	int update();
-	void swapWindow(Renderer::Window& window);
 	void quit();
 }

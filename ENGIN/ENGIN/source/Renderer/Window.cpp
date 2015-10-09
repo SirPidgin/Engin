@@ -9,5 +9,9 @@ namespace Engin
 			window = SDL_CreateWindow(title.c_str(), x, y, w, h, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 			SDL_GLContext glcontext = SDL_GL_CreateContext(window);
 		}
+		void Window::swapWindow()
+		{
+			SDL_GL_SwapWindow(window);
+		}
 	}
 }

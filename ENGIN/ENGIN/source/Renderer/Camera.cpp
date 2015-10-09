@@ -12,9 +12,10 @@ namespace Engin
 		{
 		}
 
-		void Camera::initCamera(SDL_Window* window, float posX, float posY, float zeroToOneInPixels)
+		void Camera::initCamera(float windowWidth, float windowHeight, float posX, float posY, float zeroToOneInPixels)
 		{
-			this->window = window;
+			this->windowWidth = windowWidth;
+			this->windowHeight = windowHeight;
 			this->posX = posX;
 			this->posY = posY;
 			this->zeroToOneInPixels = zeroToOneInPixels;
@@ -23,9 +24,7 @@ namespace Engin
 			y_axis = glm::vec3(0.0, 1.0, 0.0);
 			z_axis = glm::vec3(0.0, 0.0, 1.0);
 
-			SDL_GetWindowSize(window, &width, &height);
-
-			this->posX = posX / (width / (this->zeroToOneInPixels * 2));
+			this->posX = posX / (windowWidth / (this->zeroToOneInPixels * 2));
 
 			cam_pos = glm::vec3(this->posX, this->posY, 0);
 			cam_up = y_axis;
@@ -33,11 +32,11 @@ namespace Engin
 			cam_front = -z_axis;
 			V = glm::lookAt(cam_pos, cam_pos + cam_front, cam_up);
 			
-			zoomLevel = width / (this->zeroToOneInPixels);
+			zoomLevel = windowWidth / (this->zeroToOneInPixels);
 			defaultZoomLevel = zoomLevel;
 			DefaultZoomOn = true;
 
-			P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*height / width);
+			P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*windowHeight / windowWidth);
 			VP = V*P;
 		}
 
@@ -50,12 +49,12 @@ namespace Engin
 		{
 			if (DefaultZoomOn)
 			{
-				this->posX = posX / (width / (zeroToOneInPixels * 2));
+				this->posX = posX / (windowWidth / (zeroToOneInPixels * 2));
 				this->posY = posY;
 			}
 			else //if not default zoom
 			{
-				this->posX = posX / (width / (zeroToOneInPixels * 2))*(defaultZoomLevel / zoomLevel);
+				this->posX = posX / (windowWidth / (zeroToOneInPixels * 2))*(defaultZoomLevel / zoomLevel);
 				this->posY = posY*(defaultZoomLevel / zoomLevel);
 			}
 
@@ -68,26 +67,26 @@ namespace Engin
 		{
 			if (DefaultZoomOn)
 			{
-				return glm::vec2(posX*(width / (zeroToOneInPixels * 2)), posY);
+				return glm::vec2(posX*(windowWidth / (zeroToOneInPixels * 2)), posY);
 			}
 			else //if not default
 			{
-				return glm::vec2(posX*(width / (zeroToOneInPixels * 2)) / (defaultZoomLevel / zoomLevel), posY / (defaultZoomLevel / zoomLevel));
+				return glm::vec2(posX*(windowWidth / (zeroToOneInPixels * 2)) / (defaultZoomLevel / zoomLevel), posY / (defaultZoomLevel / zoomLevel));
 			}
 		}
 
 		void Camera::setZoomLevel(float size)
 		{
 			this->zoomLevel = size;
-			P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*height / width);
+			P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*windowHeight / windowWidth);
 			VP = V*P;
 			DefaultZoomOn = false;
 		}
 
 		void Camera::setDefaultZoomLevel()
 		{
-			zoomLevel = width / (zeroToOneInPixels);
-			P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*height / width);
+			zoomLevel = windowWidth / (zeroToOneInPixels);
+			P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*windowHeight / windowWidth);
 			VP = V*P;
 			DefaultZoomOn = true;
 		}
