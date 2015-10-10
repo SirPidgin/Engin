@@ -1,9 +1,7 @@
 #pragma once
 
+#include <GL\glew.h>
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/transform.hpp>
-#include <SDL/SDL.h>
 
 namespace Engin
 {
@@ -15,34 +13,35 @@ namespace Engin
 			Camera();
 			~Camera();
 
-			void initCamera(float windowWidth, float windowHeight, float posX, float posY, float zeroToOneInPixels);
+			void initCamera(GLfloat windowWidth, GLfloat windowHeight, GLfloat posX, GLfloat posY, GLfloat coordUnitSize);
 
 			glm::mat4 getVP();
-			void setPosition(float posX, float posY);
+			void setPosition(GLfloat posX, GLfloat posY);
 			glm::vec2 getPosition();
-			void setZoomLevel(float size);
+			void setPositionCenter(GLfloat posX, GLfloat posY);
+			glm::vec2 getPositionCenter();
+			void setZoomLevel(GLfloat size);
 			void setDefaultZoomLevel();
-			float getZoomLevel();
-			float getDefaultZoomLevel();
+			void setRotation(GLfloat rotation);
+			GLfloat getRotation();
+			GLfloat getZoomLevel();
+			GLfloat getDefaultZoomLevel();
 
 		private:
-			float zoomLevel;
-			float defaultZoomLevel;
-			float zeroToOneInPixels;
-			float posX;
-			float posY;
+			GLfloat zoomLevel;
+			GLfloat defaultZoomLevel;
+			GLfloat coordUnitSize;
+			GLfloat posX;
+			GLfloat posY;
+			GLfloat rotation;
 			bool DefaultZoomOn;
 
-			float windowWidth, windowHeight;
+			GLfloat windowWidth, windowHeight;
 
-			glm::vec3 x_axis;
-			glm::vec3 y_axis;
-			glm::vec3 z_axis;
-
-			glm::vec3 cam_pos;
-			glm::vec3 cam_up;
-			glm::vec3 cam_right;
-			glm::vec3 cam_front;
+			glm::vec3 camPos;
+			glm::vec3 camUp;
+			glm::vec3 camRight;
+			glm::vec3 camFront;
 
 			glm::mat4 V;
 			glm::mat4 P;

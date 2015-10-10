@@ -3,8 +3,6 @@
 #include <Engin\Renderer\Camera.h>
 #include <iostream>
 
-#include <GL\glew.h>
-
 int main(int argc, char** argv)
 {
 	Engin::init();
@@ -12,7 +10,7 @@ int main(int argc, char** argv)
 	Engin::Renderer::Camera camera;
 
 	window.createWindow("HAHAHAHA", 300, 300, 800, 600);
-	camera.initCamera(800, 600, 0.0f, 0.0f, 256.0f);
+	camera.initCamera(800, 600, 0.0f, 0.0f, 256);
 
 	Engin::initGlew();
 
