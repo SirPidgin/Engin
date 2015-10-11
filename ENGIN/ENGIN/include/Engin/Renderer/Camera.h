@@ -13,7 +13,7 @@ namespace Engin
 			Camera();
 			~Camera();
 
-			void initCamera(GLfloat windowWidth, GLfloat windowHeight, GLfloat posX, GLfloat posY, GLfloat coordUnitSize);
+			void initCamera(GLfloat windowWidth, GLfloat windowHeight, GLfloat posX, GLfloat posY, GLfloat coordUnitSize, GLfloat viewPortX, GLfloat viewPortY, GLfloat viewPortWidth, GLfloat viewPortHeight);
 
 			glm::mat4 getVP();
 			void setPosition(GLfloat posX, GLfloat posY);
@@ -46,6 +46,8 @@ namespace Engin
 			glm::mat4 V;
 			glm::mat4 P;
 			glm::mat4 VP;
+
+			glm::vec4 viewPort;
 		};
 	}
 }

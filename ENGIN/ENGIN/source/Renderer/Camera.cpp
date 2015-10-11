@@ -15,8 +15,8 @@ namespace Engin
 		{
 		}
 
-		//Sprites have to have the same coordinate unit size = multiply sprite coordinates with the same number. Dont place this comment in the header...
-		void Camera::initCamera(GLfloat windowWidth, GLfloat windowHeight, GLfloat posX, GLfloat posY, GLfloat coordUnitSize)
+		//Sprites have to have the same coordinate unit size = multiply sprite coordinates with the same number. Dont place this comment on header...
+		void Camera::initCamera(GLfloat windowWidth, GLfloat windowHeight, GLfloat posX, GLfloat posY, GLfloat coordUnitSize, GLfloat viewPortX, GLfloat viewPortY, GLfloat viewPortWidth, GLfloat viewPortHeight)
 		{
 			this->windowWidth = windowWidth;
 			this->windowHeight = windowHeight;
@@ -24,6 +24,8 @@ namespace Engin
 			this->posY = posY;
 			this->coordUnitSize = coordUnitSize;
 			this->rotation = 0.0f;
+
+			viewPort = glm::vec4(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 
 			glm::vec3 xAxis = glm::vec3(1.0, 0.0, 0.0);
 			glm::vec3 yAxis = glm::vec3(0.0, 1.0, 0.0);
@@ -48,6 +50,7 @@ namespace Engin
 
 		glm::mat4 Camera::getVP()
 		{
+			glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
 			return VP;
 		}
 
