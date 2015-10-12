@@ -48,10 +48,6 @@ namespace Engin
 			VP = V*P*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
 		}
 
-		glm::mat4 Camera::getVP()
-		{
-			return VP;
-		}
 		void Camera::activateViewPort()
 		{
 			glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);

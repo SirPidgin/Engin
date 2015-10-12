@@ -15,7 +15,7 @@ namespace Engin
 
 			void initCamera(GLfloat viewPortX, GLfloat viewPortY, GLfloat viewPortWidth, GLfloat viewPortHeight, GLfloat worldX, GLfloat worldY, GLfloat coordUnitSize);
 
-			glm::mat4 getVP();
+			const glm::mat4& getVP() const { return VP; };
 			void activateViewPort();
 			void setPosition(GLfloat worldX, GLfloat worldY);
 			glm::vec2 getPosition();

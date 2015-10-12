@@ -12,13 +12,13 @@ namespace Engin
 	void init()
 	{
 		SDL_Init(SDL_INIT_EVERYTHING);
-		glClearColor(0, 0, 0, 1);
 	}
 
 
 	void initGlew()
 	{
 		glewInit();
+		glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
 	}
 
 
