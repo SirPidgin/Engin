@@ -15,59 +15,62 @@ namespace Engin
 		{
 		}
 
-		//Sprites have to have the same coordinate unit size = multiply sprite coordinates with the same number. Dont place this comment on header...
-		void Camera::initCamera(GLfloat windowWidth, GLfloat windowHeight, GLfloat posX, GLfloat posY, GLfloat coordUnitSize, GLfloat viewPortX, GLfloat viewPortY, GLfloat viewPortWidth, GLfloat viewPortHeight)
+		void Camera::initCamera(GLfloat viewPortX, GLfloat viewPortY, GLfloat viewPortWidth, GLfloat viewPortHeight, GLfloat worldX, GLfloat worldY, GLfloat coordUnitSize)
 		{
-			this->windowWidth = windowWidth;
-			this->windowHeight = windowHeight;
-			this->posX = posX;
-			this->posY = posY;
+			this->viewPortWidth = viewPortWidth;
+			this->viewPortHeight = viewPortHeight;
+			this->worldX = worldX;
+			this->worldY = worldY;
 			this->coordUnitSize = coordUnitSize;
 			this->rotation = 0.0f;
 
 			viewPort = glm::vec4(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
+			activateViewPort();
 
 			glm::vec3 xAxis = glm::vec3(1.0, 0.0, 0.0);
 			glm::vec3 yAxis = glm::vec3(0.0, 1.0, 0.0);
 			glm::vec3 zAxis = glm::vec3(0.0, 0.0, 1.0);
 
-			this->posX = posX / (windowWidth / (this->coordUnitSize * 2));
+			this->worldX = worldX / (viewPortWidth / (this->coordUnitSize * 2));
 
-			camPos = glm::vec3(this->posX, this->posY, 0);
+			camPos = glm::vec3(this->worldX, this->worldY, 0);
 			camUp = yAxis;
 			camRight = xAxis;
 			camFront = -zAxis;
 
 			V = glm::lookAt(camPos, camPos + camFront, camUp);
 
-			zoomLevel = windowWidth;
+			zoomLevel = viewPortWidth;
 			defaultZoomLevel = zoomLevel;
 			DefaultZoomOn = true;
 
-			P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*windowHeight / windowWidth);
+			P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*viewPortHeight / viewPortWidth);
 			VP = V*P*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
 		}
 
 		glm::mat4 Camera::getVP()
 		{
-			glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
 			return VP;
 		}
+		void Camera::activateViewPort()
+		{
+			glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
+		}
 
-		void Camera::setPosition(GLfloat posX, GLfloat posY)
+		void Camera::setPosition(GLfloat worldX, GLfloat worldY)
 		{
 			if (DefaultZoomOn)
 			{
-				this->posX = posX / (windowWidth / (coordUnitSize * 2));
-				this->posY = posY;
+				this->worldX = worldX / (viewPortWidth / (coordUnitSize * 2));
+				this->worldY = worldY;
 			}
 			else
 			{
-				this->posX = posX / (windowWidth / (coordUnitSize * 2))*(defaultZoomLevel / zoomLevel);
-				this->posY = posY*(defaultZoomLevel / zoomLevel);
+				this->worldX = worldX / (viewPortWidth / (coordUnitSize * 2))*(defaultZoomLevel / zoomLevel);
+				this->worldY = worldY*(defaultZoomLevel / zoomLevel);
 			}
 
-			camPos = glm::vec3(this->posX, this->posY, 0);
+			camPos = glm::vec3(this->worldX, this->worldY, 0);
 			V = glm::lookAt(camPos, camPos + camFront, camUp);
 			VP = V*P*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
 		}
@@ -76,28 +79,28 @@ namespace Engin
 		{
 			if (DefaultZoomOn)
 			{
-				return glm::vec2(posX*(windowWidth / (coordUnitSize * 2)), posY);
+				return glm::vec2(worldX*(viewPortWidth / (coordUnitSize * 2)), worldY);
 			}
 			else
 			{
-				return glm::vec2(posX*(windowWidth / (coordUnitSize * 2)) / (defaultZoomLevel / zoomLevel), posY / (defaultZoomLevel / zoomLevel));
+				return glm::vec2(worldX*(viewPortWidth / (coordUnitSize * 2)) / (defaultZoomLevel / zoomLevel), worldY / (defaultZoomLevel / zoomLevel));
 			}
 		}
 
-		void Camera::setPositionCenter(GLfloat posX, GLfloat posY)
+		void Camera::setPositionCenter(GLfloat worldX, GLfloat worldY)
 		{
 			if (DefaultZoomOn)
 			{
-				this->posX = posX / (windowWidth / (coordUnitSize * 2)) - 1.0f;
-				this->posY = posY - 1.0f;
+				this->worldX = worldX / (viewPortWidth / (coordUnitSize * 2)) - 1.0f;
+				this->worldY = worldY - 1.0f;
 			}
 			else
 			{
-				this->posX = posX / (windowWidth / (coordUnitSize * 2))*(defaultZoomLevel / zoomLevel) - 1.0f;
-				this->posY = posY*(defaultZoomLevel / zoomLevel) - 1.0f;
+				this->worldX = worldX / (viewPortWidth / (coordUnitSize * 2))*(defaultZoomLevel / zoomLevel) - 1.0f;
+				this->worldY = worldY*(defaultZoomLevel / zoomLevel) - 1.0f;
 			}
 
-			camPos = glm::vec3(this->posX, this->posY, 0);
+			camPos = glm::vec3(this->worldX, this->worldY, 0);
 			V = glm::lookAt(camPos, camPos + camFront, camUp);
 			VP = V*P*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
 		}
@@ -106,20 +109,20 @@ namespace Engin
 		{
 			if (DefaultZoomOn)
 			{
-				return glm::vec2(posX*(windowWidth / (coordUnitSize * 2)) + 1.0f, posY + 1.0f);
+				return glm::vec2(worldX*(viewPortWidth / (coordUnitSize * 2)) + 1.0f, worldY + 1.0f);
 			}
 			else
 			{
-				return glm::vec2(posX*(windowWidth / (coordUnitSize * 2)) / (defaultZoomLevel / zoomLevel) + 1.0f, posY / (defaultZoomLevel / zoomLevel) + 1.0f);
+				return glm::vec2(worldX*(viewPortWidth / (coordUnitSize * 2)) / (defaultZoomLevel / zoomLevel) + 1.0f, worldY / (defaultZoomLevel / zoomLevel) + 1.0f);
 			}
 		}
 
 		void Camera::setZoomLevel(GLfloat size)
 		{
-			if (size*windowWidth != zoomLevel)
+			if (size*viewPortWidth != zoomLevel)
 			{
-				this->zoomLevel = size*windowWidth;
-				P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*windowHeight / windowWidth);
+				this->zoomLevel = size*viewPortWidth;
+				P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*viewPortHeight / viewPortWidth);
 				VP = V*P*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
 				DefaultZoomOn = false;
 			}
@@ -127,13 +130,13 @@ namespace Engin
 
 		void Camera::setDefaultZoomLevel()
 		{
-			zoomLevel = windowWidth;
-			P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*windowHeight / windowWidth);
+			zoomLevel = viewPortWidth;
+			P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*viewPortHeight / viewPortWidth);
 			VP = V*P*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
 			DefaultZoomOn = true;
 		}
 
-		void Camera::setRotation(GLfloat rotation)
+		void Camera::rotate(GLfloat rotation)
 		{
 			this->rotation = glm::radians(rotation);
 			VP = VP*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));

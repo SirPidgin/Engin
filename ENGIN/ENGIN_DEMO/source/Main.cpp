@@ -10,7 +10,7 @@ int main(int argc, char** argv)
 	Engin::Renderer::Camera camera;
 
 	window.createWindow("HAHAHAHA", 300, 300, 800, 600);
-	camera.initCamera(800, 600, 0.0f, 0.0f, 256, 0, 0, 800, 600);
+	camera.initCamera(0, 0, 800, 600, 0, 0, 1);
 
 	Engin::initGlew();
 

@@ -13,16 +13,17 @@ namespace Engin
 			Camera();
 			~Camera();
 
-			void initCamera(GLfloat windowWidth, GLfloat windowHeight, GLfloat posX, GLfloat posY, GLfloat coordUnitSize, GLfloat viewPortX, GLfloat viewPortY, GLfloat viewPortWidth, GLfloat viewPortHeight);
+			void initCamera(GLfloat viewPortX, GLfloat viewPortY, GLfloat viewPortWidth, GLfloat viewPortHeight, GLfloat worldX, GLfloat worldY, GLfloat coordUnitSize);
 
 			glm::mat4 getVP();
-			void setPosition(GLfloat posX, GLfloat posY);
+			void activateViewPort();
+			void setPosition(GLfloat worldX, GLfloat worldY);
 			glm::vec2 getPosition();
-			void setPositionCenter(GLfloat posX, GLfloat posY);
+			void setPositionCenter(GLfloat worldX, GLfloat worldY);
 			glm::vec2 getPositionCenter();
 			void setZoomLevel(GLfloat size);
 			void setDefaultZoomLevel();
-			void setRotation(GLfloat rotation);
+			void rotate(GLfloat rotation);
 			GLfloat getRotation();
 			GLfloat getZoomLevel();
 			GLfloat getDefaultZoomLevel();
@@ -31,12 +32,12 @@ namespace Engin
 			GLfloat zoomLevel;
 			GLfloat defaultZoomLevel;
 			GLfloat coordUnitSize;
-			GLfloat posX;
-			GLfloat posY;
+			GLfloat worldX;
+			GLfloat worldY;
 			GLfloat rotation;
 			bool DefaultZoomOn;
 
-			GLfloat windowWidth, windowHeight;
+			GLfloat viewPortWidth, viewPortHeight;
 
 			glm::vec3 camPos;
 			glm::vec3 camUp;
