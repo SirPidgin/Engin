@@ -21,6 +21,8 @@ namespace Engin
 			Vertex(Vertex&& other) { position = std::move(other.position); color = std::move(other.color); }
 		};
 
+		// TODO (eeneku): Batch should also make use of indices
+
 		class Batch
 		{
 		public:

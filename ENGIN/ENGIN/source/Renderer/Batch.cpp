@@ -48,7 +48,7 @@ namespace Engin
 
 			GLuint uniformMVP = glGetUniformLocation(shader->getProgram(), "MVP");
 
-			glUniformMatrix4fv(uniformMVP, 1, GL_FALSE, glm::value_ptr(camera.getP()));
+			glUniformMatrix4fv(uniformMVP, 1, GL_FALSE, glm::value_ptr(camera.getVP()));
 
 			glDrawArrays(GL_TRIANGLES, 0, currentVertex);
 
@@ -57,8 +57,6 @@ namespace Engin
 			shader->unbind();
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-			currentVertex = 0;
 		}
 
 		void Batch::drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, const Color& color, GLfloat depth)
