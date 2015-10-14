@@ -4,6 +4,12 @@
 #include <Engin\Renderer\Batch.h>
 #include <Engin\Renderer\Color.h>
 
+namespace //camera test
+{
+	GLfloat alpha = 0.0f;
+}
+
+
 int main(int argc, char** argv)
 {
 	Engin::init();
@@ -23,6 +29,12 @@ int main(int argc, char** argv)
 	{
 		batch.drawTriangle(500.0f, 45.0f, 750.0f, 250.0f, 65.0f, 480.0f, Engin::Renderer::clrRed, 0.0f);
 		batch.drawTriangle(10.0f, 10.0f, 100.0f, 10.0f, 50.0f, 50.0f, Engin::Renderer::clrGreen, 0.0f);
+
+		//camera test
+		camera.setZoomLevel(0.9f);
+		camera.setRotation(20.0f);
+		camera.setPosition(400.0f * cos(alpha), 0.0f);
+		alpha += 0.01f;
 
 		camera.activateViewPort();
 		batch.flush(camera);
