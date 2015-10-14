@@ -8,7 +8,6 @@ namespace Engin
 	}
 
 	void init();
-	void initGlew();
 	int update();
 	void quit();
 }

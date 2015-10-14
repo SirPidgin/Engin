@@ -5,6 +5,7 @@
 #include <glm\glm.hpp>
 #include "Camera.h"
 #include "Color.h"
+#include "Engin\Resources\Shader.h"
 
 namespace Engin
 {
@@ -23,7 +24,7 @@ namespace Engin
 		class Batch
 		{
 		public:
-			Batch(size_t maxVertices = defaultBatchSize);
+			Batch(Resources::Shader* shader, size_t maxVertices = defaultBatchSize);
 			~Batch();
 
 			void draw(const std::vector<Vertex>& vertices);
@@ -38,6 +39,8 @@ namespace Engin
 
 			GLuint VBO;
 			GLuint currentVertex;
+
+			Resources::Shader* shader;
 		};
 	}
 }

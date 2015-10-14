@@ -16,12 +16,14 @@
     <ClInclude Include="include\Engin\Renderer\Camera.h" />
     <ClInclude Include="include\Engin\Renderer\Color.h" />
     <ClInclude Include="include\Engin\Renderer\Window.h" />
+    <ClInclude Include="include\Engin\Resources\Shader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Engin.cpp" />
     <ClCompile Include="source\Renderer\Batch.cpp" />
     <ClCompile Include="source\Renderer\Camera.cpp" />
     <ClCompile Include="source\Renderer\Window.cpp" />
+    <ClCompile Include="source\Resources\Shader.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{49BC93E7-D090-4970-A1E5-529ED78E6274}</ProjectGuid>
