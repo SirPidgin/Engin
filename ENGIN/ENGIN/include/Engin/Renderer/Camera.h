@@ -36,7 +36,12 @@ namespace Engin
 			GLfloat worldX;
 			GLfloat worldY;
 			GLfloat rotation;
-			bool DefaultZoomOn;
+			GLfloat coordMultipX;
+			GLfloat coordMultipY;
+			GLfloat getMethodCoordMultipX;
+			GLfloat getMethodCoordMultipY;
+
+			GLfloat zoomCoordMultipMultip;
 
 			GLfloat viewPortWidth, viewPortHeight;
 
