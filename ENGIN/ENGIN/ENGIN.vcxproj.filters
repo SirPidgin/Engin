@@ -28,20 +28,20 @@
     <Filter Include="Header Files\Physics">
       <UniqueIdentifier>{b4fde06a-f69a-4971-8252-d71f410d4bef}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Debug">
-      <UniqueIdentifier>{49cccf43-6920-4e48-8637-90cc9ed15b78}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Audio">
       <UniqueIdentifier>{f0304add-b2b9-4b81-b26e-30fcfdd6aade}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{a0dbe176-81fb-45d9-8b0c-2ab725e2f9f4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Debug">
-      <UniqueIdentifier>{c93350a5-f2ba-4cfb-9e00-d1c398960e34}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Physics">
       <UniqueIdentifier>{33e5de78-64a2-4b5c-a04e-1a74f501f975}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Resources">
+      <UniqueIdentifier>{1178caff-a08e-4949-ad27-bd61f3856239}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Resources">
+      <UniqueIdentifier>{e91399c7-a0eb-43e3-b8d5-3d44182d2b0c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -60,6 +60,9 @@
     <ClInclude Include="include\Engin\Renderer\Color.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engin\Resources\Shader.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Engin.cpp">
@@ -73,6 +76,9 @@
     </ClCompile>
     <ClCompile Include="source\Renderer\Batch.cpp">
       <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Resources\Shader.cpp">
+      <Filter>Source Files\Resources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

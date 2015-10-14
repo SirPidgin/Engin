@@ -1,12 +1,13 @@
 #include "Engin\Renderer\Batch.h"
 
 #include <cassert>
+#include <glm\gtc\type_ptr.hpp>
 
 namespace Engin
 {
 	namespace Renderer
 	{
-		Batch::Batch(size_t maxVertices) : currentVertex(0)
+		Batch::Batch(Resources::Shader* shader, size_t maxVertices) : currentVertex(0), shader(shader)
 		{
 			assert(maxVertices > 0);
 
@@ -42,20 +43,22 @@ namespace Engin
 			glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offsetof(Vertex, position)));
 			glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offsetof(Vertex, color)));
 
-			//shader->bind();
+			shader->bind();
 			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vertex) * currentVertex, (GLvoid*)(vertices.data()));
 
-			//GLuint uniformMVP = glGetUniformLocation(shader->getProgram(), "MVP");
+			GLuint uniformMVP = glGetUniformLocation(shader->getProgram(), "MVP");
 
-			//glUniformMatrix4fv(uniformMVP, 1, GL_FALSE, glm::value_ptr(projection));
+			glUniformMatrix4fv(uniformMVP, 1, GL_FALSE, glm::value_ptr(camera.getP()));
 
 			glDrawArrays(GL_TRIANGLES, 0, currentVertex);
 
 			glDisableVertexAttribArray(0);
 			glDisableVertexAttribArray(1);
-			//shader->unbind();
+			shader->unbind();
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			currentVertex = 0;
 		}
 
 		void Batch::drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, const Color& color, GLfloat depth)
