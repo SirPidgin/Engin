@@ -25,17 +25,16 @@ namespace Engin
 			this->rotation = 0.0f;
 
 			viewPort = glm::vec4(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
-			activateViewPort();
 
 			glm::vec3 xAxis = glm::vec3(1.0, 0.0, 0.0);
 			glm::vec3 yAxis = glm::vec3(0.0, 1.0, 0.0);
 			glm::vec3 zAxis = glm::vec3(0.0, 0.0, 1.0);
 
-			coordMultipX = 1 / (viewPortWidth / (this->coordUnitSize * 2));
-			coordMultipY = 1;
+			coordMultipX = 1 / (this->viewPortWidth / (this->coordUnitSize * 2));
+			coordMultipY = 1 / (this->viewPortHeight / (this->coordUnitSize * 2));
 
-			getMethodCoordMultipX = (viewPortWidth / (coordUnitSize * 2));
-			getMethodCoordMultipY = 1;
+			getMethodCoordMultipX = (this->viewPortWidth / (this->coordUnitSize * 2));
+			getMethodCoordMultipY = (this->viewPortHeight / (this->coordUnitSize * 2));
 
 			this->worldX = worldX * coordMultipX;
 			this->worldY = worldY * coordMultipY;
@@ -47,11 +46,15 @@ namespace Engin
 
 			V = glm::lookAt(camPos, camPos + camFront, camUp);
 
-			zoomLevel = viewPortWidth;
-			defaultZoomLevel = zoomLevel;
+			/*zoomLevel = viewPortWidth;
+			defaultZoomLevel = zoomLevel;*/
 
-			P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*viewPortHeight / viewPortWidth);
-			VP = V*P*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
+			setPosition(this->worldX, this->worldY);
+			setRotation(this->rotation);
+			setDefaultZoomLevel();
+
+			P = glm::ortho(0.0f, viewPortWidth, 0.0f, /*zoomLevel**/viewPortHeight /*/ viewPortWidth*/);
+			VP = V*P/**glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0))*/;
 		}
 
 		void Camera::activateViewPort()
@@ -64,9 +67,11 @@ namespace Engin
 			this->worldX = worldX*coordMultipX;
 			this->worldY = worldY*coordMultipY;
 
-			camPos = glm::vec3(this->worldX, this->worldY, 0);
-			V = glm::lookAt(camPos, camPos + camFront, camUp);
-			VP = V*P*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
+			positionMatrix = glm::translate(glm::vec3(this->worldX, this->worldY, 0.0f));
+
+			/*camPos = glm::vec3(this->worldX, this->worldY, 0);
+			V = glm::lookAt(camPos, camPos + camFront, camUp);*/
+			//VP = VP*glm::translate(glm::vec3(this->worldX, this->worldY, 0.0f));
 		}
 
 		glm::vec2 Camera::getPosition()
@@ -90,9 +95,12 @@ namespace Engin
 			this->worldX = worldX * coordMultipX - 1.0f;
 			this->worldY = worldY * coordMultipY - 1.0f;
 
-			camPos = glm::vec3(this->worldX, this->worldY, 0);
-			V = glm::lookAt(camPos, camPos + camFront, camUp);
-			VP = V*P*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
+			/*camPos = glm::vec3(this->worldX, this->worldY, 0);
+			V = glm::lookAt(camPos, camPos + camFront, camUp);*/
+
+			positionMatrix = glm::translate(glm::vec3(this->worldX - 1.0f, this->worldY - 1.0f, 0.0f));
+
+			//VP = VP*glm::translate(glm::vec3(this->worldX-1.0f, this->worldY - 1.0f, 0.0f));
 		}
 
 		glm::vec2 Camera::getPositionCenter()
@@ -102,29 +110,31 @@ namespace Engin
 
 		void Camera::setZoomLevel(GLfloat size)
 		{
-			this->zoomLevel = size*viewPortWidth;
+			//this->zoomLevel = size*viewPortWidth;
 
-			coordMultipX = 1 / (viewPortWidth / (coordUnitSize * 2))*(defaultZoomLevel / zoomLevel);
-			coordMultipY = (defaultZoomLevel / zoomLevel);
+			coordMultipX = 1 / (viewPortWidth / (coordUnitSize * 2))/**(defaultZoomLevel / zoomLevel)*/;
+			//coordMultipY = (defaultZoomLevel / zoomLevel);
 
-			getMethodCoordMultipX = 1 / coordMultipX / (defaultZoomLevel / zoomLevel);
-			getMethodCoordMultipY = 1 / coordMultipY / (defaultZoomLevel / zoomLevel);
+			getMethodCoordMultipX = 1 / coordMultipX /*/ (defaultZoomLevel / zoomLevel)*/;
+			getMethodCoordMultipY = 1 / coordMultipY /*/ (defaultZoomLevel / zoomLevel)*/;
 
-			P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*viewPortHeight / viewPortWidth);
-			VP = V*P*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
+			scaleMatrix = glm::scale(glm::vec3(size));
+
+			//P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*viewPortHeight / viewPortWidth);
+			//VP = V*P*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
+			//VP = VP*glm::scale(glm::vec3(size));
 		}
 
 		void Camera::setDefaultZoomLevel()
 		{
-			zoomLevel = viewPortWidth;
-			P = glm::ortho(0.0f, zoomLevel, 0.0f, zoomLevel*viewPortHeight / viewPortWidth);
-			VP = V*P*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
+			scaleMatrix = glm::scale(glm::vec3(1.0f));
 		}
 
-		void Camera::rotate(GLfloat rotation)
+		void Camera::setRotation(GLfloat rotation)
 		{
 			this->rotation = glm::radians(rotation);
-			VP = VP*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
+			rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+			//VP = VP*glm::rotate(this->rotation, glm::vec3(0.0, 0.0, 1.0));
 		}
 
 		GLfloat Camera::getRotation()
@@ -132,7 +142,7 @@ namespace Engin
 			return rotation;
 		}
 
-		GLfloat Camera::getDefaultZoomLevel()
+		/*GLfloat Camera::getDefaultZoomLevel()
 		{
 			return defaultZoomLevel;
 		}
@@ -140,6 +150,6 @@ namespace Engin
 		GLfloat Camera::getZoomLevel()
 		{
 			return zoomLevel;
-		}
+		}*/
 	}
 }

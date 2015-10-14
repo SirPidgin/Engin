@@ -3,7 +3,6 @@
 #include <Engin\Renderer\Camera.h>
 #include <Engin\Renderer\Batch.h>
 #include <Engin\Renderer\Color.h>
-#include <iostream>
 
 int main(int argc, char** argv)
 {

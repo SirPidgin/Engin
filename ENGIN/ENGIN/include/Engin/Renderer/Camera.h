@@ -15,7 +15,7 @@ namespace Engin
 
 			void initCamera(GLfloat viewPortX, GLfloat viewPortY, GLfloat viewPortWidth, GLfloat viewPortHeight, GLfloat worldX, GLfloat worldY, GLfloat coordUnitSize);
 
-			const glm::mat4& getVP() const { return VP; }
+			const glm::mat4& getVP() const { return VP/**positionMatrix*rotationMatrix*scaleMatrix*/; }
 			const glm::mat4& getP() const { return P; }
 			void activateViewPort();
 			void setPosition(GLfloat worldX, GLfloat worldY);
@@ -24,14 +24,14 @@ namespace Engin
 			glm::vec2 getPositionCenter();
 			void setZoomLevel(GLfloat size);
 			void setDefaultZoomLevel();
-			void rotate(GLfloat rotation);
+			void setRotation(GLfloat rotation);
 			GLfloat getRotation();
-			GLfloat getZoomLevel();
-			GLfloat getDefaultZoomLevel();
+			/*GLfloat getZoomLevel();
+			GLfloat getDefaultZoomLevel();*/
 
 		private:
-			GLfloat zoomLevel;
-			GLfloat defaultZoomLevel;
+			/*GLfloat zoomLevel;
+			GLfloat defaultZoomLevel;*/
 			GLfloat coordUnitSize;
 			GLfloat worldX;
 			GLfloat worldY;
@@ -40,8 +40,6 @@ namespace Engin
 			GLfloat coordMultipY;
 			GLfloat getMethodCoordMultipX;
 			GLfloat getMethodCoordMultipY;
-
-			GLfloat zoomCoordMultipMultip;
 
 			GLfloat viewPortWidth, viewPortHeight;
 
@@ -53,6 +51,10 @@ namespace Engin
 			glm::mat4 V;
 			glm::mat4 P;
 			glm::mat4 VP;
+
+			glm::mat4 scaleMatrix;
+			glm::mat4 positionMatrix;
+			glm::mat4 rotationMatrix;
 
 			glm::vec4 viewPort;
 		};
