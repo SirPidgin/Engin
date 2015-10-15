@@ -43,6 +43,12 @@
     <Filter Include="Source Files\Resources">
       <UniqueIdentifier>{e91399c7-a0eb-43e3-b8d5-3d44182d2b0c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\HID">
+      <UniqueIdentifier>{e7a37d7f-f91c-40ba-bba5-020753254c2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\HID">
+      <UniqueIdentifier>{e40de104-c958-4d03-9403-12ee56fc50a0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engin\Engin.h">
@@ -63,6 +69,15 @@
     <ClInclude Include="include\Engin\Resources\Shader.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engin\HID\GamepadInput.h">
+      <Filter>Header Files\HID</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\HID\KeyboardInput.h">
+      <Filter>Header Files\HID</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\HID\MouseInput.h">
+      <Filter>Header Files\HID</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Engin.cpp">
@@ -79,6 +94,15 @@
     </ClCompile>
     <ClCompile Include="source\Resources\Shader.cpp">
       <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\HID\GamepadInput.cpp">
+      <Filter>Source Files\HID</Filter>
+    </ClCompile>
+    <ClCompile Include="source\HID\KeyboardInput.cpp">
+      <Filter>Source Files\HID</Filter>
+    </ClCompile>
+    <ClCompile Include="source\HID\MouseInput.cpp">
+      <Filter>Source Files\HID</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

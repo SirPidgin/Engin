@@ -12,6 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engin\Engin.h" />
+    <ClInclude Include="include\Engin\HID\GamepadInput.h" />
+    <ClInclude Include="include\Engin\HID\KeyboardInput.h" />
+    <ClInclude Include="include\Engin\HID\MouseInput.h" />
     <ClInclude Include="include\Engin\Renderer\Batch.h" />
     <ClInclude Include="include\Engin\Renderer\Camera.h" />
     <ClInclude Include="include\Engin\Renderer\Color.h" />
@@ -20,6 +23,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Engin.cpp" />
+    <ClCompile Include="source\HID\GamepadInput.cpp" />
+    <ClCompile Include="source\HID\KeyboardInput.cpp" />
+    <ClCompile Include="source\HID\MouseInput.cpp" />
     <ClCompile Include="source\Renderer\Batch.cpp" />
     <ClCompile Include="source\Renderer\Camera.cpp" />
     <ClCompile Include="source\Renderer\Window.cpp" />
