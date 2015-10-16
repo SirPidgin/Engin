@@ -12,6 +12,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engin\Engin.h" />
+    <ClInclude Include="include\Engin\Game\Scene.h" />
+    <ClInclude Include="include\Engin\Game\SceneManager.h" />
     <ClInclude Include="include\Engin\Renderer\Batch.h" />
     <ClInclude Include="include\Engin\Renderer\Camera.h" />
     <ClInclude Include="include\Engin\Renderer\Color.h" />
@@ -20,6 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Engin.cpp" />
+    <ClCompile Include="source\Game\SceneManager.cpp" />
     <ClCompile Include="source\Renderer\Batch.cpp" />
     <ClCompile Include="source\Renderer\Camera.cpp" />
     <ClCompile Include="source\Renderer\Window.cpp" />
