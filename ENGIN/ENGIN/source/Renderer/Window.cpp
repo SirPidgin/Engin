@@ -25,6 +25,8 @@ namespace Engin
 			glewInit();
 			glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
 
+			glEnable(GL_DEPTH_TEST);
+
 			glGenVertexArrays(1, &VAO);
 			glBindVertexArray(VAO);
 		}

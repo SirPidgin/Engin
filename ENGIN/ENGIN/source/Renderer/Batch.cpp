@@ -68,5 +68,18 @@ namespace Engin
 
 			draw(vertices);
 		}
+
+		void Batch::drawQuad(GLfloat x, GLfloat y, GLfloat width, GLfloat height, const Color& color, GLfloat depth)
+		{
+			std::vector<Vertex> vertices = {
+				Vertex(glm::vec3(x, y + height, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
+				Vertex(glm::vec3(x + width, y + height, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
+				Vertex(glm::vec3(x + width, y, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
+				Vertex(glm::vec3(x, y + height, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
+				Vertex(glm::vec3(x, y, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
+				Vertex(glm::vec3(x + width, y, depth), glm::vec4(color.r, color.g, color.b, color.a)) };
+
+			draw(vertices);
+		}
 	}
 }

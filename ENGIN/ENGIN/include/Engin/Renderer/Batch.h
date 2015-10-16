@@ -31,6 +31,7 @@ namespace Engin
 
 			void draw(const std::vector<Vertex>& vertices);
 			void drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, const Color& color, GLfloat depth = 0);
+			void drawQuad(GLfloat x, GLfloat y, GLfloat width, GLfloat height, const Color& color, GLfloat depth = 0);
 			void flush(const Camera& camera);
 			void clear() { currentVertex = 0; }
 
