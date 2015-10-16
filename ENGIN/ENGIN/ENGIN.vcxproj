@@ -18,9 +18,21 @@
     <ClInclude Include="include\Engin\Renderer\Camera.h" />
     <ClInclude Include="include\Engin\Renderer\Color.h" />
     <ClInclude Include="include\Engin\Renderer\Window.h" />
+    <ClInclude Include="include\Engin\Resources\Animation.h" />
+    <ClInclude Include="include\Engin\Resources\Music.h" />
+    <ClInclude Include="include\Engin\Resources\Resource.h" />
+    <ClInclude Include="include\Engin\Resources\ResourceManager.h" />
     <ClInclude Include="include\Engin\Resources\Shader.h" />
+    <ClInclude Include="include\Engin\Resources\Sound.h" />
+    <ClInclude Include="include\Engin\Resources\Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="J:\source\Resources\Animation.cpp" />
+    <ClCompile Include="J:\source\Resources\Music.cpp" />
+    <ClCompile Include="J:\source\Resources\Resource.cpp" />
+    <ClCompile Include="J:\source\Resources\ResourceManager.cpp" />
+    <ClCompile Include="J:\source\Resources\Sound.cpp" />
+    <ClCompile Include="J:\source\Resources\Texture.cpp" />
     <ClCompile Include="source\Engin.cpp" />
     <ClCompile Include="source\Game\SceneManager.cpp" />
     <ClCompile Include="source\Renderer\Batch.cpp" />
