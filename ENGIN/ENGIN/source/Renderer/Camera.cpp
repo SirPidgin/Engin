@@ -106,8 +106,6 @@ namespace Engin
 
 		void Camera::setRotation(GLfloat rotation)
 		{
-			setPositionCenter(1-cos(rotation)*viewPortWidth,1-sin(rotation)*viewPortHeight);
-
 			this->rotation = glm::radians(rotation);
 			rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 		}
