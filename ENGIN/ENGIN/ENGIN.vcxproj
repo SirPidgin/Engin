@@ -18,9 +18,21 @@
     <ClInclude Include="include\Engin\Renderer\Camera.h" />
     <ClInclude Include="include\Engin\Renderer\Color.h" />
     <ClInclude Include="include\Engin\Renderer\Window.h" />
+    <ClInclude Include="include\Engin\Resources\Animation.h" />
+    <ClInclude Include="include\Engin\Resources\Music.h" />
+    <ClInclude Include="include\Engin\Resources\Resource.h" />
+    <ClInclude Include="include\Engin\Resources\ResourceManager.h" />
     <ClInclude Include="include\Engin\Resources\Shader.h" />
+    <ClInclude Include="include\Engin\Resources\Sound.h" />
+    <ClInclude Include="include\Engin\Resources\Texture.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\Resources\Animation.cpp" />
+    <ClCompile Include="source\Resources\Music.cpp" />
+    <ClCompile Include="source\Resources\Resource.cpp" />
+    <ClCompile Include="source\Resources\ResourceManager.cpp" />
+    <ClCompile Include="source\Resources\Sound.cpp" />
+    <ClCompile Include="source\Resources\Texture.cpp" />
     <ClCompile Include="source\Engin.cpp" />
     <ClCompile Include="source\Game\SceneManager.cpp" />
     <ClCompile Include="source\Renderer\Batch.cpp" />
@@ -80,7 +92,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)libraries</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;SDL2test.lib;SDL2.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>inihcpp.lib;SDL2main.lib;SDL2test.lib;SDL2.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Command>XCOPY "$(MSBuildProjectDirectory)\binaries\*.dll" "$(TargetDir)" /D /K /Y</Command>
