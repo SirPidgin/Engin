@@ -56,6 +56,9 @@ namespace Engin
 			glm::mat4 rotationMatrix;
 
 			glm::vec4 viewPort;
+
+			GLfloat root;
+			GLfloat atani;
 		};
 	}
 }

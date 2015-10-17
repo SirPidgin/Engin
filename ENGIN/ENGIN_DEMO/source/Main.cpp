@@ -16,21 +16,17 @@ int main(int argc, char** argv)
 	Engin::Engin engine;
 	Engin::Renderer::Camera camera;
 	Engin::Renderer::Camera camera2;
-	Engin::Renderer::Camera camera3;
 
 	engine.init("resources/engine.ini");
 
 	camera.initCamera(0.0f, 0.0f, 400.0f, 720.0f, 0.0f, 0.0f, 1.0f);
 	camera2.initCamera(400.0f, 0.0f, 880.0f, 720.0f, 0.0f, 0.0f, 1.0f);
 
+	camera.setZoomLevel(0.5f);
+
 	Engin::Resources::Shader shader("resources/shaders/vertex.shader", "resources/shaders/fragment.shader");
 
 	Engin::Renderer::Batch batch(&shader, 4096);
-
-	camera.setZoomLevel(0.9f);
-	camera.setRotation(20.0f);
-
-	camera2.setZoomLevel(2.0f);
 
 	while (engine.update())
 	{
@@ -40,11 +36,11 @@ int main(int argc, char** argv)
 		renderTilemap(0.0f, 0.0f, 32.0f, 32.0f, 25, 25, batch);
 
 		//camera test
-
-		camera.setPosition(400.0f * cos(alpha), 0.0f);
+		//camera2.setZoomLevel(4.0f - cos(alpha)*2); //Zoom position could be relative to camera center if even possible.
+		camera2.setRotation(alpha*30);
+		camera.setPositionCenter(200.0f + 200.0f * sin(alpha), 0.0f);
 		alpha += 0.01f;
-		camera2.setZoomLevel(3.0f + 2.0f * cos(alpha));
-
+		
 		camera.activateViewPort();
 		batch.flush(camera);
 

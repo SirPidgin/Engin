@@ -34,13 +34,16 @@ namespace Engin
 			coordMultipX = this->coordUnitSize;
 			coordMultipY = this->coordUnitSize;
 
+			root = glm::sqrt(glm::pow(viewPortWidth / 2, 2.0f) + glm::pow(viewPortHeight / 2, 2.0f));
+			atani = glm::atan((viewPortHeight / 2), (viewPortWidth / 2));
+
 			getMethodCoordMultipX = 1 / this->coordUnitSize;
 			getMethodCoordMultipY = 1 / this->coordUnitSize;
 
-			this->worldX = worldX * coordMultipX;
-			this->worldY = worldY * coordMultipY;
+			this->worldX = this->worldX * coordMultipX;
+			this->worldY = this->worldY * coordMultipY;
 
-			camPos = glm::vec3(this->worldX, this->worldY, 0);
+			camPos = glm::vec3(0.0f, 0.0f, 0.0f);
 			camUp = yAxis;
 			camRight = xAxis;
 			camFront = -zAxis;
@@ -66,7 +69,7 @@ namespace Engin
 			this->worldX = worldX*coordMultipX;
 			this->worldY = worldY*coordMultipY;
 
-			positionMatrix = glm::translate(glm::vec3(this->worldX, this->worldY, 0.0f));
+			positionMatrix = glm::translate(glm::vec3(this->worldX*-1, this->worldY*-1, 0.0f));
 		}
 
 		glm::vec2 Camera::getPosition()
@@ -76,10 +79,10 @@ namespace Engin
 
 		void Camera::setPositionCenter(GLfloat worldX, GLfloat worldY)
 		{
-			this->worldX = (worldX + 0.5f*viewPortWidth)*coordMultipX;
-			this->worldY = (worldY + 0.5f*viewPortHeight)*coordMultipY;
+			this->worldX = (worldX - 0.5f*viewPortWidth)*coordMultipX;
+			this->worldY = (worldY - 0.5f*viewPortHeight)*coordMultipY;
 
-			positionMatrix = glm::translate(glm::vec3(this->worldX, this->worldY, 0.0f));
+			positionMatrix = glm::translate(glm::vec3(this->worldX*-1, this->worldY*-1, 0.0f)); //translate was on wrong direction
 		}
 
 		glm::vec2 Camera::getPositionCenter()
@@ -107,6 +110,8 @@ namespace Engin
 		void Camera::setRotation(GLfloat rotation)
 		{
 			this->rotation = glm::radians(rotation);
+			
+			setPositionCenter(root * cos(this->rotation + atani), root*sin(this->rotation + atani));
 			rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 		}
 
