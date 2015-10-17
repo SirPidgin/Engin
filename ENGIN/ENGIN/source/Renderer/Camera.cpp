@@ -34,9 +34,6 @@ namespace Engin
 			coordMultipX = this->coordUnitSize;
 			coordMultipY = this->coordUnitSize;
 
-			root = glm::sqrt(glm::pow(viewPortWidth / 2, 2.0f) + glm::pow(viewPortHeight / 2, 2.0f));
-			atani = glm::atan((viewPortHeight / 2), (viewPortWidth / 2));
-
 			getMethodCoordMultipX = 1 / this->coordUnitSize;
 			getMethodCoordMultipY = 1 / this->coordUnitSize;
 
@@ -49,9 +46,9 @@ namespace Engin
 			camFront = -zAxis;
 
 			V = glm::lookAt(camPos, camPos + camFront, camUp);
-
-			setPosition(this->worldX, this->worldY);
+						
 			setRotation(this->rotation);
+			setPosition(this->worldX, this->worldY);
 			setDefaultZoomLevel();
 
 			P = glm::ortho(0.0f, viewPortWidth, 0.0f, viewPortHeight);
@@ -60,7 +57,7 @@ namespace Engin
 
 		void Camera::activateViewPort()
 		{
-			VPmatrix = VP*positionMatrix*rotationMatrix*scaleMatrix; //temporal location for calculating VP matrix
+			VPmatrix = VP*positionMatrix*rotationMatrix*scaleMatrix; //Temporal location for calculating VP matrix.
 			glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
 		}
 
@@ -69,7 +66,7 @@ namespace Engin
 			this->worldX = worldX*coordMultipX;
 			this->worldY = worldY*coordMultipY;
 
-			positionMatrix = glm::translate(glm::vec3(this->worldX*-1, this->worldY*-1, 0.0f));
+			positionMatrix = glm::translate(glm::vec3(this->worldX*-1, this->worldY*-1, 0.0f)); //Camera translate is to an opposite direction
 		}
 
 		glm::vec2 Camera::getPosition()
@@ -82,18 +79,18 @@ namespace Engin
 			this->worldX = (worldX - 0.5f*viewPortWidth)*coordMultipX;
 			this->worldY = (worldY - 0.5f*viewPortHeight)*coordMultipY;
 
-			positionMatrix = glm::translate(glm::vec3(this->worldX*-1, this->worldY*-1, 0.0f)); //translate was on wrong direction
+			positionMatrix = glm::translate(glm::vec3(this->worldX*-1, this->worldY*-1, 0.0f)); //Camera translate is to an opposite direction
 		}
 
 		glm::vec2 Camera::getPositionCenter()
 		{
-			return glm::vec2(worldX*getMethodCoordMultipX - 0.5f*viewPortWidth, worldY*getMethodCoordMultipY - 0.5f*viewPortHeight);
+			return glm::vec2(worldX*getMethodCoordMultipX + 0.5f*viewPortWidth, worldY*getMethodCoordMultipY + 0.5f*viewPortHeight);
 		}
 
-		void Camera::setZoomLevel(GLfloat size)
+		void Camera::setZoomLevel(GLfloat size) //Test this more.
 		{
 			zoomLevel = size;
-			coordMultipX = 1.0f / (coordMultipX / (coordMultipX*size)); //Test this more.
+			coordMultipX = 1.0f / (coordMultipX / (coordMultipX*size)); 
 			coordMultipY = 1.0f / (coordMultipY / (coordMultipY*size));
 
 			getMethodCoordMultipX = 1 / coordMultipX;
@@ -109,10 +106,22 @@ namespace Engin
 
 		void Camera::setRotation(GLfloat rotation)
 		{
-			this->rotation = glm::radians(rotation);
-			
-			setPositionCenter(root * cos(this->rotation + atani), root*sin(this->rotation + atani));
-			rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+			this->rotation = glm::radians(-rotation); //Cameras rotate to the opposite direction.
+
+			{
+				GLfloat tempX;
+				GLfloat tempY;
+
+				root = glm::sqrt(glm::pow(getPositionCenter().x, 2.0f) + glm::pow(getPositionCenter().y, 2.0f));
+				atani = glm::atan(getPositionCenter().y, getPositionCenter().x);
+
+				tempX = (root * cos(this->rotation + atani) - 0.5f*viewPortWidth)*coordMultipX;
+				tempY = (root * sin(this->rotation + atani) - 0.5f*viewPortHeight)*coordMultipY;
+				positionMatrix = glm::translate(glm::vec3(tempX*-1, tempY*-1, 0.0f));
+
+				//setPositionCenter(tempX + root * cos(this->rotation + atani), tempY + root*sin(this->rotation + atani)); //Old code delete comment
+				rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));		
+			}			
 		}
 
 		GLfloat Camera::getRotation()

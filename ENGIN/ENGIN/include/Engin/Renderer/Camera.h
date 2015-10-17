@@ -24,6 +24,7 @@ namespace Engin
 			glm::vec2 getPositionCenter();
 			void setZoomLevel(GLfloat size);
 			void setDefaultZoomLevel();
+			//Rotation has to be the last operation in update. Move first then rotate. //Create manager and remove comment
 			void setRotation(GLfloat rotation);
 			GLfloat getRotation();
 			GLfloat getZoomLevel();

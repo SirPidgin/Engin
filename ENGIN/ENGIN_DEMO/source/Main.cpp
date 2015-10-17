@@ -20,9 +20,10 @@ int main(int argc, char** argv)
 	engine.init("resources/engine.ini");
 
 	camera.initCamera(0.0f, 0.0f, 400.0f, 720.0f, 0.0f, 0.0f, 1.0f);
-	camera2.initCamera(400.0f, 0.0f, 880.0f, 720.0f, 0.0f, 0.0f, 1.0f);
+	camera2.initCamera(400.0f, 0.0f, 880.0f, 720.0f, 300.0f, 0.0f, 1.0f);
 
 	camera.setZoomLevel(0.5f);
+	//camera.setRotation(20.0f);
 
 	Engin::Resources::Shader shader("resources/shaders/vertex.shader", "resources/shaders/fragment.shader");
 
@@ -37,7 +38,9 @@ int main(int argc, char** argv)
 
 		//camera test
 		//camera2.setZoomLevel(4.0f - cos(alpha)*2); //Zoom position could be relative to camera center if even possible.
-		camera2.setRotation(alpha*30);
+		camera2.setPosition(700.0f, 0.0f);
+		camera2.setRotation(alpha*30);		
+
 		camera.setPositionCenter(200.0f + 200.0f * sin(alpha), 0.0f);
 		alpha += 0.01f;
 		
