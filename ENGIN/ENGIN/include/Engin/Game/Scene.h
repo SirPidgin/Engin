@@ -8,8 +8,8 @@ namespace Engin
 		class Scene
 		{
 		public:
-			Scene();
-			virtual ~Scene();
+			Scene(){};
+			virtual ~Scene(){};
 			
 			virtual void update(GLfloat deltaTime) = 0;
 			virtual void draw() = 0;
