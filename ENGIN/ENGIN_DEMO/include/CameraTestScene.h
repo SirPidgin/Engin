@@ -23,6 +23,7 @@ namespace Engin
 			GLfloat alpha;
 
 			Renderer::Camera camera;
+			Renderer::Camera camera1;
 			Renderer::Camera camera2;
 
 			Resources::Shader shader;

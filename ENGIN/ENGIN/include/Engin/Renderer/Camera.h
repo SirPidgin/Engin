@@ -24,8 +24,11 @@ namespace Engin
 			glm::vec2 getPositionCenter();
 			void setZoomLevel(GLfloat size);
 			void setDefaultZoomLevel();
-			//Rotation has to be the last operation in update. Move first then rotate. //Create manager and remove comment
+
 			void setRotation(GLfloat rotation);
+			//Place this at the end of update to fix coordinates because camera rotates from the corner.
+			void fixCoordinatesForRotationAtTheEndOfUpdate();
+
 			GLfloat getRotation();
 			GLfloat getZoomLevel();
 
@@ -35,19 +38,11 @@ namespace Engin
 			GLfloat worldX;
 			GLfloat worldY;
 			GLfloat rotation;
-			GLfloat coordMultipX;
-			GLfloat coordMultipY;
-			GLfloat getMethodCoordMultipX;
-			GLfloat getMethodCoordMultipY;
+			GLfloat coordMultip;
+			GLfloat getMethodCoordMultip;
 
 			GLfloat viewPortWidth, viewPortHeight;
 
-			glm::vec3 camPos;
-			glm::vec3 camUp;
-			glm::vec3 camRight;
-			glm::vec3 camFront;
-
-			glm::mat4 V;
 			glm::mat4 P;
 			glm::mat4 VP;
 			glm::mat4 VPmatrix; //getVP

@@ -14,11 +14,31 @@ namespace Engin
 
 			std::cout << "Camera test scene going on, be aware of rotating cameras" << std::endl;
 
-			camera.initCamera(0.0f, 0.0f, 400.0f, 720.0f, 0.0f, 0.0f, 1.0f);
-			camera2.initCamera(400.0f, 0.0f, 880.0f, 720.0f, 300.0f, 0.0f, 1.0f);
-
+			camera.initCamera(0.0f, 0.0f, 400.0f, 400.0f, 0.0f, 0.0f, 1.0f);
+			camera1.initCamera(0.0f, 400.0f, 400.0f, 320.0f, 0.0f, 0.0f, 1.0f);
+			camera2.initCamera(400.0f, 0.0f, 880.0f, 720.0f, 0.0f, 0.0f, 1.0f);
+			
+			//camera.setRotation(45);
 			camera.setZoomLevel(0.5f);
-			//camera.setRotation(20.0f);
+			
+			//camera.setZoomLevel(0.01f);	
+			//camera.setZoomLevel(0.8f);
+			//camera.setZoomLevel(0.6f);
+
+			camera.setPositionCenter(3.0f*32.0f, 9.0f*32.0f);
+			
+			//camera.setPosition(-100.0f, 0.0f);
+			//camera.setPosition(100.0f, 0.0f);
+			//camera.setPosition(800.0f, 0.0f);
+			//camera.setPosition(96.0f, 96.0f);
+			
+
+			//camera2.setPosition(800.0f, 0.0f);
+			//camera2.setPosition(100.0f, 0.0f);
+			//camera2.setPosition(0.0f, 0.0f);
+
+			//camera.setZoomLevel(4.0f);
+			//camera.setZoomLever(0.5f);
 
 			shader.load("resources/shaders/vertex.shader", "resources/shaders/fragment.shader");
 			batch.addShader(&shader, 4096);
@@ -36,19 +56,22 @@ namespace Engin
 			batch.drawQuad(200.0f, 200.0f, 50.0f, 50.0f, Renderer::clrWhite, 0.0f);
 			renderTilemap(0.0f, 0.0f, 32.0f, 32.0f, 25, 25, batch);
 
-			//camera test
-			//camera2.setZoomLevel(4.0f - cos(alpha)*2); //Zoom position could be relative to camera center if even possible.
-			camera2.setPosition(700.0f, 0.0f);
-			camera2.setRotation(alpha * 30);
+			camera.setRotation(alpha);
+			camera2.setRotation(alpha);
 
-			camera.setPositionCenter(200.0f + 200.0f * sin(alpha), 0.0f);
-			alpha += 0.01f;
+			alpha += 0.1f;
+
+			camera.fixCoordinatesForRotationAtTheEndOfUpdate();
+			camera2.fixCoordinatesForRotationAtTheEndOfUpdate();
 		}
 
 		void CameraTestScene::draw()
 		{
 			camera.activateViewPort();
 			batch.flush(camera);
+
+			camera1.activateViewPort();
+			batch.flush(camera1);
 
 			camera2.activateViewPort();
 			batch.flush(camera2);
