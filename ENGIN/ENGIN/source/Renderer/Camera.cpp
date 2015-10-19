@@ -110,7 +110,7 @@ namespace Engin
 			GLfloat tempY;
 
 			root = glm::sqrt(glm::pow(worldX + 0.5f*viewPortWidth, 2.0f) + glm::pow(worldY + 0.5f*viewPortHeight, 2.0f));
-			atani = glm::atan(worldY + 0.5f*viewPortWidth, worldX + 0.5f*viewPortHeight);
+			atani = glm::atan(worldY + 0.5f*viewPortHeight, worldX + 0.5f*viewPortWidth);
 
 			tempX = (root * cos(this->rotation + atani) - 0.5f*viewPortWidth);
 			tempY = (root * sin(this->rotation + atani) - 0.5f*viewPortHeight);
