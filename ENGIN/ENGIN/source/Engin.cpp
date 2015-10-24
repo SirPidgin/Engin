@@ -121,11 +121,12 @@ namespace Engin
 		while (accumulator >= step)
 		{
 			// TODO (eeneku): Maybe we can only pass alpha (accumulator / step)?
-			sceneManager.update(accumulator / step);
+			sceneManager.update(step);
 			accumulator -= step;
 		}
 
 		// TODO (eeneku): What about interpolation? Probably handled in Scene or SceneManager.
+		sceneManager.interpolate(accumulator / step);
 	}
 
 	void Engin::draw()

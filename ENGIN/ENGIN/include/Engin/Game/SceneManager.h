@@ -12,7 +12,8 @@ namespace Engin
 			SceneManager();
 			~SceneManager();
 
-			void update(GLfloat alpha);
+			void update(GLfloat step);
+			void interpolate(GLfloat alpha);
 			void draw();
 
 			void push(Scene* scene);

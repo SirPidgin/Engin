@@ -48,7 +48,7 @@ namespace Engin
 			std::cout << "Camera scene shutdown" << std::endl;
 		}
 
-		void CameraTestScene::update(GLfloat alpha)
+		void CameraTestScene::update(GLfloat step)
 		{
 			camera.setRotation(this->alpha);
 			camera2.setRotation(this->alpha);
@@ -59,6 +59,10 @@ namespace Engin
 			camera2.fixCoordinatesForRotationAtTheEndOfUpdate();
 
 			//std::cout << camera2.getPositionCenter().x << std::endl;
+		}
+
+		void CameraTestScene::interpolate(GLfloat alpha)
+		{
 		}
 
 		void CameraTestScene::draw()

@@ -14,7 +14,8 @@ namespace Engin
 			CameraTestScene();
 			~CameraTestScene();
 
-			void update(GLfloat alpha);
+			void update(GLfloat step);
+			void interpolate(GLfloat alpha);
 			void draw();
 			void renderTilemap(float startX, float startY, float tileWidth, float tileHeight, size_t worldWidth, size_t worldHeight, Renderer::Batch& batch);
 

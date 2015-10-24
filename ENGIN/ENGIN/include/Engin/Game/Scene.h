@@ -11,7 +11,8 @@ namespace Engin
 			Scene(){};
 			virtual ~Scene(){};
 			
-			virtual void update(GLfloat alpha) = 0;
+			virtual void update(GLfloat step) = 0;
+			virtual void interpolate(GLfloat alpha) = 0;
 			virtual void draw() = 0;
 		private:
 			GLfloat accumulator;

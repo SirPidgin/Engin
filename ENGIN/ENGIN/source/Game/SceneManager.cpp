@@ -19,9 +19,14 @@ namespace Engin
 			scenes.clear();
 		}
 
-		void SceneManager::update(GLfloat alpha)
+		void SceneManager::update(GLfloat step)
 		{
-			scenes.back()->update(alpha);
+			scenes.back()->update(step);
+		}
+
+		void SceneManager::interpolate(GLfloat alpha)
+		{
+			scenes.back()->interpolate(alpha);
 		}
 
 		void SceneManager::draw()
