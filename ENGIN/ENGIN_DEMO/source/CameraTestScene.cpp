@@ -48,18 +48,12 @@ namespace Engin
 			std::cout << "Camera scene shutdown" << std::endl;
 		}
 
-		void CameraTestScene::update(GLfloat deltaTime)
+		void CameraTestScene::update(GLfloat alpha)
 		{
-			renderTilemap(0.0f, 0.0f, 32.0f, 32.0f, 25, 25, batch); //Depth not working?
-			batch.drawTriangle(500.0f, 45.0f, 750.0f, 250.0f, 65.0f, 480.0f, Renderer::clrRed, 0.0f);
-			batch.drawTriangle(10.0f, 10.0f, 100.0f, 10.0f, 50.0f, 50.0f, Renderer::clrGreen, 0.0f);
-			batch.drawQuad(200.0f, 200.0f, 50.0f, 50.0f, Renderer::clrWhite, 0.0f);			
-			//renderTilemap(0.0f, 0.0f, 32.0f, 32.0f, 25, 25, batch);
+			camera.setRotation(this->alpha);
+			camera2.setRotation(this->alpha);
 
-			camera.setRotation(alpha);
-			camera2.setRotation(alpha);
-
-			alpha += 0.5f;
+			this->alpha += 0.5f;
 
 			camera.fixCoordinatesForRotationAtTheEndOfUpdate();
 			camera2.fixCoordinatesForRotationAtTheEndOfUpdate();
@@ -69,6 +63,12 @@ namespace Engin
 
 		void CameraTestScene::draw()
 		{
+			renderTilemap(0.0f, 0.0f, 32.0f, 32.0f, 25, 25, batch); //Depth not working?
+			//renderTilemap(0.0f, 0.0f, 32.0f, 32.0f, 25, 25, batch);
+			batch.drawTriangle(500.0f, 45.0f, 750.0f, 250.0f, 65.0f, 480.0f, Renderer::clrRed, 0.0f);
+			batch.drawTriangle(10.0f, 10.0f, 100.0f, 10.0f, 50.0f, 50.0f, Renderer::clrGreen, 0.0f);
+			batch.drawQuad(200.0f, 200.0f, 50.0f, 50.0f, Renderer::clrWhite, 0.0f);
+
 			camera.activateViewPort();
 			batch.flush(camera);
 

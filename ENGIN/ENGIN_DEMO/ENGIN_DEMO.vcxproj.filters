@@ -29,6 +29,9 @@
     <None Include="resources\shaders\vertex.shader">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\engine.ini">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CameraTestScene.h">

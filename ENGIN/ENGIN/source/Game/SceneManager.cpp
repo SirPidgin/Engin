@@ -1,10 +1,11 @@
 #include "Engin\Game\SceneManager.h"
+#include "Engin\Engin.h"
 
 namespace Engin
 {
 	namespace Game
 	{
-		SceneManager::SceneManager()
+		SceneManager::SceneManager() : accumulator(0.0f)
 		{
 		}
 
@@ -18,9 +19,9 @@ namespace Engin
 			scenes.clear();
 		}
 
-		void SceneManager::update(GLfloat deltaTime)
+		void SceneManager::update(GLfloat alpha)
 		{
-			scenes.back()->update(deltaTime);
+			scenes.back()->update(alpha);
 		}
 
 		void SceneManager::draw()

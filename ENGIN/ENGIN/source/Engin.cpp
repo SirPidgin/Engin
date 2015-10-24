@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <GL\glew.h>
 #include <SDL\SDL.h>
 
@@ -11,7 +12,7 @@
 
 namespace Engin
 {
-	Engin::Engin()
+	Engin::Engin() : running(true), accumulator(0.0f), step(0.0f)
 	{
 	}
 
@@ -48,15 +49,16 @@ namespace Engin
 		SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
-
 		
 		window.createWindow(reader.Get("Window", "title", "unnamed"),
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
-			reader.GetReal("Window", "width", 1280.0f),
-			reader.GetReal("Window", "height", 720));
+			reader.GetInteger("Window", "width", 1280),
+			reader.GetInteger("Window", "height", 720));
 
 		SDL_SetWindowFullscreen(window.getSDLWindow(), reader.GetBoolean("Window", "fullscreen", false));
+
+		step = (float)reader.GetReal("Physics", "step", 1.0f / 60.0f);
 
 		glContext = SDL_GL_CreateContext(window.getSDLWindow());
 
@@ -76,23 +78,62 @@ namespace Engin
 		SDL_Quit();
 	}
 
-	int Engin::update()
+	void Engin::run(Game::Scene* scene)
 	{
-		window.swapWindow();
+		// Variables for deltatime
+		float deltaTime = 0.0f;
+		float newTime = 0.0f;
+		float currentTime = SDL_GetTicks() / 1000.0f; // TODO (eeneku): Use own hi-res timer.
 
+		sceneManager.change(scene);
+
+		while (running)
+		{
+			newTime = SDL_GetTicks() / 1000.0f;
+			deltaTime = std::min(newTime - currentTime, 0.25f);
+			currentTime = newTime;
+
+			handleEvents();
+			update(step);
+			draw();
+		}
+	}
+
+	void Engin::handleEvents()
+	{
+		// TODO (eeneku): This method is temporary.
 		SDL_Event event;
-		int returnValue = 1;
 
 		while (SDL_PollEvent(&event) == 1)
 		{
 			if (event.type == SDL_QUIT)
 			{
-				returnValue = 0;
+				running = false;
 			}
 		}
+	}
 
+	void Engin::update(float deltaTime)
+	{
+
+		accumulator += deltaTime;
+
+		while (accumulator >= step)
+		{
+			// TODO (eeneku): Maybe we can only pass alpha (accumulator / step)?
+			sceneManager.update(accumulator / step);
+			accumulator -= step;
+		}
+
+		// TODO (eeneku): What about interpolation? Probably handled in Scene or SceneManager.
+	}
+
+	void Engin::draw()
+	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		return returnValue;
+		sceneManager.draw();
+
+		window.swapWindow();
 	}
 }

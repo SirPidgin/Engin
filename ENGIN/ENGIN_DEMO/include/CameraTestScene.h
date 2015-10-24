@@ -14,8 +14,7 @@ namespace Engin
 			CameraTestScene();
 			~CameraTestScene();
 
-			//No use for deltaTime yet. Give some float.
-			void update(GLfloat deltaTime);
+			void update(GLfloat alpha);
 			void draw();
 			void renderTilemap(float startX, float startY, float tileWidth, float tileHeight, size_t worldWidth, size_t worldHeight, Renderer::Batch& batch);
 

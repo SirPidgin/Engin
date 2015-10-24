@@ -92,6 +92,7 @@
     <ClCompile Include="source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="resources\engine.ini" />
     <None Include="resources\shaders\fragment.shader" />
     <None Include="resources\shaders\vertex.shader" />
   </ItemGroup>

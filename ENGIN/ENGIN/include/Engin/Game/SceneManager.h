@@ -12,7 +12,7 @@ namespace Engin
 			SceneManager();
 			~SceneManager();
 
-			void update(GLfloat deltaTime);
+			void update(GLfloat alpha);
 			void draw();
 
 			void push(Scene* scene);
@@ -20,6 +20,7 @@ namespace Engin
 			void change(Scene* scene);
 		private:
 			std::vector<Scene*> scenes;
+			float accumulator;
 		};
 	}
 }

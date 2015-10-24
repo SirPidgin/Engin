@@ -11,7 +11,7 @@ namespace Engin
 			Scene(){};
 			virtual ~Scene(){};
 			
-			virtual void update(GLfloat deltaTime) = 0;
+			virtual void update(GLfloat alpha) = 0;
 			virtual void draw() = 0;
 		private:
 			GLfloat accumulator;
