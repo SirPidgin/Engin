@@ -18,7 +18,6 @@ namespace Engin
 
 	Engin::~Engin()
 	{
-		glDeleteVertexArrays(1, &VAO);
 		SDL_GL_DeleteContext(glContext);
 	}
 
@@ -39,16 +38,16 @@ namespace Engin
 		}
 
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+		SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 		SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 		SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 		SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 		SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 		SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 16);
+		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, reader.GetInteger("Graphics", "antialiasing", 4));
 		
 		window.createWindow(reader.Get("Window", "title", "unnamed"),
 			SDL_WINDOWPOS_CENTERED,
@@ -67,10 +66,6 @@ namespace Engin
 		glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
 
 		glEnable(GL_DEPTH_TEST);
-
-
-		glGenVertexArrays(1, &VAO);
-		glBindVertexArray(VAO);
 	}
 
 	void Engin::quit()
