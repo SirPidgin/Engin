@@ -38,12 +38,11 @@ namespace Engin
 			setDefaultZoomLevel();
 
 			P = glm::ortho(0.0f, viewPortWidth, 0.0f, viewPortHeight);
-			VP = P;
 		}
 
 		void Camera::activateViewPort()
 		{
-			VPmatrix = VP*positionMatrix*rotationMatrix*scaleMatrix; //Temporal location for calculating VP matrix.
+			VPmatrix = P*positionMatrix*rotationMatrix*scaleMatrix; //Temporal location for calculating VP matrix.
 			glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
 		}
 
@@ -87,7 +86,7 @@ namespace Engin
 				getMethodCoordMultip = 1 / this->coordUnitSize;
 			}
 
-			scaleMatrix = glm::scale(glm::vec3(size));
+			scaleMatrix = glm::scale(glm::vec3(size, size, 1.0f));
 		}
 
 		void Camera::setDefaultZoomLevel()
