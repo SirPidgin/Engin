@@ -21,7 +21,6 @@ namespace Engin
 			void change(Scene* scene);
 		private:
 			std::vector<Scene*> scenes;
-			float accumulator;
 		};
 	}
 }

@@ -5,7 +5,7 @@ namespace Engin
 {
 	namespace Game
 	{
-		SceneManager::SceneManager() : accumulator(0.0f)
+		SceneManager::SceneManager()
 		{
 		}
 
