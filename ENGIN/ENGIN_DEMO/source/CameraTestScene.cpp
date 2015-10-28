@@ -25,6 +25,8 @@ namespace Engin
 			//camera.setZoomLevel(0.6f);
 
 			camera.setPositionCenter(3.0f*32.0f, 9.0f*32.0f);
+			camera1.setPositionCenter(3.0f*32.0f, 9.0f*32.0f);
+			camera2.setPositionCenter(3.0f*32.0f, 9.0f*32.0f);
 
 			//camera.setPosition(-100.0f, 0.0f);
 			//camera.setPosition(100.0f, 0.0f);
@@ -32,8 +34,7 @@ namespace Engin
 			//camera.setPosition(96.0f, 96.0f);
 			
 
-			//camera2.setPosition(700.0f, 0.0f);
-			camera2.setPositionCenter(3.0f*32.0f, 9.0f*32.0f);
+			//camera2.setPosition(700.0f, 0.0f);			
 			//camera2.setPosition(0.0f, 0.0f);
 
 			//camera.setZoomLevel(4.0f);
@@ -52,6 +53,8 @@ namespace Engin
 		{
 			camera.setRotation(this->alpha);
 			camera2.setRotation(this->alpha);
+
+			camera1.setZoomLevel(1.0f+glm::cos(alpha));
 
 			this->alpha += 0.05f;
 
