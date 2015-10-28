@@ -43,7 +43,7 @@ namespace Engin
 		void Camera::activateViewPort()
 		{
 			VPmatrix = P*positionMatrix*rotationMatrix*scaleMatrix; //Temporal location for calculating VP matrix.
-			glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
+			glViewport(GLint(viewPort[0]), GLint(viewPort[1]), GLsizei(viewPort[2]), GLsizei(viewPort[3]));
 		}
 
 		void Camera::setPosition(GLfloat worldX, GLfloat worldY)

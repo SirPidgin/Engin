@@ -7,7 +7,7 @@
 
 #include "Engin\Renderer\Window.h"
 
-#include "INIReader.h"
+#include "inih\INIReader.h"
 
 
 namespace Engin
@@ -57,7 +57,7 @@ namespace Engin
 
 		SDL_SetWindowFullscreen(window.getSDLWindow(), reader.GetBoolean("Window", "fullscreen", false));
 
-		step = (float)reader.GetReal("Physics", "step", 1.0f / 60.0f);
+		step = 1.0f / (float)reader.GetReal("Physics", "step", 60.0f);
 
 		glContext = SDL_GL_CreateContext(window.getSDLWindow());
 

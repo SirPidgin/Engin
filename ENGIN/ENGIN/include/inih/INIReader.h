@@ -3,14 +3,13 @@
 // inih and INIReader are released under the New BSD license (see LICENSE.txt).
 // Go to the project home page for more info:
 //
-// http://code.google.com/p/inih/
+// https://github.com/benhoyt/inih
 
 #ifndef __INIREADER_H__
 #define __INIREADER_H__
 
 #include <map>
 #include <string>
-#include <vector>
 
 // Read an INI file into easy-to-access name/value pairs. (Note that I've gone
 // for simplicity here rather than speed, but it should be pretty decent.)
@@ -43,13 +42,9 @@ public:
     // and valid false values are "false", "no", "off", "0" (not case sensitive).
     bool GetBoolean(std::string section, std::string name, bool default_value);
 
-    // Returns all the sections (groups) from the associated INI file
-    std::vector<std::string> GetSections() const;
-
 private:
     int _error;
     std::map<std::string, std::string> _values;
-    std::vector<std::string> _sections;
     static std::string MakeKey(std::string section, std::string name);
     static int ValueHandler(void* user, const char* section, const char* name,
                             const char* value);
