@@ -89,7 +89,7 @@ namespace Engin
 			currentTime = newTime;
 
 			handleEvents();
-			update(step);
+			update(deltaTime);
 			draw();
 		}
 	}

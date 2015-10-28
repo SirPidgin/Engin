@@ -53,7 +53,7 @@ namespace Engin
 			camera.setRotation(this->alpha);
 			camera2.setRotation(this->alpha);
 
-			this->alpha += 0.5f;
+			this->alpha += 0.05f;
 
 			camera.fixCoordinatesForRotationAtTheEndOfUpdate();
 			camera2.fixCoordinatesForRotationAtTheEndOfUpdate();
