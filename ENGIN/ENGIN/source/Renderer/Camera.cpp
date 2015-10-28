@@ -27,9 +27,6 @@ namespace Engin
 
 			viewPort = glm::vec4(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
 
-			coordMultip = this->coordUnitSize;
-			getMethodCoordMultip = 1 / this->coordUnitSize;
-
 			this->worldX = this->worldX * coordMultip;
 			this->worldY = this->worldY * coordMultip;
 						
@@ -38,12 +35,12 @@ namespace Engin
 			setDefaultZoomLevel();
 
 			P = glm::ortho(0.0f, viewPortWidth, 0.0f, viewPortHeight);
-			VP = P;
 		}
 
 		void Camera::activateViewPort()
 		{
-			VPmatrix = VP*positionMatrix*rotationMatrix*scaleMatrix; //Temporal location for calculating VP matrix.
+			fixCoordinatesForRotationAtTheEndOfUpdate(); //Get rid of this
+			VPmatrix = P*positionMatrix*rotationMatrix*scaleMatrix; //Temporal? location for calculating VP matrix.
 			glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
 		}
 
@@ -65,7 +62,7 @@ namespace Engin
 			this->worldX = worldX*coordMultip - 0.5f*viewPortWidth;
 			this->worldY = worldY*coordMultip - 0.5f*viewPortHeight;
 
-			positionMatrix = glm::translate(glm::vec3(this->worldX*-1, this->worldY*-1, 0.0f)); //Camera translate is to an opposite direction
+			positionMatrix = glm::translate(glm::vec3(this->worldX*-1.0f, this->worldY*-1.0f, 0.0f)); //Camera translate is to an opposite direction
 		}
 
 		glm::vec2 Camera::getPositionCenter()
@@ -75,19 +72,24 @@ namespace Engin
 
 		void Camera::setZoomLevel(GLfloat size) //Test this more.
 		{
-			zoomLevel = size;
-			if (size > 0.0000001)
+			GLfloat tempWorldX = getPositionCenter().x;
+			GLfloat tempWorldY = getPositionCenter().y;
+
+			if (size > 0.0001)
 			{
+				zoomLevel = size;
 				coordMultip = size;
 				getMethodCoordMultip = 1 / coordMultip;
 			}
 			else //if zoom is 0 you cant see how it moves.
 			{
+				zoomLevel = 0;
 				coordMultip = this->coordUnitSize;
 				getMethodCoordMultip = 1 / this->coordUnitSize;
 			}
 
-			scaleMatrix = glm::scale(glm::vec3(size));
+			scaleMatrix = glm::scale(glm::vec3(size , size, 1.0f));
+			setPositionCenter(tempWorldX, tempWorldY);
 		}
 
 		void Camera::setDefaultZoomLevel()
@@ -100,8 +102,9 @@ namespace Engin
 
 		void Camera::setRotation(GLfloat rotation)
 		{
+			//Use lookAt and rotate camera by chaging axises.
 			this->rotation = glm::radians(-rotation); //Camera rotates to the opposite direction.
-			rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));			
+			rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
 		}
 
 		void Camera::fixCoordinatesForRotationAtTheEndOfUpdate()

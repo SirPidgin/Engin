@@ -44,7 +44,6 @@ namespace Engin
 			GLfloat viewPortWidth, viewPortHeight;
 
 			glm::mat4 P;
-			glm::mat4 VP;
 			glm::mat4 VPmatrix; //getVP
 
 			glm::mat4 scaleMatrix;
