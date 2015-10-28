@@ -25,8 +25,12 @@
     <ClInclude Include="include\Engin\Resources\Shader.h" />
     <ClInclude Include="include\Engin\Resources\Sound.h" />
     <ClInclude Include="include\Engin\Resources\Texture.h" />
+    <ClInclude Include="include\inih\ini.h" />
+    <ClInclude Include="include\inih\INIReader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\inih\ini.c" />
+    <ClCompile Include="source\inih\INIReader.cpp" />
     <ClCompile Include="source\Resources\Animation.cpp" />
     <ClCompile Include="source\Resources\Music.cpp" />
     <ClCompile Include="source\Resources\Resource.cpp" />
@@ -92,7 +96,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)libraries</AdditionalLibraryDirectories>
-      <AdditionalDependencies>inihcpp.lib;SDL2main.lib;SDL2test.lib;SDL2.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;SDL2test.lib;SDL2.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Command>XCOPY "$(MSBuildProjectDirectory)\binaries\*.dll" "$(TargetDir)" /D /K /Y</Command>

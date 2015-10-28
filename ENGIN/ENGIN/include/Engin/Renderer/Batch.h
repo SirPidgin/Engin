@@ -26,11 +26,10 @@ namespace Engin
 		class Batch
 		{
 		public:
-			Batch(){};
-			//Batch(Resources::Shader* shader, size_t maxVertices = defaultBatchSize);
+			Batch();
 			~Batch();
 
-			void addShader(Resources::Shader* shader, size_t maxVertices = defaultBatchSize);
+			void init(Resources::Shader* shader, size_t maxVertices = defaultBatchSize);
 
 			void draw(const std::vector<Vertex>& vertices);
 			void drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, const Color& color, GLfloat depth = 0);

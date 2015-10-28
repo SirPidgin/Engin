@@ -104,7 +104,7 @@ namespace Engin
 		{
 			//Use lookAt and rotate camera by chaging axises.
 			this->rotation = glm::radians(-rotation); //Camera rotates to the opposite direction.
-			rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+			rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));			
 		}
 
 		void Camera::fixCoordinatesForRotationAtTheEndOfUpdate()

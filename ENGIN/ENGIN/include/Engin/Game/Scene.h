@@ -15,8 +15,6 @@ namespace Engin
 			virtual void interpolate(GLfloat alpha) = 0;
 			virtual void draw() = 0;
 		private:
-			GLfloat accumulator;
-			GLfloat step;
 		};
 	}
 }

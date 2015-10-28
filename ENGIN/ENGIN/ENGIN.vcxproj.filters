@@ -49,6 +49,18 @@
     <Filter Include="Source Files\Game">
       <UniqueIdentifier>{625ce00b-ecc4-4292-b4f9-8bf8b72f84b1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\3rd party">
+      <UniqueIdentifier>{33d25fe6-7655-4055-818e-dd708fd94eb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3rd party">
+      <UniqueIdentifier>{167d6b88-4c25-47a0-82ea-57935c08d59e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\3rd party\inih">
+      <UniqueIdentifier>{6d1fcd07-30ec-449e-a705-489dc42d6a53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3rd party\inih">
+      <UniqueIdentifier>{46276633-160a-429d-8261-df5be06ab974}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engin\Engin.h">
@@ -93,6 +105,12 @@
     <ClInclude Include="include\Engin\Resources\ResourceManager.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
+    <ClInclude Include="include\inih\ini.h">
+      <Filter>Header Files\3rd party\inih</Filter>
+    </ClInclude>
+    <ClInclude Include="include\inih\INIReader.h">
+      <Filter>Header Files\3rd party\inih</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Renderer\Window.cpp">
@@ -130,6 +148,12 @@
     </ClCompile>
     <ClCompile Include="source\Engin.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\inih\ini.c">
+      <Filter>Source Files\3rd party\inih</Filter>
+    </ClCompile>
+    <ClCompile Include="source\inih\INIReader.cpp">
+      <Filter>Source Files\3rd party\inih</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

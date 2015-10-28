@@ -1,9 +1,9 @@
-#version 330
+#version 120
 
-layout(location = 0) in vec3 inPosition;
-layout(location = 1) in vec4 inColor;
+attribute vec3 inPosition;
+attribute vec4 inColor;
 
-out vec4 color;
+varying vec4 color;
 
 uniform mat4 MVP;
 

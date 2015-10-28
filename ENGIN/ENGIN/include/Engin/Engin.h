@@ -26,7 +26,6 @@ namespace Engin
 		Renderer::Window window;
 		Game::SceneManager sceneManager;
 		SDL_GLContext glContext;
-		GLuint VAO;
 		bool running;
 		float step;
 		float accumulator;

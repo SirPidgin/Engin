@@ -7,19 +7,18 @@ namespace Engin
 {
 	namespace Renderer
 	{
-	/*	Batch::Batch(Resources::Shader* shader, size_t maxVertices) : currentVertex(0), shader(shader)
+		Batch::Batch()
 		{
-			assert(maxVertices > 0);
+		}
 
-			vertices.resize(maxVertices);
+		Batch::~Batch()
+		{
+			glDeleteBuffers(1, &VBO);
 
-			glGenBuffers(1, &VBO);
-			glBindBuffer(GL_ARRAY_BUFFER, VBO);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * maxVertices, vertices.data(), GL_DYNAMIC_DRAW);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-		}*/
+			vertices.clear();
+		}
 
-		void Batch::addShader(Resources::Shader* shader, size_t maxVertices)
+		void Batch::init(Resources::Shader* shader, size_t maxVertices)
 		{
 			currentVertex = 0;
 			this->shader = shader;
@@ -32,13 +31,6 @@ namespace Engin
 			glBindBuffer(GL_ARRAY_BUFFER, VBO);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * maxVertices, vertices.data(), GL_DYNAMIC_DRAW);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
-		}
-
-		Batch::~Batch()
-		{
-			glDeleteBuffers(1, &VBO);
-
-			vertices.clear();
 		}
 
 		void Batch::draw(const std::vector<Vertex>& vertices)
