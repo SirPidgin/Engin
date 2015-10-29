@@ -2,6 +2,7 @@
 
 #include <unordered_map>
 
+//Under Construction...
 
 namespace Engin
 {
@@ -36,7 +37,7 @@ namespace Engin
 
 		private:
 			std::unordered_map<unsigned int, bool> buttonMap;
-			//int[] axisControlDeadZone;
+			//int* axisControlDeadZone;
 		};
 	}
 }
