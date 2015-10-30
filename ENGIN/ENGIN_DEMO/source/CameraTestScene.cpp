@@ -51,15 +51,14 @@ namespace Engin
 
 		void CameraTestScene::update(GLfloat step)
 		{
-			camera.setRotation(this->alpha);
-			camera2.setRotation(this->alpha);
+			//camera.setRotation(this->alpha);
+			camera2.setRotation(10*this->alpha);
 
-			camera1.setZoomLevel(1.0f+glm::cos(alpha));
+			camera.setPosition(400 * glm::cos(alpha), 0.0f);
 
-			this->alpha += 0.05f;
+			camera1.setZoomLevel(1.0f + glm::cos(alpha));
 
-			camera.fixCoordinatesForRotationAtTheEndOfUpdate();
-			camera2.fixCoordinatesForRotationAtTheEndOfUpdate();
+			this->alpha += 0.005f;
 
 			//std::cout << camera2.getPositionCenter().x << std::endl;
 		}

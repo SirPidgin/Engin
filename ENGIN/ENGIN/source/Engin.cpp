@@ -9,6 +9,8 @@
 
 #include "inih\INIReader.h"
 
+#include "Engin\Core\Timer.h"
+
 
 namespace Engin
 {
@@ -78,13 +80,13 @@ namespace Engin
 		// Variables for deltatime
 		float deltaTime = 0.0f;
 		float newTime = 0.0f;
-		float currentTime = SDL_GetTicks() / 1000.0f; // TODO (eeneku): Use own hi-res timer.
+		float currentTime = Core::Timer::getGlobalTime() / 1000.0f; // TODO (eeneku): Use own hi-res timer.
 
 		sceneManager.change(scene);
 
 		while (running)
 		{
-			newTime = SDL_GetTicks() / 1000.0f;
+			newTime = Core::Timer::getGlobalTime() / 1000.0f;
 			deltaTime = std::min(newTime - currentTime, 0.25f);
 			currentTime = newTime;
 
