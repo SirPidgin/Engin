@@ -78,7 +78,7 @@ namespace Engin
 			if (size > 0.0001)
 			{
 				zoomLevel = size;
-				coordMultip = size;
+				coordMultip = size*this->coordUnitSize;
 				getMethodCoordMultip = 1 / coordMultip;
 			}
 			else //if zoom is 0 you cant see how it moves.
@@ -109,15 +109,18 @@ namespace Engin
 
 		void Camera::fixCoordinatesForRotationAtTheEndOfUpdate()
 		{
-			GLfloat tempX;
-			GLfloat tempY;
+			if (rotation != 0)
+			{
+				GLfloat tempX;
+				GLfloat tempY;
 
-			root = glm::sqrt(glm::pow(worldX + 0.5f*viewPortWidth, 2.0f) + glm::pow(worldY + 0.5f*viewPortHeight, 2.0f));
-			atani = glm::atan(worldY + 0.5f*viewPortHeight, worldX + 0.5f*viewPortWidth);
+				root = glm::sqrt(glm::pow(worldX + 0.5f*viewPortWidth, 2.0f) + glm::pow(worldY + 0.5f*viewPortHeight, 2.0f));
+				atani = glm::atan(worldY + 0.5f*viewPortHeight, worldX + 0.5f*viewPortWidth);
 
-			tempX = (root * cos(this->rotation + atani) - 0.5f*viewPortWidth);
-			tempY = (root * sin(this->rotation + atani) - 0.5f*viewPortHeight);
-			positionMatrix = glm::translate(glm::vec3(tempX*-1, tempY*-1, 0.0f));
+				tempX = (root * cos(this->rotation + atani) - 0.5f*viewPortWidth);
+				tempY = (root * sin(this->rotation + atani) - 0.5f*viewPortHeight);
+				positionMatrix = glm::translate(glm::vec3(tempX*-1, tempY*-1, 0.0f));
+			}			
 		}
 
 		GLfloat Camera::getRotation()

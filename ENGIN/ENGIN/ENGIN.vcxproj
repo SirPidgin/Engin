@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Engin\Core\Timer.h" />
     <ClInclude Include="include\Engin\Engin.h" />
     <ClInclude Include="include\Engin\Game\Scene.h" />
     <ClInclude Include="include\Engin\Game\SceneManager.h" />
@@ -28,8 +29,11 @@
     <ClInclude Include="include\Engin\Resources\Texture.h" />
     <ClInclude Include="include\inih\ini.h" />
     <ClInclude Include="include\inih\INIReader.h" />
+    <ClInclude Include="include\LodePNG\lodepng.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\3rd party\LodePNG\lodepng.cpp" />
+    <ClCompile Include="source\Core\Timer.cpp" />
     <ClCompile Include="source\inih\ini.c" />
     <ClCompile Include="source\inih\INIReader.cpp" />
     <ClCompile Include="source\Renderer\TextureBatch.cpp" />
