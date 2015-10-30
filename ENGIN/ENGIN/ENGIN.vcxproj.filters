@@ -111,6 +111,9 @@
     <ClInclude Include="include\inih\INIReader.h">
       <Filter>Header Files\3rd party\inih</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engin\Core\Timer.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Renderer\Window.cpp">
@@ -154,6 +157,9 @@
     </ClCompile>
     <ClCompile Include="source\inih\INIReader.cpp">
       <Filter>Source Files\3rd party\inih</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Core\Timer.cpp">
+      <Filter>Source Files\Core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
