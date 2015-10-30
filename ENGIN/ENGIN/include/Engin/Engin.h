@@ -2,6 +2,9 @@
 
 #include "Engin\Renderer\Window.h"
 #include "Engin\Game\SceneManager.h"
+#include "Engin\Game\EventManager.h"
+#include "Engin\HID\KeyboardInput.h"
+#include "Engin\HID\MouseInput.h"
 
 namespace Engin
 {
@@ -25,6 +28,10 @@ namespace Engin
 
 		Renderer::Window window;
 		Game::SceneManager sceneManager;
+		Game::EventManager* eventManager;
+		HID::KeyboardInput* keyboardInput;
+		HID::MouseInput* mouseInput;
+
 		SDL_GLContext glContext;
 		bool running;
 		float step;

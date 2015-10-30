@@ -16,10 +16,16 @@ namespace Engin
 {
 	Engin::Engin() : running(true), accumulator(0.0f), step(0.0f)
 	{
+		keyboardInput = new HID::KeyboardInput();
+		mouseInput = new HID::MouseInput();
+		eventManager = new Game::EventManager(keyboardInput, mouseInput);
 	}
 
 	Engin::~Engin()
 	{
+		delete eventManager;
+		delete keyboardInput;
+		delete mouseInput;
 		SDL_GL_DeleteContext(glContext);
 	}
 
@@ -98,16 +104,18 @@ namespace Engin
 
 	void Engin::handleEvents()
 	{
-		// TODO (eeneku): This method is temporary.
-		SDL_Event event;
-
-		while (SDL_PollEvent(&event) == 1)
+		if (eventManager->userQuit())
 		{
-			if (event.type == SDL_QUIT)
-			{
-				running = false;
-			}
+			running = false;
 		}
+
+		if (keyboardInput->keyIsPressed(HID::KEYBOARD_ESCAPE))
+		{
+			running = false;
+		}
+
+		keyboardInput->update();
+		eventManager->update();
 	}
 
 	void Engin::update(float deltaTime)
