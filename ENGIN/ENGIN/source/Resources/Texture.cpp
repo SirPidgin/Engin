@@ -27,13 +27,15 @@ namespace Engin
 			glDeleteTextures(1, &textureID);
 		}
 
-		void Texture::changeParameters(GLenum target, GLenum parameterName, GLint parameter)
+		void Texture::changeParameters(GLenum parameterName, GLint parameter)
 		{
 			glBindTexture(GL_TEXTURE_2D, textureID);
-			glTexParameteri(target, parameterName, parameter);
+			glTexParameteri(GL_TEXTURE_2D, parameterName, parameter);
 
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels.data());
 			glGenerateMipmap(GL_TEXTURE_2D);
+
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 
 		void Texture::bindTexture(GLenum textureunit)

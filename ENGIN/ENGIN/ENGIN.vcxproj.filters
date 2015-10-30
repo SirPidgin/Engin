@@ -123,6 +123,9 @@
     <ClInclude Include="include\Engin\Core\Timer.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engin\Renderer\TextureBatch.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Renderer\Window.cpp">
@@ -166,6 +169,9 @@
     </ClCompile>
     <ClCompile Include="source\inih\INIReader.cpp">
       <Filter>Source Files\3rd party\inih</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Renderer\TextureBatch.cpp">
+      <Filter>Source Files\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

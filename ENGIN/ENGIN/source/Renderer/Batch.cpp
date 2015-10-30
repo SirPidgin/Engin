@@ -66,25 +66,25 @@ namespace Engin
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 
-		void Batch::drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, const Color& color, GLfloat depth)
+		void Batch::drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, const Color& color, GLfloat opacity, GLfloat depth)
 		{
 			std::vector<Vertex> vertices = {
-				Vertex(glm::vec3(x1, y1, depth), glm::vec4(color.r, color.g, color.b, color.a)),
-				Vertex(glm::vec3(x2, y2, depth), glm::vec4(color.r, color.g, color.b, color.a)),
-				Vertex(glm::vec3(x3, y3, depth), glm::vec4(color.r, color.g, color.b, color.a)) };
+				Vertex(glm::vec3(x1, y1, depth), glm::vec4(color.r, color.g, color.b, opacity)),
+				Vertex(glm::vec3(x2, y2, depth), glm::vec4(color.r, color.g, color.b, opacity)),
+				Vertex(glm::vec3(x3, y3, depth), glm::vec4(color.r, color.g, color.b, opacity)) };
 
 			draw(vertices);
 		}
 
-		void Batch::drawQuad(GLfloat x, GLfloat y, GLfloat width, GLfloat height, const Color& color, GLfloat depth)
+		void Batch::drawQuad(GLfloat x, GLfloat y, GLfloat width, GLfloat height, const Color& color, GLfloat opacity, GLfloat depth)
 		{
 			std::vector<Vertex> vertices = {
-				Vertex(glm::vec3(x, y + height, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
-				Vertex(glm::vec3(x + width, y + height, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
-				Vertex(glm::vec3(x + width, y, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
-				Vertex(glm::vec3(x, y + height, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
-				Vertex(glm::vec3(x, y, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
-				Vertex(glm::vec3(x + width, y, depth), glm::vec4(color.r, color.g, color.b, color.a)) };
+				Vertex(glm::vec3(x, y + height, depth), glm::vec4(color.r, color.g, color.b, opacity)),
+				Vertex(glm::vec3(x + width, y + height, depth), glm::vec4(color.r, color.g, color.b, opacity)),
+				Vertex(glm::vec3(x + width, y, depth), glm::vec4(color.r, color.g, color.b, opacity)),
+				Vertex(glm::vec3(x, y + height, depth), glm::vec4(color.r, color.g, color.b, opacity)),
+				Vertex(glm::vec3(x, y, depth), glm::vec4(color.r, color.g, color.b, opacity)),
+				Vertex(glm::vec3(x + width, y, depth), glm::vec4(color.r, color.g, color.b, opacity)) };
 
 			draw(vertices);
 		}
