@@ -61,6 +61,12 @@
     <Filter Include="Source Files\3rd party\inih">
       <UniqueIdentifier>{46276633-160a-429d-8261-df5be06ab974}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\3rd party\LodePNG">
+      <UniqueIdentifier>{563e3a9e-a811-4672-ac72-43162eb5e5ea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\3rd party\LodePNG">
+      <UniqueIdentifier>{f0fc5526-3c60-4a1c-9157-19afde22eff5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engin\Engin.h">
@@ -111,6 +117,9 @@
     <ClInclude Include="include\inih\INIReader.h">
       <Filter>Header Files\3rd party\inih</Filter>
     </ClInclude>
+    <ClInclude Include="include\LodePNG\lodepng.h">
+      <Filter>Header Files\3rd party\LodePNG</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Renderer\Window.cpp">
@@ -154,6 +163,9 @@
     </ClCompile>
     <ClCompile Include="source\inih\INIReader.cpp">
       <Filter>Source Files\3rd party\inih</Filter>
+    </ClCompile>
+    <ClCompile Include="source\3rd party\LodePNG\lodepng.cpp">
+      <Filter>Source Files\3rd party\LodePNG</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

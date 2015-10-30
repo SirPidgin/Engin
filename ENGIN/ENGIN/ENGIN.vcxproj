@@ -27,8 +27,10 @@
     <ClInclude Include="include\Engin\Resources\Texture.h" />
     <ClInclude Include="include\inih\ini.h" />
     <ClInclude Include="include\inih\INIReader.h" />
+    <ClInclude Include="include\LodePNG\lodepng.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\3rd party\LodePNG\lodepng.cpp" />
     <ClCompile Include="source\inih\ini.c" />
     <ClCompile Include="source\inih\INIReader.cpp" />
     <ClCompile Include="source\Resources\Animation.cpp" />
