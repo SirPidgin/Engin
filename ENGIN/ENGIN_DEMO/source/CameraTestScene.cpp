@@ -41,7 +41,17 @@ namespace Engin
 			//camera.setZoomLevel(0.5f);
 
 			shader.load("resources/shaders/vertex.shader", "resources/shaders/fragment.shader");
+			textureShader.load("resources/shaders/texture_vertex.shader", "resources/shaders/texture_fragment.shader");
 			batch.init(&shader, 4096);
+			textureBatch.setShader(&textureShader);
+
+			doge = resourceManager.load<Resources::Texture>("resources/doge.png");
+
+			textureBatch.draw(doge, nullptr, 0.0f, 0.0f, 10.0f, 10.0f, 0.0f, 1.0f, Renderer::clrBlack, 1.0f, 1.0f);
+
+			std::cout << doge->getResourcePath() << ": " << doge->getHeight() << " " << doge->getReferenceCount() << std::endl;
+		
+			
 		}
 
 		CameraTestScene::~CameraTestScene()

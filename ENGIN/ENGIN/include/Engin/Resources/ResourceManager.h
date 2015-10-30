@@ -28,7 +28,7 @@ namespace Engin
 				if (it != resourceMap.end())
 				{
 					(*it).second->incReferences();
-					return (*it).second;
+					return static_cast<T*>((*it).second);
 				}
 
 				T *resource = new T(filename);

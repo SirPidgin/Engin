@@ -31,8 +31,8 @@ namespace Engin
 			void growTextureQueue();
 			void growSortedTextures();
 			void sortTextures();
-			void renderBatch();
-			void renderSprite();
+			void renderBatch(Resources::Texture* texture, size_t start, size_t count, const Camera& camera);
+			void renderTexture();
 
 			struct TextureInfo
 			{
@@ -42,7 +42,7 @@ namespace Engin
 				glm::vec2 topRight;
 				glm::vec2 bottomLeft;
 				glm::vec2 bottomRight;
-				const Resources::Texture* texture;
+				Resources::Texture* texture;
 				float depth;
 			};
 
@@ -67,6 +67,7 @@ namespace Engin
 
 			size_t textureQueueCount;
 			size_t textureQueueArraySize;
+			size_t vertexBufferPos;
 
 			GLuint VBO;
 			GLuint IBO;

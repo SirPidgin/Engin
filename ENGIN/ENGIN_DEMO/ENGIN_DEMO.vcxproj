@@ -96,10 +96,15 @@
   <ItemGroup>
     <None Include="resources\engine.ini" />
     <None Include="resources\shaders\fragment.shader" />
+    <None Include="resources\shaders\texture_fragment.shader" />
+    <None Include="resources\shaders\texture_vertex.shader" />
     <None Include="resources\shaders\vertex.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CameraTestScene.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\doge.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

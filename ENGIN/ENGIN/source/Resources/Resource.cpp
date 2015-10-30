@@ -5,7 +5,7 @@ namespace Engin
 {
 	namespace Resources
 	{
-		Resource::Resource(const std::string& resourcePath)
+		Resource::Resource(const std::string& resourcePath) : resourcePath(resourcePath)
 		{
 			if (resourcePath.empty())
 			{

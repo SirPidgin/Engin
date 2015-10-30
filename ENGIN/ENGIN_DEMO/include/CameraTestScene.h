@@ -4,6 +4,8 @@
 #include <Engin\Renderer\Camera.h>
 #include <Engin\Renderer\Batch.h>
 #include <Engin\Renderer\TextureBatch.h>
+#include "Engin\Resources\ResourceManager.h"
+#include "Engin\Resources\Texture.h"
 
 namespace Engin
 {
@@ -28,7 +30,12 @@ namespace Engin
 			Renderer::Camera camera2;
 
 			Resources::Shader shader;
+			Resources::Shader textureShader;
 			Renderer::Batch batch;
+			Renderer::TextureBatch textureBatch;
+
+			Resources::ResourceManager resourceManager;
+			Resources::Texture* doge;
 		};
 	}
 }

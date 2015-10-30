@@ -32,10 +32,21 @@
     <None Include="resources\engine.ini">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\shaders\texture_fragment.shader">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\shaders\texture_vertex.shader">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CameraTestScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\doge.png">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>
