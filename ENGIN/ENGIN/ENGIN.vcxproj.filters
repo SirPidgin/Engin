@@ -67,6 +67,12 @@
     <Filter Include="Source Files\3rd party\LodePNG">
       <UniqueIdentifier>{f0fc5526-3c60-4a1c-9157-19afde22eff5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\HID">
+      <UniqueIdentifier>{4602f2ad-2e4a-40b0-b855-1b00234b32cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\HID">
+      <UniqueIdentifier>{a9921436-eec3-4503-b27d-90b21703a2e3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engin\Engin.h">
@@ -126,6 +132,18 @@
     <ClInclude Include="include\Engin\Renderer\TextureBatch.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engin\Game\EventManager.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\HID\GamepadInput.h">
+      <Filter>Header Files\HID</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\HID\KeyboardInput.h">
+      <Filter>Header Files\HID</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\HID\MouseInput.h">
+      <Filter>Header Files\HID</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Renderer\Window.cpp">
@@ -161,9 +179,6 @@
     <ClCompile Include="source\Resources\Texture.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="source\Engin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\inih\ini.c">
       <Filter>Source Files\3rd party\inih</Filter>
     </ClCompile>
@@ -182,21 +197,35 @@
     <ClCompile Include="source\Resources\Sound.cpp" />
     <ClCompile Include="source\Resources\Texture.cpp" />
     <ClCompile Include="source\Engin.cpp" />
-    <ClCompile Include="source\HID\GamepadInput.cpp" />
-    <ClCompile Include="source\HID\KeyboardInput.cpp" />
-    <ClCompile Include="source\HID\MouseInput.cpp" />
     <ClCompile Include="source\Game\SceneManager.cpp" />
     <ClCompile Include="source\Renderer\Batch.cpp" />
     <ClCompile Include="source\Renderer\Camera.cpp" />
     <ClCompile Include="source\Renderer\Window.cpp" />
     <ClCompile Include="source\Resources\Shader.cpp" />
-    <ClCompile Include="source\Game\EventManager.cpp" />
+    <ClCompile Include="source\Game\EventManager.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="source\HID\GamepadInput.cpp">
+      <Filter>Source Files\HID</Filter>
+    </ClCompile>
+    <ClCompile Include="source\HID\KeyboardInput.cpp">
+      <Filter>Source Files\HID</Filter>
+    </ClCompile>
+    <ClCompile Include="source\HID\MouseInput.cpp">
+      <Filter>Source Files\HID</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Engin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\3rd party\LodePNG\lodepng.cpp">
+      <Filter>Source Files\3rd party\LodePNG</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Core\Timer.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engin\Engin.h" />
-    <ClInclude Include="include\Engin\HID\GamepadInput.h" />
-    <ClInclude Include="include\Engin\HID\KeyboardInput.h" />
-    <ClInclude Include="include\Engin\HID\MouseInput.h" />
     <ClInclude Include="include\Engin\Game\Scene.h" />
     <ClInclude Include="include\Engin\Game\SceneManager.h" />
     <ClInclude Include="include\Engin\Renderer\Batch.h" />
@@ -212,6 +241,5 @@
     <ClInclude Include="include\Engin\Resources\Texture.h" />
     <ClInclude Include="include\inih\ini.h" />
     <ClInclude Include="include\inih\INIReader.h" />
-    <ClInclude Include="include\Engin\Game\EventManager.h" />
   </ItemGroup>
 </Project>

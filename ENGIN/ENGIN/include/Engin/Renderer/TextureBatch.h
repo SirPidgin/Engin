@@ -23,7 +23,7 @@ namespace Engin
 			void draw(Resources::Texture* texture, glm::vec4* textureRegion, float x, float y, float width, float height, float rotation, float scale, const Color& color, float opacity = 1.0f, float depth = 0.0f);
 			void flush(const Camera& camera);
 
-			void clear() { textureQueueCount = 0; }
+			void clear();
 		private:
 			void createBuffers();
 			void createIndexValues();

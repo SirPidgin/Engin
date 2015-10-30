@@ -57,23 +57,24 @@ namespace Engin
 			if (!textureQueueCount)
 				return;
 
-			prepareForRendering();
 			sortTextures();
+			prepareForRendering();
 
 			glBindBuffer(GL_ARRAY_BUFFER, VBO);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
+			shader->bind();
+
 			glEnableVertexAttribArray(0);
 			glEnableVertexAttribArray(1);
+			glEnableVertexAttribArray(2);
 
 			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offsetof(Vertex, color)));
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offsetof(Vertex, position)));
 			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offsetof(Vertex, uv)));
-
-			shader->bind();
-
+			
 			glUniformMatrix4fv(glGetUniformLocation(shader->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(camera.getVP()));
-			glUniform1i(glGetUniformLocation(shader->getProgram(), "texture"), 0);
+			glUniform1i(glGetUniformLocation(shader->getProgram(), "ourTexture"), 0);
 
 			Resources::Texture* batchTexture = nullptr;
 			size_t batchStart = 0;
@@ -100,13 +101,18 @@ namespace Engin
 
 			glDisableVertexAttribArray(0);
 			glDisableVertexAttribArray(1);
+			glDisableVertexAttribArray(2);
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+			vertexBufferPos = 0;
+		}
+
+		void TextureBatch::clear()
+		{
 			textureQueueCount = 0;
 			vertexBufferPos = 0;
-			
 			sortedTextures.clear();
 		}
 
@@ -124,13 +130,13 @@ namespace Engin
 					t->texCoords.x, t->texCoords.y));
 				vertices.push_back(Vertex(t->topRight.x, t->topRight.y, t->depth,
 					t->color.r, t->color.g, t->color.b, t->color.a,
-					t->texCoords.x, t->texCoords.y));
+					t->texCoords.z, t->texCoords.y));
 				vertices.push_back(Vertex(t->bottomLeft.x, t->bottomLeft.y, t->depth,
 					t->color.r, t->color.g, t->color.b, t->color.a,
-					t->texCoords.x, t->texCoords.y));
+					t->texCoords.x, t->texCoords.w));
 				vertices.push_back(Vertex(t->bottomRight.x, t->bottomRight.y, t->depth,
 					t->color.r, t->color.g, t->color.b, t->color.a,
-					t->texCoords.x, t->texCoords.y));
+					t->texCoords.z, t->texCoords.w));
 			}
 
 			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vertex) * vertices.size(), (void*)(vertices.data()));
@@ -225,20 +231,25 @@ namespace Engin
 
 			if (textureRegion)
 			{
-				textureInfo->texCoords = *textureRegion;
+				textureInfo->texCoords.x = textureRegion->x / texture->getWidth();
+				textureInfo->texCoords.y = textureRegion->y / texture->getHeight();
+				textureInfo->texCoords.z = textureInfo->texCoords.x + textureRegion->z / texture->getWidth();
+				textureInfo->texCoords.w = textureInfo->texCoords.y + textureRegion->w / texture->getHeight();
 			}
 			else
 			{
-				textureInfo->texCoords = glm::vec4(0.0f, 0.0f, (GLfloat)texture->getWidth(), (GLfloat)texture->getHeight());
+				textureInfo->texCoords = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 			}
 
-			textureInfo->color = glm::vec4(color.r, color.b, color.g, opacity);
+			textureInfo->texture = texture;
+
+			textureInfo->color = glm::vec4(color.r, color.g, color.b, opacity);
 			textureInfo->depth = depth;
 
 			textureInfo->topLeft = glm::vec2(x, y + height);
 			textureInfo->topRight = glm::vec2(x + width, y + height);
 			textureInfo->bottomLeft = glm::vec2(x, y);
-			textureInfo->bottomLeft = glm::vec2(x + width, y);
+			textureInfo->bottomRight = glm::vec2(x + width, y);
 
 			textureQueueCount++;
 		}

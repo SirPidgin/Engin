@@ -21,7 +21,7 @@ namespace Engin
 			void interpolate(GLfloat alpha);
 			void draw();
 			void renderTilemap(float startX, float startY, float tileWidth, float tileHeight, size_t worldWidth, size_t worldHeight, Renderer::Batch& batch);
-
+			void renderTexture(Resources::Texture* texture, float x, float y, const Renderer::Camera& camera);
 		public:
 			GLfloat alpha;
 
