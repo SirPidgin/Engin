@@ -12,7 +12,7 @@ namespace Engin
 				std::cout << "Empty filename not allowed!" << std::endl;
 			}
 
-			references = 0; // Pitääkö nämä olla kaikissa?
+			references = 0;
 		}
 
 		Resource::~Resource()

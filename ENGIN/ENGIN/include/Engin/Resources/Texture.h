@@ -13,7 +13,7 @@ namespace Engin
 			Texture(const std::string& resourcePath);
 			~Texture();
 
-			void changeParameters(GLenum target, GLenum parameterName, GLint parameter);
+			void changeParameters(GLenum parameterName, GLint parameter);
 			void bindTexture(GLenum textureUnit);
 
 			GLuint getWidth()
