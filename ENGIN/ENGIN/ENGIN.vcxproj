@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engin\Engin.h" />
+    <ClInclude Include="include\Engin\Game\EventManager.h" />
     <ClInclude Include="include\Engin\HID\GamepadInput.h" />
     <ClInclude Include="include\Engin\HID\KeyboardInput.h" />
     <ClInclude Include="include\Engin\HID\MouseInput.h" />
@@ -32,6 +33,7 @@
     <ClInclude Include="include\inih\INIReader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\Game\EventManager.cpp" />
     <ClCompile Include="source\inih\ini.c" />
     <ClCompile Include="source\inih\INIReader.cpp" />
     <ClCompile Include="source\Resources\Animation.cpp" />

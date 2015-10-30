@@ -17,7 +17,7 @@ namespace Engin
 			//update previousButtonMap
 			for (auto& it : buttonMap)
 			{
-				previousButtonMap.at(it.first) = it.second;
+				previousButtonMap[it.first] = it.second;
 			}
 		}
 
@@ -56,20 +56,20 @@ namespace Engin
 		//Private:
 		void MouseInput::pressButton(unsigned int buttonID)
 		{
-			buttonMap.at(buttonID) = true;
+			buttonMap[buttonID] = true;
 		}
 
 
 		void MouseInput::releaseButton(unsigned int buttonID)
 		{
-			buttonMap.at(buttonID) = false;
+			buttonMap[buttonID] = false;
 		}
 
 
-		void MouseInput::setMousePosition(float x, float y)
+		void MouseInput::setMousePosition(int x, int y)
 		{
-			mousePosition.x = x;
-			mousePosition.y = y;
+			mousePositionX = x;
+			mousePositionX = y;
 		}
 
 

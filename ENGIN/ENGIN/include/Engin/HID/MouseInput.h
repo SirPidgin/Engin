@@ -5,10 +5,19 @@
 #include <unordered_map>
 
 
-//Call setMousePosition, pressButton and releaseButton in EventHandler(or what ever it will be called) to update mouse position coordinates and buttonMap
+//Call setMousePosition, pressButton and releaseButton in EventManager to update mouse position coordinates and buttonMap
 //call update() in game loop to update previousButtonMap
-//In the game's code you can call e.g. Engin::keyboardInput->keyIsDown(KEYBOARD_UP), which returns a true if up arrow is pressed.
+//In the game's code you can call e.g. Engin::mouseInput->buttonIsPressed(HID::MOUSEBUTTON_LEFT), which returns a true if left mouse button is pressed.
 
+
+//Forward Declaration
+namespace Engin
+{
+	namespace Game
+	{
+		class EventManager;
+	}
+}
 
 namespace Engin
 {
@@ -16,13 +25,16 @@ namespace Engin
 	{
 		enum MouseButton : unsigned int
 		{
-			//TODO
-			//list all possible mouse buttons...
+			MOUSEBUTTON_LEFT = 1,
+			MOUSEBUTTON_MIDDLE = 2,
+			MOUSEBUTTON_RIGHT = 3,
+			MOUSEBUTTON_X1 = 4,
+			MOUSEBUTTON_X2 = 5
 		};
 
 		class MouseInput
 		{
-			//friend class EventHandler
+			friend class Game::EventManager;
 
 		public:
 			MouseInput();
@@ -33,24 +45,26 @@ namespace Engin
 			bool ButtonIsPressed(MouseButton buttonID);
 			bool ButtonWasPressed(MouseButton buttonID);
 			bool ButtonWasReleased(MouseButton buttonID);
+			//TODO: Mouse wheel stuff
 			//bool mouseWheelMoved(); ??
 
 			//Getters
-			//NOTE: if we don't need both of these mouseposition getters, the useless one can be removed
-			void getMousePosition(float &xPos, float &yPos) { xPos = mousePosition.x; yPos = mousePosition.y; }
-			glm::vec2 getMousePosition() { return mousePosition; }
+			void getMousePosition(int &xPos, int &yPos) { xPos = mousePositionX; yPos = mousePositionY; }
 			//void getMouseWheelPosition(int &position); ??
 
-		private:
+		protected:
 			void pressButton(unsigned int buttonID);
 			void releaseButton(unsigned int buttonID);
-			void setMousePosition(float x, float y);
+			void setMousePosition(int x, int y);
 
+		private:
 			bool buttonWasDown(unsigned int buttonID);
 
 			std::unordered_map<unsigned int, bool> buttonMap;
 			std::unordered_map<unsigned int, bool> previousButtonMap;
-			glm::vec2 mousePosition;
+			int mousePositionX;
+			int mousePositionY;
+			//TODO: mouse moved event system
 		};
 	}
 }

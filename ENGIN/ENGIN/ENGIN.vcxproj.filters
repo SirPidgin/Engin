@@ -1,180 +1,45 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Source Files\Renderer">
-      <UniqueIdentifier>{9e170b5e-492a-45ba-9852-f2f8eb3f509b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Renderer">
-      <UniqueIdentifier>{6ae202ce-a1d5-4c0d-920c-dcbd38da70f8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Audio">
-      <UniqueIdentifier>{820c9bce-7248-4e7d-8481-2855e28b537e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Core">
-      <UniqueIdentifier>{57da7697-6c49-4c53-9c58-c3fb69181554}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Physics">
-      <UniqueIdentifier>{b4fde06a-f69a-4971-8252-d71f410d4bef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Audio">
-      <UniqueIdentifier>{f0304add-b2b9-4b81-b26e-30fcfdd6aade}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Core">
-      <UniqueIdentifier>{a0dbe176-81fb-45d9-8b0c-2ab725e2f9f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Physics">
-      <UniqueIdentifier>{33e5de78-64a2-4b5c-a04e-1a74f501f975}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Resources">
-      <UniqueIdentifier>{1178caff-a08e-4949-ad27-bd61f3856239}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Resources">
-      <UniqueIdentifier>{e91399c7-a0eb-43e3-b8d5-3d44182d2b0c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\HID">
-      <UniqueIdentifier>{e7a37d7f-f91c-40ba-bba5-020753254c2c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\HID">
-      <UniqueIdentifier>{e40de104-c958-4d03-9403-12ee56fc50a0}</UniqueIdentifier>
-    <Filter Include="Header Files\Game">
-      <UniqueIdentifier>{83c119a5-1256-4049-9609-4f7c785f084f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Game">
-      <UniqueIdentifier>{625ce00b-ecc4-4292-b4f9-8bf8b72f84b1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\3rd party">
-      <UniqueIdentifier>{33d25fe6-7655-4055-818e-dd708fd94eb6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\3rd party">
-      <UniqueIdentifier>{167d6b88-4c25-47a0-82ea-57935c08d59e}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\3rd party\inih">
-      <UniqueIdentifier>{6d1fcd07-30ec-449e-a705-489dc42d6a53}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\3rd party\inih">
-      <UniqueIdentifier>{46276633-160a-429d-8261-df5be06ab974}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="source\inih\ini.c" />
+    <ClCompile Include="source\inih\INIReader.cpp" />
+    <ClCompile Include="source\Resources\Animation.cpp" />
+    <ClCompile Include="source\Resources\Music.cpp" />
+    <ClCompile Include="source\Resources\Resource.cpp" />
+    <ClCompile Include="source\Resources\ResourceManager.cpp" />
+    <ClCompile Include="source\Resources\Sound.cpp" />
+    <ClCompile Include="source\Resources\Texture.cpp" />
+    <ClCompile Include="source\Engin.cpp" />
+    <ClCompile Include="source\HID\GamepadInput.cpp" />
+    <ClCompile Include="source\HID\KeyboardInput.cpp" />
+    <ClCompile Include="source\HID\MouseInput.cpp" />
+    <ClCompile Include="source\Game\SceneManager.cpp" />
+    <ClCompile Include="source\Renderer\Batch.cpp" />
+    <ClCompile Include="source\Renderer\Camera.cpp" />
+    <ClCompile Include="source\Renderer\Window.cpp" />
+    <ClCompile Include="source\Resources\Shader.cpp" />
+    <ClCompile Include="source\Game\EventManager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\Engin\Engin.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Renderer\Window.h">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Renderer\Camera.h">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Renderer\Batch.h">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Renderer\Color.h">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Resources\Shader.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\HID\GamepadInput.h">
-      <Filter>Header Files\HID</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\HID\KeyboardInput.h">
-      <Filter>Header Files\HID</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\HID\MouseInput.h">
-      <Filter>Header Files\HID</Filter>
-    <ClInclude Include="include\Engin\Game\Scene.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Game\SceneManager.h">
-      <Filter>Header Files\Game</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Resources\Sound.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Resources\Texture.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Resources\Animation.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Resources\Music.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Resources\Resource.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Resources\ResourceManager.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="include\inih\ini.h">
-      <Filter>Header Files\3rd party\inih</Filter>
-    </ClInclude>
-    <ClInclude Include="include\inih\INIReader.h">
-      <Filter>Header Files\3rd party\inih</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="source\Renderer\Window.cpp">
-      <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Renderer\Camera.cpp">
-      <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Renderer\Batch.cpp">
-      <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Resources\Shader.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="source\HID\GamepadInput.cpp">
-      <Filter>Source Files\HID</Filter>
-    </ClCompile>
-    <ClCompile Include="source\HID\KeyboardInput.cpp">
-      <Filter>Source Files\HID</Filter>
-    </ClCompile>
-    <ClCompile Include="source\HID\MouseInput.cpp">
-      <Filter>Source Files\HID</Filter>
-    <ClCompile Include="source\Game\SceneManager.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Resources\Animation.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Resources\Music.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Resources\Resource.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Resources\ResourceManager.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Resources\Sound.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Resources\Texture.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Engin.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\inih\ini.c">
-      <Filter>Source Files\3rd party\inih</Filter>
-    </ClCompile>
-    <ClCompile Include="source\inih\INIReader.cpp">
-      <Filter>Source Files\3rd party\inih</Filter>
-    </ClCompile>
+    <ClInclude Include="include\Engin\Engin.h" />
+    <ClInclude Include="include\Engin\HID\GamepadInput.h" />
+    <ClInclude Include="include\Engin\HID\KeyboardInput.h" />
+    <ClInclude Include="include\Engin\HID\MouseInput.h" />
+    <ClInclude Include="include\Engin\Game\Scene.h" />
+    <ClInclude Include="include\Engin\Game\SceneManager.h" />
+    <ClInclude Include="include\Engin\Renderer\Batch.h" />
+    <ClInclude Include="include\Engin\Renderer\Camera.h" />
+    <ClInclude Include="include\Engin\Renderer\Color.h" />
+    <ClInclude Include="include\Engin\Renderer\Window.h" />
+    <ClInclude Include="include\Engin\Resources\Animation.h" />
+    <ClInclude Include="include\Engin\Resources\Music.h" />
+    <ClInclude Include="include\Engin\Resources\Resource.h" />
+    <ClInclude Include="include\Engin\Resources\ResourceManager.h" />
+    <ClInclude Include="include\Engin\Resources\Shader.h" />
+    <ClInclude Include="include\Engin\Resources\Sound.h" />
+    <ClInclude Include="include\Engin\Resources\Texture.h" />
+    <ClInclude Include="include\inih\ini.h" />
+    <ClInclude Include="include\inih\INIReader.h" />
+    <ClInclude Include="include\Engin\Game\EventManager.h" />
   </ItemGroup>
 </Project>

@@ -17,17 +17,20 @@ namespace Engin
 			//update previousKeyMap
 			for (auto& it : keyMap)
 			{
-				previousKeyMap.at(it.first) = it.second;
+				previousKeyMap[it.first] = it.second;
 			}
 		}
 
 
 		bool KeyboardInput::keyIsPressed(KeyboardKey keyID)
 		{
-			auto it = keyMap.find(keyID);
-			if (it != keyMap.end())
+			if (keyMap.size() != 0)
 			{
-				return it->second;
+				auto it = keyMap.find(keyID);
+				if (it != keyMap.end())
+				{
+					return it->second;
+				}
 			}
 			return false;
 		}
@@ -56,13 +59,13 @@ namespace Engin
 		//Private:
 		void KeyboardInput::pressKey(unsigned int keyID)
 		{
-			keyMap.at(keyID) = true;
+			keyMap[keyID] = true;
 		}
 
 
 		void KeyboardInput::releaseKey(unsigned int keyID)
 		{
-			keyMap.at(keyID) = false;
+			keyMap[keyID] = false;
 		}
 
 
