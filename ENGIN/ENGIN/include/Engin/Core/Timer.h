@@ -24,8 +24,7 @@ namespace Engin
 			GLfloat startTime;
 			GLfloat stopTime;
 			GLfloat pauseTime;
-			static GLfloat globalTime;
-			static GLfloat localTime;
+			GLfloat localTime;
 
 			bool started;
 			bool paused;

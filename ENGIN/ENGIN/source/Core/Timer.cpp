@@ -10,18 +10,15 @@ namespace Engin
 			startTime = 0.0f;
 			stopTime = 0.0f;
 			pauseTime = 0.0f;
-			globalTime = 0.0f;
 			localTime = 0.0f;
 
 			started = false;
 			paused = false;
-
-			globalTime = SDL_GetTicks();
 		}
 
 		GLfloat Timer::getGlobalTime()
 		{
-			return globalTime;
+			return SDL_GetTicks();
 		}
 
 		GLfloat Timer::getLocalTime()
@@ -36,29 +33,20 @@ namespace Engin
 				}
 				else
 				{
-					localTime = globalTime - startTime;
+					localTime = getGlobalTime() - startTime;
 				}
 			}
 			return localTime;
 		}
 
 		GLfloat Timer::start()
-		{	
-			if (started && paused) //To unpause.
-			{
-				paused = false;
-				startTime = globalTime - pauseTime;
-				pauseTime = 0.0f;
-			}
-			else
-			{
-				started = true;
-				paused = false;
+		{			
+			started = true;
+			paused = false;
 
-				startTime = globalTime;
-				pauseTime = 0.0f;
-				return startTime;
-			}
+			startTime = getGlobalTime();
+			pauseTime = 0.0f;
+			return startTime;	
 		}
 
 		GLfloat Timer::stop()
@@ -66,7 +54,7 @@ namespace Engin
 			started = false;
 			paused = false;
 
-			stopTime = globalTime;
+			stopTime = getGlobalTime();
 
 			startTime = 0.0f;
 			pauseTime = 0.0f;
@@ -75,22 +63,24 @@ namespace Engin
 
 		GLfloat Timer::pause()
 		{
-			if (started == true && paused == false)
+			if (started && paused) //To unpause.
+			{
+				paused = false;
+				startTime = getGlobalTime() - pauseTime;
+				pauseTime = 0.0f;
+				return startTime;
+			}
+			else if (started == true && paused == false)
 			{
 				paused = true;
 
-				pauseTime = globalTime - startTime;
+				pauseTime = getGlobalTime() - startTime;
 				return pauseTime;
 			}
 			else
 			{
 				return pauseTime;
 			}
-		}
-
-		void Timer::update()
-		{
-			globalTime = SDL_GetTicks();
 		}
 
 		bool Timer::isStarted()
