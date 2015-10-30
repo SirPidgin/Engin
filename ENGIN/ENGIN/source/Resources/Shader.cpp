@@ -9,7 +9,7 @@ namespace Engin
 {
 	namespace Resources
 	{
-		Shader::Shader(const GLchar* vertexPath, const GLchar* fragmentPath)
+		void Shader::load(const GLchar* vertexPath, const GLchar* fragmentPath)
 		{
 			std::string vertexTemp;
 			std::string fragmentTemp;

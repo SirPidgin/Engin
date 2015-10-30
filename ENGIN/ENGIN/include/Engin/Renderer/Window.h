@@ -15,10 +15,9 @@ namespace Engin
 
 			void createWindow(const std::string& title, int x, int y, int w, int h);
 			void swapWindow();
+			SDL_Window* getSDLWindow() { return window; }
 		private:
 			SDL_Window* window;
-			SDL_GLContext glContext;
-			GLuint VAO;
 		};
 	}
 }

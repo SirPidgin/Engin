@@ -7,8 +7,22 @@ namespace Engin
 {
 	namespace Renderer
 	{
-		Batch::Batch(Resources::Shader* shader, size_t maxVertices) : currentVertex(0), shader(shader)
+		Batch::Batch()
 		{
+		}
+
+		Batch::~Batch()
+		{
+			glDeleteBuffers(1, &VBO);
+
+			vertices.clear();
+		}
+
+		void Batch::init(Resources::Shader* shader, size_t maxVertices)
+		{
+			currentVertex = 0;
+			this->shader = shader;
+
 			assert(maxVertices > 0);
 
 			vertices.resize(maxVertices);
@@ -17,13 +31,6 @@ namespace Engin
 			glBindBuffer(GL_ARRAY_BUFFER, VBO);
 			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * maxVertices, vertices.data(), GL_DYNAMIC_DRAW);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
-		}
-
-		Batch::~Batch()
-		{
-			glDeleteBuffers(1, &VBO);
-
-			vertices.clear();
 		}
 
 		void Batch::draw(const std::vector<Vertex>& vertices)
@@ -65,6 +72,19 @@ namespace Engin
 				Vertex(glm::vec3(x1, y1, depth), glm::vec4(color.r, color.g, color.b, color.a)),
 				Vertex(glm::vec3(x2, y2, depth), glm::vec4(color.r, color.g, color.b, color.a)),
 				Vertex(glm::vec3(x3, y3, depth), glm::vec4(color.r, color.g, color.b, color.a)) };
+
+			draw(vertices);
+		}
+
+		void Batch::drawQuad(GLfloat x, GLfloat y, GLfloat width, GLfloat height, const Color& color, GLfloat depth)
+		{
+			std::vector<Vertex> vertices = {
+				Vertex(glm::vec3(x, y + height, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
+				Vertex(glm::vec3(x + width, y + height, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
+				Vertex(glm::vec3(x + width, y, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
+				Vertex(glm::vec3(x, y + height, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
+				Vertex(glm::vec3(x, y, depth), glm::vec4(color.r, color.g, color.b, color.a)), 
+				Vertex(glm::vec3(x + width, y, depth), glm::vec4(color.r, color.g, color.b, color.a)) };
 
 			draw(vertices);
 		}

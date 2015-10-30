@@ -15,17 +15,36 @@
     <ClInclude Include="include\Engin\HID\GamepadInput.h" />
     <ClInclude Include="include\Engin\HID\KeyboardInput.h" />
     <ClInclude Include="include\Engin\HID\MouseInput.h" />
+    <ClInclude Include="include\Engin\Game\Scene.h" />
+    <ClInclude Include="include\Engin\Game\SceneManager.h" />
     <ClInclude Include="include\Engin\Renderer\Batch.h" />
     <ClInclude Include="include\Engin\Renderer\Camera.h" />
     <ClInclude Include="include\Engin\Renderer\Color.h" />
     <ClInclude Include="include\Engin\Renderer\Window.h" />
+    <ClInclude Include="include\Engin\Resources\Animation.h" />
+    <ClInclude Include="include\Engin\Resources\Music.h" />
+    <ClInclude Include="include\Engin\Resources\Resource.h" />
+    <ClInclude Include="include\Engin\Resources\ResourceManager.h" />
     <ClInclude Include="include\Engin\Resources\Shader.h" />
+    <ClInclude Include="include\Engin\Resources\Sound.h" />
+    <ClInclude Include="include\Engin\Resources\Texture.h" />
+    <ClInclude Include="include\inih\ini.h" />
+    <ClInclude Include="include\inih\INIReader.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="source\inih\ini.c" />
+    <ClCompile Include="source\inih\INIReader.cpp" />
+    <ClCompile Include="source\Resources\Animation.cpp" />
+    <ClCompile Include="source\Resources\Music.cpp" />
+    <ClCompile Include="source\Resources\Resource.cpp" />
+    <ClCompile Include="source\Resources\ResourceManager.cpp" />
+    <ClCompile Include="source\Resources\Sound.cpp" />
+    <ClCompile Include="source\Resources\Texture.cpp" />
     <ClCompile Include="source\Engin.cpp" />
     <ClCompile Include="source\HID\GamepadInput.cpp" />
     <ClCompile Include="source\HID\KeyboardInput.cpp" />
     <ClCompile Include="source\HID\MouseInput.cpp" />
+    <ClCompile Include="source\Game\SceneManager.cpp" />
     <ClCompile Include="source\Renderer\Batch.cpp" />
     <ClCompile Include="source\Renderer\Camera.cpp" />
     <ClCompile Include="source\Renderer\Window.cpp" />

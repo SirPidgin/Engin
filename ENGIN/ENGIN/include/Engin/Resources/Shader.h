@@ -9,7 +9,8 @@ namespace Engin
 		class Shader
 		{
 		public:
-			Shader(const GLchar* vertexPath, const GLchar* fragmentPath);
+			Shader(){};
+			void load(const GLchar* vertexPath, const GLchar* fragmentPath);
 			~Shader();
 
 			void bind();
