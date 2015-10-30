@@ -3,6 +3,7 @@
 #include "Engin\Game\Scene.h"
 #include <Engin\Renderer\Camera.h>
 #include <Engin\Renderer\Batch.h>
+#include <Engin\Renderer\TextureBatch.h>
 
 namespace Engin
 {

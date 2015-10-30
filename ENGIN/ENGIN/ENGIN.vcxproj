@@ -17,6 +17,7 @@
     <ClInclude Include="include\Engin\Renderer\Batch.h" />
     <ClInclude Include="include\Engin\Renderer\Camera.h" />
     <ClInclude Include="include\Engin\Renderer\Color.h" />
+    <ClInclude Include="include\Engin\Renderer\TextureBatch.h" />
     <ClInclude Include="include\Engin\Renderer\Window.h" />
     <ClInclude Include="include\Engin\Resources\Animation.h" />
     <ClInclude Include="include\Engin\Resources\Music.h" />
@@ -31,6 +32,7 @@
   <ItemGroup>
     <ClCompile Include="source\inih\ini.c" />
     <ClCompile Include="source\inih\INIReader.cpp" />
+    <ClCompile Include="source\Renderer\TextureBatch.cpp" />
     <ClCompile Include="source\Resources\Animation.cpp" />
     <ClCompile Include="source\Resources\Music.cpp" />
     <ClCompile Include="source\Resources\Resource.cpp" />
