@@ -59,20 +59,22 @@ namespace Engin
 
 			float angle = glm::radians(rotation);
 
-			// TODO (eeneku): Add anchor x/y to parameters?
+			width = width * scale;
+			height = height * scale;
 
-			float nWidth = width * scale;
-			float nHeight = height * scale;
+			// TODO (eeneku): Add anchor x/y to parameters?
+			float anchor_x = width / 2;
+			float anchor_y = height / 2;
 
 			textureInfo->texture = texture;
 			textureInfo->rotation = rotation;
 			textureInfo->scale = scale;
 			textureInfo->depth = depth;
 			textureInfo->color = glm::vec4(color.r, color.g, color.b, opacity);
-			textureInfo->topLeft = glm::vec2(x ,y) + glm::rotate(glm::vec2(-nWidth / 2, nHeight / 2), angle);
-			textureInfo->topRight = glm::vec2(x, y) + glm::rotate(glm::vec2(nWidth / 2, nHeight / 2), angle);
-			textureInfo->bottomLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-nWidth / 2, -nHeight / 2), angle);
-			textureInfo->bottomRight = glm::vec2(x, y) + glm::rotate(glm::vec2(nWidth / 2, -nHeight / 2), angle);
+			textureInfo->topLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-anchor_x, height - anchor_y), angle);
+			textureInfo->topRight = glm::vec2(x, y) + glm::rotate(glm::vec2(width - anchor_x, height - anchor_y), angle);
+			textureInfo->bottomLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-anchor_x, -anchor_y), angle);
+			textureInfo->bottomRight = glm::vec2(x, y) + glm::rotate(glm::vec2(width - anchor_x, -anchor_y), angle);
 
 			textureQueueCount++;
 		}
