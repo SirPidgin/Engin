@@ -1,14 +1,16 @@
 #include "Engin\Renderer\TextureBatch.h"
 
 #include <algorithm>
+#include <cassert>
 #include <glm\gtc\type_ptr.hpp>
+#include <glm\gtx\rotate_vector.hpp>
 
 namespace Engin
 {
 	namespace Renderer
 	{
 
-		TextureBatch::TextureBatch() : shader(nullptr), IBO(0), VBO(0), textureQueueCount(0), textureQueueArraySize(0), vertexBufferPos(0)
+		TextureBatch::TextureBatch() : shader(nullptr), IBO(0), VBO(0), textureQueueCount(0), textureQueueArraySize(0), vertexBufferPos(0), inBeginEndPair(false)
 		{
 			createBuffers();
 		}
@@ -19,46 +21,76 @@ namespace Engin
 			glDeleteBuffers(1, &VBO);
 		}
 
-		void TextureBatch::createBuffers()
+		void TextureBatch::begin()
 		{
-			glGenBuffers(1, &VBO);
-			glBindBuffer(GL_ARRAY_BUFFER, VBO);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * maxBatchSize * vertiecsPerTexture, nullptr, GL_DYNAMIC_DRAW);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			vertices.reserve(initialQueueSize * vertiecsPerTexture);
-
-			createIndexValues();
-
-			glGenBuffers(1, &IBO);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * indices.size(), indices.data(), GL_STATIC_DRAW);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+			inBeginEndPair = true;
 		}
 
-		void TextureBatch::createIndexValues()
+		void TextureBatch::draw(Resources::Texture* texture, float x, float y, float opacity, float depth)
 		{
-			size_t size = maxBatchSize * indicesPerTexture;
-			indices.reserve(size);
+			draw(texture, nullptr, x, y, texture->getWidth(), texture->getHeight(), 0.0f, 1.0f, Renderer::clrWhite, opacity, depth);
+		}
 
-			for (unsigned short i = 0; i < size; i += vertiecsPerTexture)
+		void TextureBatch::draw(Resources::Texture* texture, float x, float y, float width, float height, const Color& color, float opacity, float depth)
+		{
+			draw(texture, nullptr, x, y, width, height, 0.0f, 1.0f, color, opacity, depth);
+		}
+
+		void TextureBatch::draw(Resources::Texture* texture, glm::vec4* textureRegion, float x, float y, float width, float height, float rotation, float scale, const Color& color, float opacity, float depth)
+		{
+			if (textureQueueCount >= textureQueueArraySize)
 			{
-				indices.push_back(i);
-				indices.push_back(i + 1);
-				indices.push_back(i + 2);
-
-				indices.push_back(i + 1);
-				indices.push_back(i + 3);
-				indices.push_back(i + 2);
+				growTextureQueue();
 			}
+
+			TextureInfo* textureInfo = &textureQueue[textureQueueCount];
+
+			if (textureRegion)
+			{
+				textureInfo->texCoords.x = textureRegion->x / texture->getWidth();
+				textureInfo->texCoords.y = textureRegion->y / texture->getHeight();
+				textureInfo->texCoords.z = textureInfo->texCoords.x + textureRegion->z / texture->getWidth();
+				textureInfo->texCoords.w = textureInfo->texCoords.y + textureRegion->w / texture->getHeight();
+			}
+			else
+			{
+				textureInfo->texCoords = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+			}
+
+			float angle = glm::radians(rotation);
+
+			// TODO (eeneku): Add anchor x/y to parameters?
+
+			float nWidth = width * scale;
+			float nHeight = height * scale;
+
+			textureInfo->texture = texture;
+			textureInfo->rotation = rotation;
+			textureInfo->scale = scale;
+			textureInfo->depth = depth;
+			textureInfo->color = glm::vec4(color.r, color.g, color.b, opacity);
+			textureInfo->topLeft = glm::vec2(x ,y) + glm::rotate(glm::vec2(-nWidth / 2, nHeight / 2), angle);
+			textureInfo->topRight = glm::vec2(x, y) + glm::rotate(glm::vec2(nWidth / 2, nHeight / 2), angle);
+			textureInfo->bottomLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-nWidth / 2, -nHeight / 2), angle);
+			textureInfo->bottomRight = glm::vec2(x, y) + glm::rotate(glm::vec2(nWidth / 2, -nHeight / 2), angle);
+
+			textureQueueCount++;
+		}
+
+		void TextureBatch::end()
+		{
+			assert(inBeginEndPair);
+			
+			sortTextures();
+			prepareForRendering();
+
+			inBeginEndPair = false;
 		}
 
 		void TextureBatch::flush(const Camera& camera)
 		{
-			if (!textureQueueCount)
+			if (!textureQueueCount && inBeginEndPair)
 				return;
-
-			sortTextures();
-			prepareForRendering();
 
 			glBindBuffer(GL_ARRAY_BUFFER, VBO);
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
@@ -72,7 +104,7 @@ namespace Engin
 			glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offsetof(Vertex, color)));
 			glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offsetof(Vertex, position)));
 			glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (GLvoid*)(offsetof(Vertex, uv)));
-			
+
 			glUniformMatrix4fv(glGetUniformLocation(shader->getProgram(), "MVP"), 1, GL_FALSE, glm::value_ptr(camera.getVP()));
 			glUniform1i(glGetUniformLocation(shader->getProgram(), "ourTexture"), 0);
 
@@ -116,6 +148,39 @@ namespace Engin
 			sortedTextures.clear();
 		}
 
+		void TextureBatch::createBuffers()
+		{
+			glGenBuffers(1, &VBO);
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * maxBatchSize * vertiecsPerTexture, nullptr, GL_DYNAMIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+			vertices.reserve(initialQueueSize * vertiecsPerTexture);
+
+			createIndexValues();
+
+			glGenBuffers(1, &IBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLushort) * indices.size(), indices.data(), GL_STATIC_DRAW);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		}
+
+		void TextureBatch::createIndexValues()
+		{
+			size_t size = maxBatchSize * indicesPerTexture;
+			indices.reserve(size);
+
+			for (unsigned short i = 0; i < size; i += vertiecsPerTexture)
+			{
+				indices.push_back(i);
+				indices.push_back(i + 1);
+				indices.push_back(i + 2);
+
+				indices.push_back(i + 1);
+				indices.push_back(i + 3);
+				indices.push_back(i + 2);
+			}
+		}
+
 		void TextureBatch::prepareForRendering()
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -128,12 +193,15 @@ namespace Engin
 				vertices.push_back(Vertex(t->topLeft.x, t->topLeft.y, t->depth, 
 					t->color.r, t->color.g, t->color.b, t->color.a, 
 					t->texCoords.x, t->texCoords.y));
+
 				vertices.push_back(Vertex(t->topRight.x, t->topRight.y, t->depth,
 					t->color.r, t->color.g, t->color.b, t->color.a,
 					t->texCoords.z, t->texCoords.y));
+	
 				vertices.push_back(Vertex(t->bottomLeft.x, t->bottomLeft.y, t->depth,
 					t->color.r, t->color.g, t->color.b, t->color.a,
 					t->texCoords.x, t->texCoords.w));
+
 				vertices.push_back(Vertex(t->bottomRight.x, t->bottomRight.y, t->depth,
 					t->color.r, t->color.g, t->color.b, t->color.a,
 					t->texCoords.z, t->texCoords.w));
@@ -218,40 +286,6 @@ namespace Engin
 			}
 
 			// TODO (Pidgin): texture->unbindTexture();
-		}
-
-		void TextureBatch::draw(Resources::Texture* texture, glm::vec4* textureRegion, float x, float y, float width, float height, float rotation, float scale, const Color& color, float opacity, float depth)
-		{
-			if (textureQueueCount >= textureQueueArraySize)
-			{
-				growTextureQueue();
-			}
-
-			TextureInfo* textureInfo = &textureQueue[textureQueueCount];
-
-			if (textureRegion)
-			{
-				textureInfo->texCoords.x = textureRegion->x / texture->getWidth();
-				textureInfo->texCoords.y = textureRegion->y / texture->getHeight();
-				textureInfo->texCoords.z = textureInfo->texCoords.x + textureRegion->z / texture->getWidth();
-				textureInfo->texCoords.w = textureInfo->texCoords.y + textureRegion->w / texture->getHeight();
-			}
-			else
-			{
-				textureInfo->texCoords = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
-			}
-
-			textureInfo->texture = texture;
-
-			textureInfo->color = glm::vec4(color.r, color.g, color.b, opacity);
-			textureInfo->depth = depth;
-
-			textureInfo->topLeft = glm::vec2(x, y + height);
-			textureInfo->topRight = glm::vec2(x + width, y + height);
-			textureInfo->bottomLeft = glm::vec2(x, y);
-			textureInfo->bottomRight = glm::vec2(x + width, y);
-
-			textureQueueCount++;
 		}
 	}
 }

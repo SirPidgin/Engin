@@ -78,19 +78,28 @@ namespace Engin
 
 		void CameraTestScene::draw()
 		{
+			textureBatch.begin();
 			//renderTilemap(0.0f, 0.0f, 32.0f, 32.0f, 25, 25, batch); //Depth not working?
 			//renderTilemap(0.0f, 0.0f, 32.0f, 32.0f, 25, 25, batch);
 			batch.drawTriangle(500.0f, 45.0f, 750.0f, 250.0f, 65.0f, 480.0f, Renderer::clrRed, 1.0f, 0.0f);
 			batch.drawTriangle(10.0f, 10.0f, 100.0f, 10.0f, 50.0f, 50.0f, Renderer::clrGreen, 1.0f, 1.0f);
 			batch.drawQuad(200.0f, 200.0f, 50.0f, 50.0f, Renderer::clrWhite, 1.0f, 1.0f);
-			textureBatch.draw(doge, &glm::vec4(0.0f, 0.0f, 275.0f, 275.0f), 110.0f, 110.0f, 250.0f, 250.0f, 0.0f, 0.0f, Renderer::clrBlue, 1.0f, 1.0f);
+			textureBatch.draw(doge, &glm::vec4(190.0f, 170.0f, 60.0f, 60.0f), 110.0f, 110.0f, 250.0f, 250.0f, alpha * 1000.0f, alpha * 1.0f, Renderer::clrBlue, 1.0f, 1.0f);
+			textureBatch.draw(doge, nullptr, 0.0f, 0.0f, 100.0f, 100.0f, 0.0f, 1.0f, Renderer::clrRed, 0.5f, 1.0f);
+			textureBatch.draw(doge, &glm::vec4(0.0f, 0.0f, 300.0f, 300.0f), 350.0f, 350.0f, 125.0f, 250.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
+			textureBatch.draw(doge, nullptr, 600.0f, 600.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrGreen, 0.2f, 1.0f);
+			textureBatch.draw(doge, 500.0f, 0.0f, 0.5f, 0.0f);
+			renderDogemap(0.0f, 0.0f, 64.0f, 64.0f, 20, 20);
+
+			textureBatch.end();
 
 			camera.activateViewPort();
 			batch.flush(camera);
-			//renderTexture(doge, 50.0f, 50.0f, camera);
+			textureBatch.flush(camera);
 
 			camera1.activateViewPort();
 			batch.flush(camera1);
+			textureBatch.flush(camera1);
 
 			camera2.activateViewPort();
 			batch.flush(camera2);
@@ -113,6 +122,24 @@ namespace Engin
 					else
 					{
 						batch.drawQuad(startX + x * tileWidth, startY + y * tileHeight, tileWidth, tileHeight, Renderer::clrBlack, 0.0f, 0.0f);
+					}
+				}
+			}
+		}
+
+		void CameraTestScene::renderDogemap(float startX, float startY, float tileWidth, float tileHeight, size_t worldWidth, size_t worldHeight)
+		{
+			for (size_t y = 0; y < worldHeight; y++)
+			{
+				for (size_t x = 0; x < worldWidth; x++)
+				{
+					if ((x + y) % 2)
+					{
+						textureBatch.draw(doge, startX + x * tileWidth, startY + y * tileHeight, tileWidth, tileHeight, Renderer::clrRed);
+					}
+					else
+					{
+						textureBatch.draw(doge, startX + x * tileWidth, startY + y * tileHeight, tileWidth, tileHeight, Renderer::clrBlue);
 					}
 				}
 			}

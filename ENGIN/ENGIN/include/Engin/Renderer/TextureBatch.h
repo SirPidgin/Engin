@@ -20,9 +20,12 @@ namespace Engin
 			~TextureBatch();
 
 			void setShader(Resources::Shader* shader) { this->shader = shader; }
+			void begin();
+			void draw(Resources::Texture* texture, float x, float y, float opacity = 1.0f, float depth = 0.0f);
+			void draw(Resources::Texture* texture, float x, float y, float width, float height, const Color& color, float opacity = 1.0f, float depth = 0.0f);
 			void draw(Resources::Texture* texture, glm::vec4* textureRegion, float x, float y, float width, float height, float rotation, float scale, const Color& color, float opacity = 1.0f, float depth = 0.0f);
+			void end();
 			void flush(const Camera& camera);
-
 			void clear();
 		private:
 			void createBuffers();
@@ -44,6 +47,8 @@ namespace Engin
 				glm::vec2 bottomRight;
 				Resources::Texture* texture;
 				float depth;
+				float scale;
+				float rotation;
 			};
 
 			struct Vertex
@@ -71,6 +76,8 @@ namespace Engin
 
 			GLuint VBO;
 			GLuint IBO;
+
+			bool inBeginEndPair;
 
 			std::vector<TextureInfo const*> sortedTextures;
 
