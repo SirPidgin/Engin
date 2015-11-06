@@ -76,6 +76,12 @@
     <Filter Include="Header Files\3rd party\RapidXml">
       <UniqueIdentifier>{816cde1e-448f-4c20-892c-c35e72f15118}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Game\Components">
+      <UniqueIdentifier>{0a3905d0-afa1-4ed5-a444-7e9ecfaf2e23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game\Components">
+      <UniqueIdentifier>{ff4bb562-41f2-433c-8f0b-912bacd9512d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engin\Engin.h">
@@ -92,9 +98,6 @@
     </ClInclude>
     <ClInclude Include="include\Engin\Renderer\Color.h">
       <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Resources\Shader.h">
-      <Filter>Header Files\Resources</Filter>
     </ClInclude>
     <ClInclude Include="include\Engin\Game\Scene.h">
       <Filter>Header Files\Game</Filter>
@@ -162,21 +165,6 @@
     <ClInclude Include="include\Engin\Resources\Font.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engin\Game\GameObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Game\Component.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Game\Transform.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Game\Sprite.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Game\RigidBody.h">
-      <Filter>Header Files</Filter>
-	</ClInclude>
     <ClInclude Include="include\RapidXml\rapidxml.hpp">
       <Filter>Header Files\3rd party\RapidXml</Filter>
     </ClInclude>
@@ -189,6 +177,21 @@
     <ClInclude Include="include\RapidXml\rapidxml_utils.hpp">
       <Filter>Header Files\3rd party\RapidXml</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engin\Game\Component.h">
+      <Filter>Header Files\Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Game\RigidBody.h">
+      <Filter>Header Files\Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Game\Sprite.h">
+      <Filter>Header Files\Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Game\Transform.h">
+      <Filter>Header Files\Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Game\GameObject.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Renderer\Window.cpp">
@@ -199,9 +202,6 @@
     </ClCompile>
     <ClCompile Include="source\Renderer\Batch.cpp">
       <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Resources\Shader.cpp">
-      <Filter>Source Files\Resources</Filter>
     </ClCompile>
     <ClCompile Include="source\Game\SceneManager.cpp">
       <Filter>Source Files\Game</Filter>
@@ -241,7 +241,6 @@
     <ClCompile Include="source\Resources\ResourceManager.cpp" />
     <ClCompile Include="source\Resources\Sound.cpp" />
     <ClCompile Include="source\Resources\Texture.cpp" />
-    <ClCompile Include="source\Engin.cpp" />
     <ClCompile Include="source\Game\SceneManager.cpp" />
     <ClCompile Include="source\Renderer\Batch.cpp" />
     <ClCompile Include="source\Renderer\Camera.cpp" />
@@ -284,9 +283,12 @@
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
     <ClCompile Include="source\Game\GameObject.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
     <ClCompile Include="source\Game\Sprite.cpp">
+      <Filter>Source Files\Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Engin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
