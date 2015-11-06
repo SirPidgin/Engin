@@ -73,6 +73,9 @@
     <Filter Include="Header Files\HID">
       <UniqueIdentifier>{a9921436-eec3-4503-b27d-90b21703a2e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\3rd party\RapidXml">
+      <UniqueIdentifier>{816cde1e-448f-4c20-892c-c35e72f15118}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engin\Engin.h">
@@ -143,6 +146,18 @@
     </ClInclude>
     <ClInclude Include="include\Engin\HID\MouseInput.h">
       <Filter>Header Files\HID</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RapidXml\rapidxml.hpp">
+      <Filter>Header Files\3rd party\RapidXml</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RapidXml\rapidxml_iterators.hpp">
+      <Filter>Header Files\3rd party\RapidXml</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RapidXml\rapidxml_print.hpp">
+      <Filter>Header Files\3rd party\RapidXml</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RapidXml\rapidxml_utils.hpp">
+      <Filter>Header Files\3rd party\RapidXml</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

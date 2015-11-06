@@ -34,6 +34,10 @@
     <ClInclude Include="include\inih\ini.h" />
     <ClInclude Include="include\inih\INIReader.h" />
     <ClInclude Include="include\LodePNG\lodepng.h" />
+    <ClInclude Include="include\RapidXml\rapidxml.hpp" />
+    <ClInclude Include="include\RapidXml\rapidxml_iterators.hpp" />
+    <ClInclude Include="include\RapidXml\rapidxml_print.hpp" />
+    <ClInclude Include="include\RapidXml\rapidxml_utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\3rd party\LodePNG\lodepng.cpp" />
