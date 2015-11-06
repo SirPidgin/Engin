@@ -63,9 +63,13 @@ namespace Engin
 			animation = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/test.xml");
 			animation1 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/testmushroom.xml");
 
-			animationPlayer.setAnimation(animation1);
+			animationPlayer.setAnimation(animation);
 			animationPlayer.loopable(true);
 			animationPlayer.start();
+
+			animationPlayer1.setAnimation(animation1);
+			animationPlayer1.loopable(true);
+			animationPlayer1.start();
 			
 			textCreator = new Renderer::TextRenderer();
 			textCreator->createTextTexture(font, 500, 500, textString, 255 ,255, 255);
@@ -102,6 +106,7 @@ namespace Engin
 			//std::cout << camera2.getPositionCenter().x << std::endl;
 
 			animationPlayer.update();
+			animationPlayer1.update();
 		}
 
 		void CameraTestScene::interpolate(GLfloat alpha)
@@ -124,7 +129,8 @@ namespace Engin
 			alphaTextureBatch.draw(doge, nullptr, 630.0f, 600.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrBlue, 0.7f, 0.4f);
 			alphaTextureBatch.draw(doge, 500.0f, 0.0f, 0.5f, 0.1f);
 			alphaTextureBatch.draw(textTexture, 3000.0f, 400.0f, 0.8f, 0.5f); //coordinates not working correctly for text
-			alphaTextureBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), 256.0f, 256.0f, 512.0f, 512.0f, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 1.0f);
+			alphaTextureBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), 128.0f, 128.0f, 256.0f, 256.0f, 0.0f, 1.0f, Renderer::clrGreen, 1.0f, 0.7f);
+			alphaTextureBatch.draw(animationPlayer1.getTexture(), animationPlayer1.getCurrentFrameTexCoords(), 0.0f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 1.0f);
 
 			renderDogemap(0.0f, 0.0f, 64.0f, 64.0f, 20, 20);
 

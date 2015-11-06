@@ -55,6 +55,7 @@ namespace Engin
 			Resources::Animation* animation1;
 
 			Game::AnimationPlayer animationPlayer;
+			Game::AnimationPlayer animationPlayer1;
 		};
 	}
 }
