@@ -167,6 +167,7 @@
     </ClInclude>
     <ClInclude Include="include\Engin\Game\RigidBody.h">
       <Filter>Header Files</Filter>
+	</ClInclude>
     <ClInclude Include="include\RapidXml\rapidxml.hpp">
       <Filter>Header Files\3rd party\RapidXml</Filter>
     </ClInclude>
