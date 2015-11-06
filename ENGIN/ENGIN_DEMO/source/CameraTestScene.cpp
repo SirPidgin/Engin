@@ -72,7 +72,7 @@ namespace Engin
 			animationPlayer1.start();
 			
 			textCreator = new Renderer::TextRenderer();
-			textCreator->createTextTexture(font, 500, 500, textString, 255 ,255, 255);
+			textCreator->createTextTexture(font, textString, 255 ,255, 255);
 			textTexture = textCreator->getTexture();
 		}
 
@@ -128,7 +128,7 @@ namespace Engin
 			alphaTextureBatch.draw(doge, nullptr, 620.0f, 620.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrRed, 0.4f, 0.3f);
 			alphaTextureBatch.draw(doge, nullptr, 630.0f, 600.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrBlue, 0.7f, 0.4f);
 			alphaTextureBatch.draw(doge, 500.0f, 0.0f, 0.5f, 0.1f);
-			alphaTextureBatch.draw(textTexture, 3000.0f, 400.0f, 0.8f, 0.5f); //coordinates not working correctly for text
+			alphaTextureBatch.draw(textTexture, 2300.0f, 400.0f, 0.8f, 0.5f); //coordinates not working correctly for text
 			alphaTextureBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), 128.0f, 128.0f, 256.0f, 256.0f, 0.0f, 1.0f, Renderer::clrGreen, 1.0f, 0.7f);
 			alphaTextureBatch.draw(animationPlayer1.getTexture(), animationPlayer1.getCurrentFrameTexCoords(), 0.0f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 1.0f);
 

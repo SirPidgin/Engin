@@ -13,7 +13,7 @@ namespace Engin
 			//Creates an opengl texture
 			TextRenderer(){};
 			~TextRenderer(){};
-			void createTextTexture(Resources::Font* font, GLint textureSizeX, GLint textureSizeY, std::string message, GLint colorR, GLint colorG, GLint colorB);
+			void createTextTexture(Resources::Font* font, std::string message, GLint colorR, GLint colorG, GLint colorB);
 			Resources::Texture* getTexture();
 
 		private:
