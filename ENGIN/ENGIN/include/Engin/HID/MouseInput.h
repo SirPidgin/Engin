@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm\glm.hpp>
+#include <glm\vec2.hpp>
 
 #include <unordered_map>
 
@@ -55,7 +55,9 @@ namespace Engin
 			bool mouseWasMoved();
 
 			//Getters
-			void getMousePosition(int* xPos, int* yPos) { xPos = &mousePositionX; yPos = &mousePositionY; }
+			glm::ivec2 getMousePosition() { return mousePosition; }
+			int getMouseXPosition() { return mousePosition.x; }
+			int getMouseYPosition() { return mousePosition.y; }
 
 		protected:
 			void pressButton(unsigned int buttonID);
@@ -68,10 +70,8 @@ namespace Engin
 
 			std::unordered_map<unsigned int, bool> buttonMap;
 			std::unordered_map<unsigned int, bool> previousButtonMap;
-			int mousePositionX;
-			int mousePositionY;
-			int prevMousePosX = -1;
-			int prevMousePosY = -1;
+			glm::ivec2 mousePosition;
+			glm::ivec2 prevMousePos = glm::ivec2(-1, -1);
 			int mouseWheelYPosition = 0;
 		};
 	}

@@ -22,8 +22,8 @@ namespace Engin
 			//Reset mouse wheel position
 			mouseWheelYPosition = 0;
 			//Update prevMousePosition
-			prevMousePosX = mousePositionX;
-			prevMousePosY = mousePositionY;
+			prevMousePos.x = mousePosition.x;
+			prevMousePos.y = mousePosition.y;
 		}
 
 
@@ -81,9 +81,9 @@ namespace Engin
 
 		bool MouseInput::mouseWasMoved()
 		{
-			if (mousePositionX != prevMousePosX || mousePositionY != prevMousePosY)
+			if (mousePosition.x != prevMousePos.x || mousePosition.y != prevMousePos.y)
 			{
-				if (prevMousePosX != -1 && prevMousePosY != 1)
+				if (prevMousePos.x != -1 && prevMousePos.y != 1)
 				{
 					return true;
 				}
@@ -107,8 +107,8 @@ namespace Engin
 
 		void MouseInput::setMousePosition(int x, int y)
 		{
-			mousePositionX = x;
-			mousePositionX = y;
+			mousePosition.x = x;
+			mousePosition.y = y;
 		}
 
 
