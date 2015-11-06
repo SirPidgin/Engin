@@ -25,10 +25,11 @@
     <ClInclude Include="include\Engin\Renderer\TextureBatch.h" />
     <ClInclude Include="include\Engin\Renderer\Window.h" />
     <ClInclude Include="include\Engin\Resources\Animation.h" />
+    <ClInclude Include="include\Engin\Resources\Font.h" />
     <ClInclude Include="include\Engin\Resources\Music.h" />
     <ClInclude Include="include\Engin\Resources\Resource.h" />
     <ClInclude Include="include\Engin\Resources\ResourceManager.h" />
-    <ClInclude Include="include\Engin\Resources\Shader.h" />
+    <ClInclude Include="include\Engin\Resources\ShaderProgram.h" />
     <ClInclude Include="include\Engin\Resources\Sound.h" />
     <ClInclude Include="include\Engin\Resources\Texture.h" />
     <ClInclude Include="include\inih\ini.h" />
@@ -47,6 +48,7 @@
     <ClCompile Include="source\inih\INIReader.cpp" />
     <ClCompile Include="source\Renderer\TextureBatch.cpp" />
     <ClCompile Include="source\Resources\Animation.cpp" />
+    <ClCompile Include="source\Resources\Font.cpp" />
     <ClCompile Include="source\Resources\Music.cpp" />
     <ClCompile Include="source\Resources\Resource.cpp" />
     <ClCompile Include="source\Resources\ResourceManager.cpp" />
@@ -60,7 +62,7 @@
     <ClCompile Include="source\Renderer\Batch.cpp" />
     <ClCompile Include="source\Renderer\Camera.cpp" />
     <ClCompile Include="source\Renderer\Window.cpp" />
-    <ClCompile Include="source\Resources\Shader.cpp" />
+    <ClCompile Include="source\Resources\ShaderProgram.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{49BC93E7-D090-4970-A1E5-529ED78E6274}</ProjectGuid>

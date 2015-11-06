@@ -19,10 +19,15 @@ namespace Engin
 			{
 				previousButtonMap[it.first] = it.second;
 			}
+			//Reset mouse wheel position
+			mouseWheelYPosition = 0;
+			//Update prevMousePosition
+			prevMousePosX = mousePositionX;
+			prevMousePosY = mousePositionY;
 		}
 
 
-		bool MouseInput::ButtonIsPressed(MouseButton buttonID)
+		bool MouseInput::buttonIsPressed(MouseButton buttonID)
 		{
 			auto it = buttonMap.find(buttonID);
 			if (it != buttonMap.end())
@@ -33,9 +38,9 @@ namespace Engin
 		}
 
 		
-		bool MouseInput::ButtonWasPressed(MouseButton buttonID)
+		bool MouseInput::buttonWasPressed(MouseButton buttonID)
 		{
-			if (ButtonIsPressed(buttonID) == true && buttonWasDown(buttonID) == false)
+			if (buttonIsPressed(buttonID) == true && buttonWasDown(buttonID) == false)
 			{
 				return true;
 			}
@@ -43,11 +48,45 @@ namespace Engin
 		}
 
 
-		bool MouseInput::ButtonWasReleased(MouseButton buttonID)
+		bool MouseInput::buttonWasReleased(MouseButton buttonID)
 		{
-			if (ButtonIsPressed(buttonID) == false && buttonWasDown(buttonID) == true)
+			if (buttonIsPressed(buttonID) == false && buttonWasDown(buttonID) == true)
 			{
 				return true;
+			}
+			return false;
+		}
+
+
+		bool MouseInput::mouseWheelWasMoved(MouseWheel direction)
+		{
+			if (direction < 0)
+			{
+				if (mouseWheelYPosition < 0)
+				{
+					return true;
+				}
+				return false;
+			}
+			else
+			{
+				if (mouseWheelYPosition > 0)
+				{
+					return true;
+				}
+				return false;
+			}
+		}
+
+
+		bool MouseInput::mouseWasMoved()
+		{
+			if (mousePositionX != prevMousePosX || mousePositionY != prevMousePosY)
+			{
+				if (prevMousePosX != -1 && prevMousePosY != 1)
+				{
+					return true;
+				}
 			}
 			return false;
 		}
@@ -80,6 +119,12 @@ namespace Engin
 				return it->second;
 			else
 				return false;
+		}
+
+
+		void MouseInput::moveMouseWheel(int y)
+		{
+			mouseWheelYPosition += y;
 		}
 	}
 }

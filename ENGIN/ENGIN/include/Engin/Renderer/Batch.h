@@ -5,7 +5,7 @@
 #include <glm\glm.hpp>
 #include "Camera.h"
 #include "Color.h"
-#include "Engin\Resources\Shader.h"
+#include "Engin\Resources\ShaderProgram.h"
 
 namespace Engin
 {
@@ -29,7 +29,7 @@ namespace Engin
 			Batch();
 			~Batch();
 
-			void init(Resources::Shader* shader, size_t maxVertices = defaultBatchSize);
+			void init(Resources::ShaderProgram* shader, size_t maxVertices = defaultBatchSize);
 
 			void draw(const std::vector<Vertex>& vertices);
 			void drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, const Color& color, GLfloat opacity = 1.0f, GLfloat depth = 0.0f);
@@ -45,7 +45,7 @@ namespace Engin
 			GLuint VBO;
 			GLuint currentVertex;
 
-			Resources::Shader* shader;
+			Resources::ShaderProgram* shader;
 		};
 	}
 }

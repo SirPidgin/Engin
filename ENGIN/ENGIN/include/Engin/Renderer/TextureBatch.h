@@ -4,7 +4,7 @@
 #include <vector>
 #include "GL\glew.h"
 #include "glm\glm.hpp"
-#include "Engin\Resources\Shader.h"
+#include "Engin\Resources\ShaderProgram.h"
 #include "Engin\Resources\Texture.h"
 #include "Engin\Renderer\Color.h"
 #include "Engin\Renderer\Camera.h"
@@ -26,7 +26,7 @@ namespace Engin
 			TextureBatch();
 			~TextureBatch();
 
-			void setShader(Resources::Shader* shader) 
+			void setShader(Resources::ShaderProgram* shader)
 			{ 
 				this->shader = shader; 
 			}
@@ -102,7 +102,7 @@ namespace Engin
 			std::vector<Vertex> vertices;
 			std::vector<GLushort> indices;
 
-			Resources::Shader* shader;
+			Resources::ShaderProgram* shader;
 		};
 	}
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Engin\Engin.h>
 #include "Engin\Game\Scene.h"
 #include <Engin\Renderer\Camera.h>
 #include <Engin\Renderer\Batch.h>
@@ -14,7 +15,7 @@ namespace Engin
 		class CameraTestScene : public Scene
 		{
 		public:
-			CameraTestScene();
+			CameraTestScene(Engin* engine);
 			~CameraTestScene();
 
 			void update(GLfloat step);
@@ -26,13 +27,15 @@ namespace Engin
 		public:
 			GLfloat alpha;
 
+			Engin* engine;
+
 			Renderer::Camera camera;
 			Renderer::Camera camera1;
 			Renderer::Camera camera2;
 
-			Resources::Shader shader;
-			Resources::Shader textureShader;
-			Resources::Shader alphaShader;
+			Resources::ShaderProgram shader;
+			Resources::ShaderProgram textureShader;
+			Resources::ShaderProgram alphaShader;
 			Renderer::Batch batch;
 			Renderer::TextureBatch textureBatch;
 			Renderer::TextureBatch alphaTextureBatch;

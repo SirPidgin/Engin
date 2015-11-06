@@ -38,10 +38,15 @@ namespace Engin
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 
-		void Texture::bindTexture(GLenum textureunit)
+		void Texture::bind(GLenum textureunit)
 		{
 			glActiveTexture(textureunit);
 			glBindTexture(GL_TEXTURE_2D, textureID);
+		}
+
+		void Texture::unbind()
+		{
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
 }

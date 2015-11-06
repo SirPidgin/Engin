@@ -93,9 +93,6 @@
     <ClInclude Include="include\Engin\Renderer\Color.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engin\Resources\Shader.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="include\Engin\Game\Scene.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
@@ -147,6 +144,12 @@
     <ClInclude Include="include\Engin\HID\MouseInput.h">
       <Filter>Header Files\HID</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engin\Resources\Font.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Resources\ShaderProgram.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
     <ClInclude Include="include\RapidXml\rapidxml.hpp">
       <Filter>Header Files\3rd party\RapidXml</Filter>
     </ClInclude>
@@ -169,9 +172,6 @@
     </ClCompile>
     <ClCompile Include="source\Renderer\Batch.cpp">
       <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Resources\Shader.cpp">
-      <Filter>Source Files\Resources</Filter>
     </ClCompile>
     <ClCompile Include="source\Game\SceneManager.cpp">
       <Filter>Source Files\Game</Filter>
@@ -237,6 +237,12 @@
     </ClCompile>
     <ClCompile Include="source\Core\Timer.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Resources\Font.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Resources\ShaderProgram.cpp">
+      <Filter>Source Files\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
