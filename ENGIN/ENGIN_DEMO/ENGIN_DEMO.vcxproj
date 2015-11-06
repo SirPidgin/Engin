@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine.ini" />
+    <None Include="resources\shaders\alpha_fragment.shader" />
     <None Include="resources\shaders\fragment.shader" />
     <None Include="resources\shaders\texture_fragment.shader" />
     <None Include="resources\shaders\texture_vertex.shader" />

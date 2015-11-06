@@ -38,6 +38,9 @@
     <None Include="resources\shaders\texture_vertex.shader">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="resources\shaders\alpha_fragment.shader">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CameraTestScene.h">

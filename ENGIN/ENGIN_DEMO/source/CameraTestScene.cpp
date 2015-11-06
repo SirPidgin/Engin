@@ -42,14 +42,15 @@ namespace Engin
 			//camera.setZoomLevel(0.5f);
 			shader.load("resources/shaders/vertex.shader", "resources/shaders/fragment.shader");
 			textureShader.load("resources/shaders/texture_vertex.shader", "resources/shaders/texture_fragment.shader");
+			alphaShader.load("resources/shaders/texture_vertex.shader", "resources/shaders/alpha_fragment.shader");
 			batch.init(&shader, 4096);
 			textureBatch.setShader(&textureShader);
+			alphaTextureBatch.setShader(&alphaShader);
+			alphaTextureBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
 
 			doge = resourceManager.load<Resources::Texture>("resources/furball.png");
 
 			std::cout << doge->getResourcePath() << ": " << doge->getHeight() << " " << doge->getReferenceCount() << std::endl;
-		
-			
 		}
 
 		CameraTestScene::~CameraTestScene()
@@ -78,33 +79,42 @@ namespace Engin
 		void CameraTestScene::draw()
 		{
 			textureBatch.begin();
+			alphaTextureBatch.begin();
 			//renderTilemap(0.0f, 0.0f, 32.0f, 32.0f, 25, 25, batch); //Depth not working?
 			//renderTilemap(0.0f, 0.0f, 32.0f, 32.0f, 25, 25, batch);
 			batch.drawTriangle(500.0f, 45.0f, 750.0f, 250.0f, 65.0f, 480.0f, Renderer::clrRed, 1.0f, 0.0f);
 			batch.drawTriangle(10.0f, 10.0f, 100.0f, 10.0f, 50.0f, 50.0f, Renderer::clrGreen, 1.0f, 1.0f);
 			batch.drawQuad(200.0f, 200.0f, 50.0f, 50.0f, Renderer::clrWhite, 1.0f, 1.0f);
-			textureBatch.draw(doge, &glm::vec4(190.0f, 170.0f, 60.0f, 60.0f), 110.0f, 110.0f, 250.0f, 250.0f, alpha * 1000.0f, 1.0f, Renderer::clrBlue, 1.0f, 1.0f);
-			textureBatch.draw(doge, nullptr, 0.0f, 0.0f, 100.0f, 100.0f, 0.0f, 1.0f, Renderer::clrRed, 0.5f, 1.0f);
+			alphaTextureBatch.draw(doge, &glm::vec4(190.0f, 170.0f, 60.0f, 60.0f), 110.0f, 110.0f, 250.0f, 250.0f, alpha * 1000.0f, 1.0f, Renderer::clrBlue, glm::abs(glm::sin(alpha)), 0.9f);
+			alphaTextureBatch.draw(doge, nullptr, 0.0f, 0.0f, 100.0f, 100.0f, 0.0f, 1.0f, Renderer::clrRed, 0.5f, 1.0f);
 			textureBatch.draw(doge, &glm::vec4(0.0f, 0.0f, 300.0f, 300.0f), 350.0f, 350.0f, 125.0f, 250.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
-			textureBatch.draw(doge, nullptr, 600.0f, 600.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrGreen, 0.2f, 1.0f);
-			textureBatch.draw(doge, 500.0f, 0.0f, 0.5f, 0.0f);
+			alphaTextureBatch.draw(doge, nullptr, 600.0f, 600.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrGreen, 0.5f, 0.1f);
+			alphaTextureBatch.draw(doge, nullptr, 610.0f, 610.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrWhite, 0.3f, 0.2f);
+			alphaTextureBatch.draw(doge, nullptr, 620.0f, 620.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrRed, 0.4f, 0.3f);
+			alphaTextureBatch.draw(doge, nullptr, 630.0f, 600.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrBlue, 0.7f, 0.4f);
+			alphaTextureBatch.draw(doge, 500.0f, 0.0f, 0.5f, 0.1f);
 			renderDogemap(0.0f, 0.0f, 64.0f, 64.0f, 20, 20);
 
 			textureBatch.end();
+			alphaTextureBatch.end();
 
 			camera.activateViewPort();
 			batch.flush(camera);
 			textureBatch.flush(camera);
+			alphaTextureBatch.flush(camera);
 
 			camera1.activateViewPort();
 			batch.flush(camera1);
 			textureBatch.flush(camera1);
+			alphaTextureBatch.flush(camera1);
 
 			camera2.activateViewPort();
 			batch.flush(camera2);
 			textureBatch.flush(camera2);
+			alphaTextureBatch.flush(camera2);
 
 			textureBatch.clear();
+			alphaTextureBatch.clear();
 			batch.clear();
 		}
 
@@ -134,11 +144,11 @@ namespace Engin
 				{
 					if ((x + y) % 2)
 					{
-						textureBatch.draw(doge, startX + x * tileWidth, startY + y * tileHeight, tileWidth, tileHeight, Renderer::clrRed);
+						alphaTextureBatch.draw(doge, startX + x * tileWidth, startY + y * tileHeight, tileWidth, tileHeight, Renderer::clrRed);
 					}
 					else
 					{
-						textureBatch.draw(doge, startX + x * tileWidth, startY + y * tileHeight, tileWidth, tileHeight, Renderer::clrBlue);
+						alphaTextureBatch.draw(doge, startX + x * tileWidth, startY + y * tileHeight, tileWidth, tileHeight, Renderer::clrBlue);
 					}
 				}
 			}

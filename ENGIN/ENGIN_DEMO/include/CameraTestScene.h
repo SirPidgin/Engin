@@ -32,8 +32,10 @@ namespace Engin
 
 			Resources::ShaderProgram shader;
 			Resources::ShaderProgram textureShader;
+			Resources::ShaderProgram alphaShader;
 			Renderer::Batch batch;
 			Renderer::TextureBatch textureBatch;
+			Renderer::TextureBatch alphaTextureBatch;
 
 			Resources::ResourceManager resourceManager;
 			Resources::Texture* doge;
