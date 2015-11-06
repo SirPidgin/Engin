@@ -66,6 +66,10 @@ namespace Engin
 			animationPlayer.setAnimation(animation1);
 			animationPlayer.loopable(true);
 			animationPlayer.start();
+
+			animationPlayer1.setAnimation(animation);
+			animationPlayer1.loopable(true);
+			animationPlayer1.start();
 			
 			textCreator = new Renderer::TextRenderer();
 			textCreator->createTextTexture(font, 500, 500, textString, 255 ,255, 255);
@@ -102,6 +106,7 @@ namespace Engin
 			//std::cout << camera2.getPositionCenter().x << std::endl;
 
 			animationPlayer.update();
+			animationPlayer1.update();
 		}
 
 		void CameraTestScene::interpolate(GLfloat alpha)
@@ -125,6 +130,8 @@ namespace Engin
 			alphaTextureBatch.draw(doge, 500.0f, 0.0f, 0.5f, 0.1f);
 			alphaTextureBatch.draw(textTexture, 3000.0f, 400.0f, 0.8f, 0.5f); //coordinates not working correctly for text
 			alphaTextureBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), 256.0f, 256.0f, 512.0f, 512.0f, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 1.0f);
+			alphaTextureBatch.draw(animationPlayer1.getTexture(), animationPlayer1.getCurrentFrameTexCoords(), 256.0f, 256.0f, 512.0f, 512.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
+
 
 			renderDogemap(0.0f, 0.0f, 64.0f, 64.0f, 20, 20);
 

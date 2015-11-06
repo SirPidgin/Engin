@@ -1,4 +1,4 @@
-<animation path="resources/cloud_explosion_animation_512" width="512" height="512" loopable="1">
+<animation path="resources/cloud_explosion_animation_512.png" width="512" height="512" loopable="1">
 	<frame duration="25" id="0" />
 	<frame duration="25" id="1" />
 	<frame duration="25" id="2" />
@@ -30,13 +30,4 @@
   <frame duration="25" id="28" />
   <frame duration="25" id="29" />
   <frame duration="25" id="30" />
-  <frame duration="25" id="31" />
-  <frame duration="25" id="32" />
-  <frame duration="25" id="33" />
-	<frame duration="25" id="34" />
-	<frame duration="25" id="35" />
-	<frame duration="25" id="36" />
-  <frame duration="25" id="37" />
-  <frame duration="25" id="38" />
-  <frame duration="25" id="39" />
 </animation>
