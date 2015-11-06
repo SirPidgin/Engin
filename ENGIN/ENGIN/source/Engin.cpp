@@ -1,6 +1,7 @@
 #include <iostream>
 #include <algorithm>
 #include <GL\glew.h>
+#include <SDL\SDL_ttf.h>
 #include <SDL\SDL.h>
 
 #include "Engin\Engin.h"
@@ -71,6 +72,8 @@ namespace Engin
 
 		glewExperimental = GL_TRUE;
 		glewInit();
+		TTF_Init();
+
 		glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
 
 		glEnable(GL_DEPTH_TEST);
@@ -80,6 +83,7 @@ namespace Engin
 
 	void Engin::quit()
 	{
+		TTF_Quit();
 		SDL_Quit();
 	}
 

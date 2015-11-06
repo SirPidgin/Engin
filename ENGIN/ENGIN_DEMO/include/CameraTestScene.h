@@ -6,6 +6,8 @@
 #include <Engin\Renderer\TextureBatch.h>
 #include "Engin\Resources\ResourceManager.h"
 #include "Engin\Resources\Texture.h"
+#include "Engin\Resources\Font.h"
+#include "Engin\Renderer\TextRenderer.h"
 
 namespace Engin
 {
@@ -37,6 +39,11 @@ namespace Engin
 
 			Resources::ResourceManager resourceManager;
 			Resources::Texture* doge;
+
+			//std::string textString;
+			//Resources::Font* font;
+			//Renderer::TextRenderer* textCreator; //Change TextRenderer class name
+			//Resources::Texture* textTexture;	
 		};
 	}
 }

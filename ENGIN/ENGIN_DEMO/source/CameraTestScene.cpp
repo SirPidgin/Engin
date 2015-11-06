@@ -50,7 +50,10 @@ namespace Engin
 
 			std::cout << doge->getResourcePath() << ": " << doge->getHeight() << " " << doge->getReferenceCount() << std::endl;
 		
-			
+			/*textString = "plaaa";
+			font = resourceManager.load<Resources::Font>("resources/arial.ttf");
+			textCreator->createTextTexture(font, 500, 500, textString);
+			textTexture = textCreator->getTexture();*/
 		}
 
 		CameraTestScene::~CameraTestScene()
@@ -89,6 +92,7 @@ namespace Engin
 			textureBatch.draw(doge, &glm::vec4(0.0f, 0.0f, 300.0f, 300.0f), 350.0f, 350.0f, 125.0f, 250.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
 			textureBatch.draw(doge, nullptr, 600.0f, 600.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrGreen, 0.2f, 1.0f);
 			textureBatch.draw(doge, 500.0f, 0.0f, 0.5f, 0.0f);
+			//textureBatch.draw(textTexture, 500.0f, 0.0f, 0.5f, 0.0f);
 			renderDogemap(0.0f, 0.0f, 64.0f, 64.0f, 20, 20);
 
 			textureBatch.end();

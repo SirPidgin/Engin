@@ -144,6 +144,12 @@
     <ClInclude Include="include\Engin\HID\MouseInput.h">
       <Filter>Header Files\HID</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engin\Resources\Font.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Renderer\TextRenderer.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Renderer\Window.cpp">
@@ -222,6 +228,12 @@
     </ClCompile>
     <ClCompile Include="source\Core\Timer.cpp">
       <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Resources\Font.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Renderer\TextRenderer.cpp">
+      <Filter>Source Files\Resources</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
