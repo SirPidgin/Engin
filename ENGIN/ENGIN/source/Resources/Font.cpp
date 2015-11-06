@@ -7,9 +7,9 @@ namespace Engin
 	{
 		Font::Font(const std::string& resourcePath) : Resource(resourcePath)
 		{
-			std::cout<< "Couldn't initialize TTF: %s\n";
-
 			ptsize = 18;
+
+			this->resourcePath = resourcePath;
 				
 			font = TTF_OpenFont(resourcePath.c_str(), ptsize);
 			if (font == NULL) 
@@ -28,7 +28,7 @@ namespace Engin
 			if (this->ptsize != ptsize) {
 				this->ptsize = ptsize;
 
-				font = TTF_OpenFont(resourcePath.c_str(), ptsize);
+				font = TTF_OpenFont(this->resourcePath.c_str(), ptsize);
 			}
 		}
 
