@@ -22,6 +22,7 @@
     <ClInclude Include="include\Engin\Renderer\Batch.h" />
     <ClInclude Include="include\Engin\Renderer\Camera.h" />
     <ClInclude Include="include\Engin\Renderer\Color.h" />
+    <ClInclude Include="include\Engin\Renderer\ParticleGenerator.h" />
     <ClInclude Include="include\Engin\Renderer\TextureBatch.h" />
     <ClInclude Include="include\Engin\Renderer\Window.h" />
     <ClInclude Include="include\Engin\Resources\Animation.h" />
@@ -42,6 +43,7 @@
     <ClCompile Include="source\Game\EventManager.cpp" />
     <ClCompile Include="source\inih\ini.c" />
     <ClCompile Include="source\inih\INIReader.cpp" />
+    <ClCompile Include="source\Renderer\ParticleGenerator.cpp" />
     <ClCompile Include="source\Renderer\TextureBatch.cpp" />
     <ClCompile Include="source\Resources\Animation.cpp" />
     <ClCompile Include="source\Resources\Font.cpp" />
@@ -112,7 +114,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)libraries</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;SDL2test.lib;SDL2.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;SDL2test.lib;SDL2.lib;glew32s.lib;opengl32.lib;irrKlang.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Command>XCOPY "$(MSBuildProjectDirectory)\binaries\*.dll" "$(TargetDir)" /D /K /Y</Command>
@@ -137,7 +139,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)libraries</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;SDL2test.lib;SDL2.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;SDL2test.lib;SDL2.lib;glew32s.lib;opengl32.lib;irrKlang.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Command>XCOPY "$(MSBuildProjectDirectory)\binaries\*.dll" "$(TargetDir)" /D /K /Y</Command>

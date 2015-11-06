@@ -9,7 +9,7 @@ namespace Engin
 {
 	namespace Resources
 	{
-		void ShaderProgram::load(const GLchar* vertexPath, const GLchar* fragmentPath)
+		ShaderProgram::ShaderProgram(const std::string &resourcePath) : Resource(resourcePath)
 		{
 			std::string vertexTemp;
 			std::string fragmentTemp;
@@ -22,8 +22,8 @@ namespace Engin
 
 			try
 			{
-				vertexFile.open(vertexPath);
-				fragmentFile.open(fragmentPath);
+				vertexFile.open(resourcePath + ".vertex");
+				fragmentFile.open(resourcePath + ".fragment");
 
 				std::stringstream vertexStream;
 				std::stringstream fragmentStream;
@@ -90,6 +90,7 @@ namespace Engin
 			glDeleteShader(vertex);
 			glDeleteShader(fragment);
 		}
+
 
 		ShaderProgram::~ShaderProgram()
 		{

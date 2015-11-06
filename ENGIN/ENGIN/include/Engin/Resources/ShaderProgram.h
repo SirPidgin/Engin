@@ -1,18 +1,19 @@
 #pragma once
 
 #include <GL/glew.h>
+#include <string>
+#include "Engin\Resources\Resource.h"
 
 namespace Engin
 {
 	namespace Resources
 	{
-		class ShaderProgram
+		class ShaderProgram : public Resource
 		{
 		public:
-			ShaderProgram(){};
+			ShaderProgram(const std::string &resourcePath);
 			~ShaderProgram();
 
-			void load(const GLchar* vertexPath, const GLchar* fragmentPath);
 			void bind();
 			void unbind();
 

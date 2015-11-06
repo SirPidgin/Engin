@@ -23,22 +23,31 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="resources\shaders\fragment.shader">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="resources\shaders\vertex.shader">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="resources\engine.ini">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resources\shaders\texture_fragment.shader">
+    <None Include="resources\shaders\shader.fragment">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resources\shaders\texture_vertex.shader">
+    <None Include="resources\shaders\shader.vertex">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resources\shaders\alpha_fragment.shader">
+    <None Include="resources\shaders\texture_shader.vertex">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\shaders\texture_shader.fragment">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\shaders\alpha_shader.fragment">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="alpha_shader.vertex">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\shaders\particle_shader.vertex">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\shaders\particle_shader.fragment">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

@@ -6,6 +6,7 @@
 #include <Engin\Renderer\TextureBatch.h>
 #include "Engin\Resources\ResourceManager.h"
 #include "Engin\Resources\Texture.h"
+#include "Engin\Resources\ShaderProgram.h"
 
 namespace Engin
 {
@@ -30,9 +31,9 @@ namespace Engin
 			Renderer::Camera camera1;
 			Renderer::Camera camera2;
 
-			Resources::ShaderProgram shader;
-			Resources::ShaderProgram textureShader;
-			Resources::ShaderProgram alphaShader;
+			Resources::ShaderProgram* shader;
+			Resources::ShaderProgram* textureShader;
+			Resources::ShaderProgram* alphaShader;
 			Renderer::Batch batch;
 			Renderer::TextureBatch textureBatch;
 			Renderer::TextureBatch alphaTextureBatch;

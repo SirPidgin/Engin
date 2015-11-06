@@ -35,7 +35,7 @@ namespace Engin
 				resource->incReferences();
 
 				resourceMap.insert(std::pair<std::string, Resource*>(filename, resource));
-				return resource;
+				return static_cast<T*>(resource);
 			};
 
 			bool unload(const std::string &filename);
