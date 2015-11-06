@@ -14,14 +14,15 @@ namespace Engin
 			~Texture();
 
 			void changeParameters(GLenum parameterName, GLint parameter);
-			void bindTexture(GLenum textureUnit);
+			void bind(GLenum textureUnit);
+			void unbind();
 
 			GLuint getWidth()
-			{
+			{ 
 				return width;
 			}
 
-			GLuint getHeight()
+			GLuint getHeight() 
 			{
 				return height;
 			}

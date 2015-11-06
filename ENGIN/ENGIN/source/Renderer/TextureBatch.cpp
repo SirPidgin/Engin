@@ -259,7 +259,7 @@ namespace Engin
 
 		void TextureBatch::renderBatch(Resources::Texture* texture, size_t start, size_t count, const Camera& camera)
 		{
-			texture->bindTexture(GL_TEXTURE0 + 0);
+			texture->bind(GL_TEXTURE0 + 0);
 
 			while (count > 0)
 			{
@@ -287,7 +287,7 @@ namespace Engin
 				vertexBufferPos += batchSize;
 			}
 
-			// TODO (Pidgin): texture->unbindTexture();
+			texture->unbind();
 		}
 	}
 }

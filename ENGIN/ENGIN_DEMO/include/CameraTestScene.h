@@ -30,8 +30,8 @@ namespace Engin
 			Renderer::Camera camera1;
 			Renderer::Camera camera2;
 
-			Resources::Shader shader;
-			Resources::Shader textureShader;
+			Resources::ShaderProgram shader;
+			Resources::ShaderProgram textureShader;
 			Renderer::Batch batch;
 			Renderer::TextureBatch textureBatch;
 

@@ -40,7 +40,6 @@ namespace Engin
 
 			//camera.setZoomLevel(4.0f);
 			//camera.setZoomLevel(0.5f);
-
 			shader.load("resources/shaders/vertex.shader", "resources/shaders/fragment.shader");
 			textureShader.load("resources/shaders/texture_vertex.shader", "resources/shaders/texture_fragment.shader");
 			batch.init(&shader, 4096);

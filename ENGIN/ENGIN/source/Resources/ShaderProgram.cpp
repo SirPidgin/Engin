@@ -1,4 +1,4 @@
-#include "Engin\Resources\Shader.h"
+#include "Engin\Resources\ShaderProgram.h"
 
 #include <string>
 #include <fstream>
@@ -9,7 +9,7 @@ namespace Engin
 {
 	namespace Resources
 	{
-		void Shader::load(const GLchar* vertexPath, const GLchar* fragmentPath)
+		void ShaderProgram::load(const GLchar* vertexPath, const GLchar* fragmentPath)
 		{
 			std::string vertexTemp;
 			std::string fragmentTemp;
@@ -91,17 +91,17 @@ namespace Engin
 			glDeleteShader(fragment);
 		}
 
-		Shader::~Shader()
+		ShaderProgram::~ShaderProgram()
 		{
 			glDeleteProgram(program);
 		}
 
-		void Shader::bind()
+		void ShaderProgram::bind()
 		{
 			glUseProgram(program);
 		}
 
-		void Shader::unbind()
+		void ShaderProgram::unbind()
 		{
 			glUseProgram(0);
 		}
