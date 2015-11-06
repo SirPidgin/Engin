@@ -66,7 +66,7 @@ namespace Engin
 			animationPlayer.setAnimation(animation);
 			animationPlayer.loopable(true);
 			animationPlayer.start();
-
+			
 			animationPlayer1.setAnimation(animation1);
 			animationPlayer1.loopable(true);
 			animationPlayer1.start();

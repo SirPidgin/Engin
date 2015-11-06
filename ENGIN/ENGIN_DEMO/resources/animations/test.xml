@@ -1,14 +1,14 @@
 <animation path="resources/hit_explosion_animation_256.png" width="256" height="256" loopable="1">
-	<frame duration="100" id="0" />
-	<frame duration="100" id="1" />
-	<frame duration="100" id="2" />
-	<frame duration="100" id="3" />
-	<frame duration="100" id="4" />
-  <frame duration="100" id="5" />
-  <frame duration="100" id="6" />
-  <frame duration="100" id="7" />
-  <frame duration="100" id="8" />
-  <frame duration="100" id="9" />
-  <frame duration="100" id="10" />
-  <frame duration="100" id="11" />
+	<frame duration="50" id="0" />
+	<frame duration="50" id="1" />
+	<frame duration="50" id="2" />
+	<frame duration="50" id="3" />
+	<frame duration="50" id="4" />
+  <frame duration="50" id="5" />
+  <frame duration="50" id="6" />
+  <frame duration="50" id="7" />
+  <frame duration="50" id="8" />
+  <frame duration="50" id="9" />
+  <frame duration="50" id="10" />
+  <frame duration="50" id="11" />
 </animation>
