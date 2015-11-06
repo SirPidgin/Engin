@@ -10,8 +10,17 @@ namespace Engin
 		class ResourceManager
 		{
 		public:
-			ResourceManager();
+			ResourceManager() {};
 			~ResourceManager();
+
+			static ResourceManager& getInstance()
+			{
+				static ResourceManager instance;
+				return instance;
+			}
+
+			ResourceManager(const ResourceManager&) = delete;
+			void operator=(const ResourceManager&) = delete;
 
 			template <class T>
 			T* load(const std::string &filename)

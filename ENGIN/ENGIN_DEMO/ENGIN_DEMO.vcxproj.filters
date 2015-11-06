@@ -13,6 +13,15 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Shaders">
+      <UniqueIdentifier>{f68c5357-440b-4a97-8feb-5fca9eed734c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Animations">
+      <UniqueIdentifier>{3e2c9ab6-6fcc-4b60-ab31-bcd3e5f3a791}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\Textures">
+      <UniqueIdentifier>{4349a795-351e-4f89-8482-b069d76fe812}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Main.cpp">
@@ -26,29 +35,29 @@
     <None Include="resources\engine.ini">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="resources\shaders\shader.fragment">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="resources\shaders\shader.vertex">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="resources\shaders\texture_shader.vertex">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="resources\shaders\texture_shader.fragment">
-      <Filter>Resource Files</Filter>
+    <None Include="alpha_shader.vertex">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="resources\shaders\alpha_shader.fragment">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="alpha_shader.vertex">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="resources\shaders\particle_shader.vertex">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="resources\shaders\particle_shader.fragment">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="resources\shaders\particle_shader.vertex">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="resources\shaders\shader.vertex">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="resources\shaders\shader.fragment">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="resources\shaders\texture_shader.fragment">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="resources\shaders\texture_shader.vertex">
+      <Filter>Resource Files\Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -58,7 +67,15 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\doge.png">
-      <Filter>Resource Files</Filter>
+      <Filter>Resource Files\Textures</Filter>
     </Image>
+    <Image Include="resources\cloud_explosion_animation_512.png">
+      <Filter>Resource Files\Textures</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="resources\animations\test.xml">
+      <Filter>Resource Files\Animations</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

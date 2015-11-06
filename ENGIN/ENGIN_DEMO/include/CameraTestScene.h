@@ -10,6 +10,8 @@
 #include "Engin\Resources\Font.h"
 #include "Engin\Renderer\TextRenderer.h"
 #include "Engin\Resources\ShaderProgram.h"
+#include "Engin\Resources\Animation.h"
+#include "Engin\Game\AnimationPlayer.h"
 
 namespace Engin
 {
@@ -43,13 +45,15 @@ namespace Engin
 			Renderer::TextureBatch textureBatch;
 			Renderer::TextureBatch alphaTextureBatch;
 
-			Resources::ResourceManager resourceManager;
 			Resources::Texture* doge;
 
 			std::string textString;
 			Resources::Font* font;
 			Renderer::TextRenderer* textCreator; //Change TextRenderer class name
 			Resources::Texture* textTexture;	
+			Resources::Animation* animation;
+
+			Game::AnimationPlayer animationPlayer;
 		};
 	}
 }

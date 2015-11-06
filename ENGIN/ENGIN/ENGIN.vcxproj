@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="include\Engin\Core\Timer.h" />
     <ClInclude Include="include\Engin\Engin.h" />
+    <ClInclude Include="include\Engin\Game\AnimationPlayer.h" />
     <ClInclude Include="include\Engin\Game\Component.h" />
     <ClInclude Include="include\Engin\Game\EventManager.h" />
     <ClInclude Include="include\Engin\Game\GameObject.h" />
@@ -50,6 +51,7 @@
   <ItemGroup>
     <ClCompile Include="source\3rd party\LodePNG\lodepng.cpp" />
     <ClCompile Include="source\Core\Timer.cpp" />
+    <ClCompile Include="source\Game\AnimationPlayer.cpp" />
     <ClCompile Include="source\Game\EventManager.cpp" />
     <ClCompile Include="source\Game\GameObject.cpp" />
     <ClCompile Include="source\Game\Sprite.cpp" />

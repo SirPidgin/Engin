@@ -44,22 +44,28 @@ namespace Engin
 
 			//camera.setZoomLevel(4.0f);
 			//camera.setZoomLevel(0.5f);
-			shader = resourceManager.load<Resources::ShaderProgram>("resources/shaders/shader");
-			textureShader = resourceManager.load<Resources::ShaderProgram>("resources/shaders/texture_shader");
-			alphaShader = resourceManager.load<Resources::ShaderProgram>("resources/shaders/alpha_shader");
+			shader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/shader");
+			textureShader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/texture_shader");
+			alphaShader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/alpha_shader");
 			batch.init(shader, 4096);
 			textureBatch.setShader(textureShader);
 			alphaTextureBatch.setShader(alphaShader);
 			alphaTextureBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
 
-			doge = resourceManager.load<Resources::Texture>("resources/doge.png");
-			SoundEngine->play2D("resources/rossini.mp3", GL_TRUE);
+			doge = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/doge.png");
+			//SoundEngine->play2D("resources/rossini.mp3", GL_TRUE);
 			std::cout << doge->getResourcePath() << ": " << doge->getHeight() << " " << doge->getReferenceCount() << std::endl;
 		
 			textString = "plaaa";
-			font = resourceManager.load<Resources::Font>("resources/arial.ttf");
+			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 			font->setPtSize(2000);
 
+			animation = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/test.xml");
+
+			animationPlayer.setAnimation(animation);
+			animationPlayer.loopable(true);
+			animationPlayer.start();
+			
 			textCreator = new Renderer::TextRenderer();
 			textCreator->createTextTexture(font, 500, 500, textString, 255 ,255, 255);
 			textTexture = textCreator->getTexture();
@@ -93,6 +99,8 @@ namespace Engin
 			this->alpha += 0.005f;
 
 			//std::cout << camera2.getPositionCenter().x << std::endl;
+
+			animationPlayer.update();
 		}
 
 		void CameraTestScene::interpolate(GLfloat alpha)
@@ -103,8 +111,6 @@ namespace Engin
 		{
 			textureBatch.begin();
 			alphaTextureBatch.begin();
-			//renderTilemap(0.0f, 0.0f, 32.0f, 32.0f, 25, 25, batch); //Depth not working?
-			//renderTilemap(0.0f, 0.0f, 32.0f, 32.0f, 25, 25, batch);
 			batch.drawTriangle(500.0f, 45.0f, 750.0f, 250.0f, 65.0f, 480.0f, Renderer::clrRed, 1.0f, 0.0f);
 			batch.drawTriangle(10.0f, 10.0f, 100.0f, 10.0f, 50.0f, 50.0f, Renderer::clrGreen, 1.0f, 1.0f);
 			batch.drawQuad(200.0f, 200.0f, 50.0f, 50.0f, Renderer::clrWhite, 1.0f, 1.0f);
@@ -117,6 +123,7 @@ namespace Engin
 			alphaTextureBatch.draw(doge, nullptr, 630.0f, 600.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrBlue, 0.7f, 0.4f);
 			alphaTextureBatch.draw(doge, 500.0f, 0.0f, 0.5f, 0.1f);
 			alphaTextureBatch.draw(textTexture, 3000.0f, 400.0f, 0.8f, 0.5f); //coordinates not working correctly for text
+			alphaTextureBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), 256.0f, 256.0f, 1024.0f, 1024.0f, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 1.0f);
 			renderDogemap(0.0f, 0.0f, 64.0f, 64.0f, 20, 20);
 
 			textureBatch.end();

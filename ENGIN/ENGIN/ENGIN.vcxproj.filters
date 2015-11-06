@@ -192,6 +192,9 @@
     <ClInclude Include="include\Engin\Game\GameObject.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engin\Game\AnimationPlayer.h">
+      <Filter>Header Files\Game\Components</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Renderer\Window.cpp">
@@ -290,6 +293,9 @@
     </ClCompile>
     <ClCompile Include="source\Engin.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Game\AnimationPlayer.cpp">
+      <Filter>Source Files\Game\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

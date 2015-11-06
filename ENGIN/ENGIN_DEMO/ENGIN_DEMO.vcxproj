@@ -108,7 +108,11 @@
     <ClInclude Include="include\CameraTestScene.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="resources\cloud_explosion_animation_512.png" />
     <Image Include="resources\doge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="resources\animations\test.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

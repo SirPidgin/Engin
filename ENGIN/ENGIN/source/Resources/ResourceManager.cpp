@@ -5,12 +5,6 @@ namespace Engin
 {
 	namespace Resources
 	{
-
-		ResourceManager::ResourceManager()
-		{
-		}
-
-
 		ResourceManager::~ResourceManager()
 		{
 			releaseAll();
