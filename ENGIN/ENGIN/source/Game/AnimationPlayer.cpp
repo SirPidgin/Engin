@@ -28,6 +28,8 @@ namespace Engin
 							start();
 						}
 					}
+
+					start();
 				}
 			}
 		}
