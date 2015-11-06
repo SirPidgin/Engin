@@ -7,7 +7,7 @@ namespace Engin
 {
 	namespace Game
 	{
-		class Component : public GameObject
+		class Component/* : public GameObject*/
 		{
 		public:
 			Component();

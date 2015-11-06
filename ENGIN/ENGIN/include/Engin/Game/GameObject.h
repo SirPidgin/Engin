@@ -17,11 +17,11 @@ namespace Engin
 			GameObject();
 			~GameObject();
 
-			void update();
+			//void update();
 			void draw();
 
 			//add or enable(?)
-			void addComponent(Component* newComponent);
+			//void addComponent(Component* newComponent);
 
 			//Pure Virtual Getters & Setters
 			//Transform Component
@@ -39,7 +39,7 @@ namespace Engin
 			virtual void setCurrentSprite() = 0;
 			
 		private:
-			std::vector<Component*> components;
+			//std::vector<Component*> components;
 		};
 	}
 }

@@ -10,6 +10,7 @@ namespace Engin
 
 		Animation::~Animation()
 		{
+			frames.clear();
 		}
 	}
 }
