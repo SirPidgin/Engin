@@ -5,7 +5,9 @@
 
 //Call pressKey and releaseKey in EventManager to update keyMap
 //call update() in game loop to update previousKeyMap
-//In the game's code you can call e.g. Engin::keyboardInput->keyIsPressed(HID::KEYBOARD_UP), which returns a true if up arrow is pressed.
+//In the game's code you can call e.g. keyboardInput->keyIsPressed(HID::KEYBOARD_UP), which returns a true if up arrow is pressed.
+
+//TODO: Can iterators be cleaned up?
 
 
 //Forward Declaration
@@ -285,13 +287,15 @@ namespace Engin
 			void update();
 
 			bool keyIsPressed(KeyboardKey keyID);
+			bool keyIsPressed(KeyboardKey keyID, KeyboardKey modID);
+			bool keyIsPressed(KeyboardKey keyID, KeyboardKey modID, KeyboardKey modID2);
+
 			bool keyWasPressed(KeyboardKey keyID);
+			bool keyWasPressed(KeyboardKey keyID, KeyboardKey modID);
+			bool keyWasPressed(KeyboardKey keyID, KeyboardKey modID, KeyboardKey modID2);
+
 			bool keyWasReleased(KeyboardKey keyID);
-			//TODO:
-			//bool keyComboWasPressed();
-			//unsigned int* getAllPressedKeys(); ??
-			//any key is pressed
-			//Keymods?
+			bool anyKeyIsPressed();
 
 		protected:
 			void pressKey(unsigned int keyID);
@@ -299,12 +303,12 @@ namespace Engin
 			
 		private:
 			bool keyWasDown(unsigned int keyID);
+			bool keyWasDown(unsigned int keyID, unsigned int modID);
+			bool keyWasDown(unsigned int keyID, unsigned int modID, unsigned int modID2);
 
 			//store information of key states
 			std::unordered_map<unsigned int, bool> keyMap;
 			std::unordered_map<unsigned int, bool> previousKeyMap;
-			//comboarray
-			//
 		};
 	}
 }

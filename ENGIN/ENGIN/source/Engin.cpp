@@ -117,6 +117,8 @@ namespace Engin
 		}
 
 		keyboardInput->update();
+		mouseInput->update();
+		//eventManager must be updated last
 		eventManager->update();
 	}
 

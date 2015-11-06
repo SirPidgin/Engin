@@ -21,6 +21,9 @@ namespace Engin
 		const Renderer::Window& getWindow() const { return window; }
 		const Game::SceneManager& getSceneManager() const { return sceneManager; }
 		const float getStep() const { return step; }
+
+		HID::KeyboardInput* keyboardInput;
+		HID::MouseInput* mouseInput;
 	private:
 		void handleEvents();
 		void update(float deltaTime);
@@ -29,8 +32,6 @@ namespace Engin
 		Renderer::Window window;
 		Game::SceneManager sceneManager;
 		Game::EventManager* eventManager;
-		HID::KeyboardInput* keyboardInput;
-		HID::MouseInput* mouseInput;
 
 		SDL_GLContext glContext;
 		bool running;

@@ -9,8 +9,9 @@ namespace Engin
 {
 	namespace Game
 	{
-		CameraTestScene::CameraTestScene()
+		CameraTestScene::CameraTestScene(Engin* engine)
 		{
+			this->engine = engine;
 			alpha = 0.0f;
 
 			std::cout << "Camera test scene going on, be aware of rotating cameras" << std::endl;
@@ -60,12 +61,23 @@ namespace Engin
 
 		void CameraTestScene::update(GLfloat step)
 		{
+			static float zoomByInput = 1.0f;
+			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP))
+			{
+				zoomByInput -= 0.1f;
+			}
+			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_DOWN))
+			{
+				zoomByInput += 0.1f;
+			}
+			
 			//camera.setRotation(this->alpha);
 			camera2.setRotation(10*this->alpha);
 
 			camera.setPosition(400 * glm::cos(alpha), 0.0f);
 
 			camera1.setZoomLevel(1.0f + glm::cos(alpha));
+			camera2.setZoomLevel(zoomByInput);
 
 			this->alpha += 0.005f;
 
