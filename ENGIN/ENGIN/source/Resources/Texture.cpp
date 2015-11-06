@@ -21,7 +21,12 @@ namespace Engin
 
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
-
+		Texture::Texture(const GLuint id, const GLuint w, const GLuint h) : Resource("__INTERNAL__")
+		{
+			this->textureID = id;
+			width = w;
+			height = h;
+		}
 		Texture::~Texture()
 		{
 			glDeleteTextures(1, &textureID);
@@ -38,10 +43,15 @@ namespace Engin
 			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 
-		void Texture::bindTexture(GLenum textureunit)
+		void Texture::bind(GLenum textureunit)
 		{
 			glActiveTexture(textureunit);
 			glBindTexture(GL_TEXTURE_2D, textureID);
+		}
+
+		void Texture::unbind()
+		{
+			glBindTexture(GL_TEXTURE_2D, 0);
 		}
 	}
 }

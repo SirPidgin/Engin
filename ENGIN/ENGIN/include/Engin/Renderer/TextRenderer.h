@@ -13,7 +13,7 @@ namespace Engin
 			//Creates an opengl texture
 			TextRenderer(){};
 			~TextRenderer(){};
-			void createTextTexture(Resources::Font* font, GLint textureSizeX, GLint textureSizeY, std::string message);
+			void createTextTexture(Resources::Font* font, GLint textureSizeX, GLint textureSizeY, std::string message, GLint colorR, GLint colorG, GLint colorB);
 			Resources::Texture* getTexture();
 
 		private:
@@ -28,6 +28,7 @@ namespace Engin
 			}
 
 			GLuint texture;
+			GLuint pointSize;
 			GLint w, h;
 			SDL_Surface *image;
 			SDL_Rect area;
@@ -36,7 +37,6 @@ namespace Engin
 			void SDLLoadTexture();
 			
 			SDL_Surface *surface;
-			Resources::Font* font;
 			Resources::Texture* textureResource;
 
 			GLfloat texCoord[4];

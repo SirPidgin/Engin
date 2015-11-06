@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Engin\Engin.h>
 #include "Engin\Game\Scene.h"
 #include <Engin\Renderer\Camera.h>
 #include <Engin\Renderer\Batch.h>
@@ -8,6 +9,7 @@
 #include "Engin\Resources\Texture.h"
 #include "Engin\Resources\Font.h"
 #include "Engin\Renderer\TextRenderer.h"
+#include "Engin\Resources\ShaderProgram.h"
 
 namespace Engin
 {
@@ -16,7 +18,7 @@ namespace Engin
 		class CameraTestScene : public Scene
 		{
 		public:
-			CameraTestScene();
+			CameraTestScene(Engin* engine);
 			~CameraTestScene();
 
 			void update(GLfloat step);
@@ -28,22 +30,26 @@ namespace Engin
 		public:
 			GLfloat alpha;
 
+			Engin* engine;
+
 			Renderer::Camera camera;
 			Renderer::Camera camera1;
 			Renderer::Camera camera2;
 
-			Resources::Shader shader;
-			Resources::Shader textureShader;
+			Resources::ShaderProgram* shader;
+			Resources::ShaderProgram* textureShader;
+			Resources::ShaderProgram* alphaShader;
 			Renderer::Batch batch;
 			Renderer::TextureBatch textureBatch;
+			Renderer::TextureBatch alphaTextureBatch;
 
 			Resources::ResourceManager resourceManager;
 			Resources::Texture* doge;
 
-			//std::string textString;
-			//Resources::Font* font;
-			//Renderer::TextRenderer* textCreator; //Change TextRenderer class name
-			//Resources::Texture* textTexture;	
+			std::string textString;
+			Resources::Font* font;
+			Renderer::TextRenderer* textCreator; //Change TextRenderer class name
+			Resources::Texture* textTexture;	
 		};
 	}
 }

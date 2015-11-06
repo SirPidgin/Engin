@@ -10,7 +10,7 @@ namespace Engin
 	namespace Renderer
 	{
 
-		TextureBatch::TextureBatch() : shader(nullptr), IBO(0), VBO(0), textureQueueCount(0), textureQueueArraySize(0), vertexBufferPos(0), inBeginEndPair(false)
+		TextureBatch::TextureBatch() : shader(nullptr), IBO(0), VBO(0), textureQueueCount(0), textureQueueArraySize(0), vertexBufferPos(0), inBeginEndPair(false), sortMode(TextureSortMode::Texture)
 		{
 			createBuffers();
 		}
@@ -91,7 +91,7 @@ namespace Engin
 
 		void TextureBatch::flush(const Camera& camera)
 		{
-			if (!textureQueueCount && inBeginEndPair)
+			if (!textureQueueCount && !inBeginEndPair)
 				return;
 
 			glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -251,15 +251,39 @@ namespace Engin
 				growSortedTextures();
 			}
 
-			std::sort(sortedTextures.begin(), sortedTextures.begin() + textureQueueCount, [](TextureInfo const* x, TextureInfo const* y) -> bool
+			switch (sortMode)
 			{
-				return x->texture < y->texture;
-			});
+				case TextureSortMode::Texture:
+				{
+					std::sort(sortedTextures.begin(), sortedTextures.begin() + textureQueueCount, [](TextureInfo const* x, TextureInfo const* y) -> bool
+					{
+						return x->texture < y->texture;
+					});
+				} break;
+
+				case TextureSortMode::BackToFront:
+				{
+					std::sort(sortedTextures.begin(), sortedTextures.begin() + textureQueueCount, [](TextureInfo const* x, TextureInfo const* y) -> bool
+					{
+						return x->depth > y->depth;
+					});
+				} break;
+
+				case TextureSortMode::FrontToBack:
+				{
+					std::sort(sortedTextures.begin(), sortedTextures.begin() + textureQueueCount, [](TextureInfo const* x, TextureInfo const* y) -> bool
+					{
+						return x->depth < y->depth;
+					});
+				} break;
+
+				default: break;
+			}
 		}
 
 		void TextureBatch::renderBatch(Resources::Texture* texture, size_t start, size_t count, const Camera& camera)
 		{
-			texture->bindTexture(GL_TEXTURE0 + 0);
+			texture->bind(GL_TEXTURE0 + 0);
 
 			while (count > 0)
 			{
@@ -287,7 +311,7 @@ namespace Engin
 				vertexBufferPos += batchSize;
 			}
 
-			// TODO (Pidgin): texture->unbindTexture();
+			texture->unbind();
 		}
 	}
 }

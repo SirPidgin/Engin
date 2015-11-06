@@ -18,7 +18,7 @@ namespace Engin
 			vertices.clear();
 		}
 
-		void Batch::init(Resources::Shader* shader, size_t maxVertices)
+		void Batch::init(Resources::ShaderProgram* shader, size_t maxVertices)
 		{
 			currentVertex = 0;
 			this->shader = shader;

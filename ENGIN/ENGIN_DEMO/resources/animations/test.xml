@@ -1,0 +1,7 @@
+<animation path="resources/textures/sheet.png" width="32" height="32" loopable= />
+	<frame duration="50" id="0" />
+	<frame duration="50" id="1" />
+	<frame duration="50" id="2" />
+	<frame duration="50" id="3" />
+	<frame duration="50" id="4" />
+</animation>

@@ -13,7 +13,12 @@
   <ItemGroup>
     <ClInclude Include="include\Engin\Core\Timer.h" />
     <ClInclude Include="include\Engin\Engin.h" />
+    <ClInclude Include="include\Engin\Game\Component.h" />
     <ClInclude Include="include\Engin\Game\EventManager.h" />
+    <ClInclude Include="include\Engin\Game\GameObject.h" />
+    <ClInclude Include="include\Engin\Game\RigidBody.h" />
+    <ClInclude Include="include\Engin\Game\Sprite.h" />
+    <ClInclude Include="include\Engin\Game\Transform.h" />
     <ClInclude Include="include\Engin\HID\GamepadInput.h" />
     <ClInclude Include="include\Engin\HID\KeyboardInput.h" />
     <ClInclude Include="include\Engin\HID\MouseInput.h" />
@@ -22,6 +27,7 @@
     <ClInclude Include="include\Engin\Renderer\Batch.h" />
     <ClInclude Include="include\Engin\Renderer\Camera.h" />
     <ClInclude Include="include\Engin\Renderer\Color.h" />
+    <ClInclude Include="include\Engin\Renderer\ParticleGenerator.h" />
     <ClInclude Include="include\Engin\Renderer\TextRenderer.h" />
     <ClInclude Include="include\Engin\Renderer\TextureBatch.h" />
     <ClInclude Include="include\Engin\Renderer\Window.h" />
@@ -30,19 +36,26 @@
     <ClInclude Include="include\Engin\Resources\Music.h" />
     <ClInclude Include="include\Engin\Resources\Resource.h" />
     <ClInclude Include="include\Engin\Resources\ResourceManager.h" />
-    <ClInclude Include="include\Engin\Resources\Shader.h" />
+    <ClInclude Include="include\Engin\Resources\ShaderProgram.h" />
     <ClInclude Include="include\Engin\Resources\Sound.h" />
     <ClInclude Include="include\Engin\Resources\Texture.h" />
     <ClInclude Include="include\inih\ini.h" />
     <ClInclude Include="include\inih\INIReader.h" />
     <ClInclude Include="include\LodePNG\lodepng.h" />
+    <ClInclude Include="include\RapidXml\rapidxml.hpp" />
+    <ClInclude Include="include\RapidXml\rapidxml_iterators.hpp" />
+    <ClInclude Include="include\RapidXml\rapidxml_print.hpp" />
+    <ClInclude Include="include\RapidXml\rapidxml_utils.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\3rd party\LodePNG\lodepng.cpp" />
     <ClCompile Include="source\Core\Timer.cpp" />
     <ClCompile Include="source\Game\EventManager.cpp" />
+    <ClCompile Include="source\Game\GameObject.cpp" />
+    <ClCompile Include="source\Game\Sprite.cpp" />
     <ClCompile Include="source\inih\ini.c" />
     <ClCompile Include="source\inih\INIReader.cpp" />
+    <ClCompile Include="source\Renderer\ParticleGenerator.cpp" />
     <ClCompile Include="source\Renderer\TextRenderer.cpp" />
     <ClCompile Include="source\Renderer\TextureBatch.cpp" />
     <ClCompile Include="source\Resources\Animation.cpp" />
@@ -60,7 +73,7 @@
     <ClCompile Include="source\Renderer\Batch.cpp" />
     <ClCompile Include="source\Renderer\Camera.cpp" />
     <ClCompile Include="source\Renderer\Window.cpp" />
-    <ClCompile Include="source\Resources\Shader.cpp" />
+    <ClCompile Include="source\Resources\ShaderProgram.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{49BC93E7-D090-4970-A1E5-529ED78E6274}</ProjectGuid>
@@ -114,7 +127,8 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)libraries</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;SDL2test.lib;SDL2.lib;SDL2_ttf.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;SDL2test.lib;SDL2.lib;glew32s.lib;opengl32.lib;irrKlang.lib</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;SDL2test.lib;SDL2.lib;glew32s.lib;opengl32.lib;irrKlang.lib;SDL2_ttf.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Command>XCOPY "$(MSBuildProjectDirectory)\binaries\*.dll" "$(TargetDir)" /D /K /Y</Command>
@@ -139,7 +153,7 @@
     </Link>
     <Lib>
       <AdditionalLibraryDirectories>$(ProjectDir)libraries</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2main.lib;SDL2test.lib;SDL2.lib;SDL2_ttf.lib;glew32s.lib;opengl32.lib</AdditionalDependencies>
+      <AdditionalDependencies>SDL2main.lib;SDL2test.lib;SDL2.lib;glew32s.lib;opengl32.lib;irrKlang.lib;SDL2_ttf.lib</AdditionalDependencies>
     </Lib>
     <PostBuildEvent>
       <Command>XCOPY "$(MSBuildProjectDirectory)\binaries\*.dll" "$(TargetDir)" /D /K /Y</Command>

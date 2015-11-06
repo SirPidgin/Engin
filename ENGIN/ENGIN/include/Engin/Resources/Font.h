@@ -12,8 +12,11 @@ namespace Engin
 		public:
 			Font(const std::string& resourcePath);
 			TTF_Font* getFont();
+
+			GLuint getPtSize();
+			void setPtSize(const GLuint ptsize);
 		private:
-			GLint ptsize;
+			GLuint ptsize;
 			TTF_Font* font;
 		};
 	}

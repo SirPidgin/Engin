@@ -11,17 +11,19 @@ namespace Engin
 		{
 		public:
 			Texture(const std::string& resourcePath);
+			Texture(const GLuint id, const GLuint w, const GLuint h);
 			~Texture();
 
 			void changeParameters(GLenum parameterName, GLint parameter);
-			void bindTexture(GLenum textureUnit);
+			void bind(GLenum textureUnit);
+			void unbind();
 
 			GLuint getWidth()
-			{
+			{ 
 				return width;
 			}
 
-			GLuint getHeight()
+			GLuint getHeight() 
 			{
 				return height;
 			}

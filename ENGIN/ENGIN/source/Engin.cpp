@@ -5,13 +5,9 @@
 #include <SDL\SDL.h>
 
 #include "Engin\Engin.h"
-
 #include "Engin\Renderer\Window.h"
-
 #include "inih\INIReader.h"
-
 #include "Engin\Core\Timer.h"
-
 
 namespace Engin
 {
@@ -121,6 +117,8 @@ namespace Engin
 		}
 
 		keyboardInput->update();
+		mouseInput->update();
+		//eventManager must be updated last
 		eventManager->update();
 	}
 

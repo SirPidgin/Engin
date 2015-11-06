@@ -73,6 +73,9 @@
     <Filter Include="Header Files\HID">
       <UniqueIdentifier>{a9921436-eec3-4503-b27d-90b21703a2e3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\3rd party\RapidXml">
+      <UniqueIdentifier>{816cde1e-448f-4c20-892c-c35e72f15118}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Engin\Engin.h">
@@ -149,6 +152,42 @@
     </ClInclude>
     <ClInclude Include="include\Engin\Renderer\TextRenderer.h">
       <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Resources\ShaderProgram.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Renderer\ParticleGenerator.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Resources\Font.h">
+      <Filter>Header Files\Resources</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Game\GameObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Game\Component.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Game\Transform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Game\Sprite.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Game\RigidBody.h">
+      <Filter>Header Files</Filter>
+	</ClInclude>
+    <ClInclude Include="include\RapidXml\rapidxml.hpp">
+      <Filter>Header Files\3rd party\RapidXml</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RapidXml\rapidxml_iterators.hpp">
+      <Filter>Header Files\3rd party\RapidXml</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RapidXml\rapidxml_print.hpp">
+      <Filter>Header Files\3rd party\RapidXml</Filter>
+    </ClInclude>
+    <ClInclude Include="include\RapidXml\rapidxml_utils.hpp">
+      <Filter>Header Files\3rd party\RapidXml</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -234,6 +273,21 @@
     </ClCompile>
     <ClCompile Include="source\Renderer\TextRenderer.cpp">
       <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Resources\ShaderProgram.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Renderer\ParticleGenerator.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Resources\Font.cpp">
+      <Filter>Source Files\Resources</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Game\GameObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Game\Sprite.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

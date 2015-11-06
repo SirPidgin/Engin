@@ -4,13 +4,12 @@ namespace Engin
 {
 	namespace Renderer
 	{
-		void TextRenderer::createTextTexture(Resources::Font* font, GLint textureSizeX, GLint textureSizeY, std::string message)
+		void TextRenderer::createTextTexture(Resources::Font* font, GLint textureSizeX, GLint textureSizeY, std::string message, GLint colorR, GLint colorG, GLint colorB)
 		{
-			this->font = font;
 			this->w = textureSizeX;
 			this->h = textureSizeY;
 
-			this->surface = TTF_RenderText_Blended(this->font->getFont(), message.c_str(), SDL_Color{255});
+			this->surface = TTF_RenderText_Blended(font->getFont(), message.c_str(), SDL_Color{colorR,colorG,colorB});
 			SDLLoadTexture();
 		}
 
@@ -77,7 +76,8 @@ namespace Engin
 				GL_UNSIGNED_BYTE,
 				image->pixels);
 
-			this->textureResource->bindTexture(texture);
+			this->textureResource = new Resources::Texture(texture, area.w, area.h);
+			this->textureResource->bind(8);
 
 			SDL_FreeSurface(image); /* No longer needed */
 		}

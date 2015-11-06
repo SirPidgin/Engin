@@ -59,8 +59,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>ENGIN.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(TargetDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ENGIN.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TargetDir)</AdditionalLibraryDirectories>
       <EntryPointSymbol>
       </EntryPointSymbol>
       <IgnoreSpecificDefaultLibraries>
@@ -83,8 +83,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>ENGIN.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(TargetDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>ENGIN.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(TargetDir)</AdditionalLibraryDirectories>
       <EntryPointSymbol>
       </EntryPointSymbol>
     </Link>
@@ -94,11 +94,15 @@
     <ClCompile Include="source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="alpha_shader.vertex" />
     <None Include="resources\engine.ini" />
-    <None Include="resources\shaders\fragment.shader" />
-    <None Include="resources\shaders\texture_fragment.shader" />
-    <None Include="resources\shaders\texture_vertex.shader" />
-    <None Include="resources\shaders\vertex.shader" />
+    <None Include="resources\shaders\alpha_shader.fragment" />
+    <None Include="resources\shaders\particle_shader.fragment" />
+    <None Include="resources\shaders\particle_shader.vertex" />
+    <None Include="resources\shaders\shader.fragment" />
+    <None Include="resources\shaders\texture_shader.fragment" />
+    <None Include="resources\shaders\texture_shader.vertex" />
+    <None Include="resources\shaders\shader.vertex" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CameraTestScene.h" />

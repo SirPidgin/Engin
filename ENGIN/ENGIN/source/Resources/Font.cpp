@@ -9,13 +9,26 @@ namespace Engin
 		{
 			std::cout<< "Couldn't initialize TTF: %s\n";
 
-			ptsize = 18; //TODO:: create user changable pointsize
+			ptsize = 18;
 				
 			font = TTF_OpenFont(resourcePath.c_str(), ptsize);
 			if (font == NULL) 
 			{
 				std::cout << "Couldn't load %d pt font from %s: %s\n"<<
 					ptsize << resourcePath << std::endl;
+			}
+		}
+
+		GLuint Font::getPtSize() 
+		{
+			return ptsize;
+		}
+		void Font::setPtSize(const GLuint ptsize) 
+		{
+			if (this->ptsize != ptsize) {
+				this->ptsize = ptsize;
+
+				font = TTF_OpenFont(resourcePath.c_str(), ptsize);
 			}
 		}
 
