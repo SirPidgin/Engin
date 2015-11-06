@@ -13,13 +13,29 @@ namespace Engin
 {
 	namespace Renderer
 	{
+		enum TextureSortMode
+		{
+			Texture,
+			BackToFront,
+			FrontToBack
+		};
+
 		class TextureBatch
 		{
 		public:
 			TextureBatch();
 			~TextureBatch();
 
-			void setShader(Resources::Shader* shader) { this->shader = shader; }
+			void setShader(Resources::Shader* shader) 
+			{ 
+				this->shader = shader; 
+			}
+
+			void setSortMode(TextureSortMode sortMode) 
+			{
+				this->sortMode = sortMode;
+			}
+
 			void begin();
 			void draw(Resources::Texture* texture, float x, float y, float opacity = 1.0f, float depth = 0.0f);
 			void draw(Resources::Texture* texture, float x, float y, float width, float height, const Color& color, float opacity = 1.0f, float depth = 0.0f);
@@ -76,6 +92,8 @@ namespace Engin
 
 			GLuint VBO;
 			GLuint IBO;
+
+			TextureSortMode sortMode;
 
 			bool inBeginEndPair;
 
