@@ -52,6 +52,7 @@ namespace Engin
 			Renderer::TextRenderer* textCreator; //Change TextRenderer class name
 			Resources::Texture* textTexture;	
 			Resources::Animation* animation;
+			Resources::Animation* animation1;
 
 			Game::AnimationPlayer animationPlayer;
 		};

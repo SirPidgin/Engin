@@ -61,8 +61,9 @@ namespace Engin
 			font->setPtSize(2000);
 
 			animation = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/test.xml");
+			animation1 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/testmushroom.xml");
 
-			animationPlayer.setAnimation(animation);
+			animationPlayer.setAnimation(animation1);
 			animationPlayer.loopable(true);
 			animationPlayer.start();
 			
@@ -123,7 +124,8 @@ namespace Engin
 			alphaTextureBatch.draw(doge, nullptr, 630.0f, 600.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrBlue, 0.7f, 0.4f);
 			alphaTextureBatch.draw(doge, 500.0f, 0.0f, 0.5f, 0.1f);
 			alphaTextureBatch.draw(textTexture, 3000.0f, 400.0f, 0.8f, 0.5f); //coordinates not working correctly for text
-			alphaTextureBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), 256.0f, 256.0f, 1024.0f, 1024.0f, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 1.0f);
+			alphaTextureBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), 256.0f, 256.0f, 512.0f, 512.0f, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 1.0f);
+
 			renderDogemap(0.0f, 0.0f, 64.0f, 64.0f, 20, 20);
 
 			textureBatch.end();
