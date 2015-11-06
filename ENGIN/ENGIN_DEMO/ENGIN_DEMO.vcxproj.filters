@@ -77,5 +77,8 @@
     <Xml Include="resources\animations\test.xml">
       <Filter>Resource Files\Animations</Filter>
     </Xml>
+    <Xml Include="resources\animations\testmushroom.xml">
+      <Filter>Resource Files\Animations</Filter>
+    </Xml>
   </ItemGroup>
 </Project>
