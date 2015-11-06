@@ -23,7 +23,7 @@ namespace Engin
 		//Private:
 		void EventManager::processInput()
 		{
-			SDL_Event inputEvent;
+			static SDL_Event inputEvent;
 
 			while (SDL_PollEvent(&inputEvent))
 			{
@@ -44,6 +44,9 @@ namespace Engin
 					break;
 				case SDL_MOUSEMOTION:
 					mouseInput->setMousePosition(inputEvent.motion.x, inputEvent.motion.y);
+					break;
+				case SDL_MOUSEWHEEL:
+					mouseInput->moveMouseWheel(inputEvent.wheel.y);
 					break;
 
 					//QUIT
