@@ -53,7 +53,7 @@ namespace Engin
 			alphaTextureBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
 
 			doge = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/doge.png");
-			//SoundEngine->play2D("resources/rossini.mp3", GL_TRUE);
+			SoundEngine->play2D("resources/rossini.mp3", GL_TRUE);
 			std::cout << doge->getResourcePath() << ": " << doge->getHeight() << " " << doge->getReferenceCount() << std::endl;
 		
 			textString = "plaaa";
@@ -86,11 +86,12 @@ namespace Engin
 			static float zoomByInput = 1.0f;
 			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP))
 			{
-				zoomByInput -= 0.1f;
+				if (zoomByInput > 0.1f)
+				zoomByInput -= glm::radians(2.0f);
 			}
 			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_DOWN))
 			{
-				zoomByInput += 0.1f;
+				zoomByInput += glm::radians(2.0f);
 			}
 			
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_A))
