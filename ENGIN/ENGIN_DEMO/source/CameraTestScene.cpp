@@ -93,6 +93,11 @@ namespace Engin
 				zoomByInput += 0.1f;
 			}
 			
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_A))
+			{
+				animationPlayer.pause();
+			}
+
 			//camera.setRotation(this->alpha);
 			camera2.setRotation(10*this->alpha);
 

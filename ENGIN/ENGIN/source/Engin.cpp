@@ -29,6 +29,7 @@ namespace Engin
 	void Engin::init(const std::string& path)
 	{
 		// TODO (eeneku): Get parameters from a file!
+		// TODO (eeneku): Clean this function!
 		SDL_Init(SDL_INIT_EVERYTHING);
 
 		INIReader reader(path);
@@ -116,8 +117,6 @@ namespace Engin
 			running = false;
 		}
 
-		keyboardInput->update();
-		mouseInput->update();
 		//eventManager must be updated last
 		eventManager->update();
 	}
@@ -132,6 +131,12 @@ namespace Engin
 			// TODO (eeneku): Maybe we can only pass alpha (accumulator / step)?
 			sceneManager.update(step);
 			accumulator -= step;
+
+			// JUUSO HUOM! Nää piti siirtää tähän että toimii kunnolla. Tää looppi saattaa 
+			// ajautua (?!) useamman kerran per mainloop, ja silloin nuo prevKeyt ei päivity
+			// tarvittaessa. Näin toimii täydellisesti!
+			keyboardInput->update();
+			mouseInput->update();
 		}
 
 		// TODO (eeneku): What about interpolation? Probably handled in Scene or SceneManager.
