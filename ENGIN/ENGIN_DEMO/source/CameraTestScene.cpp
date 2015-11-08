@@ -93,23 +93,62 @@ namespace Engin
 			{
 				zoomByInput += glm::radians(2.0f);
 			}
+			camera2.setZoomLevel(zoomByInput); //by input
 			
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_A))
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_P))
 			{
 				animationPlayer.pause();
 			}
 
+			static float moveByInputX = 1.0f;
+			static float moveByInputY = 1.0f;
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_W))
+			{
+				//std::cout << "W" << std::endl;
+				moveByInputY += 64.0f;
+			}
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_A))
+			{
+				//std::cout << "A" << std::endl;
+				moveByInputX -= 64.0f;
+			}
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_S))
+			{
+				//std::cout << "S" << std::endl;
+				moveByInputY -= 64.0f;
+			}
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_D))
+			{
+				//std::cout << "D" << std::endl;
+				moveByInputX += 64.0f;
+			}
+			camera2.setPositionRotationOrigin(moveByInputX, moveByInputY); //by input
+			//camera2.setPosition(moveByInputX, moveByInputY); //by input
+			//camera2.setPositionCenter(moveByInputX, moveByInputY); //by input
+			
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE))
+			{
+				std::cout << camera2.getPositionRotationOrigin().x << " - " << camera2.getPositionRotationOrigin().y << std::endl;
+			}
+
+			static float rotateByInput = 0.0f;
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_LEFT))
+			{
+				//std::cout << "<-" << std::endl;
+				rotateByInput -= 10.0f;
+			}
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_RIGHT))
+			{
+				//std::cout << "->" << std::endl;
+				rotateByInput += 10.0f;
+			}
+			camera2.setRotation(rotateByInput); //by input
+
 			//camera.setRotation(this->alpha);
-			camera2.setRotation(30*alpha);
-
+			//camera2.setRotation(30 * alpha);
 			camera.setPosition(400 * glm::cos(alpha), 0.0f);
-
 			camera1.setZoomLevel(1.0f + glm::cos(alpha));
-			camera2.setZoomLevel(zoomByInput);
-
 			this->alpha += 0.005f;
-
-			//std::cout << camera2.getPositionCenter().x << std::endl;
 
 			animationPlayer.update();
 			animationPlayer1.update();
