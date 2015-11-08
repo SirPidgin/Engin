@@ -56,9 +56,9 @@ namespace Engin
 			SoundEngine->play2D("resources/rossini.mp3", GL_TRUE);
 			std::cout << doge->getResourcePath() << ": " << doge->getHeight() << " " << doge->getReferenceCount() << std::endl;
 		
-			textString = "plaaa";
+			textString = "Press T to get Global time";
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
-			font->setPtSize(2000);
+			font->setPtSize(200);
 
 			animation = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/test.xml");
 			animation1 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/testmushroom.xml");
@@ -152,6 +152,15 @@ namespace Engin
 
 			animationPlayer.update();
 			animationPlayer1.update();
+
+			//Test:
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_T))
+			{
+				GLfloat time = Core::Timer::getGlobalTime()/1000.0f;
+				textString = "Global time: " + std::to_string(time) + " seconds";
+				textCreator->createTextTexture(font, textString, 255, 255, 255);
+				textTexture = textCreator->getTexture();
+			}
 		}
 
 		void CameraTestScene::interpolate(GLfloat alpha)
@@ -173,7 +182,7 @@ namespace Engin
 			alphaTextureBatch.draw(doge, nullptr, 620.0f, 620.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrRed, 0.4f, 0.3f);
 			alphaTextureBatch.draw(doge, nullptr, 630.0f, 600.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrBlue, 0.7f, 0.4f);
 			alphaTextureBatch.draw(doge, 500.0f, 0.0f, 0.5f, 0.1f);
-			alphaTextureBatch.draw(textTexture, 2300.0f, 400.0f, 0.8f, 0.5f); //coordinates not working correctly for text
+			alphaTextureBatch.draw(textTexture, 300.0f, 600.0f, 0.8f, 0.5f); //coordinates not working correctly for text
 			alphaTextureBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), camera2.getPositionRotationOrigin().x, camera2.getPositionRotationOrigin().y, 256.0f, 256.0f, camera2.getRotation() , 1.0f, Renderer::clrGreen, 1.0f, 0.7f);
 			alphaTextureBatch.draw(animationPlayer1.getTexture(), animationPlayer1.getCurrentFrameTexCoords(), 0.0f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 1.0f);
 
