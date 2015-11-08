@@ -21,7 +21,7 @@ namespace Engin
 
 			camera.initCamera(0.0f, 0.0f, 400.0f, 400.0f, 0.0f, 0.0f, 1.0f, 200, 200);
 			camera1.initCamera(0.0f, 400.0f, 400.0f, 320.0f, 0.0f, 0.0f, 1.0f, 200, 160);
-			camera2.initCamera(400.0f, 0.0f, 880.0f, 720.0f, 0.0f, 0.0f, 1.0f, 440, 144);
+			camera2.initCamera(400.0f, 0.0f, 880.0f, 720.0f, 0.0f, 0.0f, 64.0f, 440, 144);
 			
 			//camera.setRotation(45);
 			camera.setZoomLevel(0.5f);			
@@ -58,7 +58,7 @@ namespace Engin
 		
 			textString = "Press T to get Global time";
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
-			font->setPtSize(200);
+			font->setPtSize(100);
 
 			animation = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/test.xml");
 			animation1 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/testmushroom.xml");
@@ -105,22 +105,22 @@ namespace Engin
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_W))
 			{
 				//std::cout << "W" << std::endl;
-				moveByInputY += 64.0f;
+				moveByInputY += 1.0f; //camera2 unitsize = 64
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_A))
 			{
 				//std::cout << "A" << std::endl;
-				moveByInputX -= 64.0f;
+				moveByInputX -= 1.0f; //camera2 unitsize = 64
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_S))
 			{
 				//std::cout << "S" << std::endl;
-				moveByInputY -= 64.0f;
+				moveByInputY -= 1.0f; //camera2 unitsize = 64
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_D))
 			{
 				//std::cout << "D" << std::endl;
-				moveByInputX += 64.0f;
+				moveByInputX += 1.0f; //camera2 unitsize = 64
 			}
 			camera2.setPositionRotationOrigin(moveByInputX, moveByInputY); //by input
 			//camera2.setPosition(moveByInputX, moveByInputY); //by input
