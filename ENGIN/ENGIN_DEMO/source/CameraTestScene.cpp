@@ -19,9 +19,9 @@ namespace Engin
 
 			std::cout << "Camera test scene going on, be aware of rotating cameras" << std::endl;
 
-			camera.initCamera(0.0f, 0.0f, 400.0f, 400.0f, 0.0f, 0.0f, 1.0f);
-			camera1.initCamera(0.0f, 400.0f, 400.0f, 320.0f, 0.0f, 0.0f, 1.0f);
-			camera2.initCamera(400.0f, 0.0f, 880.0f, 720.0f, 0.0f, 0.0f, 1.0f);
+			camera.initCamera(0.0f, 0.0f, 400.0f, 400.0f, 0.0f, 0.0f, 1.0f, 200, 200);
+			camera1.initCamera(0.0f, 400.0f, 400.0f, 320.0f, 0.0f, 0.0f, 1.0f, 200, 160);
+			camera2.initCamera(400.0f, 0.0f, 880.0f, 720.0f, 0.0f, 0.0f, 1.0f, 440, 144);
 			
 			//camera.setRotation(45);
 			camera.setZoomLevel(0.5f);			
@@ -31,7 +31,7 @@ namespace Engin
 
 			camera.setPositionCenter(3.0f*32.0f, 9.0f*32.0f);
 			camera1.setPositionCenter(3.0f*32.0f, 9.0f*32.0f);
-			camera2.setPositionCenter(3.0f*32.0f, 9.0f*32.0f);
+			camera2.setPositionRotationOrigin(5*64.0f, 9*64.0f);
 
 			//camera.setPosition(-100.0f, 0.0f);
 			//camera.setPosition(100.0f, 0.0f);
@@ -86,8 +86,8 @@ namespace Engin
 			static float zoomByInput = 1.0f;
 			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP))
 			{
-				if (zoomByInput > 0.1f)
-				zoomByInput -= glm::radians(2.0f);
+				if (zoomByInput > 0.0f)
+				zoomByInput -= glm::radians(2.0f); //???? Eikös glm::radians(2.0f) ole aina 0.034 ja risat
 			}
 			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_DOWN))
 			{
@@ -100,7 +100,7 @@ namespace Engin
 			}
 
 			//camera.setRotation(this->alpha);
-			camera2.setRotation(10*this->alpha);
+			camera2.setRotation(30*alpha);
 
 			camera.setPosition(400 * glm::cos(alpha), 0.0f);
 
@@ -135,7 +135,7 @@ namespace Engin
 			alphaTextureBatch.draw(doge, nullptr, 630.0f, 600.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrBlue, 0.7f, 0.4f);
 			alphaTextureBatch.draw(doge, 500.0f, 0.0f, 0.5f, 0.1f);
 			alphaTextureBatch.draw(textTexture, 2300.0f, 400.0f, 0.8f, 0.5f); //coordinates not working correctly for text
-			alphaTextureBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), 128.0f, 128.0f, 256.0f, 256.0f, 0.0f, 1.0f, Renderer::clrGreen, 1.0f, 0.7f);
+			alphaTextureBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), camera2.getPositionRotationOrigin().x, camera2.getPositionRotationOrigin().y, 256.0f, 256.0f, camera2.getRotation() , 1.0f, Renderer::clrGreen, 1.0f, 0.7f);
 			alphaTextureBatch.draw(animationPlayer1.getTexture(), animationPlayer1.getCurrentFrameTexCoords(), 0.0f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 1.0f);
 
 			renderDogemap(0.0f, 0.0f, 64.0f, 64.0f, 20, 20);
