@@ -100,8 +100,8 @@ namespace Engin
 				animationPlayer.pause();
 			}
 
-			static float moveByInputX = 1.0f;
-			static float moveByInputY = 1.0f;
+			static float moveByInputX = 0.0f;
+			static float moveByInputY = 0.0f;
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_W))
 			{
 				//std::cout << "W" << std::endl;
