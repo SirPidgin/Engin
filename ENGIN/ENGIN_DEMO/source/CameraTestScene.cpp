@@ -31,16 +31,61 @@ namespace Engin
 			doge = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/white_tile_40.png");
 			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_40.png");
 			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/yellow_tile_40.png");
+			doge4 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_tile_40.png");
 			std::cout << doge->getResourcePath() << ": " << doge->getHeight() << " " << doge->getReferenceCount() << std::endl;
-		
-			textString = "Press T to get visible tile count";
-			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
-			font->setPtSize(18);
-			
-			textCreator = new Renderer::TextRenderer();
-			textCreator->createTextTexture(font, textString, 0 ,0, 0);
-			textTexture = textCreator->getTexture();
-			k = 0;
+
+			wallTiles.push_back(glm::vec2(1, 18));
+			wallTiles.push_back(glm::vec2(2, 19));
+			wallTiles.push_back(glm::vec2(2, 18));
+			wallTiles.push_back(glm::vec2(1, 17));
+			wallTiles.push_back(glm::vec2(3, 19));
+
+			wallTiles.push_back(glm::vec2(10, 18));
+			wallTiles.push_back(glm::vec2(11, 18));
+			wallTiles.push_back(glm::vec2(12, 18));
+			wallTiles.push_back(glm::vec2(13, 18));
+			wallTiles.push_back(glm::vec2(14, 18));
+
+			wallTiles.push_back(glm::vec2(2, 13));
+			wallTiles.push_back(glm::vec2(2, 17));
+			wallTiles.push_back(glm::vec2(2, 16));
+			wallTiles.push_back(glm::vec2(2, 15));
+			wallTiles.push_back(glm::vec2(2, 14));
+
+			wallTiles.push_back(glm::vec2(0, 13));
+			wallTiles.push_back(glm::vec2(0, 12));
+			wallTiles.push_back(glm::vec2(0, 11));
+			wallTiles.push_back(glm::vec2(0, 15));
+			wallTiles.push_back(glm::vec2(0, 14));
+
+			wallTiles.push_back(glm::vec2(4, 11));
+			wallTiles.push_back(glm::vec2(3, 11));
+			wallTiles.push_back(glm::vec2(2, 11));
+			wallTiles.push_back(glm::vec2(1, 11));
+			wallTiles.push_back(glm::vec2(0, 11));
+
+
+			for (int i = -1; i < 22; i++)
+			{
+				wallTiles.push_back(glm::vec2(-1, i));
+			}
+
+			for (int i = -1; i < 22; i++)
+			{
+				wallTiles.push_back(glm::vec2(21, i));
+			}
+
+			for (int i = -1; i < 22; i++)
+			{
+				wallTiles.push_back(glm::vec2(i, 21));
+			}
+
+			for (int i = -1; i < 22; i++)
+			{
+				wallTiles.push_back(glm::vec2(i, -1));
+			}
+
+			drawVision(400, 400);
 		}
 
 		CameraTestScene::~CameraTestScene()
@@ -62,29 +107,38 @@ namespace Engin
 			}
 			camera.setZoomLevel(zoomByInput); //by input
 
-			static float moveByInputX = 400.0f;
-			static float moveByInputY = 400.0f;
+			static int playerX = 400;
+			static int playerY = 400;
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_W))
 			{
 				//std::cout << "W" << std::endl;
-				moveByInputY += 40.0f;
+				playerY += 40;
+				visibleTiles.clear();
+				drawVision(playerX, playerY);
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_A))
 			{
 				//std::cout << "A" << std::endl;
-				moveByInputX -= 40.0f;
+				playerX -= 40;
+				visibleTiles.clear();
+				drawVision(playerX, playerY);
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_S))
 			{
 				//std::cout << "S" << std::endl;
-				moveByInputY -= 40.0f;
+				playerY -= 40;
+				visibleTiles.clear();
+				drawVision(playerX, playerY);
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_D))
 			{
 				//std::cout << "D" << std::endl;
-				moveByInputX += 40.0f;
+				playerX += 40;
+				visibleTiles.clear();
+				drawVision(playerX, playerY);
 			}
-			camera.setPositionRotationOrigin(moveByInputX, moveByInputY); //by input
+			
+			camera.setPositionRotationOrigin(playerX, playerY);
 			
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE))
 			{
@@ -103,73 +157,10 @@ namespace Engin
 				rotateByInput -= 10.0f;
 			}
 			camera.setRotation(rotateByInput); //by input
-
 			
-			
-			//-----------------------------------------------------------------------------------------------------
-			// Algorithm code
-			//
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_RETURN))
-			{
-				point0 = glm::vec2(camera.getPositionRotationOrigin().x / 40.0f, camera.getPositionRotationOrigin().y / 40.0f);
-				addVisiblePoint(point0);
-						
-				////Map bottom
-				for (int i = 0; i < 20; i++)
-				{
-					point1 = glm::vec2(i, 0);
-					octant = calculateOctant(point0, point1);
-
-					temp0 = inputSwap(point0, octant);
-					temp1 = inputSwap(point1, octant);
-
-					plotLine(temp0, temp1);
-				}
-					
-				//Map right side
-				for (int i = 0; i < 20; i++)
-				{
-					point1 = glm::vec2(20, i);
-					octant = calculateOctant(point0, point1);
-
-					temp0 = inputSwap(point0, octant);
-					temp1 = inputSwap(point1, octant);
-					plotLine(temp0, temp1);
-				}
-				//Map top
-				for (int i = 20; i > 0; i--)
-				{
-					point1 = glm::vec2(i, 20);
-					octant = calculateOctant(point0, point1);
-
-					temp0 = inputSwap(point0, octant);
-					temp1 = inputSwap(point1, octant);
-					plotLine(temp0, temp1);
-				}
-				//Map left side
-				for (int i = 20; i > 0; i--)
-				{
-					point1 = glm::vec2(0, i);
-					octant = calculateOctant(point0, point1);
-
-					temp0 = inputSwap(point0, octant);
-					temp1 = inputSwap(point1, octant);
-					plotLine(temp0, temp1);
-				}		
-			}
-
-
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_DELETE))
 			{
 				visibleTiles.clear();
-				k = 0;
-			}
-
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_T))
-			{
-				/*textString = visibleTiles.size();				
-				textCreator->createTextTexture(font, textString, 0, 0, 0);
-				textTexture = textCreator->getTexture();*/
 			}
 		}
 
@@ -182,14 +173,21 @@ namespace Engin
 			textureBatch.begin();
 			alphaTextureBatch.begin();
 			
-			alphaTextureBatch.draw(doge2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y, 1.0f, 0.1f);
-			alphaTextureBatch.draw(textTexture, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y+40.0f, 1.0f, 0.1f);
+			alphaTextureBatch.draw(doge2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y, 1.0f, 0.6f);
 
 			if (visibleTiles.size() > 0)
 			{
 				for (int i = 0; i < visibleTiles.size(); i++)
 				{
-					alphaTextureBatch.draw(doge3, visibleTiles[i].x * 40, visibleTiles[i].y * 40, 1.0f, 0.0f);
+					alphaTextureBatch.draw(doge3, visibleTiles[i].x * 40, visibleTiles[i].y * 40, 1.0f, 0.5f);
+				}
+			}
+
+			if (wallTiles.size() > 0)
+			{
+				for (int i = 0; i < wallTiles.size(); i++)
+				{
+					alphaTextureBatch.draw(doge4, wallTiles[i].x * 40, wallTiles[i].y * 40, 1.0f, 0.5f);
 				}
 			}
 
@@ -225,7 +223,10 @@ namespace Engin
 				}
 			}
 		}
-
+		
+		//-----------------------------------------------------------------------------------------------------
+		// Algorithm code
+		//
 		glm::vec2 CameraTestScene::inputSwap(glm::vec2 xy, int octant)
 		{
 			//input switch
@@ -270,9 +271,6 @@ namespace Engin
 			{
 				return glm::vec2(xy.x,-xy.y);
 			}
-
-			default:
-				return glm::vec2(0);
 			}
 		}
 
@@ -332,12 +330,15 @@ namespace Engin
 			dy = point1.y - point0.y;
 
 			Difference = 2 * dy - dx;			
-
+			
 			y = point0.y;
 			for (int x = point0.x + 1; x <= point1.x; x++)
 			{
 				temp = outputSwap(glm::vec2(x, y), octant);
-				addVisiblePoint(glm::vec2(temp));
+				if (addVisiblePoint(glm::vec2(temp)) == true)
+				{
+					return;
+				}
 
 				Difference = Difference + 2 * dy;
 				if (Difference > 0)
@@ -351,36 +352,37 @@ namespace Engin
 		int CameraTestScene::calculateOctant(glm::vec2 point0, glm::vec2 point1)
 		{
 			alpha = glm::atan(point1.y - point0.y, point1.x - point0.x);
+			
 			if (alpha < 0)
 			{
 				alpha = glm::radians(360.0f) + alpha;
 			}
 
-			if (alpha >= glm::radians(0.0f) && alpha <= glm::radians(45.0f))
+			if (alpha >= glm::radians(0.0f) && alpha < glm::radians(45.0f))
 			{
 				return 0;
 			}
-			if (alpha >= glm::radians(45.0f) && alpha <= glm::radians(90.0f))
+			if (alpha >= glm::radians(45.0f) && alpha < glm::radians(90.0f))
 			{
 				return 1;
 			}
-			if (alpha >= glm::radians(90.0f) && alpha <= glm::radians(135.0f))
+			if (alpha >= glm::radians(90.0f) && alpha < glm::radians(135.0f))
 			{
 				return 2;
 			}
-			if (alpha >= glm::radians(135.0f) && alpha <= glm::radians(180.0f))
+			if (alpha >= glm::radians(135.0f) && alpha < glm::radians(180.0f))
 			{
 				return 3;
 			}
-			if (alpha >= glm::radians(180.0f) && alpha <= glm::radians(225.0f))
+			if (alpha >= glm::radians(180.0f) && alpha < glm::radians(225.0f))
 			{
 				return 4;
 			}
-			if (alpha >= glm::radians(225.0f) && alpha <= glm::radians(270.0f))
+			if (alpha >= glm::radians(225.0f) && alpha < glm::radians(270.0f))
 			{
 				return 5;
 			}
-			if (alpha >= glm::radians(270.0f) && alpha <= glm::radians(315.0f))
+			if (alpha >= glm::radians(270.0f) && alpha < glm::radians(315.0f))
 			{
 				return 6;
 			}
@@ -388,13 +390,13 @@ namespace Engin
 			{
 				return 7;
 			}
-			return -1;
 		}
 
 		bool CameraTestScene::addVisiblePoint(glm::vec2 point)
 		{
 			int count = 0;
-			
+			int count1 = 0;
+
 			if (visibleTiles.size() > 0)
 			{
 				for (int i = 0; i < visibleTiles.size(); i++)
@@ -404,14 +406,82 @@ namespace Engin
 						count++;
 					}
 				}
-			}			
+			}
+
+			if (wallTiles.size() > 0)
+			{
+				for (int i = 0; i < wallTiles.size(); i++)
+				{
+					if (wallTiles[i] == point)
+					{
+						count1++;
+					}
+				}
+			}
 
 			if (count == 0)
 			{
-				visibleTiles.push_back(point);
+				if (count1 == 0)
+				{
+					visibleTiles.push_back(point);
+				}
+				else
+				{
+					return true; //hit the wall
+				}				
+			}
+			return false;
+		}
+		
+		void CameraTestScene::drawVision(int playerX,int playerY)
+		{
+			point0 = glm::vec2(playerX / 40, playerY / 40);
+			if (addVisiblePoint(point0) == true)
+			{
+				return; //Hit wall
+			}
+			////Map bottom
+			for (int i = 0; i < 20; i++)
+			{
+				point1 = glm::vec2(i, 0);
+				octant = calculateOctant(point0, point1);
+
+				temp0 = inputSwap(point0, octant);
+				temp1 = inputSwap(point1, octant);
+
+				plotLine(temp0, temp1);
 			}
 
-			return false;
+			//Map right side
+			for (int i = 0; i < 20; i++)
+			{
+				point1 = glm::vec2(20, i);
+				octant = calculateOctant(point0, point1);
+
+				temp0 = inputSwap(point0, octant);
+				temp1 = inputSwap(point1, octant);
+				plotLine(temp0, temp1);
+			}
+			//Map top
+			for (int i = 20; i > 0; i--)
+			{
+				point1 = glm::vec2(i, 20);
+				octant = calculateOctant(point0, point1);
+
+				temp0 = inputSwap(point0, octant);
+				temp1 = inputSwap(point1, octant);
+				plotLine(temp0, temp1);
+			}
+			//Map left side
+			for (int i = 20; i > 0; i--)
+			{
+				point1 = glm::vec2(0, i);
+				octant = calculateOctant(point0, point1);
+
+				temp0 = inputSwap(point0, octant);
+				temp1 = inputSwap(point1, octant);
+				plotLine(temp0, temp1);
+			}
 		}
 	}
 }
