@@ -40,29 +40,30 @@ namespace Engin
 			wallTiles.push_back(glm::vec2(1, 17));
 			wallTiles.push_back(glm::vec2(3, 19));
 
-			wallTiles.push_back(glm::vec2(10, 18));
-			wallTiles.push_back(glm::vec2(11, 18));
-			wallTiles.push_back(glm::vec2(12, 18));
-			wallTiles.push_back(glm::vec2(13, 18));
-			wallTiles.push_back(glm::vec2(14, 18));
+			for (int i = 10; i < 15; i++)
+			{
+				wallTiles.push_back(glm::vec2(i, 18));
+			}
 
-			wallTiles.push_back(glm::vec2(2, 13));
-			wallTiles.push_back(glm::vec2(2, 17));
-			wallTiles.push_back(glm::vec2(2, 16));
-			wallTiles.push_back(glm::vec2(2, 15));
-			wallTiles.push_back(glm::vec2(2, 14));
+			for (int i = 13; i < 18; i++)
+			{
+				wallTiles.push_back(glm::vec2(2, i));
+			}
 
-			wallTiles.push_back(glm::vec2(0, 13));
-			wallTiles.push_back(glm::vec2(0, 12));
-			wallTiles.push_back(glm::vec2(0, 11));
-			wallTiles.push_back(glm::vec2(0, 15));
-			wallTiles.push_back(glm::vec2(0, 14));
+			for (int i = 11; i < 16; i++)
+			{
+				wallTiles.push_back(glm::vec2(0, i));
+			}
 
-			wallTiles.push_back(glm::vec2(4, 11));
-			wallTiles.push_back(glm::vec2(3, 11));
-			wallTiles.push_back(glm::vec2(2, 11));
-			wallTiles.push_back(glm::vec2(1, 11));
-			wallTiles.push_back(glm::vec2(0, 11));
+			for (int i = 1; i < 11; i++)
+			{
+				wallTiles.push_back(glm::vec2(i, 11));
+			}
+
+			for (int i = 2; i < 11; i++)
+			{
+				wallTiles.push_back(glm::vec2(i, 9));
+			}
 
 
 			for (int i = -1; i < 22; i++)
