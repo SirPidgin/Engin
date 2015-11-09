@@ -15,62 +15,33 @@ namespace Engin
 		{
 		}
 
-		void Camera::initCamera(GLfloat viewPortX, GLfloat viewPortY, GLfloat viewPortWidth, GLfloat viewPortHeight, GLfloat worldX, GLfloat worldY, GLfloat coordUnitSize, GLfloat rotationOriginX, GLfloat rotationOriginY)
+		void Camera::initCamera(GLfloat viewPortX, GLfloat viewPortY, GLfloat viewPortWidth, GLfloat viewPortHeight, GLfloat worldX, GLfloat worldY, GLfloat rotationOriginX, GLfloat rotationOriginY)
 		{
 			this->viewPortWidth = viewPortWidth;
 			this->viewPortHeight = viewPortHeight;
 			this->worldX = worldX;
 			this->worldY = worldY;
-			this->coordUnitSize = coordUnitSize;
 			this->rotation = 0.0f;
-			this->zoomLevel = 1.0f;
 
 			this->rotationOriginX = rotationOriginX;
 			this->rotationOriginY = rotationOriginY;
 
-			viewPort = glm::vec4(viewPortX, viewPortY, viewPortWidth, viewPortHeight);
-
-			this->worldX = this->worldX * coordMultip;
-			this->worldY = this->worldY * coordMultip;
-						
-			setRotation(this->rotation);
-			setPosition(this->worldX, this->worldY);
+			viewPort = glm::vec4(viewPortX, viewPortY, viewPortWidth, viewPortHeight);						
 			setDefaultZoomLevel();
+
+			this->worldX = this->worldX*coordMultip;
+			this->worldY = this->worldY*coordMultip;
+
+			setPositionRotationOrigin(this->worldX, this->worldY);			
 
 			P = glm::ortho(0.0f, viewPortWidth, 0.0f, viewPortHeight);
 		}
 
 		void Camera::activateViewPort()
 		{
-			fixCoordinatesForRotationAtTheEndOfUpdate(); //Get rid of this? Or move to update.
-			VPmatrix = P*positionMatrix*rotationMatrix*scaleMatrix; //Temporal location for calculating VP matrix.
+			fixCoordinatesForRotationAtTheEndOfUpdate(); //Temporal location. These will go to end of update.
+			VPmatrix = P*positionMatrix*rotationMatrix*scaleMatrix; //Temporal location. These will go to end of update.
 			glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
-		}
-
-		void Camera::setPosition(GLfloat worldX, GLfloat worldY) //Not working with rotate anymore. Remove?
-		{
-			this->worldX = worldX*coordMultip;
-			this->worldY = worldY*coordMultip;
-
-			positionMatrix = glm::translate(glm::vec3(-this->worldX, -this->worldY, 0.0f)); //Camera translate is to an opposite direction
-		}
-
-		glm::vec2 Camera::getPosition()
-		{
-			return glm::vec2(worldX, worldY*getMethodCoordMultip);
-		}
-
-		void Camera::setPositionCenter(GLfloat worldX, GLfloat worldY) //Not working with rotate anymore. Remove?
-		{
-			this->worldX = worldX*coordMultip - 0.5f*viewPortWidth;
-			this->worldY = worldY*coordMultip - 0.5f*viewPortHeight;
-
-			positionMatrix = glm::translate(glm::vec3(-this->worldX, -this->worldY, 0.0f)); //Camera translate is to an opposite direction
-		}
-
-		glm::vec2 Camera::getPositionCenter()
-		{
-			return glm::vec2((worldX + 0.5f*viewPortWidth), (worldY + 0.5f*viewPortHeight)*getMethodCoordMultip);
 		}
 
 		void Camera::setPositionRotationOrigin(GLfloat worldX, GLfloat worldY)
@@ -94,15 +65,15 @@ namespace Engin
 			if (size > 0.0001f)
 			{
 				zoomLevel = size;
-				coordMultip = size*this->coordUnitSize;
-				getMethodCoordMultip = 1.0f / size;
+				coordMultip = size;
+				getMethodCoordMultip = 1.0f/zoomLevel;
 				scaleMatrix = glm::scale(glm::vec3(size, size, 1.0f));
 				setPositionRotationOrigin(tempWorldX, tempWorldY);
 			}
 			if (size <= 0.0f)//if zoom is 0 you cant see how it moves. negative zoom neglected
 			{
 				zoomLevel = 0.0f;
-				coordMultip = this->coordUnitSize;
+				coordMultip = 1.0f;
 				getMethodCoordMultip = 1.0f;
 				scaleMatrix = glm::scale(glm::vec3(0.0f, 0.0f, 1.0f));
 				setPositionRotationOrigin(tempWorldX, tempWorldY);
@@ -111,7 +82,8 @@ namespace Engin
 
 		void Camera::setDefaultZoomLevel()
 		{
-			coordMultip = this->coordUnitSize;
+			zoomLevel = 1.0f;
+			coordMultip = 1.0f;
 			getMethodCoordMultip = 1.0f;
 			scaleMatrix = glm::scale(glm::vec3(1.0f));
 		}
@@ -135,11 +107,6 @@ namespace Engin
 				tempX = (root * cos(this->rotation + atani) - rotationOriginX);
 				tempY = (root * sin(this->rotation + atani) - rotationOriginY);
 
-				//root = glm::sqrt(glm::pow(worldX + 0.5f*viewPortWidth, 2.0f) + glm::pow(worldY + 0.5f*viewPortHeight, 2.0f));
-				//atani = glm::atan(worldY + 0.5f*viewPortHeight, worldX + 0.5f*viewPortWidth);
-
-				//tempX = (root * cos(this->rotation + atani) - 0.5f*viewPortWidth);
-				//tempY = (root * sin(this->rotation + atani) - 0.5f*viewPortHeight);
 				positionMatrix = glm::translate(glm::vec3(-tempX, -tempY, 0.0f));
 			}			
 		}

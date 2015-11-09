@@ -74,9 +74,9 @@ namespace Engin
 				image->pixels);
 
 			this->textureResource = new Resources::Texture(texture, area.w, area.h);
-			this->textureResource->bind(8);
+			this->textureResource->bind(0);
 
-			SDL_FreeSurface(image); /* No longer needed */
+			SDL_FreeSurface(image); /* SDL surface no longer needed */
 		}
 	}
 }

@@ -19,9 +19,9 @@ namespace Engin
 
 			std::cout << "Camera test scene going on, be aware of rotating cameras" << std::endl;
 
-			camera.initCamera(0.0f, 0.0f, 400.0f, 400.0f, 0.0f, 0.0f, 1.0f, 200, 200);
-			camera1.initCamera(0.0f, 400.0f, 400.0f, 320.0f, 0.0f, 0.0f, 1.0f, 200, 160);
-			camera2.initCamera(400.0f, 0.0f, 880.0f, 720.0f, 0.0f, 0.0f, 64.0f, 440, 144);
+			camera.initCamera(0.0f, 0.0f, 400.0f, 400.0f, 0.0f, 0.0f, 200, 200);
+			camera1.initCamera(0.0f, 400.0f, 400.0f, 320.0f, 0.0f, 0.0f, 200, 160);
+			camera2.initCamera(400.0f, 0.0f, 880.0f, 720.0f, 0.0f, 0.0f, 440, 144);
 			
 			//camera.setRotation(45);
 			camera.setZoomLevel(0.5f);			
@@ -29,18 +29,9 @@ namespace Engin
 			//camera.setZoomLevel(0.8f);
 			//camera.setZoomLevel(0.6f);
 
-			camera.setPositionCenter(3.0f*32.0f, 9.0f*32.0f);
-			camera1.setPositionCenter(3.0f*32.0f, 9.0f*32.0f);
+			camera.setPositionRotationOrigin(3.0f*32.0f, 9.0f*32.0f);
+			camera1.setPositionRotationOrigin(3.0f*32.0f, 9.0f*32.0f);
 			camera2.setPositionRotationOrigin(5*64.0f, 9*64.0f);
-
-			//camera.setPosition(-100.0f, 0.0f);
-			//camera.setPosition(100.0f, 0.0f);
-			//camera.setPosition(800.0f, 0.0f);
-			//camera.setPosition(96.0f, 96.0f);
-			
-
-			//camera2.setPosition(700.0f, 0.0f);			
-			//camera2.setPosition(0.0f, 0.0f);
 
 			//camera.setZoomLevel(4.0f);
 			//camera.setZoomLevel(0.5f);
@@ -105,26 +96,24 @@ namespace Engin
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_W))
 			{
 				//std::cout << "W" << std::endl;
-				moveByInputY += 1.0f; //camera2 unitsize = 64
+				moveByInputY += 64.0f;
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_A))
 			{
 				//std::cout << "A" << std::endl;
-				moveByInputX -= 1.0f; //camera2 unitsize = 64
+				moveByInputX -= 64.0f;
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_S))
 			{
 				//std::cout << "S" << std::endl;
-				moveByInputY -= 1.0f; //camera2 unitsize = 64
+				moveByInputY -= 64.0f;
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_D))
 			{
 				//std::cout << "D" << std::endl;
-				moveByInputX += 1.0f; //camera2 unitsize = 64
+				moveByInputX += 64.0f;
 			}
 			camera2.setPositionRotationOrigin(moveByInputX, moveByInputY); //by input
-			//camera2.setPosition(moveByInputX, moveByInputY); //by input
-			//camera2.setPositionCenter(moveByInputX, moveByInputY); //by input
 			
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE))
 			{
@@ -135,18 +124,18 @@ namespace Engin
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_LEFT))
 			{
 				//std::cout << "<-" << std::endl;
-				rotateByInput -= 10.0f;
+				rotateByInput += 10.0f;
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_RIGHT))
 			{
 				//std::cout << "->" << std::endl;
-				rotateByInput += 10.0f;
+				rotateByInput -= 10.0f;
 			}
 			camera2.setRotation(rotateByInput); //by input
 
 			//camera.setRotation(this->alpha);
 			//camera2.setRotation(30 * alpha);
-			camera.setPosition(400 * glm::cos(alpha), 0.0f);
+			camera.setPositionRotationOrigin(400 * glm::cos(alpha), 0.0f);
 			camera1.setZoomLevel(1.0f + glm::cos(alpha));
 			this->alpha += 0.005f;
 
