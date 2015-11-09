@@ -30,15 +30,17 @@ namespace Engin
 
 			doge = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/white_tile_40.png");
 			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_40.png");
+			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/yellow_tile_40.png");
 			std::cout << doge->getResourcePath() << ": " << doge->getHeight() << " " << doge->getReferenceCount() << std::endl;
 		
-			textString = "Press T to get Global time";
+			textString = "Press T to get visible tile count";
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
-			font->setPtSize(100);
+			font->setPtSize(18);
 			
 			textCreator = new Renderer::TextRenderer();
-			textCreator->createTextTexture(font, textString, 255 ,255, 255);
+			textCreator->createTextTexture(font, textString, 0 ,0, 0);
 			textTexture = textCreator->getTexture();
+			k = 0;
 		}
 
 		CameraTestScene::~CameraTestScene()
@@ -52,11 +54,11 @@ namespace Engin
 			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP))
 			{
 				if (zoomByInput > 0.0f)
-				zoomByInput -= glm::radians(2.0f); //???? Eikös glm::radians(2.0f) ole aina 0.034 ja risat
+				zoomByInput -= 0.03f;
 			}
 			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_DOWN))
 			{
-				zoomByInput += glm::radians(2.0f);
+				zoomByInput += 0.03f;
 			}
 			camera.setZoomLevel(zoomByInput); //by input
 
@@ -101,7 +103,74 @@ namespace Engin
 				rotateByInput -= 10.0f;
 			}
 			camera.setRotation(rotateByInput); //by input
-	
+
+			
+			
+			//-----------------------------------------------------------------------------------------------------
+			// Algorithm code
+			//
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_RETURN))
+			{
+				point0 = glm::vec2(camera.getPositionRotationOrigin().x / 40.0f, camera.getPositionRotationOrigin().y / 40.0f);
+				addVisiblePoint(point0);
+						
+				////Map bottom
+				for (int i = 0; i < 20; i++)
+				{
+					point1 = glm::vec2(i, 0);
+					octant = calculateOctant(point0, point1);
+
+					temp0 = inputSwap(point0, octant);
+					temp1 = inputSwap(point1, octant);
+
+					plotLine(temp0, temp1);
+				}
+					
+				//Map right side
+				for (int i = 0; i < 20; i++)
+				{
+					point1 = glm::vec2(20, i);
+					octant = calculateOctant(point0, point1);
+
+					temp0 = inputSwap(point0, octant);
+					temp1 = inputSwap(point1, octant);
+					plotLine(temp0, temp1);
+				}
+				//Map top
+				for (int i = 20; i > 0; i--)
+				{
+					point1 = glm::vec2(i, 20);
+					octant = calculateOctant(point0, point1);
+
+					temp0 = inputSwap(point0, octant);
+					temp1 = inputSwap(point1, octant);
+					plotLine(temp0, temp1);
+				}
+				//Map left side
+				for (int i = 20; i > 0; i--)
+				{
+					point1 = glm::vec2(0, i);
+					octant = calculateOctant(point0, point1);
+
+					temp0 = inputSwap(point0, octant);
+					temp1 = inputSwap(point1, octant);
+					plotLine(temp0, temp1);
+				}		
+			}
+
+
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_DELETE))
+			{
+				visibleTiles.clear();
+				k = 0;
+			}
+
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_T))
+			{
+				/*textString = visibleTiles.size();				
+				textCreator->createTextTexture(font, textString, 0, 0, 0);
+				textTexture = textCreator->getTexture();*/
+			}
 		}
 
 		void CameraTestScene::interpolate(GLfloat alpha)
@@ -112,10 +181,18 @@ namespace Engin
 		{
 			textureBatch.begin();
 			alphaTextureBatch.begin();
-			//batch.drawQuad(0.0f, 0.0f, 64.0f, 64.0f, Renderer::clrWhite, 1.0f, 1.0f);
 			
 			alphaTextureBatch.draw(doge2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y, 1.0f, 0.1f);
-			
+			alphaTextureBatch.draw(textTexture, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y+40.0f, 1.0f, 0.1f);
+
+			if (visibleTiles.size() > 0)
+			{
+				for (int i = 0; i < visibleTiles.size(); i++)
+				{
+					alphaTextureBatch.draw(doge3, visibleTiles[i].x * 40, visibleTiles[i].y * 40, 1.0f, 0.0f);
+				}
+			}
+
 			renderDogemap(0.0f, 0.0f, 40.0f, 40.0f, 21, 21);
 
 			textureBatch.end();
@@ -147,6 +224,194 @@ namespace Engin
 					}
 				}
 			}
+		}
+
+		glm::vec2 CameraTestScene::inputSwap(glm::vec2 xy, int octant)
+		{
+			//input switch
+			switch (octant)
+			{
+			case 0:
+			{
+				return xy;				
+			}
+
+			case 1:
+			{
+				return glm::vec2(xy.y, xy.x);
+			}
+
+			case 2:
+			{
+				return glm::vec2(xy.y, -xy.x);
+			}
+
+			case 3:
+			{
+				return glm::vec2(-xy.x, xy.y);
+			}
+
+			case 4:
+			{
+				return glm::vec2(-xy.x, -xy.y);
+			}
+
+			case 5:
+			{
+				return glm::vec2(-xy.y, -xy.x);
+			}
+
+			case 6:
+			{
+				return glm::vec2(-xy.y, xy.x);
+			}
+
+			case 7:
+			{
+				return glm::vec2(xy.x,-xy.y);
+			}
+
+			default:
+				return glm::vec2(0);
+			}
+		}
+
+		glm::vec2 CameraTestScene::outputSwap(glm::vec2 xy, int octant)
+		{
+			//input switch
+			switch (octant)
+			{
+			case 0:
+			{
+				return xy;
+			}
+
+			case 1:
+			{
+				return glm::vec2(xy.y, xy.x);
+			}
+
+			case 2:
+			{
+				return glm::vec2(-xy.y, xy.x);
+			}
+
+			case 3:
+			{
+				return glm::vec2(-xy.x, xy.y);
+			}
+
+			case 4:
+			{
+				return glm::vec2(-xy.x, -xy.y);
+			}
+
+			case 5:
+			{
+				return glm::vec2(-xy.y, -xy.x);
+			}
+
+			case 6:
+			{
+				return glm::vec2(xy.y, -xy.x);
+			}
+
+			case 7:
+			{
+				return glm::vec2(xy.x, -xy.y);
+			}
+
+			default:
+				return glm::vec2(0);
+			}
+		}
+
+		void CameraTestScene::plotLine(glm::vec2 point0, glm::vec2 point1)
+		{
+			dx = point1.x - point0.x;
+			dy = point1.y - point0.y;
+
+			Difference = 2 * dy - dx;			
+
+			y = point0.y;
+			for (int x = point0.x + 1; x <= point1.x; x++)
+			{
+				temp = outputSwap(glm::vec2(x, y), octant);
+				addVisiblePoint(glm::vec2(temp));
+
+				Difference = Difference + 2 * dy;
+				if (Difference > 0)
+				{
+					y++;
+					Difference = Difference - (2 * dx);
+				}
+			}
+		}
+
+		int CameraTestScene::calculateOctant(glm::vec2 point0, glm::vec2 point1)
+		{
+			alpha = glm::atan(point1.y - point0.y, point1.x - point0.x);
+			if (alpha < 0)
+			{
+				alpha = glm::radians(360.0f) + alpha;
+			}
+
+			if (alpha >= glm::radians(0.0f) && alpha <= glm::radians(45.0f))
+			{
+				return 0;
+			}
+			if (alpha >= glm::radians(45.0f) && alpha <= glm::radians(90.0f))
+			{
+				return 1;
+			}
+			if (alpha >= glm::radians(90.0f) && alpha <= glm::radians(135.0f))
+			{
+				return 2;
+			}
+			if (alpha >= glm::radians(135.0f) && alpha <= glm::radians(180.0f))
+			{
+				return 3;
+			}
+			if (alpha >= glm::radians(180.0f) && alpha <= glm::radians(225.0f))
+			{
+				return 4;
+			}
+			if (alpha >= glm::radians(225.0f) && alpha <= glm::radians(270.0f))
+			{
+				return 5;
+			}
+			if (alpha >= glm::radians(270.0f) && alpha <= glm::radians(315.0f))
+			{
+				return 6;
+			}
+			if (alpha >= glm::radians(315.0f) && alpha <= glm::radians(360.0f))
+			{
+				return 7;
+			}
+			return -1;
+		}
+
+		bool CameraTestScene::addVisiblePoint(glm::vec2 point)
+		{
+			int count = 0;
+			
+			if (visibleTiles.size() > 0)
+			{
+				for (int i = 0; i < visibleTiles.size(); i++)
+				{
+					if (visibleTiles[i] == point)
+					{
+						count++;
+					}
+				}
+			}			
+
+			if (count == 0)
+			{
+				visibleTiles.push_back(point);
+			}
+
+			return false;
 		}
 	}
 }

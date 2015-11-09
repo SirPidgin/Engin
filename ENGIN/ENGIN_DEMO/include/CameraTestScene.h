@@ -40,11 +40,33 @@ namespace Engin
 
 			Resources::Texture* doge;
 			Resources::Texture* doge2;
+			Resources::Texture* doge3;
 
 			std::string textString;
 			Resources::Font* font;
 			Renderer::TextRenderer* textCreator; //Change TextRenderer class name
 			Resources::Texture* textTexture;
+
+			//algorithm
+			glm::vec2 point0;
+			glm::vec2 point1;
+			glm::vec2 temp0;
+			glm::vec2 temp1;
+			glm::vec2 temp;
+			std::vector<glm::vec2> visibleTiles;
+			int Difference;
+			int dx;
+			int dy;
+			int y;
+			int octant;
+			int k;
+			float alpha;
+
+			glm::vec2 inputSwap(glm::vec2 xy, int octant);
+			glm::vec2 outputSwap(glm::vec2 xy, int octant);
+			void plotLine(glm::vec2 point0, glm::vec2 point1);
+			int calculateOctant(glm::vec2 point0, glm::vec2 point1);
+			bool addVisiblePoint(glm::vec2 point);
 		};
 	}
 }
