@@ -46,6 +46,8 @@ namespace Engin
 				frames.push_back(frame);
 			}
 
+			content.clear();
+			buffer.clear();
 			document.clear();
 		}
 

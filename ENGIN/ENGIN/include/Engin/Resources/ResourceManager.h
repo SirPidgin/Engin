@@ -49,6 +49,8 @@ namespace Engin
 
 			bool unload(const std::string &filename);
 
+			void printResources();
+
 		private:
 			std::unordered_map< std::string, Resource*> resourceMap;
 			void releaseAll();

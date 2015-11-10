@@ -34,6 +34,14 @@ namespace Engin
 			return true;
 		}
 
+		void ResourceManager::printResources()
+		{
+			for (auto resource : resourceMap)
+			{
+				std::cout << resource.second->getResourcePath() << ": " << resource.second->getReferenceCount() << std::endl;
+			}
+		}
+
 		void ResourceManager::releaseAll()
 		{
 			std::unordered_map<std::string, Resource*>::iterator it;

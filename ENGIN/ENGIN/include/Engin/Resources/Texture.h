@@ -12,6 +12,7 @@ namespace Engin
 		public:
 			Texture(const std::string& resourcePath);
 			Texture(const GLuint id, const GLuint w, const GLuint h);
+			Texture() : Resource("__INTERNAL__"), textureID(0), width(0), height(0) {};
 			~Texture();
 
 			void changeParameters(GLenum parameterName, GLint parameter);
@@ -26,6 +27,18 @@ namespace Engin
 			GLuint getHeight() 
 			{
 				return height;
+			}
+
+			GLuint getID()
+			{
+				return textureID;
+			}
+
+			void setIDWidthHeight(GLuint id, GLuint w, GLuint h)
+			{
+				textureID = id;
+				width = w;
+				height = h;
 			}
 
 		private:
