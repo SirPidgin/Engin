@@ -86,6 +86,16 @@ namespace Engin
 				wallTiles.push_back(glm::vec2(i, -1));
 			}
 
+			for (int i = 15; i < 19; i++)
+			{
+				wallTiles.push_back(glm::vec2(i, 3));
+			}
+
+			for (int i = 4; i < 7; i++)
+			{
+				wallTiles.push_back(glm::vec2(18, i));
+			}
+
 			drawVision(400, 400);
 		}
 
@@ -113,30 +123,46 @@ namespace Engin
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_W))
 			{
 				//std::cout << "W" << std::endl;
-				playerY += 40;
-				visibleTiles.clear();
-				drawVision(playerX, playerY);
+				if (playerY < 800)
+				{
+					playerY += 40;
+					visibleTiles.clear();
+					drawVision(playerX, playerY);
+					drawX(playerX, playerY);
+				}				
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_A))
 			{
 				//std::cout << "A" << std::endl;
-				playerX -= 40;
-				visibleTiles.clear();
-				drawVision(playerX, playerY);
+				if (playerX > 0)
+				{
+					playerX -= 40;
+					visibleTiles.clear();
+					drawVision(playerX, playerY);
+					drawX(playerX, playerY);
+				}
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_S))
 			{
 				//std::cout << "S" << std::endl;
-				playerY -= 40;
-				visibleTiles.clear();
-				drawVision(playerX, playerY);
+				if (playerY > 0)
+				{
+					playerY -= 40;
+					visibleTiles.clear();
+					drawVision(playerX, playerY);
+					drawX(playerX, playerY);
+				}
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_D))
 			{
 				//std::cout << "D" << std::endl;
-				playerX += 40;
-				visibleTiles.clear();
-				drawVision(playerX, playerY);
+				if (playerX < 800)
+				{
+					playerX += 40;
+					visibleTiles.clear();
+					drawVision(playerX, playerY);
+					drawX(playerX, playerY);
+				}
 			}
 			
 			camera.setPositionRotationOrigin(playerX, playerY);
@@ -163,6 +189,11 @@ namespace Engin
 			{
 				visibleTiles.clear();
 			}
+
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_X))
+			{
+				drawX(playerX, playerY);
+			}
 		}
 
 		void CameraTestScene::interpolate(GLfloat alpha)
@@ -180,7 +211,7 @@ namespace Engin
 			{
 				for (int i = 0; i < visibleTiles.size(); i++)
 				{
-					alphaTextureBatch.draw(doge3, visibleTiles[i].x * 40, visibleTiles[i].y * 40, 1.0f, 0.5f);
+					alphaTextureBatch.draw(doge3, visibleTiles[i].x * 40, visibleTiles[i].y * 40, 0.50f, 0.5f);
 				}
 			}
 
@@ -359,31 +390,31 @@ namespace Engin
 				alpha = glm::radians(360.0f) + alpha;
 			}
 
-			if (alpha >= glm::radians(0.0f) && alpha < glm::radians(45.0f))
+			if (alpha >= glm::radians(0.0f) && alpha <= glm::radians(45.0f))
 			{
 				return 0;
 			}
-			if (alpha >= glm::radians(45.0f) && alpha < glm::radians(90.0f))
+			if (alpha >= glm::radians(45.0f) && alpha <= glm::radians(90.0f))
 			{
 				return 1;
 			}
-			if (alpha >= glm::radians(90.0f) && alpha < glm::radians(135.0f))
+			if (alpha >= glm::radians(90.0f) && alpha <= glm::radians(135.0f))
 			{
 				return 2;
 			}
-			if (alpha >= glm::radians(135.0f) && alpha < glm::radians(180.0f))
+			if (alpha >= glm::radians(135.0f) && alpha <= glm::radians(180.0f))
 			{
 				return 3;
 			}
-			if (alpha >= glm::radians(180.0f) && alpha < glm::radians(225.0f))
+			if (alpha >= glm::radians(180.0f) && alpha <= glm::radians(225.0f))
 			{
 				return 4;
 			}
-			if (alpha >= glm::radians(225.0f) && alpha < glm::radians(270.0f))
+			if (alpha >= glm::radians(225.0f) && alpha <= glm::radians(270.0f))
 			{
 				return 5;
 			}
-			if (alpha >= glm::radians(270.0f) && alpha < glm::radians(315.0f))
+			if (alpha >= glm::radians(270.0f) && alpha <= glm::radians(315.0f))
 			{
 				return 6;
 			}
@@ -482,6 +513,45 @@ namespace Engin
 				temp0 = inputSwap(point0, octant);
 				temp1 = inputSwap(point1, octant);
 				plotLine(temp0, temp1);
+			}
+		}
+
+		void CameraTestScene::drawX(int playerX, int playerY)
+		{
+			endX = 0;
+			for (endX; endX<10000; endX++) //Until hit the wall
+			{
+				temp = glm::vec2(playerX / 40 + endX, playerY / 40 + endX);
+				if (addVisiblePoint(temp) == true)
+				{
+					endX = 10001;
+				}
+			}
+			endX = 0;
+			for (endX; endX<10000; endX++)
+			{
+				temp = glm::vec2(playerX / 40 + endX, playerY / 40 - endX);
+				if (addVisiblePoint(temp) == true)
+				{
+					endX = 10001;
+				}
+			}
+			endX = 0;
+			for (endX; endX<10000; endX++)
+			{
+				temp = glm::vec2(playerX / 40 - endX, playerY / 40 + endX);
+				if (addVisiblePoint(temp) == true)
+				{
+					endX = 10001;
+				}
+			}
+			for (int i = 0;; i++)
+			{
+				temp = glm::vec2(playerX / 40 - i, playerY / 40 - i);
+				if (addVisiblePoint(temp) == true)
+				{
+					return;
+				}
 			}
 		}
 	}

@@ -66,6 +66,8 @@ namespace Engin
 			int playerY;
 
 			void drawVision(int playerX, int playerY);
+			void drawX(int playerX, int playerY);
+			int endX;
 		};
 	}
 }
