@@ -55,8 +55,13 @@ namespace Engin
 			Resources::Texture* doge4;
 			Resources::Texture* text;
 			Resources::Texture* text2;
+			Resources::Texture* text3;
 			Renderer::TextRenderer textCreator;
+			Renderer::TextRenderer textCreator2;
+			Renderer::TextRenderer textCreator3;
 			Resources::Font* font;
+			Core::Timer myTimer;
+			Core::Timer myTimer2;
 
 			//algorithm
 			glm::vec2 point0;

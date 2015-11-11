@@ -36,11 +36,13 @@ namespace Engin
 
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 			font->setPtSize(40);
-			textCreator.createTextTexture(font,"Vision calculation time: ", 255,100,0);
+			textCreator.createTextTexture(font, "Vision calculation time: ", 255,100,0);
 			text = textCreator.getTexture();
-			textCreator.createTextTexture(font, "Tile draw time: ", 255, 100, 0);
-			text2 = textCreator.getTexture();
-			std::cout << doge->getResourcePath() << ": " << doge->getHeight() << " " << doge->getReferenceCount() << std::endl;
+			textCreator2.createTextTexture(font, "Visible tiles draw time: ", 255, 100, 0);
+			text2 = textCreator2.getTexture();
+			textCreator3.createTextTexture(font, "Visible tile count: ", 255, 100, 0);
+			text3 = textCreator3.getTexture();
+			
 #pragma endregion
 
 #pragma region WallTiles
@@ -221,17 +223,20 @@ namespace Engin
 			camera.setRotation(rotateByInput); //by input
 
 #pragma endregion
-
+			myTimer.start();
 			//During Update
 			visibleTiles.clear();
 			calculateVision(playerX, playerY);
 			calculate90(playerX, playerY);
+			myTimer.pause();
 
 			//Information
-			textCreator.createTextTexture(font, "Vision calculation time: ", 255, 100, 0);
+			textCreator.createTextTexture(font, "Vision calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
 			text = textCreator.getTexture();
-			textCreator.createTextTexture(font, "Tile draw time: ", 255, 100, 0);
-			text2 = textCreator.getTexture();
+			textCreator2.createTextTexture(font, "Visible tiles draw time: " + std::to_string(myTimer2.getLocalTime()) + " ms", 255, 100, 0);
+			text2 = textCreator2.getTexture();
+			textCreator3.createTextTexture(font, "Visible tiles count: " + std::to_string(visibleTiles.size()), 255, 100, 0);
+			text3 = textCreator3.getTexture();
 		}
 
 		void CameraTestScene::interpolate(GLfloat alpha)
@@ -244,10 +249,9 @@ namespace Engin
 			alphaTextureBatch.begin();
 			
 			alphaTextureBatch.draw(doge2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y, 1.0f, 0.6f);
-			alphaTextureBatch.draw(text, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y+100.0f, 1.0f, 0.6f);
-			alphaTextureBatch.draw(text2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y + 50.0f, 1.0f, 0.6f);
+			
 
-
+			myTimer2.start();
 			if (visibleTiles.size() > 0)
 			{
 				for (int i = 0; i < visibleTiles.size(); i++)
@@ -263,6 +267,12 @@ namespace Engin
 					alphaTextureBatch.draw(doge4, wallTiles[i].x * 40, wallTiles[i].y * 40, 1.0f, 0.5f);
 				}
 			}
+			myTimer2.pause();
+
+			alphaTextureBatch.draw(text, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y + 110.0f, 1.0f, 0.9f);
+			alphaTextureBatch.draw(text2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y + 70.0f, 1.0f, 0.9f);
+			alphaTextureBatch.draw(text3, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y + 30.0f, 1.0f, 0.9f);
+
 
 			renderDogemap(0.0f, 0.0f, 40.0f, 40.0f, 21, 21);
 

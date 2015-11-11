@@ -4,6 +4,25 @@ namespace Engin
 {
 	namespace Renderer
 	{
+
+		TextRenderer::TextRenderer() : surface(nullptr), textureResource(nullptr) 
+		{
+			glGenTextures(1, &texture);
+			glBindTexture(GL_TEXTURE_2D, texture);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+			textureResource = new Resources::Texture();
+			textureResource->bind(0);
+		};
+
+		TextRenderer::~TextRenderer() 
+		{ 
+			glDeleteTextures(1, &texture);
+			delete textureResource;
+			
+		};
+
 		void TextRenderer::createTextTexture(Resources::Font* font, std::string message, GLint colorR, GLint colorG, GLint colorB)
 		{
 			this->surface = TTF_RenderText_Blended(font->getFont(), message.c_str(), SDL_Color{colorR,colorG,colorB});
@@ -13,10 +32,12 @@ namespace Engin
 		Resources::Texture* TextRenderer::getTexture()
 		{
 			return textureResource;
+			SDL_FreeSurface(surface);
 		}
 
 		void TextRenderer::SDLLoadTexture()
 		{
+
 			/* Use the surface width and height expanded to powers of 2 */
 			w = power_of_two(surface->w);
 			h = power_of_two(surface->h);
@@ -60,10 +81,7 @@ namespace Engin
 			SDL_SetSurfaceBlendMode(surface, saved_mode);
 
 			/* Create an OpenGL texture for the image */
-			glGenTextures(1, &texture);
-			glBindTexture(GL_TEXTURE_2D, texture);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+			textureResource->bind(0);
 			glTexImage2D(GL_TEXTURE_2D,
 				0,
 				GL_RGBA,
@@ -73,10 +91,11 @@ namespace Engin
 				GL_UNSIGNED_BYTE,
 				image->pixels);
 
-			this->textureResource = new Resources::Texture(texture, area.w, area.h);
-			this->textureResource->bind(0);
+			textureResource->setIDWidthHeight(texture, area.w, area.h);
+			textureResource->unbind();
 
 			SDL_FreeSurface(image); /* SDL surface no longer needed */
+			SDL_FreeSurface(surface);
 		}
 	}
 }
