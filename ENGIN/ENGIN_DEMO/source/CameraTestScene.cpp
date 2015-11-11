@@ -33,6 +33,13 @@ namespace Engin
 			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_40.png");
 			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/yellow_tile_40.png");
 			doge4 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_tile_40.png");
+
+			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
+			font->setPtSize(40);
+			textCreator.createTextTexture(font,"Vision calculation time: ", 255,100,0);
+			text = textCreator.getTexture();
+			textCreator.createTextTexture(font, "Tile draw time: ", 255, 100, 0);
+			text2 = textCreator.getTexture();
 			std::cout << doge->getResourcePath() << ": " << doge->getHeight() << " " << doge->getReferenceCount() << std::endl;
 #pragma endregion
 
@@ -219,6 +226,12 @@ namespace Engin
 			visibleTiles.clear();
 			calculateVision(playerX, playerY);
 			calculate90(playerX, playerY);
+
+			//Information
+			textCreator.createTextTexture(font, "Vision calculation time: ", 255, 100, 0);
+			text = textCreator.getTexture();
+			textCreator.createTextTexture(font, "Tile draw time: ", 255, 100, 0);
+			text2 = textCreator.getTexture();
 		}
 
 		void CameraTestScene::interpolate(GLfloat alpha)
@@ -231,6 +244,9 @@ namespace Engin
 			alphaTextureBatch.begin();
 			
 			alphaTextureBatch.draw(doge2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y, 1.0f, 0.6f);
+			alphaTextureBatch.draw(text, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y+100.0f, 1.0f, 0.6f);
+			alphaTextureBatch.draw(text2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y + 50.0f, 1.0f, 0.6f);
+
 
 			if (visibleTiles.size() > 0)
 			{

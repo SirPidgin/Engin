@@ -8,6 +8,9 @@
 #include "Engin\Resources\ResourceManager.h"
 #include "Engin\Resources\Texture.h"
 #include "Engin\Resources\ShaderProgram.h"
+#include "Engin\Core\Timer.h"
+#include "Engin\Renderer\TextRenderer.h"
+#include "Engin\Resources\Font.h"
 
 namespace Engin
 {
@@ -24,7 +27,17 @@ namespace Engin
 			void draw();
 			void renderDogemap(float startX, float startY, float tileWidth, float tileHeight, size_t worldWidth, size_t worldHeight);
 			void renderTexture(Resources::Texture* texture, float x, float y, const Renderer::Camera& camera);
-		public:
+		
+			glm::vec2 inputSwap(glm::vec2 xy, int octant);
+			glm::vec2 outputSwap(glm::vec2 xy, int octant);
+			void plotLine(glm::vec2 point0, glm::vec2 point1);
+			int calculateOctant(glm::vec2 point0, glm::vec2 point1);
+			bool addVisiblePoint(glm::vec2 point);
+
+			void calculateVision(int playerX, int playerY);
+			void calculate90(int playerX, int playerY);
+
+		private:
 			Engin* engine;
 
 			Renderer::Camera camera;
@@ -40,6 +53,10 @@ namespace Engin
 			Resources::Texture* doge2;
 			Resources::Texture* doge3;
 			Resources::Texture* doge4;
+			Resources::Texture* text;
+			Resources::Texture* text2;
+			Renderer::TextRenderer textCreator;
+			Resources::Font* font;
 
 			//algorithm
 			glm::vec2 point0;
@@ -57,17 +74,11 @@ namespace Engin
 			int octant;
 			float alpha;
 
-			glm::vec2 inputSwap(glm::vec2 xy, int octant);
-			glm::vec2 outputSwap(glm::vec2 xy, int octant);
-			void plotLine(glm::vec2 point0, glm::vec2 point1);
-			int calculateOctant(glm::vec2 point0, glm::vec2 point1);
-			bool addVisiblePoint(glm::vec2 point);
-
+			
 			int playerX;
 			int playerY;
 
-			void calculateVision(int playerX, int playerY);
-			void calculate90(int playerX, int playerY);
+			
 			int endX;
 		};
 	}
