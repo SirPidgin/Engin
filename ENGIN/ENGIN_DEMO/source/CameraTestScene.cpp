@@ -154,7 +154,7 @@ namespace Engin
 				if (playerY < 800)
 				{
 					playerY += 40;
-					visibleTiles.clear();
+					//visibleTiles.clear();
 					//calculateVision(playerX, playerY);
 					//calculate90(playerX, playerY);
 				}
@@ -165,7 +165,7 @@ namespace Engin
 				if (playerX > 0)
 				{
 					playerX -= 40;
-					visibleTiles.clear();
+					//visibleTiles.clear();
 					//calculateVision(playerX, playerY);
 					//calculate90(playerX, playerY);
 				}
@@ -176,7 +176,7 @@ namespace Engin
 				if (playerY > 0)
 				{
 					playerY -= 40;
-					visibleTiles.clear();
+					//visibleTiles.clear();
 					//calculateVision(playerX, playerY);
 					//calculate90(playerX, playerY);
 				}
@@ -187,7 +187,7 @@ namespace Engin
 				if (playerX < 800)
 				{
 					playerX += 40;
-					visibleTiles.clear();
+					//visibleTiles.clear();
 					//calculateVision(playerX, playerY);
 					//calculate90(playerX, playerY);
 				}
@@ -213,15 +213,12 @@ namespace Engin
 			}
 			camera.setRotation(rotateByInput); //by input
 
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_DELETE))
-			{
-				visibleTiles.clear();
-			}
 #pragma endregion
 
+			//During Update
+			visibleTiles.clear();
 			calculateVision(playerX, playerY);
 			calculate90(playerX, playerY);
-
 		}
 
 		void CameraTestScene::interpolate(GLfloat alpha)
@@ -555,18 +552,6 @@ namespace Engin
 		
 		void CameraTestScene::calculateVision(int playerX,int playerY)
 		{
-			/*point0 = glm::vec2(0, 0);
-			point1 = glm::vec2(1, 1);
-
-			octant = calculateOctant(point0, point1);
-			if (octant != 90)
-			{
-				temp0 = inputSwap(point0, octant);
-				temp1 = inputSwap(point1, octant);
-
-				plotLine(temp0, temp1);
-			}*/
-
 			point0 = glm::vec2(playerX / 40, playerY / 40);
 			
 			////Map bottom
