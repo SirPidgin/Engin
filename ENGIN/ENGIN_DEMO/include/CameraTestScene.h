@@ -53,6 +53,7 @@ namespace Engin
 			int dx;
 			int dy;
 			int y;
+			float m;
 			int octant;
 			float alpha;
 
@@ -65,8 +66,8 @@ namespace Engin
 			int playerX;
 			int playerY;
 
-			void drawVision(int playerX, int playerY);
-			void drawX(int playerX, int playerY);
+			void calculateVision(int playerX, int playerY);
+			void calculate90(int playerX, int playerY);
 			int endX;
 		};
 	}

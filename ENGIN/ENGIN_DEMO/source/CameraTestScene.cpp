@@ -14,12 +14,13 @@ namespace Engin
 	{
 		CameraTestScene::CameraTestScene(Engin* engine)
 		{
+#pragma region INIT
 			this->engine = engine;
 
 			std::cout << "Camera test scene going on, be aware of rotating cameras" << std::endl;
 
 			camera.initCamera(0.0f, 0.0f, 800.0f, 800.0f, 0.0f, 0.0f, 400, 400);
-			
+
 			shader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/shader");
 			textureShader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/texture_shader");
 			alphaShader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/alpha_shader");
@@ -33,12 +34,20 @@ namespace Engin
 			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/yellow_tile_40.png");
 			doge4 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_tile_40.png");
 			std::cout << doge->getResourcePath() << ": " << doge->getHeight() << " " << doge->getReferenceCount() << std::endl;
+#pragma endregion
 
+#pragma region WallTiles
 			wallTiles.push_back(glm::vec2(1, 18));
 			wallTiles.push_back(glm::vec2(2, 19));
 			wallTiles.push_back(glm::vec2(2, 18));
 			wallTiles.push_back(glm::vec2(1, 17));
 			wallTiles.push_back(glm::vec2(3, 19));
+			
+			wallTiles.push_back(glm::vec2(1, 1));
+
+			wallTiles.push_back(glm::vec2(8, 5));
+			wallTiles.push_back(glm::vec2(8, 4));
+
 
 			for (int i = 10; i < 15; i++)
 			{
@@ -95,8 +104,10 @@ namespace Engin
 			{
 				wallTiles.push_back(glm::vec2(18, i));
 			}
-
-			drawVision(400, 400);
+#pragma endregion
+			//At the beginning:
+			calculateVision(400, 400);
+			calculate90(400,400);
 		}
 
 		CameraTestScene::~CameraTestScene()
@@ -106,11 +117,12 @@ namespace Engin
 
 		void CameraTestScene::update(GLfloat step)
 		{
+#pragma region KeyboardMovement
 			static float zoomByInput = 1.0f;
 			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP))
 			{
 				if (zoomByInput > 0.0f)
-				zoomByInput -= 0.03f;
+					zoomByInput -= 0.03f;
 			}
 			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_DOWN))
 			{
@@ -127,9 +139,9 @@ namespace Engin
 				{
 					playerY += 40;
 					visibleTiles.clear();
-					drawVision(playerX, playerY);
-					drawX(playerX, playerY);
-				}				
+					//calculateVision(playerX, playerY);
+					//calculate90(playerX, playerY);
+				}
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_A))
 			{
@@ -138,8 +150,8 @@ namespace Engin
 				{
 					playerX -= 40;
 					visibleTiles.clear();
-					drawVision(playerX, playerY);
-					drawX(playerX, playerY);
+					//calculateVision(playerX, playerY);
+					//calculate90(playerX, playerY);
 				}
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_S))
@@ -149,8 +161,8 @@ namespace Engin
 				{
 					playerY -= 40;
 					visibleTiles.clear();
-					drawVision(playerX, playerY);
-					drawX(playerX, playerY);
+					//calculateVision(playerX, playerY);
+					//calculate90(playerX, playerY);
 				}
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_D))
@@ -160,16 +172,16 @@ namespace Engin
 				{
 					playerX += 40;
 					visibleTiles.clear();
-					drawVision(playerX, playerY);
-					drawX(playerX, playerY);
+					//calculateVision(playerX, playerY);
+					//calculate90(playerX, playerY);
 				}
 			}
-			
+
 			camera.setPositionRotationOrigin(playerX, playerY);
-			
+
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE))
 			{
-				std::cout << camera.getPositionRotationOrigin().x << " - " << camera.getPositionRotationOrigin().y << std::endl;
+				std::cout << camera.getPositionRotationOrigin().x << " - " << camera.getPositionRotationOrigin().y << visibleTiles.size()<< std::endl;
 			}
 
 			static float rotateByInput = 0.0f;
@@ -184,16 +196,16 @@ namespace Engin
 				rotateByInput -= 10.0f;
 			}
 			camera.setRotation(rotateByInput); //by input
-			
+
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_DELETE))
 			{
 				visibleTiles.clear();
 			}
+#pragma endregion
 
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_X))
-			{
-				drawX(playerX, playerY);
-			}
+			calculateVision(playerX, playerY);
+			calculate90(playerX, playerY);
+
 		}
 
 		void CameraTestScene::interpolate(GLfloat alpha)
@@ -361,67 +373,127 @@ namespace Engin
 			dx = point1.x - point0.x;
 			dy = point1.y - point0.y;
 
-			Difference = 2 * dy - dx;			
-			
-			y = point0.y;
-			for (int x = point0.x + 1; x <= point1.x; x++)
-			{
-				temp = outputSwap(glm::vec2(x, y), octant);
-				if (addVisiblePoint(glm::vec2(temp)) == true)
-				{
-					return;
-				}
+			Difference = 2 * dy - dx;
 
-				Difference = Difference + 2 * dy;
+			if (addVisiblePoint(this->point0) == true)
+			{
+				return; //Wall was hit
+			}
+			y = point0.y;
+			for (int x = point0.x+1; x <= point1.x; x++)
+			{				
 				if (Difference > 0)
 				{
 					y++;
 					Difference = Difference - (2 * dx);
 				}
+				
+				//plot
+				temp = outputSwap(glm::vec2(x, y), octant);
+				if (addVisiblePoint(glm::vec2(temp)) == true)
+				{
+					return; //Wall was hit
+				}
+
+				Difference = Difference + 2 * dy;
 			}
 		}
 
 		int CameraTestScene::calculateOctant(glm::vec2 point0, glm::vec2 point1)
 		{
-			alpha = glm::atan(point1.y - point0.y, point1.x - point0.x);
-			
-			if (alpha < 0)
+			m = (point1.y - point0.y) / (point1.x - point0.x);
+
+			if (glm::isinf(m))
 			{
-				alpha = glm::radians(360.0f) + alpha;
+				return 90;
 			}
 
-			if (alpha >= glm::radians(0.0f) && alpha <= glm::radians(45.0f))
+			if (m >= 0.0f && m <= 1.0f && point0.x < point1.x)
 			{
 				return 0;
 			}
-			if (alpha >= glm::radians(45.0f) && alpha <= glm::radians(90.0f))
+
+			if (m > 1.0f && m < DBL_MAX && point0.y < point1.y)
 			{
 				return 1;
 			}
-			if (alpha >= glm::radians(90.0f) && alpha <= glm::radians(135.0f))
+
+			if (m < -1.0f && m > -DBL_MAX && point0.y < point1.y)
 			{
 				return 2;
 			}
-			if (alpha >= glm::radians(135.0f) && alpha <= glm::radians(180.0f))
+
+			if (m <= 0.0f && m >= -1.0f && point1.x < point0.x)
 			{
 				return 3;
 			}
-			if (alpha >= glm::radians(180.0f) && alpha <= glm::radians(225.0f))
+
+			if (m > 0.0f && m <= 1.0f && point1.x < point0.x)
 			{
 				return 4;
 			}
-			if (alpha >= glm::radians(225.0f) && alpha <= glm::radians(270.0f))
+
+			if (m > 1.0f && m < DBL_MAX && point1.y < point0.y)
 			{
 				return 5;
 			}
-			if (alpha >= glm::radians(270.0f) && alpha <= glm::radians(315.0f))
+
+			if (m < -1.0f && m > -DBL_MAX && point1.y < point0.y)
 			{
 				return 6;
 			}
-			if (alpha >= glm::radians(315.0f) && alpha <= glm::radians(360.0f))
+
+			if (m <= 0.0f && m >= -1.0f && point0.x < point1.x)
 			{
 				return 7;
 			}
+
+#pragma region Withangles
+			//alpha = glm::atan(point1.y - point0.y, point1.x - point0.x);
+
+			//if (alpha < 0)
+			//{
+			//	alpha = glm::radians(360.0f) + alpha;
+			//}
+
+			//if (alpha >= glm::radians(0.0f) && alpha < glm::radians(44.9999f))
+			//{
+			//	return 0;
+			//}
+			//if (alpha > glm::radians(45.0001f) && alpha <= glm::radians(90.0f))
+			//{
+			//	return 1;
+			//}
+			//if (alpha >= glm::radians(90.0f) && alpha < glm::radians(134.9999f))
+			//{
+			//	return 2;
+			//}
+			//if (alpha > glm::radians(135.0001f) && alpha <= glm::radians(180.0f))
+			//{
+			//	return 3;
+			//}
+			//if (alpha >= glm::radians(180.0f) && alpha < glm::radians(224.9999f))
+			//{
+			//	return 4;
+			//}
+			//if (alpha > glm::radians(225.0001f) && alpha <= glm::radians(270.0f))
+			//{
+			//	return 5;
+			//}
+			//if (alpha >= glm::radians(270.0f) && alpha < glm::radians(314.9999f))
+			//{
+			//	return 6;
+			//}
+			//if (alpha > glm::radians(315.0001f) && alpha <= glm::radians(360.0f))
+			//{
+			//	return 7;
+			//}
+			//else //45, 135, 225, 315
+			//{
+			//	return 45;
+			//}		  
+#pragma endregion
+
 		}
 
 		bool CameraTestScene::addVisiblePoint(glm::vec2 point)
@@ -465,94 +537,131 @@ namespace Engin
 			return false;
 		}
 		
-		void CameraTestScene::drawVision(int playerX,int playerY)
+		void CameraTestScene::calculateVision(int playerX,int playerY)
 		{
-			point0 = glm::vec2(playerX / 40, playerY / 40);
-			if (addVisiblePoint(point0) == true)
+			/*point0 = glm::vec2(0, 0);
+			point1 = glm::vec2(1, 1);
+
+			octant = calculateOctant(point0, point1);
+			if (octant != 90)
 			{
-				return; //Hit wall
-			}
+				temp0 = inputSwap(point0, octant);
+				temp1 = inputSwap(point1, octant);
+
+				plotLine(temp0, temp1);
+			}*/
+
+			point0 = glm::vec2(playerX / 40, playerY / 40);
+			
 			////Map bottom
 			for (int i = 0; i < 20; i++)
 			{
 				point1 = glm::vec2(i, 0);
 				octant = calculateOctant(point0, point1);
+				if (octant != 90)
+				{
+					temp0 = inputSwap(point0, octant);
+					temp1 = inputSwap(point1, octant);
 
-				temp0 = inputSwap(point0, octant);
-				temp1 = inputSwap(point1, octant);
-
-				plotLine(temp0, temp1);
+					plotLine(temp0, temp1);
+				}				
 			}
 
 			//Map right side
-			for (int i = 0; i < 20; i++)
+			for (int i = 0; i <= 20; i++)
 			{
 				point1 = glm::vec2(20, i);
 				octant = calculateOctant(point0, point1);
-
-				temp0 = inputSwap(point0, octant);
-				temp1 = inputSwap(point1, octant);
-				plotLine(temp0, temp1);
+				if (octant != 90)
+				{
+					temp0 = inputSwap(point0, octant);
+					temp1 = inputSwap(point1, octant);
+					plotLine(temp0, temp1);
+				}
 			}
+
 			//Map top
-			for (int i = 20; i > 0; i--)
+			for (int i = 20; i >= 0; i--)
 			{
 				point1 = glm::vec2(i, 20);
 				octant = calculateOctant(point0, point1);
-
-				temp0 = inputSwap(point0, octant);
-				temp1 = inputSwap(point1, octant);
-				plotLine(temp0, temp1);
+				if (octant != 90)
+				{
+					temp0 = inputSwap(point0, octant);
+					temp1 = inputSwap(point1, octant);
+					plotLine(temp0, temp1);
+				}
 			}
+
 			//Map left side
-			for (int i = 20; i > 0; i--)
+			for (int i = 20; i >= 0; i--)
 			{
 				point1 = glm::vec2(0, i);
 				octant = calculateOctant(point0, point1);
-
-				temp0 = inputSwap(point0, octant);
-				temp1 = inputSwap(point1, octant);
-				plotLine(temp0, temp1);
+				if (octant != 90)
+				{
+					temp0 = inputSwap(point0, octant);
+					temp1 = inputSwap(point1, octant);
+					plotLine(temp0, temp1);
+				}
 			}
 		}
 
-		void CameraTestScene::drawX(int playerX, int playerY)
+		void CameraTestScene::calculate90(int playerX, int playerY)
 		{
-			endX = 0;
-			for (endX; endX<10000; endX++) //Until hit the wall
+			for (int i = 0; i<100; i++)
 			{
-				temp = glm::vec2(playerX / 40 + endX, playerY / 40 + endX);
+				temp = glm::vec2(playerX / 40, playerY / 40 + i);
 				if (addVisiblePoint(temp) == true)
 				{
-					endX = 10001;
-				}
+					i = 1000; //Wall was hit
+				}				
 			}
-			endX = 0;
-			for (endX; endX<10000; endX++)
+			for (int i = 0; i<100; i++)
 			{
-				temp = glm::vec2(playerX / 40 + endX, playerY / 40 - endX);
+				temp = glm::vec2(playerX / 40, playerY / 40 - i);
 				if (addVisiblePoint(temp) == true)
 				{
-					endX = 10001;
+					i = 1000; //Wall was hit
 				}
 			}
-			endX = 0;
-			for (endX; endX<10000; endX++)
-			{
-				temp = glm::vec2(playerX / 40 - endX, playerY / 40 + endX);
-				if (addVisiblePoint(temp) == true)
-				{
-					endX = 10001;
-				}
-			}
-			for (int i = 0;; i++)
-			{
-				temp = glm::vec2(playerX / 40 - i, playerY / 40 - i);
-				if (addVisiblePoint(temp) == true)
-				{
-					return;
-				}
-			}
+#pragma region CalcX
+//			endX = 0;
+//			for (endX; endX < 10000; endX++) //Until hit the wall
+//			{
+//				temp = glm::vec2(playerX / 40 + endX, playerY / 40 + endX);
+//				if (addVisiblePoint(temp) == true)
+//				{
+//					endX = 10001;
+//				}
+//			}
+//			endX = 0;
+//			for (endX; endX < 10000; endX++)
+//			{
+//				temp = glm::vec2(playerX / 40 + endX, playerY / 40 - endX);
+//				if (addVisiblePoint(temp) == true)
+//				{
+//					endX = 10001;
+//				}
+//			}
+//			endX = 0;
+//			for (endX; endX < 10000; endX++)
+//			{
+//				temp = glm::vec2(playerX / 40 - endX, playerY / 40 + endX);
+//				if (addVisiblePoint(temp) == true)
+//				{
+//					endX = 10001;
+//				}
+//			}
+//			for (int i = 0;; i++)
+//			{
+//				temp = glm::vec2(playerX / 40 - i, playerY / 40 - i);
+//				if (addVisiblePoint(temp) == true)
+//				{
+//					return;
+//				}
+//			}
+#pragma endregion
 		}
 	}
 }
