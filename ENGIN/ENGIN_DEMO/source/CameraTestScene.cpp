@@ -104,7 +104,23 @@ namespace Engin
 			{
 				wallTiles.push_back(glm::vec2(18, i));
 			}
+
+			for (int i = 8; i < 17; i++)
+			{
+				wallTiles.push_back(glm::vec2(15, i));
+			}
+
+			for (int i = 12; i < 16; i++)
+			{
+				wallTiles.push_back(glm::vec2(i, 7));
+			}
+
+			for (int i = 2; i < 13; i++)
+			{
+				wallTiles.push_back(glm::vec2(i, 3));
+			}
 #pragma endregion
+
 			//At the beginning:
 			calculateVision(400, 400);
 			calculate90(400,400);
