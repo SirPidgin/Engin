@@ -20,6 +20,7 @@ namespace Engin
 			std::cout << "Camera test scene going on, be aware of rotating cameras" << std::endl;
 
 			camera.initCamera(0.0f, 0.0f, 800.0f, 800.0f, 0.0f, 0.0f, 400, 400);
+			camera2.initCamera(0.0f, 800.0f, 800.0f, 200.0f, 0.0f, 0.0f, 400, 50);
 
 			shader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/shader");
 			textureShader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/texture_shader");
@@ -28,6 +29,8 @@ namespace Engin
 			textureBatch.setShader(textureShader);
 			alphaTextureBatch.setShader(alphaShader);
 			alphaTextureBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
+			alphaTextureBatch2.setShader(alphaShader);
+			alphaTextureBatch2.setSortMode(Renderer::TextureSortMode::FrontToBack);
 
 			doge = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/white_tile_40.png");
 			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_40.png");
@@ -238,13 +241,17 @@ namespace Engin
 			friendX = 17;
 			friendY = 10;
 
-			for (int i = 0; i < visibleTiles.size(); i++)
+			if (visibleTiles.size() > 0)
 			{
-				if (visibleTiles[i].x == friendX && visibleTiles[i].y == friendY)
+				for (int i = 0; i < visibleTiles.size(); i++)
 				{
-					visibleFriend.push_back(glm::vec2(friendX, friendY));
+					if (visibleTiles[i].x == friendX && visibleTiles[i].y == friendY)
+					{
+						visibleFriend.push_back(glm::vec2(friendX, friendY));
+					}
 				}
 			}
+			
 
 			myTimer.pause();
 
@@ -298,22 +305,30 @@ namespace Engin
 			}
 			
 
-			alphaTextureBatch.draw(text, camera.getPositionRotationOrigin().x - 60.0f, camera.getPositionRotationOrigin().y + 360.0f, 1.0f, 0.9f);
-			//alphaTextureBatch.draw(text2, camera.getPositionRotationOrigin().x - 100.0f, camera.getPositionRotationOrigin().y + 310.0f, 1.0f, 0.9f);
-			alphaTextureBatch.draw(text3, camera.getPositionRotationOrigin().x - 100.0f, camera.getPositionRotationOrigin().y + 270.0f, 1.0f, 0.9f);
+			
 			
 			renderDogemap(0.0f, 0.0f, 40.0f, 40.0f, 21, 21);
 
 			textureBatch.end();
 			alphaTextureBatch.end();
 
+			alphaTextureBatch2.begin();
+			alphaTextureBatch2.draw(text, camera2.getPositionRotationOrigin().x, camera2.getPositionRotationOrigin().y+25, 1.0f, 0.9f);
+			//alphaTextureBatch2.draw(text2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y, 1.0f, 0.9f);
+			alphaTextureBatch2.draw(text3, camera2.getPositionRotationOrigin().x, camera2.getPositionRotationOrigin().y-30, 1.0f, 0.9f);
+			alphaTextureBatch2.end();
+
 			camera.activateViewPort();
 			batch.flush(camera);
 			textureBatch.flush(camera);
 			alphaTextureBatch.flush(camera);
 
+			camera2.activateViewPort();
+			alphaTextureBatch2.flush(camera2);
+
 			textureBatch.clear();
 			alphaTextureBatch.clear();
+			alphaTextureBatch2.clear();
 			batch.clear();
 
 			//myTimer2.pause();
