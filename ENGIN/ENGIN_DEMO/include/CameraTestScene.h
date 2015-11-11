@@ -53,6 +53,7 @@ namespace Engin
 			Resources::Texture* doge2;
 			Resources::Texture* doge3;
 			Resources::Texture* doge4;
+			Resources::Texture* doge5;
 			Resources::Texture* text;
 			Resources::Texture* text2;
 			Resources::Texture* text3;
@@ -70,6 +71,7 @@ namespace Engin
 			glm::vec2 temp1;
 			glm::vec2 temp;
 			std::vector<glm::vec2> visibleTiles;
+			std::vector<glm::vec2> visibleFriend;
 			std::vector<glm::vec2> wallTiles;
 			int Difference;
 			int dx;
@@ -83,6 +85,8 @@ namespace Engin
 			int playerX;
 			int playerY;
 
+			int friendX;
+			int friendY;
 			
 			int endX;
 		};

@@ -33,6 +33,7 @@ namespace Engin
 			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_40.png");
 			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/yellow_tile_40.png");
 			doge4 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_tile_40.png");
+			doge5 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/green_tile_40.png");
 
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 			font->setPtSize(40);
@@ -223,11 +224,28 @@ namespace Engin
 			camera.setRotation(rotateByInput); //by input
 
 #pragma endregion
+
+			
+
 			myTimer.start();
 			//During Update
 			visibleTiles.clear();
+			visibleFriend.clear();
 			calculateVision(playerX, playerY);
 			calculate90(playerX, playerY);
+			
+
+			friendX = 17;
+			friendY = 10;
+
+			for (int i = 0; i < visibleTiles.size(); i++)
+			{
+				if (visibleTiles[i].x == friendX && visibleTiles[i].y == friendY)
+				{
+					visibleFriend.push_back(glm::vec2(friendX, friendY));
+				}
+			}
+
 			myTimer.pause();
 
 			//Information
@@ -251,6 +269,8 @@ namespace Engin
 			
 			alphaTextureBatch.draw(doge2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y, 1.0f, 0.6f);
 			
+			//friend
+			alphaTextureBatch.draw(doge2, friendX*40, friendY*40, 1.0f, 0.6f);
 
 			
 			if (visibleTiles.size() > 0)
@@ -258,6 +278,14 @@ namespace Engin
 				for (int i = 0; i < visibleTiles.size(); i++)
 				{
 					alphaTextureBatch.draw(doge3, visibleTiles[i].x * 40, visibleTiles[i].y * 40, 0.50f, 0.5f);
+				}
+			}
+
+			if (visibleFriend.size() > 0)
+			{
+				for (int i = 0; i < visibleFriend.size(); i++)
+				{
+					alphaTextureBatch.draw(doge5, visibleFriend[i].x * 40, visibleFriend[i].y * 40, 0.50f, 0.9f);
 				}
 			}
 
@@ -270,7 +298,7 @@ namespace Engin
 			}
 			
 
-			alphaTextureBatch.draw(text, camera.getPositionRotationOrigin().x -100.0f, camera.getPositionRotationOrigin().y + 360.0f, 1.0f, 0.9f);
+			alphaTextureBatch.draw(text, camera.getPositionRotationOrigin().x - 60.0f, camera.getPositionRotationOrigin().y + 360.0f, 1.0f, 0.9f);
 			//alphaTextureBatch.draw(text2, camera.getPositionRotationOrigin().x - 100.0f, camera.getPositionRotationOrigin().y + 310.0f, 1.0f, 0.9f);
 			alphaTextureBatch.draw(text3, camera.getPositionRotationOrigin().x - 100.0f, camera.getPositionRotationOrigin().y + 270.0f, 1.0f, 0.9f);
 			
@@ -572,7 +600,7 @@ namespace Engin
 				}
 				else
 				{
-					return true; //hit the wall
+					return true; //Wall was hit
 				}				
 			}
 			return false;
