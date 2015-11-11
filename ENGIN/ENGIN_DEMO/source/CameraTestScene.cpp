@@ -181,7 +181,7 @@ namespace Engin
 
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE))
 			{
-				std::cout << camera.getPositionRotationOrigin().x << " - " << camera.getPositionRotationOrigin().y << visibleTiles.size()<< std::endl;
+				std::cout << camera.getPositionRotationOrigin().x << " - " << camera.getPositionRotationOrigin().y <<" visible tiles: "<< visibleTiles.size()<< std::endl;
 			}
 
 			static float rotateByInput = 0.0f;
