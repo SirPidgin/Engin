@@ -38,8 +38,8 @@ namespace Engin
 			font->setPtSize(40);
 			textCreator.createTextTexture(font, "Vision calculation time: ", 255,100,0);
 			text = textCreator.getTexture();
-			textCreator2.createTextTexture(font, "Visible tiles draw time: ", 255, 100, 0);
-			text2 = textCreator2.getTexture();
+			/*textCreator2.createTextTexture(font, "Scene draw time: ", 255, 100, 0);
+			text2 = textCreator2.getTexture();*/
 			textCreator3.createTextTexture(font, "Visible tile count: ", 255, 100, 0);
 			text3 = textCreator3.getTexture();
 			
@@ -233,8 +233,8 @@ namespace Engin
 			//Information
 			textCreator.createTextTexture(font, "Vision calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
 			text = textCreator.getTexture();
-			textCreator2.createTextTexture(font, "Visible tiles draw time: " + std::to_string(myTimer2.getLocalTime()) + " ms", 255, 100, 0);
-			text2 = textCreator2.getTexture();
+			/*textCreator2.createTextTexture(font, "Scene draw time: " + std::to_string(myTimer2.getLocalTime()) + " ms", 255, 100, 0);
+			text2 = textCreator2.getTexture();*/
 			textCreator3.createTextTexture(font, "Visible tiles count: " + std::to_string(visibleTiles.size()), 255, 100, 0);
 			text3 = textCreator3.getTexture();
 		}
@@ -245,13 +245,14 @@ namespace Engin
 
 		void CameraTestScene::draw()
 		{
+			//myTimer2.start();
 			textureBatch.begin();
 			alphaTextureBatch.begin();
 			
 			alphaTextureBatch.draw(doge2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y, 1.0f, 0.6f);
 			
 
-			myTimer2.start();
+			
 			if (visibleTiles.size() > 0)
 			{
 				for (int i = 0; i < visibleTiles.size(); i++)
@@ -267,13 +268,12 @@ namespace Engin
 					alphaTextureBatch.draw(doge4, wallTiles[i].x * 40, wallTiles[i].y * 40, 1.0f, 0.5f);
 				}
 			}
-			myTimer2.pause();
+			
 
-			alphaTextureBatch.draw(text, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y + 110.0f, 1.0f, 0.9f);
-			alphaTextureBatch.draw(text2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y + 70.0f, 1.0f, 0.9f);
-			alphaTextureBatch.draw(text3, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y + 30.0f, 1.0f, 0.9f);
-
-
+			alphaTextureBatch.draw(text, camera.getPositionRotationOrigin().x -100.0f, camera.getPositionRotationOrigin().y + 360.0f, 1.0f, 0.9f);
+			//alphaTextureBatch.draw(text2, camera.getPositionRotationOrigin().x - 100.0f, camera.getPositionRotationOrigin().y + 310.0f, 1.0f, 0.9f);
+			alphaTextureBatch.draw(text3, camera.getPositionRotationOrigin().x - 100.0f, camera.getPositionRotationOrigin().y + 270.0f, 1.0f, 0.9f);
+			
 			renderDogemap(0.0f, 0.0f, 40.0f, 40.0f, 21, 21);
 
 			textureBatch.end();
@@ -287,6 +287,8 @@ namespace Engin
 			textureBatch.clear();
 			alphaTextureBatch.clear();
 			batch.clear();
+
+			//myTimer2.pause();
 		}
 
 		void CameraTestScene::renderDogemap(float startX, float startY, float tileWidth, float tileHeight, size_t worldWidth, size_t worldHeight)
