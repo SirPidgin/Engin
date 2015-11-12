@@ -33,10 +33,10 @@ namespace Engin
 			alphaTextureBatch2.setSortMode(Renderer::TextureSortMode::FrontToBack);
 
 			doge = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/white_tile_40.png");
-			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_40.png");
-			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/yellow_tile_40.png");
-			doge4 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_tile_40.png");
-			doge5 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/green_tile_40.png");
+			doge4 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_40.png");
+			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/yellow_tile_40.png");
+			doge1 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_tile_40.png");
+			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/green_tile_40.png");
 
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 			font->setPtSize(40);
@@ -46,97 +46,108 @@ namespace Engin
 			text2 = textCreator2.getTexture();*/
 			textCreator3.createTextTexture(font, "Visible tile count: ", 255, 100, 0);
 			text3 = textCreator3.getTexture();
+
+			visibleTiles.resize(441);
+			visibleFriend.resize(441);
+			objectTiles.resize(441);			
 			
+			emptyVector(2);
+			emptyVector(3);
+			
+
 #pragma endregion
 
 #pragma region WallTiles
-			wallTiles.push_back(glm::vec2(1, 18));
-			wallTiles.push_back(glm::vec2(2, 19));
-			wallTiles.push_back(glm::vec2(2, 18));
-			wallTiles.push_back(glm::vec2(1, 17));
-			wallTiles.push_back(glm::vec2(3, 19));
 			
-			wallTiles.push_back(glm::vec2(1, 1));
+			//MapSides
+			for (int i = 0; i <= 20; i++)
+			{
+				//objectTiles.push_back(glm::vec2(-1, i));
+				addIntoVector(1, glm::vec2(0, i), 1);
+			}
 
-			wallTiles.push_back(glm::vec2(8, 5));
-			wallTiles.push_back(glm::vec2(8, 4));
+			for (int i = 0; i <= 20; i++)
+			{
+				//objectTiles.push_back(glm::vec2(21, i));
+				addIntoVector(1, glm::vec2(20, i), 1);
+			}
 
+			for (int i = 0; i <= 20; i++)
+			{
+				//objectTiles.push_back(glm::vec2(i, 21));
+				addIntoVector(1, glm::vec2(i, 20), 1);
+			}
+
+			for (int i = 0; i <= 20; i++)
+			{
+				//objectTiles.push_back(glm::vec2(i, -1));
+				addIntoVector(1, glm::vec2(i, 0), 1);
+			}			
+			//---------------------
+
+			addIntoVector(1, glm::vec2(2, 19), 1);
 
 			for (int i = 10; i < 15; i++)
 			{
-				wallTiles.push_back(glm::vec2(i, 18));
+				//objectTiles.push_back(glm::vec2(i, 18));
+				addIntoVector(1, glm::vec2(i, 18), 1);
 			}
 
 			for (int i = 13; i < 18; i++)
 			{
-				wallTiles.push_back(glm::vec2(2, i));
+				//objectTiles.push_back(glm::vec2(2, i));
+				addIntoVector(1, glm::vec2(2, i), 1);
 			}
 
 			for (int i = 11; i < 16; i++)
 			{
-				wallTiles.push_back(glm::vec2(0, i));
+				//objectTiles.push_back(glm::vec2(0, i));
+				addIntoVector(1, glm::vec2(0, i), 1);
 			}
 
 			for (int i = 1; i < 11; i++)
 			{
-				wallTiles.push_back(glm::vec2(i, 11));
+				//objectTiles.push_back(glm::vec2(i, 11));
+				addIntoVector(1, glm::vec2(i, 11), 1);
 			}
 
 			for (int i = 2; i < 11; i++)
 			{
-				wallTiles.push_back(glm::vec2(i, 9));
-			}
-
-
-			for (int i = -1; i < 22; i++)
-			{
-				wallTiles.push_back(glm::vec2(-1, i));
-			}
-
-			for (int i = -1; i < 22; i++)
-			{
-				wallTiles.push_back(glm::vec2(21, i));
-			}
-
-			for (int i = -1; i < 22; i++)
-			{
-				wallTiles.push_back(glm::vec2(i, 21));
-			}
-
-			for (int i = -1; i < 22; i++)
-			{
-				wallTiles.push_back(glm::vec2(i, -1));
+				//objectTiles.push_back(glm::vec2(i, 9));
+				addIntoVector(1, glm::vec2(i, 9), 1);
 			}
 
 			for (int i = 15; i < 19; i++)
 			{
-				wallTiles.push_back(glm::vec2(i, 3));
+				//objectTiles.push_back(glm::vec2(i, 3));
+				addIntoVector(1, glm::vec2(i, 3), 1);
 			}
 
 			for (int i = 4; i < 7; i++)
 			{
-				wallTiles.push_back(glm::vec2(18, i));
+				//objectTiles.push_back(glm::vec2(18, i));
+				addIntoVector(1, glm::vec2(18, i), 1);
 			}
 
 			for (int i = 8; i < 17; i++)
 			{
-				wallTiles.push_back(glm::vec2(15, i));
+				//objectTiles.push_back(glm::vec2(15, i));
+				addIntoVector(1, glm::vec2(15, i), 1);
 			}
 
 			for (int i = 12; i < 16; i++)
 			{
-				wallTiles.push_back(glm::vec2(i, 7));
+				//objectTiles.push_back(glm::vec2(i, 7));
+				addIntoVector(1, glm::vec2(i, 7), 1);
 			}
 
 			for (int i = 2; i < 13; i++)
 			{
-				wallTiles.push_back(glm::vec2(i, 3));
+				//objectTiles.push_back(glm::vec2(i, 3));
+				addIntoVector(1, glm::vec2(i, 3), 1);
 			}
 #pragma endregion
 
-			//At the beginning:
-			calculateVision(400, 400);
-			calculate90(400,400);
 		}
 
 		CameraTestScene::~CameraTestScene()
@@ -167,9 +178,6 @@ namespace Engin
 				if (playerY < 800)
 				{
 					playerY += 40;
-					//visibleTiles.clear();
-					//calculateVision(playerX, playerY);
-					//calculate90(playerX, playerY);
 				}
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_A))
@@ -178,9 +186,6 @@ namespace Engin
 				if (playerX > 0)
 				{
 					playerX -= 40;
-					//visibleTiles.clear();
-					//calculateVision(playerX, playerY);
-					//calculate90(playerX, playerY);
 				}
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_S))
@@ -189,9 +194,6 @@ namespace Engin
 				if (playerY > 0)
 				{
 					playerY -= 40;
-					//visibleTiles.clear();
-					//calculateVision(playerX, playerY);
-					//calculate90(playerX, playerY);
 				}
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_D))
@@ -200,9 +202,6 @@ namespace Engin
 				if (playerX < 800)
 				{
 					playerX += 40;
-					//visibleTiles.clear();
-					//calculateVision(playerX, playerY);
-					//calculate90(playerX, playerY);
 				}
 			}
 
@@ -232,35 +231,21 @@ namespace Engin
 
 			myTimer.start();
 			//During Update
-			visibleTiles.clear();
-			visibleFriend.clear();
-			calculateVision(playerX, playerY);
-			calculate90(playerX, playerY);
-			
+			emptyVector(2);
+			emptyVector(3);
 
 			friendX = 17;
 			friendY = 10;
+			addIntoVector(1, glm::vec2(friendX, friendY), 3);
 
-			if (visibleTiles.size() > 0)
-			{
-				for (int i = 0; i < visibleTiles.size(); i++)
-				{
-					if (visibleTiles[i].x == friendX && visibleTiles[i].y == friendY)
-					{
-						visibleFriend.push_back(glm::vec2(friendX, friendY));
-					}
-				}
-			}
-			
-
+			calculateVision(playerX, playerY);
+			calculate90(playerX, playerY);			
 			myTimer.pause();
 
 			//Information
 			textCreator.createTextTexture(font, "Vision calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
 			text = textCreator.getTexture();
-			/*textCreator2.createTextTexture(font, "Scene draw time: " + std::to_string(myTimer2.getLocalTime()) + " ms", 255, 100, 0);
-			text2 = textCreator2.getTexture();*/
-			textCreator3.createTextTexture(font, "Visible tiles count: " + std::to_string(visibleTiles.size()), 255, 100, 0);
+			textCreator3.createTextTexture(font, "Visible tiles count: " + std::to_string(visibleTilesCount), 255, 100, 0);
 			text3 = textCreator3.getTexture();
 		}
 
@@ -274,47 +259,55 @@ namespace Engin
 			textureBatch.begin();
 			alphaTextureBatch.begin();
 			
-			alphaTextureBatch.draw(doge2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y, 1.0f, 0.6f);
+			//player
+			alphaTextureBatch.draw(doge4, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y, 1.0f, 0.9f);
 			
-			//friend
-			alphaTextureBatch.draw(doge2, friendX*40, friendY*40, 1.0f, 0.6f);
+			//always drawn: friend
+			alphaTextureBatch.draw(doge4, friendX*40, friendY*40, 1.0f, 0.5f);
 
-			
-			if (visibleTiles.size() > 0)
+			//drawing data vectors
+			for (int i = 0; i <= 20; i++)
 			{
-				for (int i = 0; i < visibleTiles.size(); i++)
+				for (int j = 0; j <= 20; j++)
 				{
-					alphaTextureBatch.draw(doge3, visibleTiles[i].x * 40, visibleTiles[i].y * 40, 0.50f, 0.5f);
-				}
+					if (objectTiles[i*20 + j] == 1)
+					{
+						alphaTextureBatch.draw(doge1, j * 40, i * 40, 1.0f, 0.4f);
+					}
+				}				
 			}
 
-			if (visibleFriend.size() > 0)
+			for (int i = 0; i <= 20; i++)
 			{
-				for (int i = 0; i < visibleFriend.size(); i++)
+				for (int j = 0; j <= 20; j++)
 				{
-					alphaTextureBatch.draw(doge5, visibleFriend[i].x * 40, visibleFriend[i].y * 40, 0.50f, 0.9f);
+					if (visibleTiles[i * 20 + j] == 1)
+					{
+						alphaTextureBatch.draw(doge2, j * 40, i * 40, 0.5f, 0.6f);
+					}
 				}
 			}
-
-			if (wallTiles.size() > 0)
+	
+			for (int i = 0; i <= 20; i++)
 			{
-				for (int i = 0; i < wallTiles.size(); i++)
+				for (int j = 0; j <= 20; j++)
 				{
-					alphaTextureBatch.draw(doge4, wallTiles[i].x * 40, wallTiles[i].y * 40, 1.0f, 0.5f);
+					if (visibleFriend[i * 20 + j] != 0)
+					{
+						alphaTextureBatch.draw(doge3, j * 40, i * 40, 0.5f, 0.7f);
+					}
 				}
 			}
-			
-
-			
+			//----------------
 			
 			renderDogemap(0.0f, 0.0f, 40.0f, 40.0f, 21, 21);
 
 			textureBatch.end();
 			alphaTextureBatch.end();
-
+			
+			//Timer
 			alphaTextureBatch2.begin();
 			alphaTextureBatch2.draw(text, camera2.getPositionRotationOrigin().x, camera2.getPositionRotationOrigin().y+25, 1.0f, 0.9f);
-			//alphaTextureBatch2.draw(text2, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y, 1.0f, 0.9f);
 			alphaTextureBatch2.draw(text3, camera2.getPositionRotationOrigin().x, camera2.getPositionRotationOrigin().y-30, 1.0f, 0.9f);
 			alphaTextureBatch2.end();
 
@@ -583,52 +576,39 @@ namespace Engin
 		bool CameraTestScene::addVisiblePoint(glm::vec2 point)
 		{
 			int count = 0;
-			int count1 = 0;
 
-			if (visibleTiles.size() > 0)
+			if (objectTiles[point.y * 20 + point.x] == 1)
 			{
-				for (int i = 0; i < visibleTiles.size(); i++)
+				return true; //wall was hit
+			}
+
+			if (visibleTiles[point.y * 20 + point.x] == 0)
+			{
+				addIntoVector(2, point, 1); //we see the tile
+				visibleTilesCount++;
+				count++;
+			}
+
+			if (count > 0)
+			{
+				if (objectTiles[point.y * 20 + point.x] == 3)
 				{
-					if (visibleTiles[i] == point)
-					{
-						count++;
-					}
+					addIntoVector(3, point, 1); //we see a friend in the tile as well
 				}
 			}
 
-			if (wallTiles.size() > 0)
-			{
-				for (int i = 0; i < wallTiles.size(); i++)
-				{
-					if (wallTiles[i] == point)
-					{
-						count1++;
-					}
-				}
-			}
-
-			if (count == 0)
-			{
-				if (count1 == 0)
-				{
-					visibleTiles.push_back(point);
-				}
-				else
-				{
-					return true; //Wall was hit
-				}				
-			}
-			return false;
+			return false; //There was no wall
 		}
 		
-		void CameraTestScene::calculateVision(int playerX,int playerY)
+		void CameraTestScene::calculateVision(int playerX,int playerY) //Limits for vision
 		{
+			visibleTilesCount = 0;
 			point0 = glm::vec2(playerX / 40, playerY / 40);
 			
 			////Map bottom
-			for (int i = 0; i < 20; i++)
+			for (int i = 1; i < 20; i++)
 			{
-				point1 = glm::vec2(i, 0);
+				point1 = glm::vec2(i, 1);
 				octant = calculateOctant(point0, point1);
 				if (octant != 90)
 				{
@@ -640,9 +620,9 @@ namespace Engin
 			}
 
 			//Map right side
-			for (int i = 0; i <= 20; i++)
+			for (int i = 1; i < 20; i++)
 			{
-				point1 = glm::vec2(20, i);
+				point1 = glm::vec2(19, i);
 				octant = calculateOctant(point0, point1);
 				if (octant != 90)
 				{
@@ -653,9 +633,9 @@ namespace Engin
 			}
 
 			//Map top
-			for (int i = 20; i >= 0; i--)
+			for (int i = 19; i > 0; i--)
 			{
-				point1 = glm::vec2(i, 20);
+				point1 = glm::vec2(i, 19);
 				octant = calculateOctant(point0, point1);
 				if (octant != 90)
 				{
@@ -666,9 +646,9 @@ namespace Engin
 			}
 
 			//Map left side
-			for (int i = 20; i >= 0; i--)
+			for (int i = 19; i > 0; i--)
 			{
-				point1 = glm::vec2(0, i);
+				point1 = glm::vec2(1, i);
 				octant = calculateOctant(point0, point1);
 				if (octant != 90)
 				{
@@ -734,6 +714,84 @@ namespace Engin
 //				}
 //			}
 #pragma endregion
+		}
+
+		void CameraTestScene::emptyVector(int vectorAsNumber)
+		{
+			switch (vectorAsNumber)
+			{
+			case 1:
+			{
+				for (int i = 0; i < objectTiles.size(); i++)
+				{
+					objectTiles[i] = 0;
+				}
+				break;
+			}
+			case 2:
+			{
+				for (int i = 0; i < visibleTiles.size(); i++)
+				{
+					visibleTiles[i] = 0;
+				}
+				break;
+			}
+			case 3:
+			{
+				for (int i = 0; i < visibleFriend.size(); i++)
+				{
+					visibleFriend[i] = 0;
+				}
+				break;
+			}
+			default:
+				break;
+			}
+		}
+
+		void CameraTestScene::addIntoVector(int vectorAsNumber, glm::vec2 xy, int tiletype)
+		{
+			switch (vectorAsNumber)
+			{
+			case 1:
+			{
+				if (xy.x >= 0 && xy.y >= 0)
+				{
+					objectTiles[xy.y * 20 + xy.x] = tiletype;
+				}
+				else
+				{
+					std::cout << "trying to place negative into vector" << std::endl;
+				}
+				break;
+			}
+			case 2:
+			{
+				if (xy.x >= 0 && xy.y >= 0)
+				{
+					visibleTiles[xy.y * 20 + xy.x] = tiletype;
+				}
+				else
+				{
+					std::cout << "trying to place negative into vector" << std::endl;
+				}
+				break;
+			}
+			case 3:
+			{
+				if (xy.x >= 0 && xy.y >= 0)
+				{
+					visibleFriend[xy.y * 20 + xy.x] = tiletype;
+				}
+				else
+				{
+					std::cout << "trying to place negative into vector" << std::endl;
+				}
+				break;
+			}
+			default:
+				break;
+			}
 		}
 	}
 }

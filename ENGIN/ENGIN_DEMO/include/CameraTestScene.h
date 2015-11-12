@@ -37,6 +37,9 @@ namespace Engin
 			void calculateVision(int playerX, int playerY);
 			void calculate90(int playerX, int playerY);
 
+			void emptyVector(int vectorAsNumber);
+			void addIntoVector(int vectorAsNumber, glm::vec2 xy, int tiletype);
+
 		private:
 			Engin* engine;
 
@@ -54,8 +57,8 @@ namespace Engin
 			Resources::Texture* doge;
 			Resources::Texture* doge2;
 			Resources::Texture* doge3;
+			Resources::Texture* doge1;
 			Resources::Texture* doge4;
-			Resources::Texture* doge5;
 			Resources::Texture* text;
 			Resources::Texture* text2;
 			Resources::Texture* text3;
@@ -72,9 +75,9 @@ namespace Engin
 			glm::vec2 temp0;
 			glm::vec2 temp1;
 			glm::vec2 temp;
-			std::vector<glm::vec2> visibleTiles;
-			std::vector<glm::vec2> visibleFriend;
-			std::vector<glm::vec2> wallTiles;
+			std::vector<int> visibleTiles;
+			std::vector<int> visibleFriend;
+			std::vector<int> objectTiles;
 			int Difference;
 			int dx;
 			int dy;
@@ -91,6 +94,7 @@ namespace Engin
 			int friendY;
 			
 			int endX;
+			int visibleTilesCount;
 		};
 	}
 }
