@@ -25,7 +25,7 @@ namespace Engin
 
 		void TextRenderer::createTextTexture(Resources::Font* font, std::string message, GLint colorR, GLint colorG, GLint colorB)
 		{
-			this->surface = TTF_RenderText_Blended(font->getFont(), message.c_str(), SDL_Color{colorR,colorG,colorB});
+			this->surface = TTF_RenderText_Blended(font->getFont(), message.c_str(), SDL_Color{ colorR, colorG, colorB }/*,SDL_Color{ 0, 0, 0 }*/);
 			SDLLoadTexture();
 		}
 
@@ -39,8 +39,8 @@ namespace Engin
 		{
 
 			/* Use the surface width and height expanded to powers of 2 */
-			w = power_of_two(surface->w);
-			h = power_of_two(surface->h);
+			w = /*power_of_two*/(surface->w);
+			h = /*power_of_two*/(surface->h);
 			texCoord[0] = 0.0f;         /* Min X */
 			texCoord[1] = 0.0f;         /* Min Y */
 			texCoord[2] = (GLfloat)surface->w / w;  /* Max X */
@@ -60,7 +60,7 @@ namespace Engin
 				0x00FF0000,
 				0x0000FF00,
 				0x000000FF
-			#endif
+			#endif				
 				);
 
 			/* Save the alpha blending attributes */

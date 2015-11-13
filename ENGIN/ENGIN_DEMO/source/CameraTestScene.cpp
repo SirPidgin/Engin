@@ -20,7 +20,7 @@ namespace Engin
 			std::cout << "Camera test scene going on, be aware of rotating cameras" << std::endl;
 
 			camera.initCamera(0.0f, 0.0f, 800.0f, 800.0f, 0.0f, 0.0f, 400, 400);
-			camera2.initCamera(0.0f, 800.0f, 800.0f, 200.0f, 0.0f, 0.0f, 400, 50);
+			camera2.initCamera(0.0f, 700.0f, 800.0f, 200.0f, 0.0f, 0.0f, 400, 50);
 
 			shader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/shader");
 			textureShader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/texture_shader");
@@ -40,10 +40,8 @@ namespace Engin
 
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 			font->setPtSize(40);
-			textCreator.createTextTexture(font, "Vision calculation time: ", 255,100,0);
+			textCreator.createTextTexture(font, "|", 255,100,0);
 			text = textCreator.getTexture();
-			/*textCreator2.createTextTexture(font, "Scene draw time: ", 255, 100, 0);
-			text2 = textCreator2.getTexture();*/
 			textCreator3.createTextTexture(font, "Visible tile count: ", 255, 100, 0);
 			text3 = textCreator3.getTexture();
 
@@ -54,7 +52,7 @@ namespace Engin
 			emptyVector(2);
 			emptyVector(3);
 			
-
+			alpha = 0.0f;
 #pragma endregion
 
 #pragma region WallTiles
@@ -147,7 +145,7 @@ namespace Engin
 				addIntoVector(1, glm::vec2(i, 3), 1);
 			}
 #pragma endregion
-
+			std::cout << ""<< std::endl;
 		}
 
 		CameraTestScene::~CameraTestScene()
@@ -243,10 +241,12 @@ namespace Engin
 			myTimer.pause();
 
 			//Information
-			textCreator.createTextTexture(font, "Vision calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
+			textCreator.createTextTexture(font, "Vision render time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
 			text = textCreator.getTexture();
 			textCreator3.createTextTexture(font, "Visible tiles count: " + std::to_string(visibleTilesCount), 255, 100, 0);
 			text3 = textCreator3.getTexture();
+
+			alpha += 0.01f;
 		}
 
 		void CameraTestScene::interpolate(GLfloat alpha)
@@ -258,6 +258,7 @@ namespace Engin
 			//myTimer2.start();
 			textureBatch.begin();
 			alphaTextureBatch.begin();
+			alphaTextureBatch2.begin();
 			
 			//player
 			alphaTextureBatch.draw(doge4, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y, 1.0f, 0.9f);
@@ -300,16 +301,18 @@ namespace Engin
 			}
 			//----------------
 			
+			alphaTextureBatch2.draw(text, &glm::vec4(0.0f, 0.0f, text->getWidth(), text->getHeight()), camera2.getPositionRotationOrigin().x + glm::cos(alpha)*400.0f, camera2.getPositionRotationOrigin().y + 25, text->getWidth(), text->getHeight(), 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.9f);
+			alphaTextureBatch2.draw(text3, camera2.getPositionRotationOrigin().x, camera2.getPositionRotationOrigin().y - 30, 1.0f, 0.9f);
+
 			renderDogemap(0.0f, 0.0f, 40.0f, 40.0f, 21, 21);
 
 			textureBatch.end();
 			alphaTextureBatch.end();
-			
-			//Timer
-			alphaTextureBatch2.begin();
-			alphaTextureBatch2.draw(text, camera2.getPositionRotationOrigin().x, camera2.getPositionRotationOrigin().y+25, 1.0f, 0.9f);
-			alphaTextureBatch2.draw(text3, camera2.getPositionRotationOrigin().x, camera2.getPositionRotationOrigin().y-30, 1.0f, 0.9f);
 			alphaTextureBatch2.end();
+			//Timer
+			
+			
+			
 
 			camera.activateViewPort();
 			batch.flush(camera);
