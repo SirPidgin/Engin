@@ -14,13 +14,12 @@ namespace Engin
 		class Sprite : public Component
 		{
 		public:
-			Sprite(Renderer::TextureBatch* textureBatch);
+			Sprite(GameObject* o);
 			~Sprite();
 
 			void draw();
 
 			void setCurrentSprite(Resources::Texture* texture);
-			//Animations?
 
 		private:
 			Renderer::TextureBatch* textureBatch;

@@ -91,6 +91,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\CameraTestScene.cpp" />
+    <ClCompile Include="source\GameObjectTestScene.cpp" />
     <ClCompile Include="source\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +107,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CameraTestScene.h" />
+    <ClInclude Include="include\GameObjectTestScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\cloud_explosion_animation_512.png" />

@@ -1,10 +1,14 @@
 #pragma once
 
 #include <vector>
+#include <string>
+#include <iostream>
 
 #include <glm\vec2.hpp>
 
 #include "Component.h"
+#include "RigidBody.h"
+#include "Engin\Renderer\TextureBatch.h"
 
 
 namespace Engin
@@ -15,31 +19,57 @@ namespace Engin
 		{
 		public:
 			GameObject();
+			GameObject(Renderer::TextureBatch* refTextureBatch);
+			GameObject(std::string name, Renderer::TextureBatch* refTextureBatch);
 			~GameObject();
 
-			//void update();
+			void update();
 			void draw();
 
-			//add or enable(?)
-			//void addComponent(Component* newComponent);
+			bool operator!=(const GameObject& other);
+			bool operator==(const GameObject& other);
 
-			//Pure Virtual Getters & Setters
-			//Transform Component
-			virtual glm::vec2 getPosition() = 0;
-			virtual float getXPosition() = 0;
-			virtual float getYPosition() = 0;
-			virtual float getScale() = 0;
-			virtual float getRotation() = 0;
-			
-			virtual void setPosition() = 0;
-			virtual void setScale() = 0;
-			virtual void setRotation() = 0;
+			void setNameTag(std::string newNameTag);
+			template <typename type> void addComponent();
+			template <typename type> Component* accessComponent();
 
-			//SpriteComponent
-			virtual void setCurrentSprite() = 0;
+			Renderer::TextureBatch* getTextureBatch();
 			
 		private:
-			//std::vector<Component*> components;
+			void initialize();
+			std::string nameTag;
+			std::vector<Component*> components;
+			Renderer::TextureBatch* textureBatch;
 		};
+
+
+		//Template Methods:
+
+		template <typename type>
+		void GameObject::addComponent()
+		{
+			type* cast = new type(this);
+
+			if (std::is_base_of<Component, type>::value == false)
+			{
+				std::cout << "Given type in not a Component!" << std::endl;
+				return;
+			}
+			components.push_back(cast);
+		}
+
+		template <typename type>
+		Component* GameObject::accessComponent()
+		{
+			for (unsigned int i = 0; i < components.size(); i++)
+			{
+				if (typeid(type*) == typeid(components[i]))
+				{
+					return components[i];
+				}
+			}
+			std::cout << "Component not found!" << std::endl;
+			return nullptr;
+		}
 	}
 }

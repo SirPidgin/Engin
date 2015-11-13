@@ -1,12 +1,15 @@
 #include "Engin\Game\Sprite.h"
+#include "Engin\Renderer\Color.h"
+#include "Engin\Game\GameObject.h"
 
 
 namespace Engin
 {
 	namespace Game
 	{
-		Sprite::Sprite(Renderer::TextureBatch* textureBatch) : currentTexture(nullptr), textureBatch(textureBatch)
+		Sprite::Sprite(GameObject* o) : Component(o), currentTexture(nullptr)
 		{
+			this->textureBatch = ownerObject->getTextureBatch();
 		}
 		Sprite::~Sprite()
 		{
@@ -15,10 +18,8 @@ namespace Engin
 
 		void Sprite::draw()
 		{
-			////IN PROGRESS...
-			//textureBatch->begin();
-			//textureBatch->draw(currentTexture, getXPosition(), getYPosition(), 1.0f, 1.0f);
-			//textureBatch->end();
+			textureBatch->draw(currentTexture, NULL, getXPosition(), getYPosition(), currentTexture->getWidth(), 
+				currentTexture->getHeight(), getRotation(), getScale(), Renderer::clrWhite);
 		}
 
 		void Sprite::setCurrentSprite(Resources::Texture* texture)

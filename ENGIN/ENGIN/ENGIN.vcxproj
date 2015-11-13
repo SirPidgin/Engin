@@ -52,8 +52,10 @@
     <ClCompile Include="source\3rd party\LodePNG\lodepng.cpp" />
     <ClCompile Include="source\Core\Timer.cpp" />
     <ClCompile Include="source\Game\AnimationPlayer.cpp" />
+    <ClCompile Include="source\Game\Component.cpp" />
     <ClCompile Include="source\Game\EventManager.cpp" />
     <ClCompile Include="source\Game\GameObject.cpp" />
+    <ClCompile Include="source\Game\RigidBody.cpp" />
     <ClCompile Include="source\Game\Sprite.cpp" />
     <ClCompile Include="source\inih\ini.c" />
     <ClCompile Include="source\inih\INIReader.cpp" />

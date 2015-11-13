@@ -12,8 +12,8 @@ namespace Engin
 		class Transform : public Component
 		{
 		public:
-			Transform();
-			~Transform();
+			Transform(GameObject* o) : Component(o) {}
+			~Transform(){}
 
 			//Getters
 			glm::vec2 getPosition() { return position; }
@@ -24,6 +24,8 @@ namespace Engin
 
 			//Setters
 			void setPosition(glm::vec2 newPos) { position = newPos; }
+			void setXPosition(float xPos) { position.x = xPos; }
+			void setYPosition(float yPos) { position.y = yPos; }
 			void setRotation(float newRot) { rotation = newRot; }
 			void setScale(float newScale) { scale = newScale; }
 
