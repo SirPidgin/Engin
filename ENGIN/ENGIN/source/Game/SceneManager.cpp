@@ -31,7 +31,10 @@ namespace Engin
 
 		void SceneManager::draw()
 		{
+			scenes.back()->begin();
 			scenes.back()->draw();
+			scenes.back()->end();
+			scenes.back()->flushBatches();
 		}
 
 		void SceneManager::push(Scene* scene)
