@@ -34,16 +34,13 @@ namespace Engin
 
 			Engin* engine;
 
-			Renderer::Camera camera;
-			Renderer::Camera camera1;
-			Renderer::Camera camera2;
+			Renderer::Camera* camera;
+			Renderer::Camera* camera1;
+			Renderer::Camera* camera2;
 
 			Resources::ShaderProgram* shader;
 			Resources::ShaderProgram* textureShader;
 			Resources::ShaderProgram* alphaShader;
-			Renderer::Batch batch;
-			Renderer::TextureBatch textureBatch;
-			Renderer::TextureBatch alphaTextureBatch;
 
 			Resources::Texture* doge;
 

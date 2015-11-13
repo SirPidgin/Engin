@@ -54,6 +54,7 @@
     <ClCompile Include="source\Game\AnimationPlayer.cpp" />
     <ClCompile Include="source\Game\EventManager.cpp" />
     <ClCompile Include="source\Game\GameObject.cpp" />
+    <ClCompile Include="source\Game\Scene.cpp" />
     <ClCompile Include="source\Game\Sprite.cpp" />
     <ClCompile Include="source\inih\ini.c" />
     <ClCompile Include="source\inih\INIReader.cpp" />

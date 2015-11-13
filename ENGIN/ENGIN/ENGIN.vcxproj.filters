@@ -93,9 +93,6 @@
     <ClInclude Include="include\Engin\Renderer\Camera.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engin\Renderer\Batch.h">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="include\Engin\Renderer\Color.h">
       <Filter>Header Files\Renderer</Filter>
     </ClInclude>
@@ -134,9 +131,6 @@
     </ClInclude>
     <ClInclude Include="include\Engin\Core\Timer.h">
       <Filter>Header Files\Core</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Renderer\TextureBatch.h">
-      <Filter>Header Files\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="include\Engin\Game\EventManager.h">
       <Filter>Header Files\Game</Filter>
@@ -195,15 +189,18 @@
     <ClInclude Include="include\Engin\Game\AnimationPlayer.h">
       <Filter>Header Files\Game\Components</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engin\Renderer\Batch.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Renderer\TextureBatch.h">
+      <Filter>Header Files\Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Renderer\Window.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="source\Renderer\Camera.cpp">
-      <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Renderer\Batch.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="source\Game\SceneManager.cpp">
@@ -232,9 +229,6 @@
     </ClCompile>
     <ClCompile Include="source\inih\INIReader.cpp">
       <Filter>Source Files\3rd party\inih</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Renderer\TextureBatch.cpp">
-      <Filter>Source Files\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="source\inih\ini.c" />
     <ClCompile Include="source\inih\INIReader.cpp" />
@@ -295,6 +289,15 @@
     </ClCompile>
     <ClCompile Include="source\Renderer\TextRenderer.cpp">
       <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Renderer\TextureBatch.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Renderer\Batch.cpp">
+      <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Game\Scene.cpp">
+      <Filter>Source Files\Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
