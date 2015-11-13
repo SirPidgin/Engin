@@ -66,6 +66,7 @@ namespace Engin
 			textTexture = textCreator->getTexture();
 
 			Resources::ResourceManager::getInstance().printResources();
+			particleGenerator.init(doge->getID());
 		}
 
 		CameraTestScene::~CameraTestScene()
@@ -177,7 +178,7 @@ namespace Engin
 			alphaTextureBatch.draw(textTexture, 0.0f, 0.0f, 0.8f, 0.5f); //coordinates not working correctly for text
 			alphaTextureBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), camera2.getPositionRotationOrigin().x, camera2.getPositionRotationOrigin().y, 256.0f, 256.0f, camera2.getRotation() , 1.0f, Renderer::clrGreen, 1.0f, 0.7f);
 			alphaTextureBatch.draw(animationPlayer1.getTexture(), animationPlayer1.getCurrentFrameTexCoords(), 0.0f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 1.0f);
-
+			particleGenerator.draw();
 			renderDogemap(0.0f, 0.0f, 64.0f, 64.0f, 20, 20);
 
 			textureBatch.end();

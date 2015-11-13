@@ -7,6 +7,8 @@ namespace Engin
 	{
 		Texture::Texture(const std::string& resourcePath) : Resource(resourcePath)
 		{
+			std::vector<unsigned char> file;
+
 			lodepng::load_file(file, resourcePath);
 			lodepng::decode(pixels, width, height, file.data(), file.size());
 

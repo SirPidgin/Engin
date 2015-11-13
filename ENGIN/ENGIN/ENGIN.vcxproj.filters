@@ -159,9 +159,6 @@
     <ClInclude Include="include\Engin\Resources\ShaderProgram.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engin\Renderer\ParticleGenerator.h">
-      <Filter>Header Files\Renderer</Filter>
-    </ClInclude>
     <ClInclude Include="include\Engin\Resources\Font.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
@@ -193,6 +190,9 @@
       <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="include\Engin\Game\AnimationPlayer.h">
+      <Filter>Header Files\Game\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Engin\Game\ParticleEffect.h">
       <Filter>Header Files\Game\Components</Filter>
     </ClInclude>
   </ItemGroup>
@@ -275,9 +275,6 @@
     <ClCompile Include="source\Resources\ShaderProgram.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="source\Renderer\ParticleGenerator.cpp">
-      <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
     <ClCompile Include="source\Resources\Font.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
@@ -295,6 +292,9 @@
     </ClCompile>
     <ClCompile Include="source\Renderer\TextRenderer.cpp">
       <Filter>Source Files\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Game\ParticleEffect.cpp">
+      <Filter>Source Files\Game\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

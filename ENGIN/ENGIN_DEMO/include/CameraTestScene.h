@@ -12,6 +12,7 @@
 #include "Engin\Resources\ShaderProgram.h"
 #include "Engin\Resources\Animation.h"
 #include "Engin\Game\AnimationPlayer.h"
+#include "Engin\Game\ParticleEffect.h"
 
 namespace Engin
 {
@@ -56,6 +57,8 @@ namespace Engin
 
 			Game::AnimationPlayer animationPlayer;
 			Game::AnimationPlayer animationPlayer1;
+
+			Renderer::ParticleEffect particleGenerator;
 		};
 	}
 }
