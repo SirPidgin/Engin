@@ -45,8 +45,6 @@ namespace Engin
 			GLuint textureID;
 			GLuint width;
 			GLuint height;
-
-			std::vector<unsigned char> file;
 			std::vector<unsigned char> pixels;
 		};
 	}

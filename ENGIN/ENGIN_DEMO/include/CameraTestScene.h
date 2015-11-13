@@ -12,6 +12,7 @@
 #include "Engin\Resources\ShaderProgram.h"
 #include "Engin\Resources\Animation.h"
 #include "Engin\Game\AnimationPlayer.h"
+#include "Engin\Game\ParticleEffect.h"
 
 namespace Engin
 {
@@ -34,16 +35,13 @@ namespace Engin
 
 			Engin* engine;
 
-			Renderer::Camera camera;
-			Renderer::Camera camera1;
-			Renderer::Camera camera2;
+			Renderer::Camera* camera;
+			Renderer::Camera* camera1;
+			Renderer::Camera* camera2;
 
 			Resources::ShaderProgram* shader;
 			Resources::ShaderProgram* textureShader;
 			Resources::ShaderProgram* alphaShader;
-			Renderer::Batch batch;
-			Renderer::TextureBatch textureBatch;
-			Renderer::TextureBatch alphaTextureBatch;
 
 			Resources::Texture* doge;
 
@@ -56,6 +54,8 @@ namespace Engin
 
 			Game::AnimationPlayer animationPlayer;
 			Game::AnimationPlayer animationPlayer1;
+
+			Renderer::ParticleEffect particleGenerator;
 		};
 	}
 }
