@@ -44,12 +44,6 @@
     <None Include="resources\shaders\alpha_shader.fragment">
       <Filter>Resource Files\Shaders</Filter>
     </None>
-    <None Include="resources\shaders\particle_shader.fragment">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="resources\shaders\particle_shader.vertex">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
     <None Include="resources\shaders\shader.vertex">
       <Filter>Resource Files\Shaders</Filter>
     </None>

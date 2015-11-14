@@ -26,7 +26,7 @@ struct Particle
 const float GRAVITY = 3.0f;
 const int NUM_PARTICLES = 1000;
 const float TIMESTEP = 0.01f;
-const float SIZE = 0.05f;
+const float SIZE = 0.15f;
 const float PI = 3.1316;
 
 // ParticleGenerator acts as a container for rendering a large number of 

@@ -15,7 +15,7 @@ namespace Engin
 
 		void ParticleEffect::init(GLuint textureID)
 		{
-			textureID = this->textureID;
+			this->textureID = textureID;
 			timeUntilNextStep = 0;
 			angle = 0;
 
@@ -99,6 +99,8 @@ namespace Engin
 			}
 			std::sort(ps.begin(), ps.end());
 
+			step();
+
 			glEnable(GL_TEXTURE_2D);
 			glBindTexture(GL_TEXTURE_2D, textureID);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -111,13 +113,13 @@ namespace Engin
 				glColor4f(p->color[0], p->color[1], p->color[2], 1 - p->age / p->lifetime);
 				float size = SIZE / 2;
 
-				glTexCoord2f(0, 0);
-				glVertex2f(p->position[0] - size, p->position[1] - size);
 				glTexCoord2f(0, 1);
+				glVertex2f(p->position[0] - size, p->position[1] - size);
+				glTexCoord2f(0, 0);
 				glVertex2f(p->position[0] - size, p->position[1] + size);
-				glTexCoord2f(1, 1);
-				glVertex2f(p->position[0] + size, p->position[1] + size);
 				glTexCoord2f(1, 0);
+				glVertex2f(p->position[0] + size, p->position[1] + size);
+				glTexCoord2f(1, 1);
 				glVertex2f(p->position[0] + size, p->position[1] - size);
 			}
 			glEnd();

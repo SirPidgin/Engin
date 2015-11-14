@@ -292,6 +292,7 @@
     </ClCompile>
     <ClCompile Include="source\Game\Component.cpp">
       <Filter>Source Files</Filter>
+	</ClCompile>
     <ClCompile Include="source\Renderer\TextureBatch.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>

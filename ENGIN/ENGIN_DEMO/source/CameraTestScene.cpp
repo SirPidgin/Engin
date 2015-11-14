@@ -17,7 +17,7 @@ namespace Engin
 			this->engine = engine;
 			alpha = 0.0f;
 
-			camera = createGuiCamera();
+			//camera = createGuiCamera();
 
 			std::cout << "Camera test scene going on, be aware of rotating cameras" << std::endl;
 
@@ -41,6 +41,7 @@ namespace Engin
 			shader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/shader");
 			textureShader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/texture_shader");
 			alphaShader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/alpha_shader");
+
 			opaqueBatch.setShader(textureShader);
 			alphaBatch.setShader(alphaShader);
 			alphaBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
@@ -175,7 +176,7 @@ namespace Engin
 			alphaBatch.draw(textTexture, 0.0f, 0.0f, 0.8f, 0.5f); //coordinates not working correctly for text
 			alphaBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), camera2->getPositionRotationOrigin().x, camera2->getPositionRotationOrigin().y, 256.0f, 256.0f, camera2->getRotation(), 1.0f, Renderer::clrGreen, 1.0f, 0.7f);
 			alphaBatch.draw(animationPlayer1.getTexture(), animationPlayer1.getCurrentFrameTexCoords(), 0.0f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 1.0f);
-
+			particleGenerator.draw();
 			renderDogemap(0.0f, 0.0f, 64.0f, 64.0f, 20, 20);
 		}
 
