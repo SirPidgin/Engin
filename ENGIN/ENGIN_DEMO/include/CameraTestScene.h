@@ -25,16 +25,17 @@ namespace Engin
 			void update(GLfloat step);
 			void interpolate(GLfloat alpha);
 			void draw();
-			void renderDogemap(float startX, float startY, float tileWidth, float tileHeight, size_t worldWidth, size_t worldHeight);
+			void renderDogemap(float startX, float startY, int tileWidth, int tileHeight, size_t worldWidth, size_t worldHeight);
 			void renderTexture(Resources::Texture* texture, float x, float y, const Renderer::Camera& camera);
 		
 			glm::vec2 inputSwap(glm::vec2 xy, int octant);
 			glm::vec2 outputSwap(glm::vec2 xy, int octant);
 			void plotLine(glm::vec2 point0, glm::vec2 point1);
 			int calculateOctant(glm::vec2 point0, glm::vec2 point1);
-			bool addVisiblePoint(glm::vec2 point);
+			bool checkIfVisiblePoint(glm::vec2 point);
 
 			void calculateVision(int playerX, int playerY);
+			void calculateVisionOctant(int playerX, int playerY, int oct);
 			void calculate90(int playerX, int playerY);
 
 			void emptyVector(int vectorAsNumber);
@@ -59,6 +60,7 @@ namespace Engin
 			Resources::Texture* doge3;
 			Resources::Texture* doge1;
 			Resources::Texture* doge4;
+			Resources::Texture* doge5;
 			Resources::Texture* text;
 			Resources::Texture* text2;
 			Resources::Texture* text3;
@@ -76,7 +78,6 @@ namespace Engin
 			glm::vec2 temp1;
 			glm::vec2 temp;
 			std::vector<int> visibleTiles;
-			std::vector<int> visibleFriend;
 			std::vector<int> objectTiles;
 			int Difference;
 			int dx;
@@ -95,6 +96,10 @@ namespace Engin
 			
 			int endX;
 			int visibleTilesCount;
+
+			int mapX;
+			int mapY;
+			int tileSize;
 		};
 	}
 }

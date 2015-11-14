@@ -25,7 +25,7 @@ namespace Engin
 			shader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/shader");
 			textureShader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/texture_shader");
 			alphaShader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/alpha_shader");
-			batch.init(shader, 4096);
+			batch.init(shader, 2*4096);
 			textureBatch.setShader(textureShader);
 			alphaTextureBatch.setShader(alphaShader);
 			alphaTextureBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
@@ -37,6 +37,7 @@ namespace Engin
 			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/yellow_tile_40.png");
 			doge1 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_tile_40.png");
 			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/green_tile_40.png");
+			doge5 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/red_tile_40.png");
 
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 			font->setPtSize(40);
@@ -45,40 +46,39 @@ namespace Engin
 			textCreator3.createTextTexture(font, "Visible tile count: ", 255, 100, 0);
 			text3 = textCreator3.getTexture();
 
-			visibleTiles.resize(441);
-			visibleFriend.resize(441);
-			objectTiles.resize(441);			
+			mapX = 40;
+			mapY = 60;
+			tileSize = 40;
+
+			visibleTiles.resize((mapX)*(mapY));
+			objectTiles.resize((mapX + 1)*(mapY + 1));
 			
 			emptyVector(2);
-			emptyVector(3);
-			
+			emptyVector(3);		
+
 			alpha = 0.0f;
 #pragma endregion
 
 #pragma region WallTiles
 			
 			//MapSides
-			for (int i = 0; i <= 20; i++)
+			for (int i = 0; i <= mapY; i++)
 			{
-				//objectTiles.push_back(glm::vec2(-1, i));
 				addIntoVector(1, glm::vec2(0, i), 1);
 			}
 
-			for (int i = 0; i <= 20; i++)
+			for (int i = 0; i <= mapY; i++)
 			{
-				//objectTiles.push_back(glm::vec2(21, i));
-				addIntoVector(1, glm::vec2(20, i), 1);
+				addIntoVector(1, glm::vec2(mapX, i), 1);
 			}
 
-			for (int i = 0; i <= 20; i++)
+			for (int i = 0; i <= mapX; i++)
 			{
-				//objectTiles.push_back(glm::vec2(i, 21));
-				addIntoVector(1, glm::vec2(i, 20), 1);
+				addIntoVector(1, glm::vec2(i, mapY), 1);
 			}
 
-			for (int i = 0; i <= 20; i++)
+			for (int i = 0; i <= mapX; i++)
 			{
-				//objectTiles.push_back(glm::vec2(i, -1));
 				addIntoVector(1, glm::vec2(i, 0), 1);
 			}			
 			//---------------------
@@ -87,62 +87,57 @@ namespace Engin
 
 			for (int i = 10; i < 15; i++)
 			{
-				//objectTiles.push_back(glm::vec2(i, 18));
 				addIntoVector(1, glm::vec2(i, 18), 1);
 			}
 
 			for (int i = 13; i < 18; i++)
 			{
-				//objectTiles.push_back(glm::vec2(2, i));
 				addIntoVector(1, glm::vec2(2, i), 1);
 			}
 
 			for (int i = 11; i < 16; i++)
 			{
-				//objectTiles.push_back(glm::vec2(0, i));
 				addIntoVector(1, glm::vec2(0, i), 1);
 			}
 
 			for (int i = 1; i < 11; i++)
 			{
-				//objectTiles.push_back(glm::vec2(i, 11));
 				addIntoVector(1, glm::vec2(i, 11), 1);
 			}
 
 			for (int i = 2; i < 11; i++)
 			{
-				//objectTiles.push_back(glm::vec2(i, 9));
 				addIntoVector(1, glm::vec2(i, 9), 1);
 			}
 
 			for (int i = 15; i < 19; i++)
 			{
-				//objectTiles.push_back(glm::vec2(i, 3));
 				addIntoVector(1, glm::vec2(i, 3), 1);
 			}
 
 			for (int i = 4; i < 7; i++)
 			{
-				//objectTiles.push_back(glm::vec2(18, i));
 				addIntoVector(1, glm::vec2(18, i), 1);
 			}
 
 			for (int i = 8; i < 17; i++)
 			{
-				//objectTiles.push_back(glm::vec2(15, i));
 				addIntoVector(1, glm::vec2(15, i), 1);
 			}
 
 			for (int i = 12; i < 16; i++)
 			{
-				//objectTiles.push_back(glm::vec2(i, 7));
 				addIntoVector(1, glm::vec2(i, 7), 1);
 			}
 
 			for (int i = 2; i < 13; i++)
 			{
-				//objectTiles.push_back(glm::vec2(i, 3));
 				addIntoVector(1, glm::vec2(i, 3), 1);
+			}
+
+			for (int i = 20; i < 40; i++)
+			{
+				addIntoVector(1, glm::vec2(i, 20), 1);
 			}
 #pragma endregion
 			std::cout << ""<< std::endl;
@@ -168,46 +163,48 @@ namespace Engin
 			}
 			camera.setZoomLevel(zoomByInput); //by input
 
-			static int playerX = 400;
-			static int playerY = 400;
+			static int layerX = 10;
+			static int layerY = 10;
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_W))
 			{
 				//std::cout << "W" << std::endl;
-				if (playerY < 800)
+				if (layerY < mapY*tileSize)
 				{
-					playerY += 40;
+					layerY += 1;
 				}
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_A))
 			{
 				//std::cout << "A" << std::endl;
-				if (playerX > 0)
+				if (layerX > 0)
 				{
-					playerX -= 40;
+					layerX -= 1;
 				}
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_S))
 			{
 				//std::cout << "S" << std::endl;
-				if (playerY > 0)
+				if (layerY > 0)
 				{
-					playerY -= 40;
+					layerY -= 1;
 				}
 			}
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_D))
 			{
 				//std::cout << "D" << std::endl;
-				if (playerX < 800)
+				if (layerX < mapX*tileSize)
 				{
-					playerX += 40;
+					layerX += 1;
 				}
 			}
 
-			camera.setPositionRotationOrigin(playerX, playerY);
+			playerX = layerX;
+			playerY = layerY;
+			camera.setPositionRotationOrigin(playerX*tileSize, playerY*tileSize);
 
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE))
 			{
-				std::cout << camera.getPositionRotationOrigin().x << " - " << camera.getPositionRotationOrigin().y <<" visible tiles: "<< visibleTiles.size()<< std::endl;
+				std::cout << camera.getPositionRotationOrigin().x << " - " << camera.getPositionRotationOrigin().y << std::endl;
 			}
 
 			static float rotateByInput = 0.0f;
@@ -241,7 +238,7 @@ namespace Engin
 			myTimer.pause();
 
 			//Information
-			textCreator.createTextTexture(font, "Vision render time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
+			textCreator.createTextTexture(font, "Vision calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
 			text = textCreator.getTexture();
 			textCreator3.createTextTexture(font, "Visible tiles count: " + std::to_string(visibleTilesCount), 255, 100, 0);
 			text3 = textCreator3.getTexture();
@@ -261,41 +258,38 @@ namespace Engin
 			alphaTextureBatch2.begin();
 			
 			//player
-			alphaTextureBatch.draw(doge4, camera.getPositionRotationOrigin().x, camera.getPositionRotationOrigin().y, 1.0f, 0.9f);
+			alphaTextureBatch.draw(doge4, playerX*tileSize, playerY*tileSize, 1.0f, 0.9f);
 			
 			//always drawn: friend
-			alphaTextureBatch.draw(doge4, friendX*40, friendY*40, 1.0f, 0.5f);
+			alphaTextureBatch.draw(doge4, friendX*tileSize, friendY * tileSize, 1.0f, 0.5f);
 
 			//drawing data vectors
-			for (int i = 0; i <= 20; i++)
+			for (int i = 0; i <= mapY; i++)
 			{
-				for (int j = 0; j <= 20; j++)
+				for (int j = 0; j <= mapX; j++)
 				{
-					if (objectTiles[i*20 + j] == 1)
+					if (objectTiles[i*mapX + j] == 1) //Wall tiles
 					{
-						alphaTextureBatch.draw(doge1, j * 40, i * 40, 1.0f, 0.4f);
+						textureBatch.draw(doge1, j * tileSize, i * tileSize, 1.0f, 0.4f);
 					}
 				}				
 			}
 
-			for (int i = 0; i <= 20; i++)
+			for (int i = 0; i < mapY; i++)
 			{
-				for (int j = 0; j <= 20; j++)
+				for (int j = 0; j < mapX; j++)
 				{
-					if (visibleTiles[i * 20 + j] == 1)
+					if (visibleTiles[i * mapX + j] == 1) //Visible
 					{
-						alphaTextureBatch.draw(doge2, j * 40, i * 40, 0.5f, 0.6f);
+						alphaTextureBatch.draw(doge2, j * tileSize, i * tileSize, 0.5f, 0.6f);
 					}
-				}
-			}
-	
-			for (int i = 0; i <= 20; i++)
-			{
-				for (int j = 0; j <= 20; j++)
-				{
-					if (visibleFriend[i * 20 + j] != 0)
+					if (visibleTiles[i * mapX + j] == 5) //Wall was hit
 					{
-						alphaTextureBatch.draw(doge3, j * 40, i * 40, 0.5f, 0.7f);
+						alphaTextureBatch.draw(doge5, j * tileSize, i * tileSize, 0.5f, 0.6f);
+					}
+					if (visibleTiles[i * mapX + j] == 3) //friend
+					{
+						alphaTextureBatch.draw(doge3, j * tileSize, i * tileSize, 0.5f, 0.6f);
 					}
 				}
 			}
@@ -304,7 +298,7 @@ namespace Engin
 			alphaTextureBatch2.draw(text, &glm::vec4(0.0f, 0.0f, text->getWidth(), text->getHeight()), camera2.getPositionRotationOrigin().x + glm::cos(alpha)*400.0f, camera2.getPositionRotationOrigin().y + 25, text->getWidth(), text->getHeight(), 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.9f);
 			alphaTextureBatch2.draw(text3, camera2.getPositionRotationOrigin().x, camera2.getPositionRotationOrigin().y - 30, 1.0f, 0.9f);
 
-			renderDogemap(0.0f, 0.0f, 40.0f, 40.0f, 21, 21);
+			renderDogemap(0.0f, 0.0f, tileSize, tileSize, mapX + 1, mapY + 1);
 
 			textureBatch.end();
 			alphaTextureBatch.end();
@@ -330,7 +324,7 @@ namespace Engin
 			//myTimer2.pause();
 		}
 
-		void CameraTestScene::renderDogemap(float startX, float startY, float tileWidth, float tileHeight, size_t worldWidth, size_t worldHeight)
+		void CameraTestScene::renderDogemap(float startX, float startY, int tileWidth, int tileHeight, size_t worldWidth, size_t worldHeight)
 		{
 			for (size_t y = 0; y < worldHeight; y++)
 			{
@@ -338,11 +332,11 @@ namespace Engin
 				{
 					if ((x + y) % 2)
 					{
-						alphaTextureBatch.draw(doge, startX + x * tileWidth, startY + y * tileHeight, tileWidth, tileHeight, Renderer::clrWhite);
+						textureBatch.draw(doge, startX + x * tileWidth, startY + y * tileHeight, tileWidth, tileHeight, Renderer::clrWhite);
 					}
 					else
 					{
-						alphaTextureBatch.draw(doge, startX + x * tileWidth, startY + y * tileHeight, tileWidth, tileHeight, {(0.4f),(0.4f),(0.4f)});
+						textureBatch.draw(doge, startX + x * tileWidth, startY + y * tileHeight, tileWidth, tileHeight, {(0.4f),(0.4f),(0.4f)});
 					}
 				}
 			}
@@ -455,8 +449,9 @@ namespace Engin
 
 			Difference = 2 * dy - dx;
 
-			if (addVisiblePoint(this->point0) == true)
+			if (checkIfVisiblePoint(this->point0) == true)
 			{
+				addIntoVector(2, temp, 5); //Mark the hit wall
 				return; //Wall was hit
 			}
 			y = point0.y;
@@ -470,8 +465,9 @@ namespace Engin
 				
 				//plot
 				temp = outputSwap(glm::vec2(x, y), octant);
-				if (addVisiblePoint(glm::vec2(temp)) == true)
+				if (checkIfVisiblePoint(glm::vec2(temp)) == true)
 				{
+					addIntoVector(2, temp, 5); //Mark the hit wall
 					return; //Wall was hit
 				}
 
@@ -528,64 +524,18 @@ namespace Engin
 				return 7;
 			}
 
-#pragma region Withangles
-			//alpha = glm::atan(point1.y - point0.y, point1.x - point0.x);
-
-			//if (alpha < 0)
-			//{
-			//	alpha = glm::radians(360.0f) + alpha;
-			//}
-
-			//if (alpha >= glm::radians(0.0f) && alpha < glm::radians(44.9999f))
-			//{
-			//	return 0;
-			//}
-			//if (alpha > glm::radians(45.0001f) && alpha <= glm::radians(90.0f))
-			//{
-			//	return 1;
-			//}
-			//if (alpha >= glm::radians(90.0f) && alpha < glm::radians(134.9999f))
-			//{
-			//	return 2;
-			//}
-			//if (alpha > glm::radians(135.0001f) && alpha <= glm::radians(180.0f))
-			//{
-			//	return 3;
-			//}
-			//if (alpha >= glm::radians(180.0f) && alpha < glm::radians(224.9999f))
-			//{
-			//	return 4;
-			//}
-			//if (alpha > glm::radians(225.0001f) && alpha <= glm::radians(270.0f))
-			//{
-			//	return 5;
-			//}
-			//if (alpha >= glm::radians(270.0f) && alpha < glm::radians(314.9999f))
-			//{
-			//	return 6;
-			//}
-			//if (alpha > glm::radians(315.0001f) && alpha <= glm::radians(360.0f))
-			//{
-			//	return 7;
-			//}
-			//else //45, 135, 225, 315
-			//{
-			//	return 45;
-			//}		  
-#pragma endregion
-
 		}
 
-		bool CameraTestScene::addVisiblePoint(glm::vec2 point)
+		bool CameraTestScene::checkIfVisiblePoint(glm::vec2 point)
 		{
 			int count = 0;
 
-			if (objectTiles[point.y * 20 + point.x] == 1)
+			if (objectTiles[point.y * mapX + point.x] == 1)
 			{
 				return true; //wall was hit
 			}
 
-			if (visibleTiles[point.y * 20 + point.x] == 0)
+			if (visibleTiles[point.y * mapX + point.x] == 0)
 			{
 				addIntoVector(2, point, 1); //we see the tile
 				visibleTilesCount++;
@@ -594,9 +544,9 @@ namespace Engin
 
 			if (count > 0)
 			{
-				if (objectTiles[point.y * 20 + point.x] == 3)
+				if (objectTiles[point.y * mapX + point.x] == 3)
 				{
-					addIntoVector(3, point, 1); //we see a friend in the tile as well
+					addIntoVector(2, point, 3); //we see a friend in the tile as well
 				}
 			}
 
@@ -606,117 +556,270 @@ namespace Engin
 		void CameraTestScene::calculateVision(int playerX,int playerY) //Limits for vision
 		{
 			visibleTilesCount = 0;
-			point0 = glm::vec2(playerX / 40, playerY / 40);
+			//point0 = glm::vec2(playerX, playerY);
 			
-			////Map bottom
-			for (int i = 1; i < 20; i++)
-			{
-				point1 = glm::vec2(i, 1);
-				octant = calculateOctant(point0, point1);
-				if (octant != 90)
-				{
-					temp0 = inputSwap(point0, octant);
-					temp1 = inputSwap(point1, octant);
+#pragma region DrawLineToCorner
+			//point1 = glm::vec2(mapX-1, mapY-1);
+			//octant = calculateOctant(point0, point1);
+			//if (octant != 90)
+			//{
+			//	temp0 = inputSwap(point0, octant);
+			//	temp1 = inputSwap(point1, octant);
 
-					plotLine(temp0, temp1);
-				}				
+			//	plotLine(temp0, temp1);
+			//}
+
+			//point1 = glm::vec2(1, mapY-1);
+			//octant = calculateOctant(point0, point1);
+			//if (octant != 90)
+			//{
+			//	temp0 = inputSwap(point0, octant);
+			//	temp1 = inputSwap(point1, octant);
+
+			//	plotLine(temp0, temp1);
+			//}
+
+			//point1 = glm::vec2(mapX-1, 1);
+			//octant = calculateOctant(point0, point1);
+			//if (octant != 90)
+			//{
+			//	temp0 = inputSwap(point0, octant);
+			//	temp1 = inputSwap(point1, octant);
+
+			//	plotLine(temp0, temp1);
+			//}
+
+			//point1 = glm::vec2(1, 1);
+			//octant = calculateOctant(point0, point1);
+			//if (octant != 90)
+			//{
+			//	temp0 = inputSwap(point0, octant);
+			//	temp1 = inputSwap(point1, octant);
+
+			//	plotLine(temp0, temp1);
+			//}  
+#pragma endregion
+
+			for (int i = 0; i <= 7; i++)
+			{
+				calculateVisionOctant(playerX, playerY, i);
+			}
+			
+#pragma region Old
+			//Map bottom
+			//for (int i = 1; i < mapX; i++)
+			//{
+			//	point1 = glm::vec2(i, 1);
+			//	octant = calculateOctant(point0, point1);
+			//	if (octant != 90)
+			//	{
+			//		temp0 = inputSwap(point0, octant);
+			//		temp1 = inputSwap(point1, octant);
+
+			//		plotLine(temp0, temp1);
+			//	}				
+			//}
+
+			////Map right side
+			//for (int i = 1; i < mapY; i++)
+			//{
+			//	point1 = glm::vec2(mapX-1, i);
+			//	octant = calculateOctant(point0, point1);
+			//	if (octant != 90)
+			//	{
+			//		temp0 = inputSwap(point0, octant);
+			//		temp1 = inputSwap(point1, octant);
+			//		plotLine(temp0, temp1);
+			//	}
+			//}
+
+			////Map top
+			//for (int i = mapX-1; i > 0; i--)
+			//{
+			//	point1 = glm::vec2(i, mapY-1);
+			//	octant = calculateOctant(point0, point1);
+			//	if (octant != 90)
+			//	{
+			//		temp0 = inputSwap(point0, octant);
+			//		temp1 = inputSwap(point1, octant);
+			//		plotLine(temp0, temp1);
+			//	}
+			//}
+
+			////Map left side
+			//for (int i = mapY-1; i > 0; i--)
+			//{
+			//	point1 = glm::vec2(1, i);
+			//	octant = calculateOctant(point0, point1);
+			//	if (octant != 90)
+			//	{
+			//		temp0 = inputSwap(point0, octant);
+			//		temp1 = inputSwap(point1, octant);
+			//		plotLine(temp0, temp1);
+			//	}
+			//}  
+#pragma endregion
+
+		}
+
+		void CameraTestScene::calculateVisionOctant(int playerX, int playerY, int oct)
+		{
+			point0 = glm::vec2(playerX, playerY);
+			
+			switch (oct)
+			{
+			case 0:
+			{
+				for (int i = mapY / 2; i < mapY; i++)
+				{
+					point1 = glm::vec2(mapX-1, i);
+					octant = calculateOctant(point0, point1);
+					if (octant != 90)
+					{
+						temp0 = inputSwap(point0, octant);
+						temp1 = inputSwap(point1, octant);
+
+						plotLine(temp0, temp1);
+					}
+				}
+				break;
+			}
+			case 1:
+			{
+				for (int i = mapX-1; i > mapX/2; i--)
+				{
+					point1 = glm::vec2(i, mapY-1);
+					octant = calculateOctant(point0, point1);
+					if (octant != 90)
+					{
+						temp0 = inputSwap(point0, octant);
+						temp1 = inputSwap(point1, octant);
+
+						plotLine(temp0, temp1);
+					}
+				}
+				break;
+			}
+			case 2:
+			{
+				for (int i = mapX/2; i > 0; i--)
+				{
+					point1 = glm::vec2(i, mapY-1);
+					octant = calculateOctant(point0, point1);
+					if (octant != 90)
+					{
+						temp0 = inputSwap(point0, octant);
+						temp1 = inputSwap(point1, octant);
+
+						plotLine(temp0, temp1);
+					}
+				}
+				break;
+			}
+			case 3:
+			{
+				for (int i = mapY-1; i > mapY/2; i--)
+				{
+					point1 = glm::vec2(1, i);
+					octant = calculateOctant(point0, point1);
+					if (octant != 90)
+					{
+						temp0 = inputSwap(point0, octant);
+						temp1 = inputSwap(point1, octant);
+
+						plotLine(temp0, temp1);
+					}
+				}
+				break;
+			}
+			case 4:
+			{
+				for (int i = mapY/2; i > 0; i--)
+				{
+					point1 = glm::vec2(1, i);
+					octant = calculateOctant(point0, point1);
+					if (octant != 90)
+					{
+						temp0 = inputSwap(point0, octant);
+						temp1 = inputSwap(point1, octant);
+
+						plotLine(temp0, temp1);
+					}
+				}
+				break;
+			}
+			case 5:
+			{
+				for (int i = 1; i < mapX/2; i++)
+				{
+					point1 = glm::vec2(i, 1);
+					octant = calculateOctant(point0, point1);
+					if (octant != 90)
+					{
+						temp0 = inputSwap(point0, octant);
+						temp1 = inputSwap(point1, octant);
+
+						plotLine(temp0, temp1);
+					}
+				}
+				break;
+			}
+			case 6:
+			{
+				for (int i = mapX / 2; i < mapX-1; i++)
+				{
+					point1 = glm::vec2(i, 1);
+					octant = calculateOctant(point0, point1);
+					if (octant != 90)
+					{
+						temp0 = inputSwap(point0, octant);
+						temp1 = inputSwap(point1, octant);
+
+						plotLine(temp0, temp1);
+					}
+				}
+				break;
+			}
+			case 7:
+			{
+				for (int i = 1; i < mapY/2; i++)
+				{
+					point1 = glm::vec2(mapX-1, i);
+					octant = calculateOctant(point0, point1);
+					if (octant != 90)
+					{
+						temp0 = inputSwap(point0, octant);
+						temp1 = inputSwap(point1, octant);
+
+						plotLine(temp0, temp1);
+					}
+				}
+				break;
 			}
 
-			//Map right side
-			for (int i = 1; i < 20; i++)
-			{
-				point1 = glm::vec2(19, i);
-				octant = calculateOctant(point0, point1);
-				if (octant != 90)
-				{
-					temp0 = inputSwap(point0, octant);
-					temp1 = inputSwap(point1, octant);
-					plotLine(temp0, temp1);
-				}
-			}
-
-			//Map top
-			for (int i = 19; i > 0; i--)
-			{
-				point1 = glm::vec2(i, 19);
-				octant = calculateOctant(point0, point1);
-				if (octant != 90)
-				{
-					temp0 = inputSwap(point0, octant);
-					temp1 = inputSwap(point1, octant);
-					plotLine(temp0, temp1);
-				}
-			}
-
-			//Map left side
-			for (int i = 19; i > 0; i--)
-			{
-				point1 = glm::vec2(1, i);
-				octant = calculateOctant(point0, point1);
-				if (octant != 90)
-				{
-					temp0 = inputSwap(point0, octant);
-					temp1 = inputSwap(point1, octant);
-					plotLine(temp0, temp1);
-				}
+			default:
+				break;
 			}
 		}
 
 		void CameraTestScene::calculate90(int playerX, int playerY)
 		{
-			for (int i = 0; i<100; i++)
+			for (int i = 0; i<10000; i++)
 			{
-				temp = glm::vec2(playerX / 40, playerY / 40 + i);
-				if (addVisiblePoint(temp) == true)
+				temp = glm::vec2(playerX, playerY + i);
+				if (checkIfVisiblePoint(temp) == true)
 				{
-					i = 1000; //Wall was hit
+					i = 100001; //Wall was hit
 				}				
 			}
-			for (int i = 0; i<100; i++)
+			for (int i = 0; i<10000; i++)
 			{
-				temp = glm::vec2(playerX / 40, playerY / 40 - i);
-				if (addVisiblePoint(temp) == true)
+				temp = glm::vec2(playerX, playerY - i);
+				if (checkIfVisiblePoint(temp) == true)
 				{
-					i = 1000; //Wall was hit
+					i = 100001; //Wall was hit
 				}
 			}
-#pragma region CalcX
-//			endX = 0;
-//			for (endX; endX < 10000; endX++) //Until hit the wall
-//			{
-//				temp = glm::vec2(playerX / 40 + endX, playerY / 40 + endX);
-//				if (addVisiblePoint(temp) == true)
-//				{
-//					endX = 10001;
-//				}
-//			}
-//			endX = 0;
-//			for (endX; endX < 10000; endX++)
-//			{
-//				temp = glm::vec2(playerX / 40 + endX, playerY / 40 - endX);
-//				if (addVisiblePoint(temp) == true)
-//				{
-//					endX = 10001;
-//				}
-//			}
-//			endX = 0;
-//			for (endX; endX < 10000; endX++)
-//			{
-//				temp = glm::vec2(playerX / 40 - endX, playerY / 40 + endX);
-//				if (addVisiblePoint(temp) == true)
-//				{
-//					endX = 10001;
-//				}
-//			}
-//			for (int i = 0;; i++)
-//			{
-//				temp = glm::vec2(playerX / 40 - i, playerY / 40 - i);
-//				if (addVisiblePoint(temp) == true)
-//				{
-//					return;
-//				}
-//			}
-#pragma endregion
 		}
 
 		void CameraTestScene::emptyVector(int vectorAsNumber)
@@ -739,14 +842,6 @@ namespace Engin
 				}
 				break;
 			}
-			case 3:
-			{
-				for (int i = 0; i < visibleFriend.size(); i++)
-				{
-					visibleFriend[i] = 0;
-				}
-				break;
-			}
 			default:
 				break;
 			}
@@ -760,11 +855,7 @@ namespace Engin
 			{
 				if (xy.x >= 0 && xy.y >= 0)
 				{
-					objectTiles[xy.y * 20 + xy.x] = tiletype;
-				}
-				else
-				{
-					std::cout << "trying to place negative into vector" << std::endl;
+					objectTiles[xy.y * mapX + xy.x] = tiletype;
 				}
 				break;
 			}
@@ -772,23 +863,7 @@ namespace Engin
 			{
 				if (xy.x >= 0 && xy.y >= 0)
 				{
-					visibleTiles[xy.y * 20 + xy.x] = tiletype;
-				}
-				else
-				{
-					std::cout << "trying to place negative into vector" << std::endl;
-				}
-				break;
-			}
-			case 3:
-			{
-				if (xy.x >= 0 && xy.y >= 0)
-				{
-					visibleFriend[xy.y * 20 + xy.x] = tiletype;
-				}
-				else
-				{
-					std::cout << "trying to place negative into vector" << std::endl;
+					visibleTiles[xy.y * mapX + xy.x] = tiletype;
 				}
 				break;
 			}

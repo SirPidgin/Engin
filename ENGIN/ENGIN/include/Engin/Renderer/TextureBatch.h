@@ -80,7 +80,7 @@ namespace Engin
 
 			std::unique_ptr<TextureInfo[]> textureQueue;
 
-			static const size_t maxBatchSize = 2048;
+			static const size_t maxBatchSize = 10240;
 			static const size_t minBatchSize = 128;
 			static const size_t initialQueueSize = 64;
 			static const size_t vertiecsPerTexture = 4;
