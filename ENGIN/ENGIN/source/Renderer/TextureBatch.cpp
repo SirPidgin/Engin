@@ -63,8 +63,8 @@ namespace Engin
 			height = height * scale;
 
 			// TODO (eeneku): Add anchor x/y to parameters?
-			float anchor_x = width / 2;
-			float anchor_y = height / 2;
+			float anchor_x = 0.0f;
+			float anchor_y = 0.0f;
 
 			textureInfo->texture = texture;
 			textureInfo->rotation = rotation;

@@ -85,6 +85,7 @@ namespace Engin
 			int DDAtexture;
 			int drawColor;
 			std::vector<glm::vec4> DDAlines;
+			std::vector<int> DDAlinesTexX;
 
 			float moveSpeed;
 			float rotSpeed;

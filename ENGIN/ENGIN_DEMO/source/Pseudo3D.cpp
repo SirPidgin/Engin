@@ -17,7 +17,7 @@ namespace Engin
 #pragma region INIT
 			this->engine = engine;
 
-			std::cout << "Scene started, stay away from negative positions" << std::endl;
+			std::cout << "Scene started, dont go over Y" << std::endl;
 
 			camera.initCamera(0.0f, 0.0f, 800.0f, 800.0f, 400.0f, 400.0f, 400, 400);
 			camera2.initCamera(0.0f, 700.0f, 800.0f, 200.0f, 0.0f, 0.0f, 400, 50);
@@ -32,12 +32,12 @@ namespace Engin
 			alphaTextureBatch2.setShader(alphaShader);
 			alphaTextureBatch2.setSortMode(Renderer::TextureSortMode::FrontToBack);
 
-			doge = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/white_tile_40.png");
+			doge = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_cubes_tile_40.png");
 			doge4 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_40.png");
-			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_tile_shaded_40.png");
+			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_warning_tile_40.png");
 			doge1 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_tile_40.png");
-			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/green_tile_40.png");
-			doge5 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/red_tile_40.png");
+			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_pine_tile_40.png");
+			doge5 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_redwood_tile_40.png");
 
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 			font->setPtSize(40);
@@ -63,6 +63,7 @@ namespace Engin
 			player = glm::vec2(22.0f, 12.0f);
 
 			DDAlines.resize(w);
+			DDAlinesTexX.resize(w);
 			emptyVector(3);
 
 			dirX = -1, dirY = 0; //initial direction vector
@@ -111,7 +112,7 @@ namespace Engin
 
 			for (int i = 17; i < 23; i++)
 			{
-				addIntoVector(1, glm::vec2(i, 19), 4);
+				addIntoVector(1, glm::vec2(i, 19), 5);
 			}
 
 
@@ -186,6 +187,7 @@ namespace Engin
 			myTimer.start();
 
 			//DDA test calculation starts.
+			emptyVector(2);
 			emptyVector(3);
 			DDA();
 
@@ -218,59 +220,72 @@ namespace Engin
 					{
 					case 1:
 					{
-						batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrRed);
+						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrRed);
+						textureBatch.draw(doge1, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
 						break;
 					}
 
 					case 2:
 					{
-						batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrGreen);
+						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrGreen);
+						textureBatch.draw(doge2, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
 						break;
 					}
 					case 3:
 					{
-						batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrBlue);
+						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrBlue);
+						textureBatch.draw(doge3, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
+
 						break;
 					}
 					case 4:
 					{
-						batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrWhite);
+						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrWhite);
+						textureBatch.draw(doge, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
+
 						break;
 					}
 					case 5:
 					{
-						batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 1.0f, 1.0f, 0 });
+						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 1.0f, 1.0f, 0 });
+						textureBatch.draw(doge5, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
+
 						break;
 					}
 
 					//shade colors
 					case 6:
 					{
-						batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.0f, 0.0f });
+						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.0f, 0.0f });
+						textureBatch.draw(doge1, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, 0.1f);
 						break;
 					}
 
 					case 7:
 					{
-						batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.0f, 0.6f, 0.0f });
+						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.0f, 0.6f, 0.0f });
+						textureBatch.draw(doge2, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, 0.1f);
 						break;
 					}
 					case 8:
 					{
-						batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.0f, 0.0f, 0.6f });
+						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.0f, 0.0f, 0.6f });
+						textureBatch.draw(doge3, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, 0.1f);
+
 						break;
 					}
 					case 9:
 					{
-						batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.6f, 0.6f });
+						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.6f, 0.6f });
+						textureBatch.draw(doge, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, 0.1f);
 						break;
 					}
 					case 10:
 					{
-						batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.6f, 0 });
+						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.6f, 0 });
+						textureBatch.draw(doge5, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, 0.1f);
 						break;
 					}
-
 
 					default:
 						break;
@@ -282,8 +297,8 @@ namespace Engin
 
 
 
-			alphaTextureBatch2.draw(text, &glm::vec4(0.0f, 0.0f, text->getWidth(), text->getHeight()), camera2.getPositionRotationOrigin().x + glm::cos(alpha)*400.0f, camera2.getPositionRotationOrigin().y + 25, text->getWidth(), text->getHeight(), 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.9f);
-			alphaTextureBatch2.draw(text3, camera2.getPositionRotationOrigin().x, camera2.getPositionRotationOrigin().y - 30, 1.0f, 0.9f);
+			alphaTextureBatch2.draw(text, &glm::vec4(0.0f, 0.0f, text->getWidth(), text->getHeight()), camera2.getPositionRotationOrigin().x + glm::cos(alpha)*400.0f-(text->getWidth()/2), camera2.getPositionRotationOrigin().y, text->getWidth(), text->getHeight(), 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.9f);
+			alphaTextureBatch2.draw(text3, camera2.getPositionRotationOrigin().x - (text3->getWidth()/2), camera2.getPositionRotationOrigin().y - 60, 1.0f, 0.9f);
 
 			//renderDogemap(0.0f, 0.0f, tileSize, tileSize, mapX + 1, mapY + 1);
 
@@ -314,6 +329,14 @@ namespace Engin
 				for (int i = 0; i < objectTiles.size(); i++)
 				{
 					objectTiles[i] = 0;
+				}
+				break;
+			}
+			case 2:
+			{
+				for (int i = 0; i < DDAlinesTexX.size(); i++)
+				{
+					DDAlinesTexX[i] = 0;
 				}
 				break;
 			}
@@ -439,6 +462,20 @@ namespace Engin
 				int drawEnd = lineHeight / 2 + h / 2;
 				if (drawEnd >= h)drawEnd = h - 1;
 
+				//texturing calculations
+				int texNum = objectTiles[DDAY * this->mapX + DDAX] - 1; //1 subtracted from it so that texture 0 can be used!
+
+				//calculate value of wallX
+				double wallX; //where exactly the wall was hit
+				if (side == 1) wallX = rayPosX + ((DDAY - rayPosY + (1 - stepY) / 2) / rayDirY) * rayDirX;
+				else       wallX = rayPosY + ((DDAX - rayPosX + (1 - stepX) / 2) / rayDirX) * rayDirY;
+				wallX -= floor((wallX));
+
+				//x coordinate on the texture
+				int texX = int(wallX * double(tileSize));
+				if (side == 0 && rayDirX > 0) texX = tileSize - texX - 1;
+				if (side == 1 && rayDirY < 0) texX = tileSize - texX - 1;
+
 				//choose wall color			
 				switch (objectTiles[DDAY * this->mapX + DDAX])
 				{
@@ -453,6 +490,7 @@ namespace Engin
 
 				//draw the pixels of the stripe as a vertical line
 				DDAlines[x] = glm::vec4(x, drawStart, drawEnd, drawColor);
+				DDAlinesTexX[x] = texX;
 
 				//---------------------------------------
 			}
