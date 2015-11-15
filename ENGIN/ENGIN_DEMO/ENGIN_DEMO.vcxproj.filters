@@ -30,6 +30,9 @@
     <ClCompile Include="source\CameraTestScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\Pseudo3D.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="resources\engine.ini">
@@ -62,6 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CameraTestScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Pseudo3D.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
