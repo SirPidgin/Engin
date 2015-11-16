@@ -39,6 +39,7 @@ namespace Engin
 
 			Renderer::Camera camera;
 			Renderer::Camera camera2;
+			Renderer::Camera camera3; //HUD
 
 			Resources::ShaderProgram* shader;
 			Resources::ShaderProgram* textureShader;
@@ -48,12 +49,12 @@ namespace Engin
 			Renderer::TextureBatch alphaTextureBatch;
 			Renderer::TextureBatch alphaTextureBatch2;
 
-			Resources::Texture* doge;
+			Resources::Texture* doge1;
 			Resources::Texture* doge2;
 			Resources::Texture* doge3;
-			Resources::Texture* doge1;
 			Resources::Texture* doge4;
 			Resources::Texture* doge5;
+			Resources::Texture* furball;
 			Resources::Texture* text;
 			Resources::Texture* text2;
 			Resources::Texture* text3;
