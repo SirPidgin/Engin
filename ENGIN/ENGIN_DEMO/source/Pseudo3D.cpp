@@ -20,7 +20,7 @@ namespace Engin
 			std::cout << "Scene started, dont go over Y" << std::endl;
 
 			camera.initCamera(0.0f, 0.0f, 800.0f, 800.0f, 400.0f-800.0f, 400.0f, 400, 400);
-			camera2.initCamera(800.0f, 0.0f, 800.0f, 800.0f, 0.0f, 0.0f, 400, 400);
+			camera2.initCamera(800.0f, 0.0f, 800.0f, 800.0f, 0.0f, 0.0f, 400, 100);
 			camera3.initCamera(0.0f, 700.0f, 800.0f, 100.0f, 0.0f, 0.0f, 400, 50);
 
 			shader = Resources::ResourceManager::getInstance().load<Resources::ShaderProgram>("resources/shaders/shader");
