@@ -32,7 +32,8 @@ namespace Engin
 			void emptyVector(int vectorAsNumber);
 			void addIntoVector(int vectorAsNumber, glm::vec2 xy, int tiletype);
 
-			void DDA();			
+			void DDA();
+			void DDADrawSprites();
 			
 		private:
 			Engin* engine;
@@ -64,7 +65,9 @@ namespace Engin
 			Core::Timer myTimer;
 
 			std::vector<int> objectTiles;
+			std::vector<glm::vec2> spriteContainer;
 			glm::vec2 player;
+			glm::vec2 sprite;
 			
 			float alpha;
 
@@ -86,11 +89,11 @@ namespace Engin
 			int DDAtexture;
 			int drawColor;
 			std::vector<glm::vec4> DDAlines;
+			std::vector<glm::vec4> DDASpriteDrawData;
 			std::vector<int> DDAlinesTexX;
 
 			float moveSpeed;
-			float rotSpeed;
-
+			float rotSpeed;			
 		};
 	}
 }
