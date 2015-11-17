@@ -68,6 +68,15 @@ namespace Engin
 			std::vector<glm::vec2> spriteContainer;
 			glm::vec2 player;
 			glm::vec2 sprite;
+			glm::vec2 sprite1;
+			glm::vec2 sprite2;
+			glm::vec2 sprite3;
+			glm::vec2 sprite4;
+			glm::vec2 sprite5;
+			glm::vec2 sprite6;
+			glm::vec2 sprite7;
+			glm::vec2 sprite8;
+			glm::vec2 sprite9;
 			
 			float alpha;
 

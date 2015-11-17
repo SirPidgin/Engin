@@ -66,12 +66,30 @@ namespace Engin
 			player = glm::vec2(22.0f, 12.0f);
 			
 			sprite = glm::vec2(12.0f, 12.0f);
+			sprite1 = glm::vec2(12.0f, 18.3f);
+			sprite2 = glm::vec2(13.5f, 12.7f);
+			sprite3 = glm::vec2(14.0f, 12.0f);
+			sprite4 = glm::vec2(15.0f, 13.2f);
+			sprite5 = glm::vec2(16.0f, 12.0f);
+			sprite6 = glm::vec2(18.0f, 13.0f);
+			sprite7 = glm::vec2(12.4f, 14.9f);
+			sprite8 = glm::vec2(18.8f, 15.0f);
+			sprite9 = glm::vec2(12.199f, 16.2f);
 			spriteContainer.push_back(sprite);
+			spriteContainer.push_back(sprite1);
+			spriteContainer.push_back(sprite2);
+			spriteContainer.push_back(sprite3);
+			spriteContainer.push_back(sprite4);
+			spriteContainer.push_back(sprite5);
+			spriteContainer.push_back(sprite6);
+			spriteContainer.push_back(sprite7);
+			spriteContainer.push_back(sprite8);
+			spriteContainer.push_back(sprite9);
 
 			DDAlines.resize(w);
 			DDAlinesTexX.resize(w);
 
-			DDASpriteDrawData.resize(1);
+			DDASpriteDrawData.resize(spriteContainer.size());
 			emptyVector(3);
 
 			dirX = -1, dirY = 0; //initial direction vector
@@ -314,22 +332,25 @@ namespace Engin
 				}
 			}
 
-			for (int i = 0; i < spriteContainer.size(); i++)
+			if (DDASpriteDrawData.size() > 0)
 			{
-				if (DDASpriteDrawData[i][0] > -800 && DDASpriteDrawData[i][0] < (800 + tileSize) && DDASpriteDrawData[i][3]>0)
+				for (int i = 0; i < spriteContainer.size(); i++)
 				{
-					if (DDASpriteDrawData[i][1] <= 0)
+					if (DDASpriteDrawData[i][0] > -800 && DDASpriteDrawData[i][0] < (800 + tileSize) && DDASpriteDrawData[i][3]>0)
 					{
-						depth = 1.0;
+						if (DDASpriteDrawData[i][1] <= 0)
+						{
+							depth = h;
+						}
+						else
+						{
+							depth = (1 / DDASpriteDrawData[i][1]);
+						}
+						alphaTextureBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], furball->getWidth(), furball->getHeight(), 0.0f, DDASpriteDrawData[i][2], Renderer::clrRed, 1.0f, depth);
 					}
-					else
-					{
-						depth = (1 / DDASpriteDrawData[i][1]);
-					}
-					alphaTextureBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], furball->getWidth(), furball->getHeight(), 0.0f, DDASpriteDrawData[i][2], Renderer::clrRed, 1.0f, depth);
 				}
-				
 			}
+			
 			//---------------
 
 			//2D camera draw
@@ -361,7 +382,7 @@ namespace Engin
 			}
 			for (int i = 0; i < spriteContainer.size(); i++)
 			{
-				alphaTextureBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), spriteContainer[i].x*tileSize + 800, spriteContainer[i].y*tileSize, furball->getWidth(), furball->getHeight(), 0.0f, 1.0f, Renderer::clrRed, 1.0f, 0.8f);
+				alphaTextureBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), spriteContainer[i].x*tileSize + 800, spriteContainer[i].y*tileSize, furball->getWidth(), furball->getHeight(), 0.0f, 1.0f, Renderer::clrRed, 1.0f, 0.7f);
 			}
 
 			//player
