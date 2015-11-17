@@ -227,39 +227,49 @@ namespace Engin
 				if (DDAlines[i][2] > 0)
 				{
 					DDAtexture = DDAlines[i][3];
+					if (DDAlines[i][1] <= 0)
+					{
+						depth = 0;
+					}
+					else
+					{
+						depth = (1 / DDAlines[i][1]);
+					}
+
+
 					switch (DDAtexture)
 					{
 					case 1:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrRed);
-						textureBatch.draw(doge1, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, (1 / DDAlines[i][1]));
+						textureBatch.draw(doge1, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 						break;
 					}
 
 					case 2:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrGreen);
-						textureBatch.draw(doge2, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, (1 / DDAlines[i][1]));
+						textureBatch.draw(doge2, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 						break;
 					}
 					case 3:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrBlue);
-						textureBatch.draw(doge3, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, (1 / DDAlines[i][1]));
+						textureBatch.draw(doge3, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 
 						break;
 					}
 					case 4:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrWhite);
-						textureBatch.draw(doge4, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, (1 / DDAlines[i][1]));
+						textureBatch.draw(doge4, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 
 						break;
 					}
 					case 5:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 1.0f, 1.0f, 0 });
-						textureBatch.draw(doge5, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, (1 / DDAlines[i][1]));
+						textureBatch.draw(doge5, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 
 						break;
 					}
@@ -268,33 +278,33 @@ namespace Engin
 					case 6:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.0f, 0.0f });
-						textureBatch.draw(doge1, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, (1 / DDAlines[i][1]));
+						textureBatch.draw(doge1, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 
 					case 7:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.0f, 0.6f, 0.0f });
-						textureBatch.draw(doge2, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, (1 / DDAlines[i][1]));
+						textureBatch.draw(doge2, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 					case 8:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.0f, 0.0f, 0.6f });
-						textureBatch.draw(doge3, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, (1 / DDAlines[i][1]));
+						textureBatch.draw(doge3, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 
 						break;
 					}
 					case 9:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.6f, 0.6f });
-						textureBatch.draw(doge4, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, (1 / DDAlines[i][1]));
+						textureBatch.draw(doge4, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 					case 10:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.6f, 0 });
-						textureBatch.draw(doge5, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, (1 / DDAlines[i][1]));
+						textureBatch.draw(doge5, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 
@@ -308,7 +318,15 @@ namespace Engin
 			{
 				if (DDASpriteDrawData[i][0] > -800 && DDASpriteDrawData[i][0] < (800 + tileSize) && DDASpriteDrawData[i][3]>0)
 				{
-					alphaTextureBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], furball->getWidth(), furball->getHeight(), 0.0f, DDASpriteDrawData[i][2], Renderer::clrRed, 1.0f, (1 / DDASpriteDrawData[i][1]));
+					if (DDASpriteDrawData[i][1] <= 0)
+					{
+						depth = 1.0;
+					}
+					else
+					{
+						depth = (1 / DDASpriteDrawData[i][1]);
+					}
+					alphaTextureBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], furball->getWidth(), furball->getHeight(), 0.0f, DDASpriteDrawData[i][2], Renderer::clrRed, 1.0f, depth);
 				}
 				
 			}

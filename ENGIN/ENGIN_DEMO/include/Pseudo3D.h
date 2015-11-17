@@ -91,6 +91,7 @@ namespace Engin
 			std::vector<glm::vec4> DDAlines;
 			std::vector<glm::vec4> DDASpriteDrawData;
 			std::vector<int> DDAlinesTexX;
+			double depth;
 
 			float moveSpeed;
 			float rotSpeed;			
