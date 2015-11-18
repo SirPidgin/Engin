@@ -61,9 +61,12 @@ namespace Engin
 		template <typename type>
 		Component* GameObject::accessComponent()
 		{
+			type* temp;
 			for (unsigned int i = 0; i < components.size(); i++)
 			{
-				if (typeid(type*) == typeid(components[i]))
+				//NOTE: dynamic_cast may be a bad thing to use this often (basically every frame; at least once(?)), but for now it's the only solution I could find.
+				temp = dynamic_cast<type*>(components[i]);
+				if (temp != nullptr)
 				{
 					return components[i];
 				}

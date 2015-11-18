@@ -19,8 +19,8 @@ GameObjectTestScene::GameObjectTestScene(Engin::Engin* engine) : gameObject("mai
 	camera.setZoomLevel(0.5f);
 
 
-	gameObject.addComponent<Engin::Game::Transform>();
 	gameObject.addComponent<Engin::Game::Sprite>();
+	gameObject.addComponent<Engin::Game::Transform>();
 	gameObject.addComponent<Engin::Game::RigidBody>();
 	gameObject.addComponent<HP_Component>();
 

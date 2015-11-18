@@ -19,7 +19,7 @@ namespace Engin
 		{}
 		void Component::update()
 		{}
-
+		
 		//Transform
 		glm::vec2 Component::getPosition()
 		{
