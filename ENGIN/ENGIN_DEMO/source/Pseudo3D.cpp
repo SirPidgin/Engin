@@ -17,7 +17,7 @@ namespace Engin
 #pragma region INIT
 			this->engine = engine;
 
-			std::cout << "Scene started, dont go over Y" << std::endl;
+			std::cout << "Scene started" << std::endl;
 
 			camera.initCamera(0.0f, 0.0f, 800.0f, 800.0f, 400.0f-1600.0f, 400.0f, 400, 400);
 			camera2.initCamera(800.0f, 0.0f, 800.0f, 800.0f, 0.0f, 0.0f, 400, 100);
@@ -77,7 +77,7 @@ namespace Engin
 			sprite5 = glm::vec2(16.0f, 12.0f);
 			sprite6 = glm::vec2(18.0f, 13.0f);
 			sprite7 = glm::vec2(12.4f, 14.9f);
-			sprite8 = glm::vec2(18.8f, 15.0f);
+			sprite8 = glm::vec2(23.0f, 15.0f);
 			sprite9 = glm::vec2(12.199f, 16.2f);
 			spriteContainer.push_back(sprite);
 			spriteContainer.push_back(sprite1);
@@ -162,7 +162,7 @@ namespace Engin
 			//move forward if no wall in front of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_W))
 			{
-				if (objectTiles[int(player.x + dirX * moveSpeed)][int(player.y)] == false) player.x += dirX * moveSpeed;
+				if (objectTiles[int((player.x + dirX * moveSpeed))][int(player.y)] == false) player.x += dirX * moveSpeed;
 				if (objectTiles[int(player.x)][int(player.y + dirY * moveSpeed)] == false) player.y += dirY * moveSpeed;
 			}
 			//move backwards if no wall behind you
@@ -233,11 +233,11 @@ namespace Engin
 					DDAtexture = DDAlines[i][3];
 					if (DDAlines[i][1] <= 0)
 					{
-						depth = 0;
+						depth = 0.99f;
 					}
 					else
 					{
-						depth = (1 / DDAlines[i][1]);
+						depth = (1.0f / DDAlines[i][1]);
 					}
 
 
@@ -246,34 +246,34 @@ namespace Engin
 					case 1:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrRed);
-						textureBatch.draw(doge1, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						textureBatch.draw(doge1, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 						break;
 					}
 
 					case 2:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrGreen);
-						textureBatch.draw(doge2, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						textureBatch.draw(doge2, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 						break;
 					}
 					case 3:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrBlue);
-						textureBatch.draw(doge3, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						textureBatch.draw(doge3, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 
 						break;
 					}
 					case 4:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrWhite);
-						textureBatch.draw(doge4, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						textureBatch.draw(doge4, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 
 						break;
 					}
 					case 5:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 1.0f, 1.0f, 0 });
-						textureBatch.draw(doge5, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						textureBatch.draw(doge5, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 
 						break;
 					}
@@ -282,33 +282,33 @@ namespace Engin
 					case 6:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.0f, 0.0f });
-						textureBatch.draw(doge1, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						textureBatch.draw(doge1, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 
 					case 7:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.0f, 0.6f, 0.0f });
-						textureBatch.draw(doge2, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						textureBatch.draw(doge2, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 					case 8:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.0f, 0.0f, 0.6f });
-						textureBatch.draw(doge3, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						textureBatch.draw(doge3, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 
 						break;
 					}
 					case 9:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.6f, 0.6f });
-						textureBatch.draw(doge4, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						textureBatch.draw(doge4, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 					case 10:
 					{
 						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.6f, 0 });
-						textureBatch.draw(doge5, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						textureBatch.draw(doge5, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 
@@ -332,7 +332,7 @@ namespace Engin
 						{
 							depth = (1 / DDASpriteDrawData[i][1]);
 						}
-						alphaTextureBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], furball->getWidth(), furball->getHeight(), 0.0f, DDASpriteDrawData[i][2], Renderer::clrRed, 1.0f, depth);
+						alphaTextureBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], furball->getWidth(), furball->getHeight(), 0.0f, 0.0f, 0.0f, DDASpriteDrawData[i][2], Renderer::clrRed, 1.0f, depth);
 					}
 				}
 			}
@@ -368,17 +368,17 @@ namespace Engin
 			}
 			for (int i = 0; i < spriteContainer.size(); i++)
 			{
-				alphaTextureBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), spriteContainer[i].x*tileSize + 800, spriteContainer[i].y*tileSize, furball->getWidth(), furball->getHeight(), 0.0f, 1.0f, Renderer::clrRed, 1.0f, 0.7f);
+				alphaTextureBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), spriteContainer[i].x*tileSize + 800, spriteContainer[i].y*tileSize, furball->getWidth(), furball->getHeight(), tileSize / 2, tileSize / 2, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 0.7f);
 			}
 
 			//player
-			alphaTextureBatch.draw(furball, &glm::vec4(0.0f,0.0f,furball->getWidth(),furball->getHeight()),player.x*tileSize + 800, player.y*tileSize, furball->getWidth() ,furball->getHeight(),camera2.getRotation(),1.0f,Renderer::clrWhite,1.0f, 0.9f);
+			alphaTextureBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player.x*tileSize + 800, player.y*tileSize, furball->getWidth(), furball->getHeight(), tileSize / 2, tileSize / 2, camera2.getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.9f);
 
 			//---------------
 
 			//Hud
-			alphaTextureBatch2.draw(text, &glm::vec4(0.0f, 0.0f, text->getWidth(), text->getHeight()), camera3.getPositionRotationOrigin().x + glm::cos(alpha)*400.0f-(text->getWidth()/2), camera3.getPositionRotationOrigin().y, text->getWidth(), text->getHeight(), 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
-			alphaTextureBatch2.draw(text3, camera3.getPositionRotationOrigin().x - (text3->getWidth()/2), camera3.getPositionRotationOrigin().y - 50, 1.0f, 1.0f);
+			alphaTextureBatch2.draw(text, &glm::vec4(0.0f, 0.0f, text->getWidth(), text->getHeight()), camera3.getPositionRotationOrigin().x + glm::cos(alpha)*400.0f, camera3.getPositionRotationOrigin().y+25, text->getWidth(), text->getHeight(), text->getWidth() / 2, text->getHeight() / 2, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
+			alphaTextureBatch2.draw(text3, &glm::vec4(0.0f, 0.0f, text3->getWidth(), text3->getHeight()), camera3.getPositionRotationOrigin().x, camera3.getPositionRotationOrigin().y - 25, text3->getWidth(), text3->getHeight(), text3->getWidth() / 2, text3->getHeight()/2, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
 
 			textureBatch.end();
 			alphaTextureBatch.end();
@@ -592,10 +592,10 @@ namespace Engin
 				//Creating sprite transform vector
 				transform = glm::vec2(spriteX, spriteY) * glm::inverse(glm::mat2x2(planeX,dirX,planeY,dirY));
 
-				//Calculating camera x for sprite				
-				spriteXout = (w / 2)*(1 + transform.x / transform.y);				
+				//Calculating x position for the sprite				
+				spriteXout = (w / 2)*(1 + transform.x / transform.y);
 
-				//Calculating camera y and scale for sprite
+				//Calculating camera y and scale for the sprite
 				double spriteHeight = glm::abs(h / transform.y);
 				spriteYout = -spriteHeight / 2 + h / 2;
 				spriteScale = 1 / (tileSize / spriteHeight);
