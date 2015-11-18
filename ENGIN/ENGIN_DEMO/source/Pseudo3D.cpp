@@ -582,7 +582,9 @@ namespace Engin
 				double spriteY;
 				double spriteXout;
 				double spriteYout;
+				double spriteScreenX;
 				double spriteScale;
+				double spriteHeightWidth;
 
 				spriteX = spriteContainer[i].x - player.x;
 				spriteY = spriteContainer[i].y - player.y;
@@ -590,15 +592,16 @@ namespace Engin
 				glm::vec2 transform;
 
 				//Creating sprite transform vector
-				transform = glm::vec2(spriteX, spriteY) * glm::inverse(glm::mat2x2(planeX,dirX,planeY,dirY));
-
-				//Calculating x position for the sprite				
-				spriteXout = (w / 2)*(1 + transform.x / transform.y);
+				transform = glm::vec2(spriteX, spriteY) * glm::inverse(glm::mat2x2(planeX,dirX,planeY,dirY));				
 
 				//Calculating camera y and scale for the sprite
-				double spriteHeight = glm::abs(h / transform.y);
-				spriteYout = -spriteHeight / 2 + h / 2;
-				spriteScale = 1 / (tileSize / spriteHeight);
+				spriteHeightWidth = glm::abs(h / transform.y);
+				spriteYout = -spriteHeightWidth / 2 + h / 2;
+				spriteScale = 1 / (tileSize / spriteHeightWidth);
+
+				//Calculating x position for the sprite				
+				spriteScreenX = (w / 2)*(1 + transform.x / transform.y);
+				spriteXout = -spriteHeightWidth / 2 + spriteScreenX;
 
 				DDASpriteDrawData[i] = glm::vec4(spriteXout,spriteYout,spriteScale,transform.y);
 			}
