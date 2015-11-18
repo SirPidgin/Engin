@@ -54,7 +54,11 @@ namespace Engin
 			tileSize = 40;
 			alpha = 0.0f;
 
-			objectTiles.resize((mapX + 1)*(mapY + 1));
+			objectTiles.resize(mapY+1);
+			for (int i = 0; i <= mapY; i++)
+			{
+				objectTiles[i].resize(mapX+1);		
+			}
 			emptyVector(1);
 
 			//DDA
@@ -100,7 +104,7 @@ namespace Engin
 #pragma region WallTiles
 
 			//MapSides
-			for (int i = 0; i <= mapY; i++)
+			for (int i = 0; i < mapY; i++)
 			{
 				addIntoVector(1, glm::vec2(0, i), 1);
 			}
@@ -110,12 +114,12 @@ namespace Engin
 				addIntoVector(1, glm::vec2(mapX, i), 1);
 			}
 
-			for (int i = 0; i <= mapX; i++)
+			for (int i = 0; i < mapX; i++)
 			{
 				addIntoVector(1, glm::vec2(i, mapY), 1);
 			}
 
-			for (int i = 0; i <= mapX; i++)
+			for (int i = 0; i < mapX; i++)
 			{
 				addIntoVector(1, glm::vec2(i, 0), 3);
 			}
@@ -158,32 +162,14 @@ namespace Engin
 			//move forward if no wall in front of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_W))
 			{
-				/*if (objectTiles[int((player.y * this->mapX) + (player.x + dirX*moveSpeed))] == 0)
-				{*/
-				player.x += dirX * moveSpeed;
-				/*}
-				if (objectTiles[int(((player.y + dirY*moveSpeed) * this->mapX) + (player.x))] == 0)
-				{*/
-				player.y += dirY * moveSpeed;
-				/*}*/
-
-				//if (worldMap[int(player.x + dirX * moveSpeed)][int(player.y)] == false) player.x += dirX * moveSpeed;
-				//if (worldMap[int(player.x)][int(player.y + dirY * moveSpeed)] == false) player.y += dirY * moveSpeed;
+				if (objectTiles[int(player.x + dirX * moveSpeed)][int(player.y)] == false) player.x += dirX * moveSpeed;
+				if (objectTiles[int(player.x)][int(player.y + dirY * moveSpeed)] == false) player.y += dirY * moveSpeed;
 			}
 			//move backwards if no wall behind you
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_S))
 			{
-				/*if (objectTiles[int((player.y * this->mapX) + (player.x - dirX*moveSpeed))] == 0)
-				{*/
-				player.x -= dirX * moveSpeed;
-				/*}
-				if (objectTiles[int(((player.y - dirY*moveSpeed) * this->mapX) + (player.x))] == 0)
-				{*/
-				player.y -= dirY * moveSpeed;
-				/*}*/
-
-				//if (worldMap[int(player.x - dirX * moveSpeed)][int(player.y)] == false) player.x -= dirX * moveSpeed;
-				//if (worldMap[int(player.x)][int(player.y - dirY * moveSpeed)] == false) player.y -= dirY * moveSpeed;
+				if (objectTiles[int(player.x - dirX * moveSpeed)][int(player.y)] == false) player.x -= dirX * moveSpeed;
+				if (objectTiles[int(player.x)][int(player.y - dirY * moveSpeed)] == false) player.y -= dirY * moveSpeed;
 			}
 			//rotate to the right   
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_D))
@@ -358,23 +344,23 @@ namespace Engin
 			{
 				for (int j = 0; j <= mapX; j++)
 				{
-					if (objectTiles[i*mapX + j] == 1)
+					if (objectTiles[j][i] == 1)
 					{
 						textureBatch.draw(doge1, (j * tileSize) + 800, i * tileSize, 1.0f, 0.4f);
 					}
-					else if (objectTiles[i*mapX + j] == 2)
+					else if (objectTiles[j][i] == 2)
 					{
 						textureBatch.draw(doge2, (j * tileSize) + 800, i * tileSize, 1.0f, 0.4f);
 					}
-					else if (objectTiles[i*mapX + j] == 3)
+					else if (objectTiles[j][i] == 3)
 					{
 						textureBatch.draw(doge3, (j * tileSize) + 800, i * tileSize, 1.0f, 0.4f);
 					}
-					else if (objectTiles[i*mapX + j] == 4)
+					else if (objectTiles[j][i] == 4)
 					{
 						textureBatch.draw(doge4, (j * tileSize) + 800, i * tileSize, 1.0f, 0.4f);
 					}
-					else if (objectTiles[i*mapX + j] == 5)
+					else if (objectTiles[j][i] == 5)
 					{
 						textureBatch.draw(doge5, (j * tileSize) + 800, i * tileSize, 1.0f, 0.4f);
 					}
@@ -422,10 +408,7 @@ namespace Engin
 			{
 			case 1:
 			{
-				for (int i = 0; i < objectTiles.size(); i++)
-				{
-					objectTiles[i] = 0;
-				}
+				//Old
 				break;
 			}
 			case 2:
@@ -457,7 +440,7 @@ namespace Engin
 			{
 				if (xy.x >= 0 && xy.y >= 0)
 				{
-					objectTiles[xy.y * mapX + xy.x] = tiletype;
+					objectTiles[xy.x][xy.y] = tiletype;
 				}
 				break;
 			}
@@ -536,7 +519,7 @@ namespace Engin
 						side = 1;
 					}
 					//Check if ray has hit a wall
-					if (objectTiles[DDAY * this->mapX + DDAX] > 0)
+					if (objectTiles[DDAX][DDAY] > 0)
 					{
 						hit = 1;
 					}
@@ -559,7 +542,7 @@ namespace Engin
 				if (drawEnd >= h)drawEnd = h - 1;
 
 				//texturing calculations
-				int texNum = objectTiles[DDAY * this->mapX + DDAX] - 1; //1 subtracted from it so that texture 0 can be used!
+				int texNum = objectTiles[DDAY][DDAX] - 1; //1 subtracted from it so that texture 0 can be used!
 
 				//calculate value of wallX
 				double wallX; //where exactly the wall was hit
@@ -573,7 +556,7 @@ namespace Engin
 				if (side == 1 && rayDirY < 0) texX = tileSize - texX - 1;
 
 				//choose wall color			
-				switch (objectTiles[DDAY * this->mapX + DDAX])
+				switch (objectTiles[DDAX][DDAY])
 				{
 				case 1:  drawColor = 1;  break; //red
 				case 2:  drawColor = 2;  break; //green

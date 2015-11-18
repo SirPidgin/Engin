@@ -64,7 +64,7 @@ namespace Engin
 			Resources::Font* font;
 			Core::Timer myTimer;
 
-			std::vector<int> objectTiles;
+			std::vector<std::vector<int>> objectTiles;
 			std::vector<glm::vec2> spriteContainer;
 			glm::vec2 player;
 			glm::vec2 sprite;
