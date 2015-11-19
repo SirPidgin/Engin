@@ -18,8 +18,8 @@ namespace Engin
 
 		void Sprite::draw()
 		{
-			textureBatch->draw(currentTexture, NULL, getXPosition(), getYPosition(), currentTexture->getWidth(), 
-				currentTexture->getHeight(), getRotation(), getScale(), Renderer::clrWhite);
+			textureBatch->draw(currentTexture, nullptr, ownerObject->accessComponent<Transform>()->getXPosition(), ownerObject->accessComponent<Transform>()->getYPosition(), currentTexture->getWidth(),
+				currentTexture->getHeight(), ownerObject->accessComponent<Transform>()->getRotation(), ownerObject->accessComponent<Transform>()->getScale(), Renderer::clrWhite, 1.0f, 0.0f);
 		}
 
 		void Sprite::setCurrentSprite(Resources::Texture* texture)

@@ -60,19 +60,19 @@ void GameObjectTestScene::update(GLfloat step)
 	static float moveByInputX = 0.0f;
 	static float moveByInputY = 0.0f;
 	static float moveSpeed = 64.0f;
-	if (engine->keyboardInput->keyWasPressed(Engin::HID::KEYBOARD_W))
+	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_W))
 	{
 		moveByInputY += moveSpeed;
 	}
-	if (engine->keyboardInput->keyWasPressed(Engin::HID::KEYBOARD_A))
+	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_A))
 	{
 		moveByInputX -= moveSpeed;
 	}
-	if (engine->keyboardInput->keyWasPressed(Engin::HID::KEYBOARD_S))
+	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_S))
 	{
 		moveByInputY -= moveSpeed;
 	}
-	if (engine->keyboardInput->keyWasPressed(Engin::HID::KEYBOARD_D))
+	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_D))
 	{
 		moveByInputX += moveSpeed;
 	}
@@ -90,6 +90,8 @@ void GameObjectTestScene::update(GLfloat step)
 		rotateByInput -= rotateSpeed;
 	}
 	gameObject.accessComponent<Engin::Game::Transform>()->setRotation(rotateByInput);
+
+	gameObject.update();
 }
 
 void GameObjectTestScene::draw()
