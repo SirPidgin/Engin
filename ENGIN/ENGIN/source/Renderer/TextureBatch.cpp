@@ -10,7 +10,7 @@ namespace Engin
 	namespace Renderer
 	{
 
-		TextureBatch::TextureBatch() : shader(nullptr), IBO(0), VBO(0), textureQueueCount(0), textureQueueArraySize(0), vertexBufferPos(0), inBeginEndPair(false), sortMode(TextureSortMode::Texture)
+		TextureBatch::TextureBatch() : shader(nullptr), IBO(0), VBO(0), textureQueueCount(0), textureQueueArraySize(0), vertexBufferPos(0), inBeginEndPair(false), sortMode(TextureSortMode::Texture), depther(0.0f)
 		{
 			createBuffers();
 		}
@@ -69,12 +69,14 @@ namespace Engin
 			textureInfo->texture = texture;
 			textureInfo->rotation = rotation;
 			textureInfo->scale = scale;
-			textureInfo->depth = depth;
+			textureInfo->depth = depth + depther;
 			textureInfo->color = glm::vec4(color.r, color.g, color.b, opacity);
 			textureInfo->topLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-anchor_x, height - anchor_y), angle);
 			textureInfo->topRight = glm::vec2(x, y) + glm::rotate(glm::vec2(width - anchor_x, height - anchor_y), angle);
 			textureInfo->bottomLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-anchor_x, -anchor_y), angle);
 			textureInfo->bottomRight = glm::vec2(x, y) + glm::rotate(glm::vec2(width - anchor_x, -anchor_y), angle);
+
+			depther = depther + 0.001f;
 
 			textureQueueCount++;
 		}
@@ -148,6 +150,7 @@ namespace Engin
 			textureQueueCount = 0;
 			vertexBufferPos = 0;
 			sortedTextures.clear();
+			depther = 0.0f;
 		}
 
 		void TextureBatch::createBuffers()
