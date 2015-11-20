@@ -1,5 +1,48 @@
 #include "Engin\Game\ParticleEffect.h"
 
+//void Sprite::init(const std::string &texturepath, float textureResolution, float x, float y)
+//{
+//	this->texturepath = texturepath;
+//	this->textureResolution = textureResolution;
+//	this->x = x;
+//	this->y = y;
+//
+//	M = glm::translate(glm::vec3(x, y, 0.0f));
+//
+//	glGenVertexArrays(1, &VertexArrayID);
+//	glBindVertexArray(VertexArrayID);
+//
+//	programID = LoadShaders("spriteVertexShader.vertexshader", "spriteFragmentShader.fragmentshader");
+//	MVP_MatrixID = glGetUniformLocation(programID, "MVP");
+//
+//	TextureID = glGetUniformLocation(programID, "myTextureSampler");
+//	Texture = loadBMP_custom(texturepath.c_str());
+//
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+//}
+//
+//Sprite::~Sprite()
+//{
+//}
+//
+//void Sprite::render(Camera &cam)
+//{
+//	glm::mat4 MVP = cam.getVP()*M;
+//	glUseProgram(programID);
+//
+//	glActiveTexture(GL_TEXTURE0);
+//	glBindTexture(GL_TEXTURE_2D, Texture);
+//	// Set our "myTextureSampler" sampler to user Texture Unit 0
+//	glUniform1i(TextureID, 0);
+//
+//	glUniformMatrix4fv(MVP_MatrixID, 1, GL_FALSE, &MVP[0][0]);
+//	glVertexAttrib3f(VERTEX_POSITION, 0.0f, 0.0f, 0.0f);
+//
+//	glPointSize(textureResolution);
+//	glDrawArrays(GL_POINTS, 0, 1);
+//}
+
 namespace Engin
 {
 	namespace Renderer
