@@ -27,7 +27,7 @@ namespace Engin
 
 		void TextRenderer::createTextTexture(Resources::Font* font, std::string message, GLint colorR, GLint colorG, GLint colorB)
 		{
-			this->surface = TTF_RenderText_Blended(font->getFont(), message.c_str(), SDL_Color{colorR,colorG,colorB});
+			this->surface = TTF_RenderText_Blended(font->getFont(), message.c_str(), SDL_Color{ colorR, colorG, colorB }/*,SDL_Color{ 0, 0, 0 }*/);
 			SDLLoadTexture();
 		}
 
