@@ -4,9 +4,6 @@
 #include <Engin\Renderer\Window.h>
 #include <Engin\Renderer\Color.h>
 #include <glm\gtc\type_ptr.hpp>
-#include "irrKlang\irrKlang.h"
-
-irrklang::ISoundEngine *SoundEngine = irrklang::createIrrKlangDevice();
 
 namespace Engin
 {
@@ -344,25 +341,27 @@ namespace Engin
 			{
 				for (int j = 0; j <= mapX; j++)
 				{
+					float offset = 20.0f;
+
 					if (objectTiles[j][i] == 1)
 					{
-						textureBatch.draw(doge1, (j * tileSize) + 800, i * tileSize, 1.0f, 0.4f);
+						textureBatch.draw(doge1, (j * tileSize) + 800 + offset, i * tileSize + offset, 1.0f, 0.4f);
 					}
 					else if (objectTiles[j][i] == 2)
 					{
-						textureBatch.draw(doge2, (j * tileSize) + 800, i * tileSize, 1.0f, 0.4f);
+						textureBatch.draw(doge2, (j * tileSize) + 800 + offset, i * tileSize + offset, 1.0f, 0.4f);
 					}
 					else if (objectTiles[j][i] == 3)
 					{
-						textureBatch.draw(doge3, (j * tileSize) + 800, i * tileSize, 1.0f, 0.4f);
+						textureBatch.draw(doge3, (j * tileSize) + 800 + offset, i * tileSize + offset, 1.0f, 0.4f);
 					}
 					else if (objectTiles[j][i] == 4)
 					{
-						textureBatch.draw(doge4, (j * tileSize) + 800, i * tileSize, 1.0f, 0.4f);
+						textureBatch.draw(doge4, (j * tileSize) + 800 + offset, i * tileSize + offset, 1.0f, 0.4f);
 					}
 					else if (objectTiles[j][i] == 5)
 					{
-						textureBatch.draw(doge5, (j * tileSize) + 800, i * tileSize, 1.0f, 0.4f);
+						textureBatch.draw(doge5, (j * tileSize) + 800 + offset, i * tileSize + offset, 1.0f, 0.4f);
 					}
 				}				
 			}

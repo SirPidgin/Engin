@@ -39,6 +39,7 @@ namespace Engin
 			void begin();
 			void draw(Resources::Texture* texture, float x, float y, float opacity = 1.0f, float depth = 0.0f);
 			void draw(Resources::Texture* texture, float x, float y, float width, float height, const Color& color, float opacity = 1.0f, float depth = 0.0f);
+			void draw(Resources::Texture* texture, glm::vec4* textureRegion, float x, float y, float width, float height, float rotation, float scale, const Color& color, float opacity = 1.0f, float depth = 0.0f);
 			void draw(Resources::Texture* texture, glm::vec4* textureRegion, float x, float y, float width, float height, float rotateOriginX, float rotateOriginY, float rotation, float scale, const Color& color, float opacity = 1.0f, float depth = 0.0f);
 			void end();
 			void flush(const Camera& camera);

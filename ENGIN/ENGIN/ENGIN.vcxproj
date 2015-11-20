@@ -17,6 +17,7 @@
     <ClInclude Include="include\Engin\Game\Component.h" />
     <ClInclude Include="include\Engin\Game\EventManager.h" />
     <ClInclude Include="include\Engin\Game\GameObject.h" />
+    <ClInclude Include="include\Engin\Game\ParticleEffect.h" />
     <ClInclude Include="include\Engin\Game\RigidBody.h" />
     <ClInclude Include="include\Engin\Game\Sprite.h" />
     <ClInclude Include="include\Engin\Game\Transform.h" />
@@ -28,7 +29,6 @@
     <ClInclude Include="include\Engin\Renderer\Batch.h" />
     <ClInclude Include="include\Engin\Renderer\Camera.h" />
     <ClInclude Include="include\Engin\Renderer\Color.h" />
-    <ClInclude Include="include\Engin\Renderer\ParticleGenerator.h" />
     <ClInclude Include="include\Engin\Renderer\TextRenderer.h" />
     <ClInclude Include="include\Engin\Renderer\TextureBatch.h" />
     <ClInclude Include="include\Engin\Renderer\Window.h" />
@@ -52,12 +52,15 @@
     <ClCompile Include="source\3rd party\LodePNG\lodepng.cpp" />
     <ClCompile Include="source\Core\Timer.cpp" />
     <ClCompile Include="source\Game\AnimationPlayer.cpp" />
+    <ClCompile Include="source\Game\Component.cpp" />
     <ClCompile Include="source\Game\EventManager.cpp" />
     <ClCompile Include="source\Game\GameObject.cpp" />
+    <ClCompile Include="source\Game\RigidBody.cpp" />
+    <ClCompile Include="source\Game\ParticleEffect.cpp" />
+    <ClCompile Include="source\Game\Scene.cpp" />
     <ClCompile Include="source\Game\Sprite.cpp" />
     <ClCompile Include="source\inih\ini.c" />
     <ClCompile Include="source\inih\INIReader.cpp" />
-    <ClCompile Include="source\Renderer\ParticleGenerator.cpp" />
     <ClCompile Include="source\Renderer\TextRenderer.cpp" />
     <ClCompile Include="source\Renderer\TextureBatch.cpp" />
     <ClCompile Include="source\Resources\Animation.cpp" />

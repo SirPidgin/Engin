@@ -30,6 +30,9 @@
     <ClCompile Include="source\CameraTestScene.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\GameObjectTestScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="source\Pseudo3D.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -42,12 +45,6 @@
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="resources\shaders\alpha_shader.fragment">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="resources\shaders\particle_shader.fragment">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="resources\shaders\particle_shader.vertex">
       <Filter>Resource Files\Shaders</Filter>
     </None>
     <None Include="resources\shaders\shader.vertex">
@@ -65,6 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CameraTestScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\GameObjectTestScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Pseudo3D.h">

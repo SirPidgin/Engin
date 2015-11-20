@@ -16,8 +16,12 @@ namespace Engin
 			void createWindow(const std::string& title, int x, int y, int w, int h);
 			void swapWindow();
 			SDL_Window* getSDLWindow() { return window; }
+
+			const int getWindowWidth() const;
+			const int getWindowHeight() const;
 		private:
 			SDL_Window* window;
+			int width, height;
 		};
 	}
 }

@@ -91,6 +91,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="source\CameraTestScene.cpp" />
+    <ClCompile Include="source\GameObjectTestScene.cpp" />
     <ClCompile Include="source\Main.cpp" />
     <ClCompile Include="source\Pseudo3D.cpp" />
   </ItemGroup>
@@ -98,8 +99,6 @@
     <None Include="alpha_shader.vertex" />
     <None Include="resources\engine.ini" />
     <None Include="resources\shaders\alpha_shader.fragment" />
-    <None Include="resources\shaders\particle_shader.fragment" />
-    <None Include="resources\shaders\particle_shader.vertex" />
     <None Include="resources\shaders\shader.fragment" />
     <None Include="resources\shaders\texture_shader.fragment" />
     <None Include="resources\shaders\texture_shader.vertex" />
@@ -107,6 +106,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CameraTestScene.h" />
+    <ClInclude Include="include\GameObjectTestScene.h" />
     <ClInclude Include="include\Pseudo3D.h" />
   </ItemGroup>
   <ItemGroup>
