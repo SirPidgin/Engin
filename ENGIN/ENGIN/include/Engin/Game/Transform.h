@@ -30,9 +30,9 @@ namespace Engin
 			void setScale(float newScale) { scale = newScale; }
 
 		private:
-			glm::vec2 position;
-			float rotation;
-			float scale;
+			glm::vec2 position = glm::vec2(0.0f, 0.0f);
+			float rotation = 0.0f;
+			float scale = 1.0f;
 		};
 	}
 }

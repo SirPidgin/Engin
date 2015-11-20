@@ -14,7 +14,7 @@ GameObjectTestScene::GameObjectTestScene(Engin::Engin* engine) : gameObject("mai
 	this->engine = engine;
 	alpha = 0.0f;
 
-	camera.initCamera(0.0f, 0.0f, 400.0f, 400.0f, 0.0f, 0.0f, 200, 200);
+	camera.initCamera(0.0f, 0.0f, 1280, 720, 0.0f, 0.0f, 640, 360);
 
 	camera.setZoomLevel(0.5f);
 
@@ -56,6 +56,7 @@ void GameObjectTestScene::update(GLfloat step)
 	{
 		zoomByInput += glm::radians(2.0f);
 	}
+	camera.setZoomLevel(zoomByInput);
 
 	static float moveByInputX = 0.0f;
 	static float moveByInputY = 0.0f;
