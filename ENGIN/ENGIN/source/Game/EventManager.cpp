@@ -36,6 +36,7 @@ namespace Engin
 				case SDL_KEYUP:
 					keyboardInput->releaseKey(inputEvent.key.keysym.sym);
 					break;
+
 				case SDL_MOUSEBUTTONDOWN:
 					mouseInput->pressButton(inputEvent.button.button);
 					break;
@@ -48,6 +49,23 @@ namespace Engin
 				case SDL_MOUSEWHEEL:
 					mouseInput->moveMouseWheel(inputEvent.wheel.y);
 					break;
+
+				case SDL_JOYBUTTONDOWN:
+					break;
+				case SDL_JOYBUTTONUP:
+					break;
+				case SDL_JOYAXISMOTION:
+					break;
+				case SDL_JOYBALLMOTION:
+					break;
+				case SDL_JOYHATMOTION:
+					break;
+				case SDL_JOYDEVICEADDED:
+					break;
+				case SDL_JOYDEVICEREMOVED:
+					break;
+
+
 
 					//QUIT
 				case SDL_QUIT:

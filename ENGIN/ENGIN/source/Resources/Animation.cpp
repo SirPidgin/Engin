@@ -10,7 +10,7 @@ namespace Engin
 {
 	namespace Resources
 	{
-		Animation::Animation(const std::string& resourcePath) : Resource(resourcePath)
+		Animation::Animation(const std::string& resourcePath) : Resource(resourcePath), frameWidth(0), frameHeight(0)
 		{
 			rapidxml::xml_document<> document;
 
@@ -26,8 +26,8 @@ namespace Engin
 
 			rapidxml::xml_node<>* root = document.first_node();
 
-			int frameWidth = atoi(root->first_attribute("width")->value());
-			int frameHeight = atoi(root->first_attribute("height")->value());
+			frameWidth = atoi(root->first_attribute("width")->value());
+			frameHeight = atoi(root->first_attribute("height")->value());
 			texture = Resources::ResourceManager::getInstance().load<Texture>(root->first_attribute("path")->value());
 
 			int framesInARow = texture->getWidth() / frameWidth;

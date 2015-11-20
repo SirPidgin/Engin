@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Engin\Core\RNG.h" />
     <ClInclude Include="include\Engin\Core\Timer.h" />
     <ClInclude Include="include\Engin\Engin.h" />
     <ClInclude Include="include\Engin\Game\AnimationPlayer.h" />
@@ -50,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\3rd party\LodePNG\lodepng.cpp" />
+    <ClCompile Include="source\Core\RNG.cpp" />
     <ClCompile Include="source\Core\Timer.cpp" />
     <ClCompile Include="source\Game\AnimationPlayer.cpp" />
     <ClCompile Include="source\Game\Component.cpp" />
