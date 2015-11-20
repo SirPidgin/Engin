@@ -38,17 +38,13 @@ namespace Engin
 		private:
 			Engin* engine;
 
-			Renderer::Camera camera;
-			Renderer::Camera camera2;
-			Renderer::Camera camera3; //HUD
+			Renderer::Camera* camera;
+			Renderer::Camera* camera2;
+			Renderer::Camera* camera3; //HUD
 
 			Resources::ShaderProgram* shader;
 			Resources::ShaderProgram* textureShader;
 			Resources::ShaderProgram* alphaShader;
-			Renderer::Batch batch;
-			Renderer::TextureBatch textureBatch;
-			Renderer::TextureBatch alphaTextureBatch;
-			Renderer::TextureBatch alphaTextureBatch2;
 
 			Resources::Texture* doge1;
 			Resources::Texture* doge2;
