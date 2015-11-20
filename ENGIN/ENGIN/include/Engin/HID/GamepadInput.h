@@ -2,8 +2,13 @@
 
 #include <unordered_map>
 
+//Still under construction . . .
 
-//Under Construction...
+//Buttons, Axes, Hats and Balls
+//Call <<<<<TBD>>>>> in EventManager to update --
+//call update() in game loop to update previousButtonMap
+//In the game's code you can call e.g. gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_X), which returns a true if X button is pressed.
+
 
 namespace Engin
 {
@@ -11,22 +16,65 @@ namespace Engin
 	{
 		class GamepadInput
 		{
+			enum GamepadButton : int
+			{
+				GAMEPAD_BUTTON_A,
+				GAMEPAD_BUTTON_B,
+				GAMEPAD_BUTTON_X,
+				GAMEPAD_BUTTON_Y,
+				GAMEPAD_BUTTON_BACK,
+				GAMEPAD_BUTTON_GUIDE,
+				GAMEPAD_BUTTON_START,
+				GAMEPAD_BUTTON_LEFTSTICK,
+				GAMEPAD_BUTTON_RIGHTSTICK,
+				GAMEPAD_BUTTON_LEFTSHOULDER,
+				GAMEPAD_BUTTON_RIGHTSHOULDER,
+				GAMEPAD_BUTTON_DPAD_UP,
+				GAMEPAD_BUTTON_DPAD_DOWN,
+				GAMEPAD_BUTTON_DPAD_LEFT,
+				GAMEPAD_BUTTON_DPAD_RIGHT,
+				GAMEPAD_BUTTON_MAX
+			};
+			enum GamepadAxis : int
+			{
+				GAMEPAD_AXIS_LEFTX,
+				GAMEPAD_AXIS_LEFTY,
+				GAMEPAD_AXIS_RIGHTX,
+				GAMEPAD_AXIS_RIGHTY,
+				GAMEPAD_AXIS_TRIGGERLEFT,
+				GAMEPAD_AXIS_TRIGGERRIGHT,
+				GAMEPAD_AXIS_MAX
+			};
+			enum GamepadHatPosition
+			{
+				GAMEPAD_HAT_CENTERED = 0x00,
+				GAMEPAD_HAT_UP = 0x01,
+				GAMEPAD_HAT_RIGHT = 0x02,
+				GAMEPAD_HAT_DOWN = 0x04,
+				GAMEPAD_HAT_LEFT = 0x08,
+				GAMEPAD_HAT_RIGHTUP = (GAMEPAD_HAT_RIGHT | GAMEPAD_HAT_UP),
+				GAMEPAD_HAT_RIGHTDOWN = (GAMEPAD_HAT_RIGHT | GAMEPAD_HAT_DOWN),
+				GAMEPAD_HAT_LEFTUP = (GAMEPAD_HAT_LEFT | GAMEPAD_HAT_UP),
+				GAMEPAD_HAT_LEFTDOWN = (GAMEPAD_HAT_LEFT | GAMEPAD_HAT_DOWN),
+			};
+
 		public:
 			GamepadInput();
 			~GamepadInput();
 
-			void createGamepad();
+			void createGamepad(); 
 			void removeGamepad(int GPindex);
 			bool gamepadIsCreated(int GPindex);
 			void update();
 
-			int getAxisX(unsigned int buttonID, int GPindex);
-			int getAxisY(unsigned int buttonID, int GPindex);
-			bool buttonIsPressed(unsigned int buttonID, int GPindex);
-			bool buttonWasPressed(unsigned int buttonID, int GPindex);
-			bool buttonWasReleased(unsigned int buttonID, int GPindex);
-			void getBallMotion(int GPindex, int ball, int &x, int &y); //int xy??
-			//getHatPosition(int GPindex, int hat); Needs enum system or something
+			int getAxisX(GamepadButton buttonID, int GPindex); //Axis thingys?
+			int getAxisY(GamepadButton buttonID, int GPindex);
+			bool buttonIsPressed(GamepadButton buttonID, int GPindex);
+			bool buttonWasPressed(GamepadButton buttonID, int GPindex);
+			bool buttonWasReleased(GamepadButton buttonID, int GPindex);
+			int getBallXMotion(int GPindex, int ballIndex);
+			int getBallYMotion(int GPindex, int ballIndex);
+			GamepadHatPosition getHatPosition(int GPindex, int hatIndex);
 
 			int getNumGamepads();
 			int getNumAxisControls(int GPindex);
@@ -36,9 +84,19 @@ namespace Engin
 
 			void setAxisControlDeadZone(int value, int GPindex);
 
+		protected:
+			//things for event manager...
+
 		private:
+			bool buttonWasDown(GamepadButton buttonID, int GPindex);
+
 			std::unordered_map<unsigned int, bool> buttonMap;
-			//int* axisControlDeadZone;
+			std::unordered_map<unsigned int, bool> previousButtonMap;
+			std::unordered_map<unsigned int, short> axisDeadZoneMap;
 		};
 	}
 }
+//https://www.libsdl.org/release/SDL-1.2.15/docs/html/joystick.html
+//https://davidgow.net/handmadepenguin/ch6.html
+//https://wiki.libsdl.org/CategoryGameController
+//http://lazyfoo.net/tutorials/SDL/19_gamepads_and_joysticks/index.php
