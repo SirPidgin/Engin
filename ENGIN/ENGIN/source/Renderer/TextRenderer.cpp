@@ -5,7 +5,7 @@ namespace Engin
 	namespace Renderer
 	{
 
-		TextRenderer::TextRenderer() : surface(nullptr), textureResource(nullptr) 
+		TextRenderer::TextRenderer() : surface(nullptr), textureResource(nullptr), image(nullptr)
 		{
 			glGenTextures(1, &texture);
 			glBindTexture(GL_TEXTURE_2D, texture);
@@ -14,6 +14,8 @@ namespace Engin
 
 			textureResource = new Resources::Texture();
 			textureResource->bind(0);
+			textureResource->setIDWidthHeight(texture, 0, 0);
+			textureResource->unbind();
 		};
 
 		TextRenderer::~TextRenderer() 
@@ -39,8 +41,8 @@ namespace Engin
 		{
 
 			/* Use the surface width and height expanded to powers of 2 */
-			w = power_of_two(surface->w);
-			h = power_of_two(surface->h);
+			w = (surface->w);
+			h = (surface->h);
 			texCoord[0] = 0.0f;         /* Min X */
 			texCoord[1] = 0.0f;         /* Min Y */
 			texCoord[2] = (GLfloat)surface->w / w;  /* Max X */
