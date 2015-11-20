@@ -98,6 +98,46 @@ namespace Engin
 			std::vector<int> DDAlinesTexX;
 			double depth;
 
+			double cameraX; //x-coordinate in camera space
+			double rayPosX;
+			double rayPosY;
+			double rayDirX;
+			double rayDirY;
+
+			//length of ray from current position to next x or y-side
+			double sideDistX;
+			double sideDistY;
+
+			//length of ray from one x or y-side to next x or y-side
+			double deltaDistX;
+			double deltaDistY;
+			double perpWallDist;
+
+			//what direction to step in x or y-direction (either +1 or -1)
+			int stepX;
+			int stepY;
+
+			int hit; //was there a wall hit?
+			int side; //was a NS or a EW wall hit?
+
+			//Calculate height of line to draw on screen
+			int lineHeight;
+
+			//calculate lowest and highest pixel to fill in current stripe
+			int drawStart;			
+			int drawEnd;
+
+			double wallX; //where exactly the wall was hit
+			int texX;
+
+			double spriteX;
+			double spriteY;
+			double spriteXout;
+			double spriteYout;
+			double spriteScreenX;
+			double spriteScale;
+			double spriteHeightWidth;
+
 			float moveSpeed;
 			float rotSpeed;			
 		};

@@ -427,31 +427,23 @@ namespace Engin
 			for (int x = 0; x < w; x++)
 			{
 				//calculate ray position and direction 
-				double cameraX = 2 * x / double(w) - 1; //x-coordinate in camera space
-				double rayPosX = player.x;
-				double rayPosY = player.y;
-				double rayDirX = dirX + planeX * cameraX;
-				double rayDirY = dirY + planeY * cameraX;
+				cameraX = 2 * x / double(w) - 1; //x-coordinate in camera space
+				rayPosX = player.x;
+				rayPosY = player.y;
+				rayDirX = dirX + planeX * cameraX;
+				rayDirY = dirY + planeY * cameraX;
 
 				//which box of the map we're in  
 				DDAX = int(rayPosX);
 				DDAY = int(rayPosY);
 
-				//length of ray from current position to next x or y-side
-				double sideDistX;
-				double sideDistY;
-
 				//length of ray from one x or y-side to next x or y-side
-				double deltaDistX = sqrt(1 + (rayDirY * rayDirY) / (rayDirX * rayDirX));
-				double deltaDistY = sqrt(1 + (rayDirX * rayDirX) / (rayDirY * rayDirY));
-				double perpWallDist;
+				deltaDistX = sqrt(1 + (rayDirY * rayDirY) / (rayDirX * rayDirX));
+				deltaDistY = sqrt(1 + (rayDirX * rayDirX) / (rayDirY * rayDirY));
+				perpWallDist;
 
 				//what direction to step in x or y-direction (either +1 or -1)
-				int stepX;
-				int stepY;
-
-				int hit = 0; //was there a wall hit?
-				int side; //was a NS or a EW wall hit?
+				hit = 0; //was there a wall hit?
 
 				//calculate step and initial sideDist
 				if (rayDirX < 0)
@@ -506,25 +498,25 @@ namespace Engin
 					perpWallDist = fabs((DDAY - rayPosY + (1 - stepY) / 2) / rayDirY);
 
 				//Calculate height of line to draw on screen
-				int lineHeight = glm::abs(int(h / perpWallDist));
+				lineHeight = glm::abs(int(h / perpWallDist));
 
 				//calculate lowest and highest pixel to fill in current stripe
-				int drawStart = -lineHeight / 2 + h / 2;
+				drawStart = -lineHeight / 2 + h / 2;
 				if (drawStart < 0)drawStart = 0;
-				int drawEnd = lineHeight / 2 + h / 2;
+				drawEnd = lineHeight / 2 + h / 2;
 				if (drawEnd >= h)drawEnd = h - 1;
 
 				//texturing calculations
 				int texNum = objectTiles[DDAY][DDAX] - 1; //1 subtracted from it so that texture 0 can be used!
 
 				//calculate value of wallX
-				double wallX; //where exactly the wall was hit
+				wallX; //where exactly the wall was hit
 				if (side == 1) wallX = rayPosX + ((DDAY - rayPosY + (1 - stepY) / 2) / rayDirY) * rayDirX;
 				else       wallX = rayPosY + ((DDAX - rayPosX + (1 - stepX) / 2) / rayDirX) * rayDirY;
 				wallX -= floor((wallX));
 
 				//x coordinate on the texture
-				int texX = int(wallX * double(tileSize));
+				texX = int(wallX * double(tileSize));
 				if (side == 0 && rayDirX > 0) texX = tileSize - texX - 1;
 				if (side == 1 && rayDirY < 0) texX = tileSize - texX - 1;
 
@@ -551,14 +543,6 @@ namespace Engin
 		{
 			for (int i = 0; i < spriteContainer.size(); i++)
 			{
-				double spriteX;
-				double spriteY;
-				double spriteXout;
-				double spriteYout;
-				double spriteScreenX;
-				double spriteScale;
-				double spriteHeightWidth;
-
 				spriteX = spriteContainer[i].x - player.x;
 				spriteY = spriteContainer[i].y - player.y;
 
