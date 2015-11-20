@@ -174,8 +174,14 @@ namespace Engin
 			alphaBatch.draw(doge, nullptr, 630.0f, 600.0f, 50.0f, 50.0f, 0.0f, 1.0f, Renderer::clrBlue, 0.7f, 0.4f);
 			alphaBatch.draw(doge, 500.0f, 0.0f, 0.5f, 0.1f);
 			alphaBatch.draw(textTexture, 0.0f, 0.0f, 0.8f, 0.5f); //coordinates not working correctly for text
-			alphaBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), camera2->getPositionRotationOrigin().x, camera2->getPositionRotationOrigin().y, 256.0f, 256.0f, camera2->getRotation(), 1.0f, Renderer::clrGreen, 1.0f, 0.7f);
-			alphaBatch.draw(animationPlayer1.getTexture(), animationPlayer1.getCurrentFrameTexCoords(), 0.0f, 0.0f, 512.0f, 512.0f, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 1.0f);
+			alphaBatch.draw(animationPlayer.getTexture(), animationPlayer.getCurrentFrameTexCoords(), 
+				camera2->getPositionRotationOrigin().x, camera2->getPositionRotationOrigin().y, 256.0f, 256.0f, 
+				128.0f, 128.0f, 
+				camera2->getRotation(), 1.0f, Renderer::clrGreen, 1.0f, 0.7f);
+			alphaBatch.draw(animationPlayer1.getTexture(), animationPlayer1.getCurrentFrameTexCoords(), 
+				0.0f, 0.0f, 512.0f, 512.0f, 
+				256.0f, 256.0f,
+				0.0f, 2.0f, Renderer::clrRed, 1.0f, 1.0f);
 			particleGenerator.draw();
 			renderDogemap(0.0f, 0.0f, 64.0f, 64.0f, 20, 20);
 		}

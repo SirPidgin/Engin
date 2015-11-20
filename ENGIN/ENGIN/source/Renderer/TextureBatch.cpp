@@ -33,15 +33,15 @@ namespace Engin
 
 		void TextureBatch::draw(Resources::Texture* texture, float x, float y, float width, float height, const Color& color, float opacity, float depth)
 		{
-			draw(texture, nullptr, x, y, width, height, texture->getWidth() / 2.0f, texture->getHeight() / 2.0f, 0.0f, 1.0f, color, opacity, depth);
+			draw(texture, nullptr, x, y, width, height, width / 2.0f, height / 2.0f, 0.0f, 1.0f, color, opacity, depth);
 		}
 
 		void TextureBatch::draw(Resources::Texture* texture, glm::vec4* textureRegion, float x, float y, float width, float height, float rotation, float scale, const Color& color, float opacity, float depth)
 		{
-			draw(texture, nullptr, x, y, width, height, texture->getWidth() / 2.0f, texture->getHeight() / 2.0f, 0.0f, 1.0f, color, opacity, depth);
+			draw(texture, nullptr, x, y, width, height, width / 2.0f, height / 2.0f, 0.0f, 1.0f, color, opacity, depth);
 		}
 
-		void TextureBatch::draw(Resources::Texture* texture, glm::vec4* textureRegion, float x, float y, float width, float height, float rotateOriginX, float rotateOriginY,float rotation, float scale, const Color& color, float opacity, float depth)
+		void TextureBatch::draw(Resources::Texture* texture, glm::vec4* textureRegion, float x, float y, float width, float height, float rotateOriginX, float rotateOriginY, float rotation, float scale, const Color& color, float opacity, float depth)
 		{
 			if (textureQueueCount >= textureQueueArraySize)
 			{
@@ -64,22 +64,21 @@ namespace Engin
 
 			float angle = glm::radians(rotation);
 
+			rotateOriginX *= scale;
+			rotateOriginY *= scale;
+
 			width = width * scale;
 			height = height * scale;
-
-			// TODO (eeneku): Add anchor x/y to parameters?
-			float anchor_x = rotateOriginX;
-			float anchor_y = rotateOriginY;
 
 			textureInfo->texture = texture;
 			textureInfo->rotation = rotation;
 			textureInfo->scale = scale;
 			textureInfo->depth = depth;
 			textureInfo->color = glm::vec4(color.r, color.g, color.b, opacity);
-			textureInfo->topLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-anchor_x, height - anchor_y), angle);
-			textureInfo->topRight = glm::vec2(x, y) + glm::rotate(glm::vec2(width - anchor_x, height - anchor_y), angle);
-			textureInfo->bottomLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-anchor_x, -anchor_y), angle);
-			textureInfo->bottomRight = glm::vec2(x, y) + glm::rotate(glm::vec2(width - anchor_x, -anchor_y), angle);
+			textureInfo->topLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-rotateOriginX, height - rotateOriginY), angle);
+			textureInfo->topRight = glm::vec2(x, y) + glm::rotate(glm::vec2(width - rotateOriginX, height - rotateOriginY), angle);
+			textureInfo->bottomLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-rotateOriginX, -rotateOriginY), angle);
+			textureInfo->bottomRight = glm::vec2(x, y) + glm::rotate(glm::vec2(width - rotateOriginX, -rotateOriginY), angle);
 
 			textureQueueCount++;
 		}

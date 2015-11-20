@@ -19,6 +19,9 @@ namespace Engin
 			Resources::Texture* getTexture() { return animation->getTexture(); }
 			glm::vec4* getCurrentFrameTexCoords() { return animation->getTexCoords(currentFrame); }
 
+			int getFrameWidth() { return animation->getFrameWidth(); }
+			int getFrameHeight() { return animation->getFrameHeight(); }
+
 			void pause() { timer.pause(); }
 			void start() { timer.start(); }
 			void stop() { timer.stop(); currentFrame = 0; }
