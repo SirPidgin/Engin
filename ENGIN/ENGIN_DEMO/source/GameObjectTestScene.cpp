@@ -14,7 +14,7 @@ GameObjectTestScene::GameObjectTestScene(Engin::Engin* engine) : gameObject("mai
 	this->engine = engine;
 	alpha = 0.0f;
 
-	camera.initCamera(0.0f, 0.0f, 1280, 720, 0.0f, 0.0f, 640, 360);
+	camera.initCamera(0.0f, 0.0f, engine->getWindow().getWindowWidth(), engine->getWindow().getWindowHeight(), 0.0f, 0.0f, engine->getWindow().getWindowWidth() / 2, engine->getWindow().getWindowHeight()/2);
 
 	camera.setZoomLevel(0.5f);
 
