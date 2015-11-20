@@ -94,8 +94,6 @@ namespace Engin
 			GLuint VBO;
 			GLuint IBO;
 
-			GLfloat depther;
-
 			TextureSortMode sortMode;
 
 			bool inBeginEndPair;
