@@ -28,15 +28,20 @@ namespace Engin
 
 		void TextureBatch::draw(Resources::Texture* texture, float x, float y, float opacity, float depth)
 		{
-			draw(texture, nullptr, x, y, texture->getWidth(), texture->getHeight(), 0.0f, 1.0f, Renderer::clrWhite, opacity, depth);
+			draw(texture, nullptr, x, y, texture->getWidth(), texture->getHeight(), texture->getWidth() / 2.0f, texture->getHeight() / 2.0f, 0.0f, 1.0f, Renderer::clrWhite, opacity, depth);
 		}
 
 		void TextureBatch::draw(Resources::Texture* texture, float x, float y, float width, float height, const Color& color, float opacity, float depth)
 		{
-			draw(texture, nullptr, x, y, width, height, 0.0f, 1.0f, color, opacity, depth);
+			draw(texture, nullptr, x, y, width, height, texture->getWidth() / 2.0f, texture->getHeight() / 2.0f, 0.0f, 1.0f, color, opacity, depth);
 		}
 
 		void TextureBatch::draw(Resources::Texture* texture, glm::vec4* textureRegion, float x, float y, float width, float height, float rotation, float scale, const Color& color, float opacity, float depth)
+		{
+			draw(texture, nullptr, x, y, width, height, texture->getWidth() / 2.0f, texture->getHeight() / 2.0f, 0.0f, 1.0f, color, opacity, depth);
+		}
+
+		void TextureBatch::draw(Resources::Texture* texture, glm::vec4* textureRegion, float x, float y, float width, float height, float rotateOriginX, float rotateOriginY,float rotation, float scale, const Color& color, float opacity, float depth)
 		{
 			if (textureQueueCount >= textureQueueArraySize)
 			{
@@ -63,8 +68,8 @@ namespace Engin
 			height = height * scale;
 
 			// TODO (eeneku): Add anchor x/y to parameters?
-			float anchor_x = width / 2;
-			float anchor_y = height / 2;
+			float anchor_x = rotateOriginX;
+			float anchor_y = rotateOriginY;
 
 			textureInfo->texture = texture;
 			textureInfo->rotation = rotation;
