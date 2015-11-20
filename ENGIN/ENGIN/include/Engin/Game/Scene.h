@@ -11,7 +11,7 @@ namespace Engin
 		class Scene
 		{
 		public:
-			Scene(){};
+			Scene();
 			virtual ~Scene(){};
 			
 			virtual void update(GLfloat step) = 0;

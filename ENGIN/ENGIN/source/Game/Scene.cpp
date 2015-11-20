@@ -4,6 +4,12 @@ namespace Engin
 {
 	namespace Game
 	{
+		Scene::Scene()
+		{
+			alphaBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
+			guiBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
+		}
+
 		Renderer::Camera* Scene::createWorldCamera()
 		{
 			worldCameras.push_back(new Renderer::Camera());

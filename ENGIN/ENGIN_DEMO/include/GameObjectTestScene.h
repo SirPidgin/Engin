@@ -31,7 +31,7 @@ public:
 
 	Engin::Resources::Texture* doge;
 
-	Engin::Renderer::Camera camera;
+	Engin::Renderer::Camera* camera;
 
 	Engin::Game::GameObject gameObject;
 
