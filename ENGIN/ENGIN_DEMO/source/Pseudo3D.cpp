@@ -367,7 +367,7 @@ namespace Engin
 			}
 			for (int i = 0; i < spriteContainer.size(); i++)
 			{
-				alphaTextureBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), spriteContainer[i].x*tileSize + 800, spriteContainer[i].y*tileSize, furball->getWidth(), furball->getHeight(), tileSize / 2, tileSize / 2, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 0.7f);
+				alphaTextureBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), spriteContainer[i].x*tileSize + 800, spriteContainer[i].y*tileSize, furball->getWidth(), furball->getHeight(), tileSize / 2, tileSize / 2, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 0.7f+i*0.01f);
 			}
 
 			//player
