@@ -41,8 +41,8 @@ namespace Engin
 		{
 
 			/* Use the surface width and height expanded to powers of 2 */
-			w = (surface->w);
-			h = (surface->h);
+			w = power_of_two(surface->w);
+			h = power_of_two(surface->h);
 			texCoord[0] = 0.0f;         /* Min X */
 			texCoord[1] = 0.0f;         /* Min Y */
 			texCoord[2] = (GLfloat)surface->w / w;  /* Max X */
@@ -93,7 +93,7 @@ namespace Engin
 				GL_UNSIGNED_BYTE,
 				image->pixels);
 
-			textureResource->setIDWidthHeight(texture, area.w, area.h);
+			textureResource->setIDWidthHeight(texture, w, h); //Size is from power of two.
 			textureResource->unbind();
 
 			SDL_FreeSurface(image); /* SDL surface no longer needed */
