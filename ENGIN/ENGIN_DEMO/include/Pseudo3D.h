@@ -11,6 +11,8 @@
 #include "Engin\Core\Timer.h"
 #include "Engin\Renderer\TextRenderer.h"
 #include "Engin\Resources\Font.h"
+#include "Engin\Game\AnimationPlayer.h"
+#include "Engin\Resources\Animation.h"
 
 #include <array>
 
@@ -50,6 +52,14 @@ namespace Engin
 			Resources::Texture* doge4;
 			Resources::Texture* doge5;
 			Resources::Texture* furball;
+
+			Resources::Texture* furball_256;
+			Resources::Texture* brick_256;
+			Resources::Texture* warning_256;
+			Resources::Texture* pine_256;
+			Resources::Texture* redwood_256;
+			Resources::Texture* cubes_256;
+
 			Resources::Texture* text;
 			Resources::Texture* text2;
 			Resources::Texture* text3;
@@ -58,7 +68,7 @@ namespace Engin
 			Resources::Font* font;
 			Core::Timer myTimer;
 
-			std::vector<std::vector<int>> objectTiles;
+			std::array<std::array<int,25>,25> objectTiles; //Notice the world size mapX and mapY
 			std::vector<glm::vec2> spriteContainer;
 			glm::vec2 player;
 			glm::vec2 sprite;
@@ -80,8 +90,12 @@ namespace Engin
 			int mapX;
 			int mapY;
 			int tileSize;
+			int tileSize2d;
 
 			//DDA
+			Resources::Animation* animFurball360;
+			Game::AnimationPlayer animPlayer;
+
 			int w;
 			int h;
 			double dirX, dirY; //initial direction vector
@@ -91,7 +105,7 @@ namespace Engin
 
 			int DDAtexture;
 			int drawColor;
-			std::vector<std::vector<int>> DDAlines;
+			std::array<std::array<int,5>, 400> DDAlines; //change DDAlines size accordingly
 			std::vector<glm::vec4> DDASpriteDrawData;
 			std::vector<int> DDAlinesTexX;
 			double depth;

@@ -1,0 +1,18 @@
+<animation path="resources/furball_anim_256.png" width="256" height="256" loopable="1">
+	<frame duration="1000" id="0" />
+	<frame duration="1000" id="1" />
+	<frame duration="1000" id="2" />
+	<frame duration="1000" id="3" />
+	<frame duration="1000" id="4" />
+  <frame duration="1000" id="5" />
+  <frame duration="1000" id="6" />
+  <frame duration="1000" id="7" />
+  <frame duration="1000" id="8" />
+  <frame duration="1000" id="9" />
+  <frame duration="1000" id="10" />
+  <frame duration="1000" id="11" />
+  <frame duration="1000" id="12" />
+  <frame duration="1000" id="13" />
+	<frame duration="1000" id="14" />
+	<frame duration="1000" id="15" />
+</animation>

@@ -16,7 +16,8 @@ namespace Engin
 
 			std::cout << "Scene started" << std::endl;
 
-			camera->initCamera(0.0f, 0.0f, 800.0f, 800.0f, 400.0f - 1600.0f, 400.0f, 400, 400);
+			camera->initCamera(0.0f, 0.0f, 800.0f, 800.0f, -1600.0f, 0.0f, 0, 0);
+			camera->setZoomLevel(2); //Use zoom if raycasting image smaller than 800. (example: raycast w = 400, zoom = 2, example1: raycast w = 200, zoom = 4) 
 			camera2->initCamera(800.0f, 0.0f, 800.0f, 800.0f, 0.0f, 0.0f, 400, 100);
 			camera3->initCamera(0.0f, 0.0f, 1600.0f, 800.0f, 0.0f, 0.0f, 800, 400);
 
@@ -30,13 +31,24 @@ namespace Engin
 			guiBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
 
 			
-			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_40.png");			
-			doge1 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_tile_40.png");
-			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_warning_tile_40.png");
-			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_pine_tile_40.png");
-			doge4 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_redwood_tile_40.png");
-			doge5 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_cubes_tile_40.png");
+			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");			
+			doge1 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_brick_tile_64.png");
+			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_warning_tile_64.png");
+			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_pine_tile_64.png");
+			doge4 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_redwood_tile_64.png");
+			doge5 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_cubes_tile_64.png");
+
+			furball_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_256.png");
+			brick_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_brick_tile_256.png");
+			warning_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_warning_tile_256.png");
+			pine_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_pine_tile_256.png");
+			redwood_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_redwood_tile_256.png");
+			cubes_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_cubes_tile_256.png");
 			
+			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360.xml");
+			animPlayer.setAnimation(animFurball360);
+			animPlayer.loopable(true);
+			animPlayer.start();
 
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 			font->setPtSize(40);
@@ -47,18 +59,14 @@ namespace Engin
 
 			mapX = 24;
 			mapY = 24;
-			tileSize = 40;
+			tileSize2d = 64;
 			alpha = 0.0f;
 
-			objectTiles.resize(mapY+1);
-			for (int i = 0; i <= mapY; i++)
-			{
-				objectTiles[i].resize(mapX+1);		
-			}
-
 			//DDA
-			w = 800;
-			h = 800;
+			tileSize = 256;
+
+			w = 400; //In pseudo3d header change DDAlines size accordingly
+			h = 400;
 
 			moveSpeed = 0.11f;
 			rotSpeed = 0.02f;
@@ -85,16 +93,28 @@ namespace Engin
 			spriteContainer.push_back(sprite8);
 			spriteContainer.push_back(sprite9);
 
-			DDAlines.resize(w);
+			//filling raycaster lines with 0
 			for (int i = 0; i < w; i++)
 			{
-				DDAlines[i].resize(5);
+				for (int j = 0; j < 5; j++)
+				{
+					DDAlines[i][j] = 0;
+				}
 			}
 
 			DDASpriteDrawData.resize(spriteContainer.size());
 
 			dirX = -1, dirY = 0; //initial direction vector
 			planeX = 0.0f, planeY = 0.5; //the 2d raycaster version of camera plane
+
+			//filling world with 0
+			for (int i = 0; i < 25; i++)
+			{
+				for (int j = 0; j < 25; j++)
+				{
+					objectTiles[i][j] = 0;
+				}				
+			}
 
 #pragma endregion
 
@@ -192,15 +212,15 @@ namespace Engin
 			}
 #pragma endregion
 			alpha += 0.01;
-			
+			animPlayer.update();
 
-			//DDA test calculation starts.
+			//Raycast calculations.
 			DDA();
-			DDADrawSprites();	
+			DDADrawSprites();
 
 			
 			//2d camera
-			camera2->setPositionRotationOrigin((player.x*tileSize) + 800, (player.y*tileSize));
+			camera2->setPositionRotationOrigin((player.x*tileSize2d) + 800, (player.y*tileSize2d));
 			camera2->setRotation(glm::degrees(glm::atan(-dirX, dirY)));
 
 			//Information		
@@ -236,30 +256,30 @@ namespace Engin
 					{
 					case 1:
 					{
-						opaqueBatch.draw(doge1, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						opaqueBatch.draw(brick_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 						break;
 					}
 
 					case 2:
 					{
-						opaqueBatch.draw(doge2, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						opaqueBatch.draw(warning_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 						break;
 					}
 					case 3:
 					{
-						opaqueBatch.draw(doge3, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						opaqueBatch.draw(pine_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 
 						break;
 					}
 					case 4:
 					{
-						opaqueBatch.draw(doge4, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						opaqueBatch.draw(redwood_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 
 						break;
 					}
 					case 5:
 					{
-						opaqueBatch.draw(doge5, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						opaqueBatch.draw(cubes_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 
 						break;
 					}
@@ -267,29 +287,29 @@ namespace Engin
 					//shade colors
 					case 6:
 					{
-						opaqueBatch.draw(doge1, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						opaqueBatch.draw(brick_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 
 					case 7:
 					{
-						opaqueBatch.draw(doge2, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						opaqueBatch.draw(warning_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 					case 8:
 					{
-						opaqueBatch.draw(doge3, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						opaqueBatch.draw(pine_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 
 						break;
 					}
 					case 9:
 					{
-						opaqueBatch.draw(doge4, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						opaqueBatch.draw(redwood_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 					case 10:
 					{
-						opaqueBatch.draw(doge5, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						opaqueBatch.draw(cubes_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 
@@ -313,7 +333,10 @@ namespace Engin
 						{
 							depth = (1 / DDASpriteDrawData[i][1]);
 						}
-						alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], furball->getWidth(), furball->getHeight(), 0.0f, 0.0f, 0.0f, DDASpriteDrawData[i][2], Renderer::clrRed, 1.0f, depth);
+						alphaBatch.draw(animPlayer.getTexture(), animPlayer.getCurrentFrameTexCoords(),
+							DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1],
+							256, 256, 0.0f, 0.0f, 0.0f,
+							DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
 					}
 				}
 			}
@@ -325,37 +348,37 @@ namespace Engin
 			{
 				for (int j = 0; j <= mapX; j++)
 				{
-					float offset = 20.0f;
+					float offset = 32.0f;
 
 					if (objectTiles[j][i] == 1)
 					{
-						opaqueBatch.draw(doge1, (j * tileSize) + 800 + offset, i * tileSize + offset, 1.0f, 0.4f);
+						opaqueBatch.draw(doge1, (j * tileSize2d) + 800 + offset, i * tileSize2d + offset, 1.0f, 0.4f);
 					}
 					else if (objectTiles[j][i] == 2)
 					{
-						opaqueBatch.draw(doge2, (j * tileSize) + 800 + offset, i * tileSize + offset, 1.0f, 0.4f);
+						opaqueBatch.draw(doge2, (j * tileSize2d) + 800 + offset, i * tileSize2d + offset, 1.0f, 0.4f);
 					}
 					else if (objectTiles[j][i] == 3)
 					{
-						opaqueBatch.draw(doge3, (j * tileSize) + 800 + offset, i * tileSize + offset, 1.0f, 0.4f);
+						opaqueBatch.draw(doge3, (j * tileSize2d) + 800 + offset, i * tileSize2d + offset, 1.0f, 0.4f);
 					}
 					else if (objectTiles[j][i] == 4)
 					{
-						opaqueBatch.draw(doge4, (j * tileSize) + 800 + offset, i * tileSize + offset, 1.0f, 0.4f);
+						opaqueBatch.draw(doge4, (j * tileSize2d) + 800 + offset, i * tileSize2d + offset, 1.0f, 0.4f);
 					}
 					else if (objectTiles[j][i] == 5)
 					{
-						opaqueBatch.draw(doge5, (j * tileSize) + 800 + offset, i * tileSize + offset, 1.0f, 0.4f);
+						opaqueBatch.draw(doge5, (j * tileSize2d) + 800 + offset, i * tileSize2d + offset, 1.0f, 0.4f);
 					}
 				}				
 			}
 			for (int i = 0; i < spriteContainer.size(); i++)
 			{
-				alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), spriteContainer[i].x*tileSize + 800, spriteContainer[i].y*tileSize, furball->getWidth(), furball->getHeight(), tileSize / 2, tileSize / 2, 0.0f, 1.0f, Renderer::clrRed, 1.0f, 0.7f+i*0.01f);
+				alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), spriteContainer[i].x*tileSize2d + 800, spriteContainer[i].y*tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.7f+i*0.01f);
 			}
 
 			//player
-			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player.x*tileSize + 800, player.y*tileSize, furball->getWidth(), furball->getHeight(), tileSize / 2, tileSize / 2, camera2->getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.9f);
+			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player.x*tileSize2d + 800, player.y*tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, camera2->getRotation(), 1.0f, Renderer::clrRed, 1.0f, 0.9f);
 
 			//---------------
 
@@ -381,7 +404,7 @@ namespace Engin
 			}
 		}
 
-		void Pseudo3D::DDA() //Vector operations are slow
+		void Pseudo3D::DDA() //Vector operations are slow, changed to std::arrays, change array sizes accordingly in the Pseudo3D header.
 		{
 			for (int x = 0; x < w; x++)
 			{
