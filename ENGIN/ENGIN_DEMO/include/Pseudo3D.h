@@ -28,8 +28,6 @@ namespace Engin
 			void interpolate(GLfloat alpha);
 			void draw();
 			void renderTexture(Resources::Texture* texture, float x, float y, const Renderer::Camera& camera);
-		
-			void emptyVector(int vectorAsNumber);
 			void addIntoVector(int vectorAsNumber, glm::vec2 xy, int tiletype);
 
 			void DDA();
@@ -93,7 +91,7 @@ namespace Engin
 
 			int DDAtexture;
 			int drawColor;
-			std::vector<glm::vec4> DDAlines;
+			std::vector<std::vector<int>> DDAlines;
 			std::vector<glm::vec4> DDASpriteDrawData;
 			std::vector<int> DDAlinesTexX;
 			double depth;
@@ -129,6 +127,7 @@ namespace Engin
 
 			double wallX; //where exactly the wall was hit
 			int texX;
+			int texNum;
 
 			double spriteX;
 			double spriteY;

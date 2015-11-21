@@ -55,7 +55,6 @@ namespace Engin
 			{
 				objectTiles[i].resize(mapX+1);		
 			}
-			emptyVector(1);
 
 			//DDA
 			w = 800;
@@ -87,10 +86,12 @@ namespace Engin
 			spriteContainer.push_back(sprite9);
 
 			DDAlines.resize(w);
-			DDAlinesTexX.resize(w);
+			for (int i = 0; i < w; i++)
+			{
+				DDAlines[i].resize(5);
+			}
 
 			DDASpriteDrawData.resize(spriteContainer.size());
-			emptyVector(3);
 
 			dirX = -1, dirY = 0; //initial direction vector
 			planeX = 0.0f, planeY = 0.5; //the 2d raycaster version of camera plane
@@ -153,7 +154,7 @@ namespace Engin
 
 		void Pseudo3D::update(GLfloat step)
 		{
-
+			myTimer.start();
 #pragma region DDAMovement
 			//move forward if no wall in front of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_W))
@@ -191,24 +192,23 @@ namespace Engin
 			}
 #pragma endregion
 			alpha += 0.01;
-
-			myTimer.start();
+			
 
 			//DDA test calculation starts.
 			DDA();
-			DDADrawSprites();
+			DDADrawSprites();	
 
-			myTimer.pause();
-
-			//Information
-			textCreator.createTextTexture(font, "Ray vision calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
-			text = textCreator.getTexture();
-			textCreator3.createTextTexture(font, "WASD " + std::to_string(player.x) + " " + std::to_string(player.y), 255, 100, 0);
-			text3 = textCreator3.getTexture();
-
+			
 			//2d camera
 			camera2->setPositionRotationOrigin((player.x*tileSize) + 800, (player.y*tileSize));
 			camera2->setRotation(glm::degrees(glm::atan(-dirX, dirY)));
+
+			//Information		
+			textCreator3.createTextTexture(font, "WASD " + std::to_string(player.x) + " " + std::to_string(player.y), 255, 100, 0);
+			text3 = textCreator3.getTexture();
+			myTimer.pause();
+			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
+			text = textCreator.getTexture();
 		}
 
 		void Pseudo3D::interpolate(GLfloat alpha)
@@ -222,7 +222,6 @@ namespace Engin
 			{
 				if (DDAlines[i][2] > 0)
 				{
-					DDAtexture = DDAlines[i][3];
 					if (DDAlines[i][1] <= 0)
 					{
 						depth = 0.99f;
@@ -233,39 +232,34 @@ namespace Engin
 					}
 
 
-					switch (DDAtexture)
+					switch (DDAlines[i][3])
 					{
 					case 1:
 					{
-						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrRed);
-						opaqueBatch.draw(doge1, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						opaqueBatch.draw(doge1, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 						break;
 					}
 
 					case 2:
 					{
-						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrGreen);
-						opaqueBatch.draw(doge2, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						opaqueBatch.draw(doge2, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 						break;
 					}
 					case 3:
 					{
-						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrBlue);
-						opaqueBatch.draw(doge3, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						opaqueBatch.draw(doge3, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 
 						break;
 					}
 					case 4:
 					{
-						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], Renderer::clrWhite);
-						opaqueBatch.draw(doge4, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						opaqueBatch.draw(doge4, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 
 						break;
 					}
 					case 5:
 					{
-						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 1.0f, 1.0f, 0 });
-						opaqueBatch.draw(doge5, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+						opaqueBatch.draw(doge5, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 
 						break;
 					}
@@ -273,34 +267,29 @@ namespace Engin
 					//shade colors
 					case 6:
 					{
-						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.0f, 0.0f });
-						opaqueBatch.draw(doge1, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						opaqueBatch.draw(doge1, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 
 					case 7:
 					{
-						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.0f, 0.6f, 0.0f });
-						opaqueBatch.draw(doge2, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						opaqueBatch.draw(doge2, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 					case 8:
 					{
-						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.0f, 0.0f, 0.6f });
-						opaqueBatch.draw(doge3, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						opaqueBatch.draw(doge3, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 
 						break;
 					}
 					case 9:
 					{
-						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.6f, 0.6f });
-						opaqueBatch.draw(doge4, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						opaqueBatch.draw(doge4, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 					case 10:
 					{
-						//batch.drawQuad(DDAlines[i][0], DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], { 0.6f, 0.6f, 0 });
-						opaqueBatch.draw(doge5, &glm::vec4(DDAlinesTexX[i], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+						opaqueBatch.draw(doge5, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 						break;
 					}
 
@@ -375,36 +364,6 @@ namespace Engin
 			guiBatch.draw(text3, &glm::vec4(0.0f, 0.0f, text3->getWidth(), text3->getHeight()), camera3->getPositionRotationOrigin().x, camera3->getPositionRotationOrigin().y + 300, text3->getWidth(), text3->getHeight(), text3->getWidth() / 2, text3->getHeight() / 2, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
 		}
 
-		void Pseudo3D::emptyVector(int vectorAsNumber)
-		{
-			switch (vectorAsNumber)
-			{
-			case 1:
-			{
-				//Old
-				break;
-			}
-			case 2:
-			{
-				for (int i = 0; i < DDAlinesTexX.size(); i++)
-				{
-					DDAlinesTexX[i] = 0;
-				}
-				break;
-			}
-			case 3:
-			{
-				for (int i = 0; i < DDAlines.size(); i++)
-				{
-					DDAlines[i] = glm::vec4(0, 0, 0, 0);
-				}
-				break;
-			}
-			default:
-				break;
-			}
-		}
-
 		void Pseudo3D::addIntoVector(int vectorAsNumber, glm::vec2 xy, int tiletype)
 		{
 			switch (vectorAsNumber)
@@ -422,7 +381,7 @@ namespace Engin
 			}
 		}
 
-		void Pseudo3D::DDA()
+		void Pseudo3D::DDA() //Vector operations are slow
 		{
 			for (int x = 0; x < w; x++)
 			{
@@ -507,7 +466,7 @@ namespace Engin
 				if (drawEnd >= h)drawEnd = h - 1;
 
 				//texturing calculations
-				int texNum = objectTiles[DDAY][DDAX] - 1; //1 subtracted from it so that texture 0 can be used!
+				texNum = objectTiles[DDAX][DDAY] - 1; //1 subtracted from it so that texture 0 can be used!
 
 				//calculate value of wallX
 				wallX; //where exactly the wall was hit
@@ -530,11 +489,13 @@ namespace Engin
 				default: drawColor = 5; break; //yellow
 				}
 				if (side == 1) { drawColor += 5; }
-				//else { DDAtexture = 2; }
 				
 				//Saving calculated data for camera slice 
-				DDAlines[x] = glm::vec4(x, drawStart, drawEnd, drawColor);
-				DDAlinesTexX[x] = texX;
+				DDAlines[x][0] = x;
+				DDAlines[x][1] = drawStart;
+				DDAlines[x][2] = drawEnd;
+				DDAlines[x][3] = drawColor;
+				DDAlines[x][4] = texX;
 				//---------------------------------------
 			}			
 		}
