@@ -81,7 +81,7 @@ namespace Engin
 			sprite2 = glm::vec3(13.5f, 12.7f, 0.0f);
 			sprite3 = glm::vec3(14.0f, 12.0f, 0.0f);
 			sprite4 = glm::vec3(15.0f, 13.2f, 0.0f);
-			sprite5 = glm::vec3(16.0f, 12.0f, 0.0f);
+			sprite5 = glm::vec3(16.0f, 4.0f, 0.0f);
 			sprite6 = glm::vec3(18.0f, 13.0f, 0.0f);
 			sprite7 = glm::vec3(12.4f, 14.9f, 0.0f);
 			sprite8 = glm::vec3(23.0f, 15.0f, 0.0f);
@@ -394,7 +394,7 @@ namespace Engin
 			}
 			for (int i = 0; i < spriteContainer.size(); i++)
 			{
-				alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), spriteContainer[i].x*tileSize2d + 800, spriteContainer[i].y*tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.7f+i*0.01f);
+				alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), spriteContainer[i].x*tileSize2d + 800, spriteContainer[i].y*tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(spriteContainer[i].z), 1.0f, Renderer::clrWhite, 1.0f, 0.7f+i*0.01f);
 			}
 
 			//player
@@ -572,9 +572,18 @@ namespace Engin
 				}
 
 				//Sprites own facing changes the angle. TODO: fix
-				spriteFacing = glm::mod((spriteContainer[i].z + glm::radians(360.0f)), glm::radians(360.0f));
-				spriteAngle -= spriteFacing;
+				if (spriteContainer[i].z != 0.0f)
+				{
+					spriteFacing = glm::mod((-spriteContainer[i].z + glm::radians(360.0f)), glm::radians(360.0f));
+					spriteAngle -= spriteFacing;
+
+					if (spriteAngle < 0.0f)
+					{
+						spriteAngle += glm::radians(360.0f);
+					}
+				}
 				
+
 #pragma region AngleSideCheck
 				if (spriteAngle >= glm::radians(348.75f) && spriteAngle <= glm::radians(360.0f) || spriteAngle >= 0.0f && spriteAngle <= glm::radians(11.25f))
 				{
