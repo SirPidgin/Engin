@@ -45,7 +45,7 @@ namespace Engin
 			redwood_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_redwood_tile_256.png");
 			cubes_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_cubes_tile_256.png");
 			
-			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360.xml");
+			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
 			animPlayer.setAnimation(animFurball360);
 			animPlayer.loopable(true);
 			animPlayer.pause();
@@ -234,7 +234,7 @@ namespace Engin
 			player.z = -glm::atan(dirX, dirY); //check camera.cpp rotation direction
 			
 			//rotating sprite
-			spriteContainer[5].z += 0.01;
+			spriteContainer[5].z += 0.05;
 
 			//2d camera
 			camera2->setPositionRotationOrigin((player.x*tileSize2d) + 800, (player.y*tileSize2d));
@@ -663,17 +663,17 @@ namespace Engin
 
 		int Pseudo3D::getSpriteAnimIndex(double angle)
 		{
-			if (glm::degrees(angle) < 11.25)
+			if (glm::degrees(angle) < 4.5)
 			{
 				return 0;
 			}
-			else if (glm::degrees(angle) >= 348.75f)
+			else if (glm::degrees(angle) >= 355.5f)
 			{
 				return 0;
 			}
 			else
 			{
-				return (glm::degrees(angle) + 11.25) / 22.5;
+				return (glm::degrees(angle) + 4.5) / 9;
 			}
 		}
 	}
