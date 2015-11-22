@@ -26,6 +26,7 @@ namespace Engin
 			void start() { timer.start(); }
 			void stop() { timer.stop(); currentFrame = 0; }
 			void loopable(bool value) { loop = value; }
+			void setCurrentFrame(int frame){ currentFrame = frame; };
 		private:
 			Resources::Animation* animation;
 			Core::Timer timer;

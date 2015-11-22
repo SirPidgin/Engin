@@ -69,18 +69,18 @@ namespace Engin
 			Core::Timer myTimer;
 
 			std::array<std::array<int,25>,25> objectTiles; //Notice the world size mapX and mapY
-			std::vector<glm::vec2> spriteContainer;
-			glm::vec2 player;
-			glm::vec2 sprite;
-			glm::vec2 sprite1;
-			glm::vec2 sprite2;
-			glm::vec2 sprite3;
-			glm::vec2 sprite4;
-			glm::vec2 sprite5;
-			glm::vec2 sprite6;
-			glm::vec2 sprite7;
-			glm::vec2 sprite8;
-			glm::vec2 sprite9;
+			std::vector<glm::vec3> spriteContainer;
+			glm::vec3 player;
+			glm::vec3 sprite;
+			glm::vec3 sprite1;
+			glm::vec3 sprite2;
+			glm::vec3 sprite3;
+			glm::vec3 sprite4;
+			glm::vec3 sprite5;
+			glm::vec3 sprite6;
+			glm::vec3 sprite7;
+			glm::vec3 sprite8;
+			glm::vec3 sprite9;
 			
 			float alpha;
 
@@ -105,9 +105,9 @@ namespace Engin
 
 			int DDAtexture;
 			int drawColor;
-			std::array<std::array<int,5>, 400> DDAlines; //change DDAlines size accordingly
-			std::vector<glm::vec4> DDASpriteDrawData;
-			std::vector<int> DDAlinesTexX;
+			std::array<std::array<double,5>, 400> DDAlines; //change DDAlines size accordingly
+			std::vector<std::array<double,5>> DDASpriteDrawData;
+			int spriteAnimIndex;
 			double depth;
 
 			double cameraX; //x-coordinate in camera space
@@ -150,6 +150,8 @@ namespace Engin
 			double spriteScreenX;
 			double spriteScale;
 			double spriteHeightWidth;
+			double spriteFacing;
+			double spriteAngle;
 
 			float moveSpeed;
 			float rotSpeed;			

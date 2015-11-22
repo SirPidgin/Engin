@@ -31,7 +31,7 @@ namespace Engin
 			guiBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
 
 			
-			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");			
+			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside_64.png");			
 			doge1 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_brick_tile_64.png");
 			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_warning_tile_64.png");
 			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_pine_tile_64.png");
@@ -48,7 +48,7 @@ namespace Engin
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360.xml");
 			animPlayer.setAnimation(animFurball360);
 			animPlayer.loopable(true);
-			animPlayer.start();
+			animPlayer.pause();
 
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 			font->setPtSize(40);
@@ -70,18 +70,22 @@ namespace Engin
 
 			moveSpeed = 0.11f;
 			rotSpeed = 0.02f;
-			player = glm::vec2(22.0f, 12.0f);
-			
-			sprite = glm::vec2(12.0f, 12.0f);
-			sprite1 = glm::vec2(12.0f, 18.3f);
-			sprite2 = glm::vec2(13.5f, 12.7f);
-			sprite3 = glm::vec2(14.0f, 12.0f);
-			sprite4 = glm::vec2(15.0f, 13.2f);
-			sprite5 = glm::vec2(16.0f, 12.0f);
-			sprite6 = glm::vec2(18.0f, 13.0f);
-			sprite7 = glm::vec2(12.4f, 14.9f);
-			sprite8 = glm::vec2(23.0f, 15.0f);
-			sprite9 = glm::vec2(12.199f, 16.2f);
+			player = glm::vec3(22.0f, 12.0f, 0.0f);
+
+			dirX = -1, dirY = 0; //initial direction vector
+			planeX = 0.0f, planeY = 0.5; //the 2d raycaster version of camera plane
+
+			//adding sprites
+			sprite = glm::vec3(12.0f, 12.0f, 0.0f);
+			sprite1 = glm::vec3(12.0f, 18.3f, 0.0f);
+			sprite2 = glm::vec3(13.5f, 12.7f, 0.0f);
+			sprite3 = glm::vec3(14.0f, 12.0f, 0.0f);
+			sprite4 = glm::vec3(15.0f, 13.2f, 0.0f);
+			sprite5 = glm::vec3(16.0f, 12.0f, 0.0f);
+			sprite6 = glm::vec3(18.0f, 13.0f, 0.0f);
+			sprite7 = glm::vec3(12.4f, 14.9f, 0.0f);
+			sprite8 = glm::vec3(23.0f, 15.0f, 0.0f);
+			sprite9 = glm::vec3(12.199f, 16.2f, 0.0f);
 			spriteContainer.push_back(sprite);
 			spriteContainer.push_back(sprite1);
 			spriteContainer.push_back(sprite2);
@@ -103,9 +107,6 @@ namespace Engin
 			}
 
 			DDASpriteDrawData.resize(spriteContainer.size());
-
-			dirX = -1, dirY = 0; //initial direction vector
-			planeX = 0.0f, planeY = 0.5; //the 2d raycaster version of camera plane
 
 			//filling world with 0
 			for (int i = 0; i < 25; i++)
@@ -188,8 +189,20 @@ namespace Engin
 				if (objectTiles[int(player.x - dirX * moveSpeed)][int(player.y)] == false) player.x -= dirX * moveSpeed;
 				if (objectTiles[int(player.x)][int(player.y - dirY * moveSpeed)] == false) player.y -= dirY * moveSpeed;
 			}
-			//rotate to the right   
+			//strafe left if no wall in left of you			
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_A))
+			{
+				if (objectTiles[int(player.x - planeX * moveSpeed)][int(player.y)] == false) player.x -= planeX * moveSpeed;
+				if (objectTiles[int(player.x)][int(player.y - planeY * moveSpeed)] == false) player.y -= planeY * moveSpeed;
+			}
+			//strafe right if no wall in right of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_D))
+			{
+				if (objectTiles[int((player.x + planeX * moveSpeed))][int(player.y)] == false) player.x += planeX * moveSpeed;
+				if (objectTiles[int(player.x)][int(player.y + planeY * moveSpeed)] == false) player.y += planeY * moveSpeed;
+			}
+			//rotate to the right   
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
 			{
 				//both camera direction and camera plane must be rotated
 				double oldDirX = dirX;
@@ -200,7 +213,7 @@ namespace Engin
 				planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
 			}
 			//rotate to the left
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_A))
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
 			{
 				//both camera direction and camera plane must be rotated
 				double oldDirX = dirX;
@@ -211,20 +224,24 @@ namespace Engin
 				planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
 			}
 #pragma endregion
-			alpha += 0.01;
-			animPlayer.update();
-
+			alpha += 0.01;			
+			
 			//Raycast calculations.
 			DDA();
 			DDADrawSprites();
 
+			//Saving player rotation
+			player.z = -glm::atan(dirX, dirY); //check camera.cpp rotation direction
 			
+			//rotating sprite
+			spriteContainer[5].z += 0.01;
+
 			//2d camera
 			camera2->setPositionRotationOrigin((player.x*tileSize2d) + 800, (player.y*tileSize2d));
-			camera2->setRotation(glm::degrees(glm::atan(-dirX, dirY)));
+			camera2->setRotation(glm::degrees(player.z));
 
 			//Information		
-			textCreator3.createTextTexture(font, "WASD " + std::to_string(player.x) + " " + std::to_string(player.y), 255, 100, 0);
+			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player.x) + " " + std::to_string(player.y), 255, 100, 0);
 			text3 = textCreator3.getTexture();
 			myTimer.pause();
 			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
@@ -238,6 +255,7 @@ namespace Engin
 		void Pseudo3D::draw()
 		{
 			//DDA draw test
+#pragma region WallTileDraw
 			for (int i = 0; i < DDAlines.size(); i++)
 			{
 				if (DDAlines[i][2] > 0)
@@ -252,7 +270,7 @@ namespace Engin
 					}
 
 
-					switch (DDAlines[i][3])
+					switch (int(DDAlines[i][3]))
 					{
 					case 1:
 					{
@@ -318,12 +336,13 @@ namespace Engin
 					}
 				}
 			}
-
+#pragma endregion
+			
 			if (DDASpriteDrawData.size() > 0)
 			{
-				for (int i = 0; i < spriteContainer.size(); i++)
+				for (int i = 0; i < DDASpriteDrawData.size(); i++)
 				{
-					if (DDASpriteDrawData[i][0] > -800 && DDASpriteDrawData[i][0] < (800 + tileSize) && DDASpriteDrawData[i][3]>0)
+					if (DDASpriteDrawData[i][0] > -w && DDASpriteDrawData[i][0] < (w + tileSize) && DDASpriteDrawData[i][3]>0)
 					{
 						if (DDASpriteDrawData[i][1] <= 0)
 						{
@@ -331,8 +350,9 @@ namespace Engin
 						}
 						else
 						{
-							depth = (1 / DDASpriteDrawData[i][1]);
-						}
+							depth = (1.0f / DDASpriteDrawData[i][1]);
+						}		
+						animPlayer.setCurrentFrame(int(DDASpriteDrawData[i][4]));
 						alphaBatch.draw(animPlayer.getTexture(), animPlayer.getCurrentFrameTexCoords(),
 							DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1],
 							256, 256, 0.0f, 0.0f, 0.0f,
@@ -378,7 +398,7 @@ namespace Engin
 			}
 
 			//player
-			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player.x*tileSize2d + 800, player.y*tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, camera2->getRotation(), 1.0f, Renderer::clrRed, 1.0f, 0.9f);
+			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player.x*tileSize2d + 800, player.y*tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, camera2->getRotation()+90, 1.0f, Renderer::clrRed, 1.0f, 0.9f);
 
 			//---------------
 
@@ -544,7 +564,91 @@ namespace Engin
 				spriteScreenX = (w / 2)*(1 + transform.x / transform.y);
 				spriteXout = -spriteHeightWidth / 2 + spriteScreenX;
 
-				DDASpriteDrawData[i] = glm::vec4(spriteXout,spriteYout,spriteScale,transform.y);
+				//Calculating sprite side, -90 degrees correction has to made.				
+				spriteAngle = (glm::atan(-spriteX , -spriteY) - glm::radians(90.0f));
+				if (spriteAngle < 0.0f)
+				{
+					spriteAngle += glm::radians(360.0f);
+				}
+
+				//Sprites own facing changes the angle. TODO: fix
+				spriteFacing = glm::mod((spriteContainer[i].z + glm::radians(360.0f)), glm::radians(360.0f));
+				spriteAngle -= spriteFacing;
+				
+#pragma region AngleSideCheck
+				if (spriteAngle >= glm::radians(348.75f) && spriteAngle <= glm::radians(360.0f) || spriteAngle >= 0.0f && spriteAngle <= glm::radians(11.25f))
+				{
+					spriteAnimIndex = 0;
+				}
+				else if (spriteAngle > glm::radians(11.25f) && spriteAngle <= glm::radians(33.75f))
+				{
+					spriteAnimIndex = 1;
+				}
+				else if (spriteAngle > glm::radians(33.75f) && spriteAngle <= glm::radians(56.25f))
+				{
+					spriteAnimIndex = 2;
+				}
+				else if (spriteAngle > glm::radians(56.25f) && spriteAngle <= glm::radians(78.75f))
+				{
+					spriteAnimIndex = 3;
+				}
+				else if (spriteAngle > glm::radians(78.75f) && spriteAngle <= glm::radians(101.25f))
+				{
+					spriteAnimIndex = 4;
+				}
+				else if (spriteAngle > glm::radians(101.25f) && spriteAngle <= glm::radians(123.75f))
+				{
+					spriteAnimIndex = 5;
+				}
+				else if (spriteAngle > glm::radians(123.75f) && spriteAngle <= glm::radians(146.25f))
+				{
+					spriteAnimIndex = 6;
+				}
+				else if (spriteAngle > glm::radians(146.25f) && spriteAngle <= glm::radians(168.75f))
+				{
+					spriteAnimIndex = 7;
+				}
+				else if (spriteAngle > glm::radians(168.75f) && spriteAngle <= glm::radians(191.25f))
+				{
+					spriteAnimIndex = 8;
+				}
+				else if (spriteAngle > glm::radians(191.25f) && spriteAngle <= glm::radians(213.75f))
+				{
+					spriteAnimIndex = 9;
+				}
+				else if (spriteAngle > glm::radians(213.75f) && spriteAngle <= glm::radians(236.25f))
+				{
+					spriteAnimIndex = 10;
+				}
+				else if (spriteAngle > glm::radians(236.25f) && spriteAngle <= glm::radians(258.75f))
+				{
+					spriteAnimIndex = 11;
+				}
+				else if (spriteAngle > glm::radians(258.75f) && spriteAngle <= glm::radians(281.25f))
+				{
+					spriteAnimIndex = 12;
+				}
+				else if (spriteAngle > glm::radians(281.25f) && spriteAngle <= glm::radians(303.75f))
+				{
+					spriteAnimIndex = 13;
+				}
+				else if (spriteAngle > glm::radians(303.75f) && spriteAngle <= glm::radians(326.25f))
+				{
+					spriteAnimIndex = 14;
+				}
+				else
+				{
+					spriteAnimIndex = 15;
+				}
+#pragma endregion
+
+
+				//Saving data
+				DDASpriteDrawData[i][0] = spriteXout;
+				DDASpriteDrawData[i][1] = spriteYout;
+				DDASpriteDrawData[i][2] = spriteScale;
+				DDASpriteDrawData[i][3] = transform.y;
+				DDASpriteDrawData[i][4] = spriteAnimIndex;
 			}
 		}
 	}
