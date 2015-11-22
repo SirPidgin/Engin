@@ -36,6 +36,7 @@ namespace Engin
 			void DDADrawSprites();
 			
 		private:
+			int getSpriteAnimIndex(double angle);
 			Engin* engine;
 
 			Renderer::Camera* camera;

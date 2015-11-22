@@ -571,7 +571,7 @@ namespace Engin
 					spriteAngle += glm::radians(360.0f);
 				}
 
-				//Sprites own facing changes the angle. TODO: fix
+				//Sprites own facing changes the angle.
 				if (spriteContainer[i].z != 0.0f)
 				{
 					spriteFacing = glm::mod((-spriteContainer[i].z + glm::radians(360.0f)), glm::radians(360.0f));
@@ -584,73 +584,73 @@ namespace Engin
 				}
 				
 
-#pragma region AngleSideCheck
-				if (spriteAngle >= glm::radians(348.75f) && spriteAngle <= glm::radians(360.0f) || spriteAngle >= 0.0f && spriteAngle <= glm::radians(11.25f))
-				{
-					spriteAnimIndex = 0;
-				}
-				else if (spriteAngle > glm::radians(11.25f) && spriteAngle <= glm::radians(33.75f))
-				{
-					spriteAnimIndex = 1;
-				}
-				else if (spriteAngle > glm::radians(33.75f) && spriteAngle <= glm::radians(56.25f))
-				{
-					spriteAnimIndex = 2;
-				}
-				else if (spriteAngle > glm::radians(56.25f) && spriteAngle <= glm::radians(78.75f))
-				{
-					spriteAnimIndex = 3;
-				}
-				else if (spriteAngle > glm::radians(78.75f) && spriteAngle <= glm::radians(101.25f))
-				{
-					spriteAnimIndex = 4;
-				}
-				else if (spriteAngle > glm::radians(101.25f) && spriteAngle <= glm::radians(123.75f))
-				{
-					spriteAnimIndex = 5;
-				}
-				else if (spriteAngle > glm::radians(123.75f) && spriteAngle <= glm::radians(146.25f))
-				{
-					spriteAnimIndex = 6;
-				}
-				else if (spriteAngle > glm::radians(146.25f) && spriteAngle <= glm::radians(168.75f))
-				{
-					spriteAnimIndex = 7;
-				}
-				else if (spriteAngle > glm::radians(168.75f) && spriteAngle <= glm::radians(191.25f))
-				{
-					spriteAnimIndex = 8;
-				}
-				else if (spriteAngle > glm::radians(191.25f) && spriteAngle <= glm::radians(213.75f))
-				{
-					spriteAnimIndex = 9;
-				}
-				else if (spriteAngle > glm::radians(213.75f) && spriteAngle <= glm::radians(236.25f))
-				{
-					spriteAnimIndex = 10;
-				}
-				else if (spriteAngle > glm::radians(236.25f) && spriteAngle <= glm::radians(258.75f))
-				{
-					spriteAnimIndex = 11;
-				}
-				else if (spriteAngle > glm::radians(258.75f) && spriteAngle <= glm::radians(281.25f))
-				{
-					spriteAnimIndex = 12;
-				}
-				else if (spriteAngle > glm::radians(281.25f) && spriteAngle <= glm::radians(303.75f))
-				{
-					spriteAnimIndex = 13;
-				}
-				else if (spriteAngle > glm::radians(303.75f) && spriteAngle <= glm::radians(326.25f))
-				{
-					spriteAnimIndex = 14;
-				}
-				else
-				{
-					spriteAnimIndex = 15;
-				}
-#pragma endregion
-
+//#pragma region AngleSideCheck
+//				if (spriteAngle >= glm::radians(348.75f) && spriteAngle <= glm::radians(360.0f) || spriteAngle >= 0.0f && spriteAngle <= glm::radians(11.25f))
+//				{
+//					spriteAnimIndex = 0;
+//				}
+//				else if (spriteAngle > glm::radians(11.25f) && spriteAngle <= glm::radians(33.75f))
+//				{
+//					spriteAnimIndex = 1;
+//				}
+//				else if (spriteAngle > glm::radians(33.75f) && spriteAngle <= glm::radians(56.25f))
+//				{
+//					spriteAnimIndex = 2;
+//				}
+//				else if (spriteAngle > glm::radians(56.25f) && spriteAngle <= glm::radians(78.75f))
+//				{
+//					spriteAnimIndex = 3;
+//				}
+//				else if (spriteAngle > glm::radians(78.75f) && spriteAngle <= glm::radians(101.25f))
+//				{
+//					spriteAnimIndex = 4;
+//				}
+//				else if (spriteAngle > glm::radians(101.25f) && spriteAngle <= glm::radians(123.75f))
+//				{
+//					spriteAnimIndex = 5;
+//				}
+//				else if (spriteAngle > glm::radians(123.75f) && spriteAngle <= glm::radians(146.25f))
+//				{
+//					spriteAnimIndex = 6;
+//				}
+//				else if (spriteAngle > glm::radians(146.25f) && spriteAngle <= glm::radians(168.75f))
+//				{
+//					spriteAnimIndex = 7;
+//				}
+//				else if (spriteAngle > glm::radians(168.75f) && spriteAngle <= glm::radians(191.25f))
+//				{
+//					spriteAnimIndex = 8;
+//				}
+//				else if (spriteAngle > glm::radians(191.25f) && spriteAngle <= glm::radians(213.75f))
+//				{
+//					spriteAnimIndex = 9;
+//				}
+//				else if (spriteAngle > glm::radians(213.75f) && spriteAngle <= glm::radians(236.25f))
+//				{
+//					spriteAnimIndex = 10;
+//				}
+//				else if (spriteAngle > glm::radians(236.25f) && spriteAngle <= glm::radians(258.75f))
+//				{
+//					spriteAnimIndex = 11;
+//				}
+//				else if (spriteAngle > glm::radians(258.75f) && spriteAngle <= glm::radians(281.25f))
+//				{
+//					spriteAnimIndex = 12;
+//				}
+//				else if (spriteAngle > glm::radians(281.25f) && spriteAngle <= glm::radians(303.75f))
+//				{
+//					spriteAnimIndex = 13;
+//				}
+//				else if (spriteAngle > glm::radians(303.75f) && spriteAngle <= glm::radians(326.25f))
+//				{
+//					spriteAnimIndex = 14;
+//				}
+//				else
+//				{
+//					spriteAnimIndex = 15;
+//				}
+//#pragma endregion
+				spriteAnimIndex = getSpriteAnimIndex(spriteAngle);
 
 				//Saving data
 				DDASpriteDrawData[i][0] = spriteXout;
@@ -658,6 +658,22 @@ namespace Engin
 				DDASpriteDrawData[i][2] = spriteScale;
 				DDASpriteDrawData[i][3] = transform.y;
 				DDASpriteDrawData[i][4] = spriteAnimIndex;
+			}			
+		}
+
+		int Pseudo3D::getSpriteAnimIndex(double angle)
+		{
+			if (glm::degrees(angle) < 11.25)
+			{
+				return 0;
+			}
+			else if (glm::degrees(angle) >= 348.75f)
+			{
+				return 0;
+			}
+			else
+			{
+				return (glm::degrees(angle) + 11.25) / 22.5;
 			}
 		}
 	}
