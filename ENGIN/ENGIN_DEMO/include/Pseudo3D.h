@@ -36,7 +36,7 @@ namespace Engin
 			void DDADrawSprites();
 			
 		private:
-			int getSpriteAnimIndex(double angle);
+			int getSpriteAnimIndex(double angle, double sides);
 			Engin* engine;
 
 			Renderer::Camera* camera;
@@ -70,18 +70,22 @@ namespace Engin
 			Core::Timer myTimer;
 
 			std::array<std::array<int,25>,25> objectTiles; //Notice the world size mapX and mapY
-			std::vector<glm::vec3> spriteContainer;
-			glm::vec3 player;
-			glm::vec3 sprite;
-			glm::vec3 sprite1;
-			glm::vec3 sprite2;
-			glm::vec3 sprite3;
-			glm::vec3 sprite4;
-			glm::vec3 sprite5;
-			glm::vec3 sprite6;
-			glm::vec3 sprite7;
-			glm::vec3 sprite8;
-			glm::vec3 sprite9;
+			std::vector<std::array<double, 5>> spriteContainer;
+			std::array<double,5> player;
+			std::array<double,5> sprite;
+			std::array<double,5> sprite1;
+			std::array<double,5> sprite2;
+			std::array<double,5> sprite3;
+			std::array<double,5> sprite4;
+			std::array<double,5> sprite5;
+			std::array<double,5> sprite6;
+			std::array<double,5> sprite7;
+			std::array<double,5> sprite8;
+			std::array<double,5> sprite9;
+			std::array<double,5> fireball;
+			std::array<double, 5> fireball1;
+			std::array<double, 5> fireball2;
+			std::array<double, 5> fireball3;
 			
 			float alpha;
 
@@ -95,7 +99,10 @@ namespace Engin
 
 			//DDA
 			Resources::Animation* animFurball360;
+			Resources::Animation* animFireball360;
 			Game::AnimationPlayer animPlayer;
+			Game::AnimationPlayer animPlayer1;
+			Game::AnimationPlayer animPlayer12d;
 
 			int w;
 			int h;
@@ -153,9 +160,15 @@ namespace Engin
 			double spriteHeightWidth;
 			double spriteFacing;
 			double spriteAngle;
+			float spriteSideAngle;
+			float convertToFloat;
+
+			//for "3d" sprite animation in draw
+			int spriteStartFrame;
+			int spriteEndFrame;
 
 			float moveSpeed;
-			float rotSpeed;			
+			float rotSpeed;
 		};
 	}
 }

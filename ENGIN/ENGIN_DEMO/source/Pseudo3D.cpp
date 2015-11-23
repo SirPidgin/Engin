@@ -31,7 +31,7 @@ namespace Engin
 			guiBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
 
 			
-			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside_64.png");			
+			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");			
 			doge1 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_brick_tile_64.png");
 			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_warning_tile_64.png");
 			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_pine_tile_64.png");
@@ -49,6 +49,19 @@ namespace Engin
 			animPlayer.setAnimation(animFurball360);
 			animPlayer.loopable(true);
 			animPlayer.pause();
+
+			animFireball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/fireball360_8.xml");
+			animPlayer1.setAnimation(animFireball360);
+			animPlayer1.loopable(true);
+			animPlayer1.setLoopStartFrame(0);
+			animPlayer1.setLoopEndFrame(9);
+			animPlayer1.start();
+
+			animPlayer12d.setAnimation(animFireball360);
+			animPlayer12d.loopable(true);
+			animPlayer12d.setLoopStartFrame(20);
+			animPlayer12d.setLoopEndFrame(29);
+			animPlayer12d.start();
 
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 			font->setPtSize(40);
@@ -70,22 +83,26 @@ namespace Engin
 
 			moveSpeed = 0.11f;
 			rotSpeed = 0.02f;
-			player = glm::vec3(22.0f, 12.0f, 0.0f);
+			player = { { 22.0f, 12.0f, 0.0f, 0 , 1} }; //x,y,rotation(radians), howmany sides drawn, spritetype
 
 			dirX = -1, dirY = 0; //initial direction vector
 			planeX = 0.0f, planeY = 0.5; //the 2d raycaster version of camera plane
 
 			//adding sprites
-			sprite = glm::vec3(5.0f, 15.0f, glm::radians(90.0f));
-			sprite1 = glm::vec3(12.0f, 18.3f, 0.0f);
-			sprite2 = glm::vec3(13.5f, 12.7f, 0.0f);
-			sprite3 = glm::vec3(14.0f, 12.0f, 0.0f);
-			sprite4 = glm::vec3(15.0f, 13.8f, 0.0f);
-			sprite5 = glm::vec3(16.0f, 4.0f, 0.0f);
-			sprite6 = glm::vec3(18.0f, 13.0f, 0.0f);
-			sprite7 = glm::vec3(12.4f, 14.9f, 0.0f);
-			sprite8 = glm::vec3(23.0f, 15.0f, 0.0f);
-			sprite9 = glm::vec3(12.199f, 16.2f, 0.0f);
+			sprite = { { 5.0f, 15.0f, 0.0f, 40 , 1 } }; //x, y, rotation(radians), how many sides, spritetype 
+			sprite1 = { { 12.0f, 18.3f, 0.0f, 40, 1 } };
+			sprite2 = { { 13.5f, 12.7f, 0.0f, 40, 1 } };
+			sprite3 = { {14.0f, 12.0f, 0.0f, 40, 1 } };
+			sprite4 = { {15.0f, 13.8f, 0.0f, 40, 1 } };
+			sprite5 = { { 16.0f, 4.0f, 0.0f, 40, 1 } };
+			sprite6 = { { 18.0f, 13.0f, 0.0f, 40, 1 } };
+			sprite7 = { { 12.4f, 14.9f, 0.0f, 40, 1 } };
+			sprite8 = { { 23.0f, 15.0f, 0.0f, 40, 1 } };
+			sprite9 = { { 12.199f, 16.2f, 0.0f, 40, 1 } };
+			fireball = { { 5.0f, 15.0f, 0.0f, 8, 2 } };
+			fireball1 = { { 7.0f, 10.0f, 0.0f, 8, 2 } };
+			fireball2 = { { 8.0f, 10.0f, 0.0f, 8, 2 } };
+			fireball3 = { { 9.0f, 10.0f, 0.0f, 8, 2 } };
 			spriteContainer.push_back(sprite);
 			spriteContainer.push_back(sprite1);
 			spriteContainer.push_back(sprite2);
@@ -96,6 +113,10 @@ namespace Engin
 			spriteContainer.push_back(sprite7);
 			spriteContainer.push_back(sprite8);
 			spriteContainer.push_back(sprite9);
+			spriteContainer.push_back(fireball);
+			spriteContainer.push_back(fireball1);
+			spriteContainer.push_back(fireball2);
+			spriteContainer.push_back(fireball3);
 
 			//filling raycaster lines with 0
 			for (int i = 0; i < w; i++)
@@ -180,26 +201,26 @@ namespace Engin
 			//move forward if no wall in front of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_W))
 			{
-				if (objectTiles[int((player.x + dirX * moveSpeed))][int(player.y)] == false) player.x += dirX * moveSpeed;
-				if (objectTiles[int(player.x)][int(player.y + dirY * moveSpeed)] == false) player.y += dirY * moveSpeed;
+				if (objectTiles[int((player[0] + dirX * moveSpeed))][int(player[1])] == false) player[0] += dirX * moveSpeed;
+				if (objectTiles[int(player[0])][int(player[1] + dirY * moveSpeed)] == false) player[1] += dirY * moveSpeed;
 			}
 			//move backwards if no wall behind you
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_S))
 			{
-				if (objectTiles[int(player.x - dirX * moveSpeed)][int(player.y)] == false) player.x -= dirX * moveSpeed;
-				if (objectTiles[int(player.x)][int(player.y - dirY * moveSpeed)] == false) player.y -= dirY * moveSpeed;
+				if (objectTiles[int(player[0] - dirX * moveSpeed)][int(player[1])] == false) player[0] -= dirX * moveSpeed;
+				if (objectTiles[int(player[0])][int(player[1] - dirY * moveSpeed)] == false) player[1] -= dirY * moveSpeed;
 			}
 			//strafe left if no wall in left of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_A))
 			{
-				if (objectTiles[int(player.x - planeX * moveSpeed)][int(player.y)] == false) player.x -= planeX * moveSpeed;
-				if (objectTiles[int(player.x)][int(player.y - planeY * moveSpeed)] == false) player.y -= planeY * moveSpeed;
+				if (objectTiles[int(player[0] - planeX * moveSpeed)][int(player[1])] == false) player[0] -= planeX * moveSpeed;
+				if (objectTiles[int(player[0])][int(player[1] - planeY * moveSpeed)] == false) player[1] -= planeY * moveSpeed;
 			}
 			//strafe right if no wall in right of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_D))
 			{
-				if (objectTiles[int((player.x + planeX * moveSpeed))][int(player.y)] == false) player.x += planeX * moveSpeed;
-				if (objectTiles[int(player.x)][int(player.y + planeY * moveSpeed)] == false) player.y += planeY * moveSpeed;
+				if (objectTiles[int((player[0] + planeX * moveSpeed))][int(player[1])] == false) player[0] += planeX * moveSpeed;
+				if (objectTiles[int(player[0])][int(player[1] + planeY * moveSpeed)] == false) player[1] += planeY * moveSpeed;
 			}
 			//rotate to the right   
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
@@ -231,30 +252,47 @@ namespace Engin
 			DDADrawSprites();
 
 			//Saving player rotation
-			player.z = -glm::atan(dirX, dirY); //check camera.cpp rotation direction
+			player[2] = -glm::atan(dirX, dirY); //check camera.cpp rotation direction
 			
 			//rotating sprites in radians
-			spriteContainer[5].z += 0.05;
-			spriteContainer[0].z += 0.01;
-			spriteContainer[4].z += 0.03;
+			spriteContainer[5][2] += 0.05f;
+			spriteContainer[0][2] += 0.01f;
+			spriteContainer[4][2] += 0.03f;
 
 			//moving sprites TODO: Make some logic and translate sprites with them.
-			spriteContainer[0].x = 5.0f + 2 * glm::cos(alpha);
-			spriteContainer[0].y = 15.0f + 2 * glm::sin(alpha);
+			spriteContainer[0][0] = 5.0f + cos(spriteContainer[0][2]);
+			spriteContainer[0][1] = 15.0f + sin(spriteContainer[0][2]);
 
-			spriteContainer[4].x = 15.0f + 3 * glm::cos(alpha);
-			spriteContainer[6].y = 10.0f + 4 * glm::sin(alpha);
+			spriteContainer[4][0] = 15.0f + 3 * glm::cos(alpha);
+			spriteContainer[6][1] = 10.0f + 4 * glm::sin(alpha);
+
+			//moving fireballs
+			static float firex = 10.0f;
+			if (firex < 24.0f)
+			{
+				firex += 0.05f;				
+			}
+			else
+			{
+				firex = 10.0f;
+			}
+			spriteContainer[11][1] = firex;
+			spriteContainer[12][1] = firex;
+			spriteContainer[13][1] = firex;
 
 			//2d camera
-			camera2->setPositionRotationOrigin((player.x*tileSize2d) + 800, (player.y*tileSize2d));
-			camera2->setRotation(glm::degrees(player.z));
+			camera2->setPositionRotationOrigin((player[0]*tileSize2d) + 800, (player[1]*tileSize2d));
+			camera2->setRotation(glm::degrees(player[2]));
 
 			//Information		
-			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player.x) + " " + std::to_string(player.y), 255, 100, 0);
+			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player[0]) + " " + std::to_string(player[1]), 255, 100, 0);
 			text3 = textCreator3.getTexture();
 			myTimer.pause();
 			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
 			text = textCreator.getTexture();
+
+			animPlayer1.update();
+			animPlayer12d.update();
 		}
 
 		void Pseudo3D::interpolate(GLfloat alpha)
@@ -347,6 +385,7 @@ namespace Engin
 			}
 #pragma endregion
 			
+			//"3D" sprites
 			if (DDASpriteDrawData.size() > 0)
 			{
 				for (int i = 0; i < DDASpriteDrawData.size(); i++)
@@ -360,16 +399,31 @@ namespace Engin
 						else
 						{
 							depth = (1.0f / DDASpriteDrawData[i][1]);
-						}		
-						animPlayer.setCurrentFrame(int(DDASpriteDrawData[i][4]));
-						alphaBatch.draw(animPlayer.getTexture(), animPlayer.getCurrentFrameTexCoords(),
-							DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1],
-							256, 256, 0.0f, 0.0f, 0.0f,
-							DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
+						}						
+						
+						if (int(spriteContainer[i][4]) == 1) //furball with different directions
+						{					
+							animPlayer.setCurrentFrame(int(DDASpriteDrawData[i][4]));
+							alphaBatch.draw(animPlayer.getTexture(), animPlayer.getCurrentFrameTexCoords(),
+								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1],
+								256, 256, 0.0f, 0.0f, 0.0f,
+								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
+						}
+						if (int(spriteContainer[i][4]) == 2) //animated flame
+						{							
+							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
+							spriteEndFrame = int(DDASpriteDrawData[i][4]) * 10 + 9;
+														
+							animPlayer1.setLoopStartFrame(spriteStartFrame);							
+							animPlayer1.setLoopEndFrame(spriteEndFrame);
+
+							alphaBatch.draw(animPlayer1.getTexture(), animPlayer1.getCurrentFrameTexCoords(),
+								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,
+								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
+						}						
 					}
 				}
-			}
-			
+			}			
 			//---------------
 
 			//2D camera draw
@@ -403,17 +457,29 @@ namespace Engin
 			}
 			for (int i = 0; i < spriteContainer.size(); i++)
 			{
-				alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), spriteContainer[i].x*tileSize2d + 800, spriteContainer[i].y*tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(spriteContainer[i].z), 1.0f, Renderer::clrWhite, 1.0f, 0.7f+i*0.01f);
+				if (int(spriteContainer[i][4]) == 1)
+				{
+					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
+						spriteContainer[i][0] * tileSize2d + 800, spriteContainer[i][1] * tileSize2d, furball->getWidth(), 
+						furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(spriteContainer[i][2]), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.01f);
+				}
+
+				else if (int(spriteContainer[i][4]) == 2)
+				{
+					alphaBatch.draw(animPlayer12d.getTexture(), animPlayer12d.getCurrentFrameTexCoords(),
+						spriteContainer[i][0] * tileSize2d + 800, spriteContainer[i][1] * tileSize2d, 256, 256, tileSize2d / 2, tileSize2d / 2, glm::degrees(spriteContainer[i][2]) + 90.0f,
+						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.01f);
+				}
 			}
 
 			//player
-			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player.x*tileSize2d + 800, player.y*tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, camera2->getRotation()+90, 1.0f, Renderer::clrRed, 1.0f, 0.9f);
+			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player[0]*tileSize2d + 800, player[1]*tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(player[2]), 1.0f, Renderer::clrRed, 1.0f, 0.8f);
 
 			//---------------
 
 			//Hud
-			guiBatch.draw(text, &glm::vec4(0.0f, 0.0f, text->getWidth(), text->getHeight()), camera3->getPositionRotationOrigin().x + glm::cos(alpha)*400.0f, camera3->getPositionRotationOrigin().y + 350, text->getWidth(), text->getHeight(), text->getWidth() / 2, text->getHeight() / 2, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
-			guiBatch.draw(text3, &glm::vec4(0.0f, 0.0f, text3->getWidth(), text3->getHeight()), camera3->getPositionRotationOrigin().x, camera3->getPositionRotationOrigin().y + 300, text3->getWidth(), text3->getHeight(), text3->getWidth() / 2, text3->getHeight() / 2, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
+			guiBatch.draw(text, &glm::vec4(0.0f, 0.0f, text->getWidth(), text->getHeight()), camera3->getPositionRotationOrigin()[0] + glm::cos(alpha)*400.0f, camera3->getPositionRotationOrigin()[1] + 350, text->getWidth(), text->getHeight(), text->getWidth() / 2, text->getHeight() / 2, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
+			guiBatch.draw(text3, &glm::vec4(0.0f, 0.0f, text3->getWidth(), text3->getHeight()), camera3->getPositionRotationOrigin()[0], camera3->getPositionRotationOrigin()[1] + 300, text3->getWidth(), text3->getHeight(), text3->getWidth() / 2, text3->getHeight() / 2, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
 		}
 
 		void Pseudo3D::addIntoVector(int vectorAsNumber, glm::vec2 xy, int tiletype)
@@ -439,8 +505,8 @@ namespace Engin
 			{
 				//calculate ray position and direction 
 				cameraX = 2 * x / double(w) - 1; //x-coordinate in camera space
-				rayPosX = player.x;
-				rayPosY = player.y;
+				rayPosX = player[0];
+				rayPosY = player[1];
 				rayDirX = dirX + planeX * cameraX;
 				rayDirY = dirY + planeY * cameraX;
 
@@ -556,8 +622,8 @@ namespace Engin
 		{
 			for (int i = 0; i < spriteContainer.size(); i++)
 			{
-				spriteX = spriteContainer[i].x - player.x;
-				spriteY = spriteContainer[i].y - player.y;
+				spriteX = spriteContainer[i][0] - player[0];
+				spriteY = spriteContainer[i][1] - player[1];
 
 				glm::vec2 transform;
 
@@ -574,16 +640,17 @@ namespace Engin
 				spriteXout = -spriteHeightWidth / 2 + spriteScreenX;
 
 				//Calculating sprite side, -90 degrees correction has to made.				
-				spriteAngle = (glm::atan(-spriteX , -spriteY) - glm::radians(90.0f));
+				spriteAngle = (glm::atan(-spriteX , -spriteY));
 				if (spriteAngle < 0.0f)
 				{
 					spriteAngle += glm::radians(360.0f);
 				}
 
 				//Sprites own facing changes the angle.
-				if (spriteContainer[i].z != 0.0f)
+				if (spriteContainer[i][2] != 0.0f)
 				{
-					spriteFacing = glm::mod((-spriteContainer[i].z + glm::radians(360.0f)), glm::radians(360.0f));
+					convertToFloat = float(spriteContainer[i][2]);
+					spriteFacing = glm::mod((-convertToFloat + glm::radians(360.0f)), glm::radians(360.0f));
 					spriteAngle -= spriteFacing;
 
 					if (spriteAngle < 0.0f)
@@ -592,74 +659,7 @@ namespace Engin
 					}
 				}
 				
-
-//#pragma region AngleSideCheck
-//				if (spriteAngle >= glm::radians(348.75f) && spriteAngle <= glm::radians(360.0f) || spriteAngle >= 0.0f && spriteAngle <= glm::radians(11.25f))
-//				{
-//					spriteAnimIndex = 0;
-//				}
-//				else if (spriteAngle > glm::radians(11.25f) && spriteAngle <= glm::radians(33.75f))
-//				{
-//					spriteAnimIndex = 1;
-//				}
-//				else if (spriteAngle > glm::radians(33.75f) && spriteAngle <= glm::radians(56.25f))
-//				{
-//					spriteAnimIndex = 2;
-//				}
-//				else if (spriteAngle > glm::radians(56.25f) && spriteAngle <= glm::radians(78.75f))
-//				{
-//					spriteAnimIndex = 3;
-//				}
-//				else if (spriteAngle > glm::radians(78.75f) && spriteAngle <= glm::radians(101.25f))
-//				{
-//					spriteAnimIndex = 4;
-//				}
-//				else if (spriteAngle > glm::radians(101.25f) && spriteAngle <= glm::radians(123.75f))
-//				{
-//					spriteAnimIndex = 5;
-//				}
-//				else if (spriteAngle > glm::radians(123.75f) && spriteAngle <= glm::radians(146.25f))
-//				{
-//					spriteAnimIndex = 6;
-//				}
-//				else if (spriteAngle > glm::radians(146.25f) && spriteAngle <= glm::radians(168.75f))
-//				{
-//					spriteAnimIndex = 7;
-//				}
-//				else if (spriteAngle > glm::radians(168.75f) && spriteAngle <= glm::radians(191.25f))
-//				{
-//					spriteAnimIndex = 8;
-//				}
-//				else if (spriteAngle > glm::radians(191.25f) && spriteAngle <= glm::radians(213.75f))
-//				{
-//					spriteAnimIndex = 9;
-//				}
-//				else if (spriteAngle > glm::radians(213.75f) && spriteAngle <= glm::radians(236.25f))
-//				{
-//					spriteAnimIndex = 10;
-//				}
-//				else if (spriteAngle > glm::radians(236.25f) && spriteAngle <= glm::radians(258.75f))
-//				{
-//					spriteAnimIndex = 11;
-//				}
-//				else if (spriteAngle > glm::radians(258.75f) && spriteAngle <= glm::radians(281.25f))
-//				{
-//					spriteAnimIndex = 12;
-//				}
-//				else if (spriteAngle > glm::radians(281.25f) && spriteAngle <= glm::radians(303.75f))
-//				{
-//					spriteAnimIndex = 13;
-//				}
-//				else if (spriteAngle > glm::radians(303.75f) && spriteAngle <= glm::radians(326.25f))
-//				{
-//					spriteAnimIndex = 14;
-//				}
-//				else
-//				{
-//					spriteAnimIndex = 15;
-//				}
-//#pragma endregion
-				spriteAnimIndex = getSpriteAnimIndex(spriteAngle);
+				spriteAnimIndex = getSpriteAnimIndex(spriteAngle, spriteContainer[i][3]);
 
 				//Saving data
 				DDASpriteDrawData[i][0] = spriteXout;
@@ -670,19 +670,21 @@ namespace Engin
 			}			
 		}
 
-		int Pseudo3D::getSpriteAnimIndex(double angle)
+		int Pseudo3D::getSpriteAnimIndex(double angle, double sides)
 		{
-			if (glm::degrees(angle) < 4.5)
+			spriteSideAngle = 360.0f / sides;
+
+			if (glm::degrees(angle) < (spriteSideAngle/2.0f))
 			{
 				return 0;
 			}
-			else if (glm::degrees(angle) >= 355.5f)
+			else if (glm::degrees(angle) >= (360.0f - (spriteSideAngle / 2.0f)))
 			{
 				return 0;
 			}
 			else
 			{
-				return (glm::degrees(angle) + 4.5) / 9;
+				return (glm::degrees(angle) + (spriteSideAngle / 2.0f)) / spriteSideAngle;
 			}
 		}
 	}
