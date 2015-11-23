@@ -467,7 +467,7 @@ namespace Engin
 				else if (int(spriteContainer[i][4]) == 2)
 				{
 					alphaBatch.draw(animPlayer12d.getTexture(), animPlayer12d.getCurrentFrameTexCoords(),
-						spriteContainer[i][0] * tileSize2d + 800, spriteContainer[i][1] * tileSize2d, 256, 256, tileSize2d / 2, tileSize2d / 2, glm::degrees(spriteContainer[i][2]) + 90.0f,
+						spriteContainer[i][0] * tileSize2d + 800, spriteContainer[i][1] * tileSize2d, 256, 256, 256 / 2, 256 / 2, glm::degrees(spriteContainer[i][2]) + 90.0f,
 						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.01f);
 				}
 			}
