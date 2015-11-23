@@ -76,11 +76,11 @@ namespace Engin
 			planeX = 0.0f, planeY = 0.5; //the 2d raycaster version of camera plane
 
 			//adding sprites
-			sprite = glm::vec3(12.0f, 12.0f, 0.0f);
+			sprite = glm::vec3(5.0f, 15.0f, glm::radians(90.0f));
 			sprite1 = glm::vec3(12.0f, 18.3f, 0.0f);
 			sprite2 = glm::vec3(13.5f, 12.7f, 0.0f);
 			sprite3 = glm::vec3(14.0f, 12.0f, 0.0f);
-			sprite4 = glm::vec3(15.0f, 13.2f, 0.0f);
+			sprite4 = glm::vec3(15.0f, 13.8f, 0.0f);
 			sprite5 = glm::vec3(16.0f, 4.0f, 0.0f);
 			sprite6 = glm::vec3(18.0f, 13.0f, 0.0f);
 			sprite7 = glm::vec3(12.4f, 14.9f, 0.0f);
@@ -233,8 +233,17 @@ namespace Engin
 			//Saving player rotation
 			player.z = -glm::atan(dirX, dirY); //check camera.cpp rotation direction
 			
-			//rotating sprite
+			//rotating sprites in radians
 			spriteContainer[5].z += 0.05;
+			spriteContainer[0].z += 0.01;
+			spriteContainer[4].z += 0.03;
+
+			//moving sprites TODO: Make some logic and translate sprites with them.
+			spriteContainer[0].x = 5.0f + 2 * glm::cos(alpha);
+			spriteContainer[0].y = 15.0f + 2 * glm::sin(alpha);
+
+			spriteContainer[4].x = 15.0f + 3 * glm::cos(alpha);
+			spriteContainer[6].y = 10.0f + 4 * glm::sin(alpha);
 
 			//2d camera
 			camera2->setPositionRotationOrigin((player.x*tileSize2d) + 800, (player.y*tileSize2d));
@@ -346,7 +355,7 @@ namespace Engin
 					{
 						if (DDASpriteDrawData[i][1] <= 0)
 						{
-							depth = h;
+							depth = h; //disappear
 						}
 						else
 						{

@@ -56,6 +56,9 @@ namespace Engin
 
 			GLfloat root;
 			GLfloat atani;
+
+			GLfloat tempX;
+			GLfloat tempY;
 		};
 	}
 }

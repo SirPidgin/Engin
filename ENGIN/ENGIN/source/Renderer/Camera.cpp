@@ -98,9 +98,6 @@ namespace Engin
 		{
 			if (rotation != 0.0f)
 			{
-				GLfloat tempX;
-				GLfloat tempY;
-
 				root = glm::sqrt(glm::pow(worldX + rotationOriginX, 2.0f) + glm::pow(worldY + rotationOriginY, 2.0f));
 				atani = glm::atan(worldY + rotationOriginY, worldX + rotationOriginX);
 
