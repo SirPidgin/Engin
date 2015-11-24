@@ -19,6 +19,10 @@ namespace Engin
 			{
 				if (timer.getLocalTime() > animation->getFrame(currentFrame).duration)
 				{
+					if (currentFrame < loopStartFrame)
+					{
+						currentFrame = loopStartFrame;
+					}
 					if (++currentFrame >= animation->getNumberOfFrames() || currentFrame >= loopEndFrame )
 					{
 						stop();
