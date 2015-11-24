@@ -100,9 +100,12 @@ namespace Engin
 			//DDA
 			Resources::Animation* animFurball360;
 			Resources::Animation* animFireball360;
-			Game::AnimationPlayer animPlayer;
-			Game::AnimationPlayer animPlayer1;
-			Game::AnimationPlayer animPlayer12d;
+			Game::AnimationPlayer animPlayerFur;
+			Game::AnimationPlayer animPlayerFire1;
+			Game::AnimationPlayer animPlayerFire2;
+			Game::AnimationPlayer animPlayerFire3;
+			Game::AnimationPlayer animPlayerFire4;
+			Game::AnimationPlayer animPlayer2d;
 
 			int w;
 			int h;

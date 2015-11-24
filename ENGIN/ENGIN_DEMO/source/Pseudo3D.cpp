@@ -46,22 +46,40 @@ namespace Engin
 			cubes_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_cubes_tile_256.png");
 			
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
-			animPlayer.setAnimation(animFurball360);
-			animPlayer.loopable(true);
-			animPlayer.pause();
+			animPlayerFur.setAnimation(animFurball360);
+			animPlayerFur.loopable(true);
+			animPlayerFur.pause();
 
 			animFireball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/fireball360_8.xml");
-			animPlayer1.setAnimation(animFireball360);
-			animPlayer1.loopable(true);
-			animPlayer1.setLoopStartFrame(0);
-			animPlayer1.setLoopEndFrame(9);
-			animPlayer1.start();
+			animPlayerFire1.setAnimation(animFireball360);
+			animPlayerFire1.loopable(true);
+			animPlayerFire1.setLoopStartFrame(0);
+			animPlayerFire1.setLoopEndFrame(9);
+			animPlayerFire1.start();
 
-			animPlayer12d.setAnimation(animFireball360);
-			animPlayer12d.loopable(true);
-			animPlayer12d.setLoopStartFrame(20);
-			animPlayer12d.setLoopEndFrame(29);
-			animPlayer12d.start();
+			animPlayerFire2.setAnimation(animFireball360);
+			animPlayerFire2.loopable(true);
+			animPlayerFire2.setLoopStartFrame(0);
+			animPlayerFire2.setLoopEndFrame(9);
+			animPlayerFire2.start();
+
+			animPlayerFire3.setAnimation(animFireball360);
+			animPlayerFire3.loopable(true);
+			animPlayerFire3.setLoopStartFrame(0);
+			animPlayerFire3.setLoopEndFrame(9);
+			animPlayerFire3.start();
+
+			animPlayerFire4.setAnimation(animFireball360);
+			animPlayerFire4.loopable(true);
+			animPlayerFire4.setLoopStartFrame(0);
+			animPlayerFire4.setLoopEndFrame(9);
+			animPlayerFire4.start();
+
+			animPlayer2d.setAnimation(animFireball360);
+			animPlayer2d.loopable(true);
+			animPlayer2d.setLoopStartFrame(20);
+			animPlayer2d.setLoopEndFrame(29);
+			animPlayer2d.start();
 
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 			font->setPtSize(40);
@@ -99,10 +117,10 @@ namespace Engin
 			sprite7 = { { 12.4f, 14.9f, 0.0f, 40, 1 } };
 			sprite8 = { { 23.0f, 15.0f, 0.0f, 40, 1 } };
 			sprite9 = { { 12.199f, 16.2f, 0.0f, 40, 1 } };
-			fireball = { { 5.0f, 15.0f, 0.0f, 8, 2 } };
-			fireball1 = { { 7.0f, 10.0f, 0.0f, 8, 2 } };
-			fireball2 = { { 8.0f, 10.0f, glm::radians(180.0f), 8, 2 } };
-			fireball3 = { { 9.0f, 10.0f, 0.0f, 8, 2 } };
+			fireball = { { 5.0f, 15.0f, glm::radians(180.0f), 8, 2 } };
+			fireball1 = { { 7.0f, 10.0f, glm::radians(180.0f), 8, 3 } };
+			fireball2 = { { 8.0f, 10.0f, 0.0f, 8, 4 } };
+			fireball3 = { { 9.0f, 10.0f, glm::radians(180.0f), 8, 5 } };
 			spriteContainer.push_back(sprite);
 			spriteContainer.push_back(sprite1);
 			spriteContainer.push_back(sprite2);
@@ -252,33 +270,48 @@ namespace Engin
 			DDADrawSprites();
 
 			//Saving player rotation
-			player[2] = -glm::atan(dirX, dirY); //check camera.cpp rotation direction
+			player[2] = -glm::atan(dirX, dirY);
 			
 			//rotating sprites in radians
 			spriteContainer[5][2] += 0.05f;
 			spriteContainer[0][2] += 0.01f;
 			spriteContainer[4][2] += 0.03f;
+			spriteContainer[10][2] += 0.01f; //fireball
 
 			//moving sprites TODO: Make some logic and translate sprites with them.
 			spriteContainer[0][0] = 5.0f + cos(spriteContainer[0][2]);
 			spriteContainer[0][1] = 15.0f + sin(spriteContainer[0][2]);
 
+			spriteContainer[10][0] = 5.0f - cos(spriteContainer[0][2]); //fireball
+			spriteContainer[10][1] = 18.0f - sin(spriteContainer[0][2]);
+
 			spriteContainer[4][0] = 15.0f + 3 * glm::cos(alpha);
 			spriteContainer[6][1] = 10.0f + 4 * glm::sin(alpha);
 
-			//moving fireballs
-			static float firex = 10.0f;
-			if (firex < 24.0f)
+			//moving the three fireballs
+			static float firex = 24.0f;
+			if (firex > 11.0f)
 			{
-				firex += 0.05f;				
+				firex -= 0.05f;				
 			}
 			else
 			{
-				firex = 10.0f;
+				firex = 24.0f;
 			}
-			spriteContainer[11][1] = firex;
-			spriteContainer[12][1] = firex;
+			spriteContainer[11][1] = firex;			
 			spriteContainer[13][1] = firex;
+
+			static float firex2 = 11.0f;
+			if (firex2 < 24.0f)
+			{
+				firex2 += 0.05f;
+			}
+			else
+			{
+				firex2 = 11.0f;
+			}
+			spriteContainer[12][1] = firex2;
+
 
 			//2d camera
 			camera2->setPositionRotationOrigin((player[0]*tileSize2d) + 800, (player[1]*tileSize2d));
@@ -290,9 +323,12 @@ namespace Engin
 			myTimer.pause();
 			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
 			text = textCreator.getTexture();
-					
-			animPlayer1.update();
-			animPlayer12d.update();
+			
+			animPlayerFire1.update();
+			animPlayerFire2.update();
+			animPlayerFire3.update();
+			animPlayerFire4.update();
+			animPlayer2d.update();
 		}
 
 		void Pseudo3D::interpolate(GLfloat alpha)
@@ -403,26 +439,61 @@ namespace Engin
 						
 						if (int(spriteContainer[i][4]) == 1) //furball with different directions
 						{					
-							animPlayer.setCurrentFrame(int(DDASpriteDrawData[i][4]));
-							alphaBatch.draw(animPlayer.getTexture(), animPlayer.getCurrentFrameTexCoords(),
+							animPlayerFur.setCurrentFrame(int(DDASpriteDrawData[i][4]));
+							alphaBatch.draw(animPlayerFur.getTexture(), animPlayerFur.getCurrentFrameTexCoords(),
 								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1],
 								256, 256, 0.0f, 0.0f, 0.0f,
 								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
 						}
-						//TODO: make the animation run
+						//TODO: Fix all fireballs to work with one player if possible.
 						if (int(spriteContainer[i][4]) == 2) //animated flame
-						{							
+						{				
 							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
 							spriteEndFrame = int(DDASpriteDrawData[i][4]) * 10 + 9;		
 							
-							animPlayer1.setLoopStartFrame(spriteStartFrame);						
-							animPlayer1.setLoopEndFrame(spriteEndFrame);
-							animPlayer1.setCurrentFrame(spriteStartFrame);
+							animPlayerFire1.setLoopStartFrame(spriteStartFrame);						
+							animPlayerFire1.setLoopEndFrame(spriteEndFrame);
 							
-							alphaBatch.draw(animPlayer1.getTexture(), animPlayer1.getCurrentFrameTexCoords(),
+							alphaBatch.draw(animPlayerFire1.getTexture(), animPlayerFire1.getCurrentFrameTexCoords(),
 								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,
 								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
-						}						
+						}	
+						if (int(spriteContainer[i][4]) == 3) //animated flame1
+						{
+							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
+							spriteEndFrame = int(DDASpriteDrawData[i][4]) * 10 + 9;
+
+							animPlayerFire2.setLoopStartFrame(spriteStartFrame);
+							animPlayerFire2.setLoopEndFrame(spriteEndFrame);
+
+							alphaBatch.draw(animPlayerFire2.getTexture(), animPlayerFire2.getCurrentFrameTexCoords(),
+								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,
+								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
+						}
+						if (int(spriteContainer[i][4]) == 4) //animated flame1
+						{
+							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
+							spriteEndFrame = int(DDASpriteDrawData[i][4]) * 10 + 9;
+
+							animPlayerFire3.setLoopStartFrame(spriteStartFrame);
+							animPlayerFire3.setLoopEndFrame(spriteEndFrame);
+
+							alphaBatch.draw(animPlayerFire3.getTexture(), animPlayerFire3.getCurrentFrameTexCoords(),
+								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,
+								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
+						}
+						if (int(spriteContainer[i][4]) == 5) //animated flame1
+						{
+							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
+							spriteEndFrame = int(DDASpriteDrawData[i][4]) * 10 + 9;
+
+							animPlayerFire4.setLoopStartFrame(spriteStartFrame);
+							animPlayerFire4.setLoopEndFrame(spriteEndFrame);
+
+							alphaBatch.draw(animPlayerFire4.getTexture(), animPlayerFire4.getCurrentFrameTexCoords(),
+								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,
+								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
+						}
 					}
 				}
 			}			
@@ -466,9 +537,9 @@ namespace Engin
 						furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(spriteContainer[i][2]), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.01f);
 				}
 
-				else if (int(spriteContainer[i][4]) == 2)
+				else if (int(spriteContainer[i][4]) == 2 || int(spriteContainer[i][4]) == 3 || int(spriteContainer[i][4]) == 4 || int(spriteContainer[i][4]) == 5)
 				{
-					alphaBatch.draw(animPlayer12d.getTexture(), animPlayer12d.getCurrentFrameTexCoords(),
+					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
 						spriteContainer[i][0] * tileSize2d + 800, spriteContainer[i][1] * tileSize2d, 256, 256, 256 / 2, 256 / 2, glm::degrees(spriteContainer[i][2]) + 90.0f,
 						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.01f);
 				}
@@ -641,14 +712,14 @@ namespace Engin
 				spriteScreenX = (w / 2)*(1 + transform.x / transform.y);
 				spriteXout = -spriteHeightWidth / 2 + spriteScreenX;
 
-				//Calculating sprite side, -90 degrees correction has to made.				
+				//Calculating sprite side				
 				spriteAngle = (glm::atan(-spriteX , -spriteY));
 				if (spriteAngle < 0.0f)
 				{
 					spriteAngle += glm::radians(360.0f);
 				}
 
-				//Sprites own facing changes the angle.
+				//Sprites own facing changes the angle
 				if (spriteContainer[i][2] != 0.0f)
 				{
 					convertToFloat = float(spriteContainer[i][2]);
