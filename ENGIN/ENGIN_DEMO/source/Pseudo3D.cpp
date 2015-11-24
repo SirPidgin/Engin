@@ -409,7 +409,7 @@ namespace Engin
 								256, 256, 0.0f, 0.0f, 0.0f,
 								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
 						}
-						//TODO: make animation the run
+						//TODO: make the animation run
 						if (int(spriteContainer[i][4]) == 2) //animated flame
 						{							
 							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
