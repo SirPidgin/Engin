@@ -47,19 +47,10 @@ namespace Engin
 			Resources::ShaderProgram* textureShader;
 			Resources::ShaderProgram* alphaShader;
 
-			Resources::Texture* doge1;
-			Resources::Texture* doge2;
-			Resources::Texture* doge3;
-			Resources::Texture* doge4;
-			Resources::Texture* doge5;
-			Resources::Texture* furball;
-
-			Resources::Texture* furball_256;
-			Resources::Texture* brick_256;
-			Resources::Texture* warning_256;
-			Resources::Texture* pine_256;
-			Resources::Texture* redwood_256;
-			Resources::Texture* cubes_256;
+			Resources::Texture* furball; //2d
+			Resources::Texture* mapSheet_64;
+			Resources::Texture* mapSheet_256;
+			Resources::Texture* roof_16;
 
 			Resources::Texture* text;
 			Resources::Texture* text2;

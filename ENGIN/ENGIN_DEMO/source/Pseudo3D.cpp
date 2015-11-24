@@ -32,18 +32,9 @@ namespace Engin
 
 			
 			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");			
-			doge1 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_brick_tile_64.png");
-			doge2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_warning_tile_64.png");
-			doge3 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_pine_tile_64.png");
-			doge4 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_redwood_tile_64.png");
-			doge5 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_cubes_tile_64.png");
-
-			furball_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_256.png");
-			brick_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_brick_tile_256.png");
-			warning_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_warning_tile_256.png");
-			pine_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_pine_tile_256.png");
-			redwood_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_redwood_tile_256.png");
-			cubes_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/wall_cubes_tile_256.png");
+			mapSheet_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_64.png");
+			mapSheet_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_256.png");
+			roof_16 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/roof.png");
 			
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
 			animPlayerFur.setAnimation(animFurball360);
@@ -337,7 +328,12 @@ namespace Engin
 
 		void Pseudo3D::draw()
 		{
-			//DDA draw test
+			//Raycast draw test
+
+			//Roof and floor
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, w, h), -1600.0f, h / 2, w, h / 2, 0.0f, 0.0f, 0.0f, 1.0f, {0.75,0.5,0.0}, 1.0f, 0.0f);
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, w, h), -1600.0f, 0.0f, w, h / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
+
 #pragma region WallTileDraw
 			for (int i = 0; i < DDAlines.size(); i++)
 			{
@@ -352,70 +348,13 @@ namespace Engin
 						depth = (1.0f / DDAlines[i][1]);
 					}
 
-
-					switch (int(DDAlines[i][3]))
+					if (int(DDAlines[i][3]) < 6)
 					{
-					case 1:
-					{
-						opaqueBatch.draw(brick_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
-						break;
+						opaqueBatch.draw(mapSheet_256, &glm::vec4(DDAlines[i][4] + (int(DDAlines[i][3])-1) * tileSize, 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 					}
-
-					case 2:
+					else
 					{
-						opaqueBatch.draw(warning_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
-						break;
-					}
-					case 3:
-					{
-						opaqueBatch.draw(pine_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
-
-						break;
-					}
-					case 4:
-					{
-						opaqueBatch.draw(redwood_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
-
-						break;
-					}
-					case 5:
-					{
-						opaqueBatch.draw(cubes_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
-
-						break;
-					}
-
-					//shade colors
-					case 6:
-					{
-						opaqueBatch.draw(brick_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
-						break;
-					}
-
-					case 7:
-					{
-						opaqueBatch.draw(warning_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
-						break;
-					}
-					case 8:
-					{
-						opaqueBatch.draw(pine_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
-
-						break;
-					}
-					case 9:
-					{
-						opaqueBatch.draw(redwood_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
-						break;
-					}
-					case 10:
-					{
-						opaqueBatch.draw(cubes_256, &glm::vec4(DDAlines[i][4], 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
-						break;
-					}
-
-					default:
-						break;
+						opaqueBatch.draw(mapSheet_256, &glm::vec4(DDAlines[i][4] + (int(DDAlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
 					}
 				}
 			}
@@ -445,7 +384,7 @@ namespace Engin
 								256, 256, 0.0f, 0.0f, 0.0f,
 								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
 						}
-						//TODO: Fix all fireballs to work with one player if possible.
+						//TODO: Change all sprites to use engine sprites
 						if (int(spriteContainer[i][4]) == 2) //animated flame
 						{				
 							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
@@ -500,34 +439,19 @@ namespace Engin
 			//---------------
 
 			//2D camera draw
+			//walls. TODO: Fix the cropping.
 			for (int i = 0; i <= mapY; i++)
 			{
 				for (int j = 0; j <= mapX; j++)
 				{
 					float offset = 32.0f;
-
-					if (objectTiles[j][i] == 1)
+					if (objectTiles[j][i] != 0)
 					{
-						opaqueBatch.draw(doge1, (j * tileSize2d) + 800 + offset, i * tileSize2d + offset, 1.0f, 0.4f);
-					}
-					else if (objectTiles[j][i] == 2)
-					{
-						opaqueBatch.draw(doge2, (j * tileSize2d) + 800 + offset, i * tileSize2d + offset, 1.0f, 0.4f);
-					}
-					else if (objectTiles[j][i] == 3)
-					{
-						opaqueBatch.draw(doge3, (j * tileSize2d) + 800 + offset, i * tileSize2d + offset, 1.0f, 0.4f);
-					}
-					else if (objectTiles[j][i] == 4)
-					{
-						opaqueBatch.draw(doge4, (j * tileSize2d) + 800 + offset, i * tileSize2d + offset, 1.0f, 0.4f);
-					}
-					else if (objectTiles[j][i] == 5)
-					{
-						opaqueBatch.draw(doge5, (j * tileSize2d) + 800 + offset, i * tileSize2d + offset, 1.0f, 0.4f);
+						opaqueBatch.draw(mapSheet_64, &glm::vec4((int(objectTiles[j][i])-1) * 64, 0.0f, 64, 64), (j * tileSize2d) + 800 + offset, i * tileSize2d+offset, 64.0f, 64.0f, 32.0f, 32.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.0f);
 					}
 				}				
 			}
+			//sprites
 			for (int i = 0; i < spriteContainer.size(); i++)
 			{
 				if (int(spriteContainer[i][4]) == 1)
@@ -547,7 +471,9 @@ namespace Engin
 
 			//player
 			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player[0]*tileSize2d + 800, player[1]*tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(player[2]), 1.0f, Renderer::clrRed, 1.0f, 0.8f);
-
+			
+			//floor
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d), 800.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d,0.0f, 0.0f, 0.0f, 1.0f, { 0.5, 0.5, 0.5 }, 1.0f, 0.0f);
 			//---------------
 
 			//Hud
