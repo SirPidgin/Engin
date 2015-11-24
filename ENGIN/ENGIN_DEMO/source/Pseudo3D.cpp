@@ -101,7 +101,7 @@ namespace Engin
 			sprite9 = { { 12.199f, 16.2f, 0.0f, 40, 1 } };
 			fireball = { { 5.0f, 15.0f, 0.0f, 8, 2 } };
 			fireball1 = { { 7.0f, 10.0f, 0.0f, 8, 2 } };
-			fireball2 = { { 8.0f, 10.0f, 0.0f, 8, 2 } };
+			fireball2 = { { 8.0f, 10.0f, glm::radians(180.0f), 8, 2 } };
 			fireball3 = { { 9.0f, 10.0f, 0.0f, 8, 2 } };
 			spriteContainer.push_back(sprite);
 			spriteContainer.push_back(sprite1);
@@ -291,6 +291,7 @@ namespace Engin
 			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
 			text = textCreator.getTexture();
 					
+			animPlayer1.update();
 			animPlayer12d.update();
 		}
 
@@ -408,6 +409,7 @@ namespace Engin
 								256, 256, 0.0f, 0.0f, 0.0f,
 								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
 						}
+						//TODO: make animation the run
 						if (int(spriteContainer[i][4]) == 2) //animated flame
 						{							
 							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
@@ -415,7 +417,7 @@ namespace Engin
 							
 							animPlayer1.setLoopStartFrame(spriteStartFrame);						
 							animPlayer1.setLoopEndFrame(spriteEndFrame);
-							animPlayer1.update(); //Alternative: create own animplayer for every fireball
+							animPlayer1.setCurrentFrame(spriteStartFrame);
 							
 							alphaBatch.draw(animPlayer1.getTexture(), animPlayer1.getCurrentFrameTexCoords(),
 								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,

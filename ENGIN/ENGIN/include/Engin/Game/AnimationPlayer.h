@@ -27,6 +27,7 @@ namespace Engin
 			void stop() { timer.stop(); currentFrame = 0 + loopStartFrame; }
 			void loopable(bool value) { loop = value; }
 			void setCurrentFrame(int frame){ currentFrame = frame; if (!timer.isPaused()){ start(); } }
+			int getCurrentFrame(){ return currentFrame; }
 			void setLoopStartFrame(int frame){ loopStartFrame = frame; }
 			void setLoopEndFrame(int frame){ loopEndFrame = frame; }
 		private:
