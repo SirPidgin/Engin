@@ -9,7 +9,7 @@ namespace Engin
 {
 	namespace Game
 	{
-		Pseudo3D::Pseudo3D(Engin* engine) : camera(createWorldCamera()), camera2(createWorldCamera()), camera3(createGuiCamera())
+		Pseudo3D::Pseudo3D(Engin* engine) : gameObject("test", &alphaBatch), camera(createWorldCamera()), camera2(createWorldCamera()), camera3(createGuiCamera())
 		{
 #pragma region INIT
 			this->engine = engine;
@@ -128,13 +128,10 @@ namespace Engin
 			spriteContainer.push_back(fireball3);
 
 			//GameObjects.							TODO: All sprites should be made as game objects
-			//GOfireBall.addComponent<Game::AnimationPlayer>();
-			GOfireBall.addComponent<Sprite>();
-			GOfireBall.addComponent<Transform>();			
-			GOfireBall.addComponent<RigidBody>();
-
-			GOfireBall.accessComponent<Sprite>()->setCurrentSprite(mapSheet_64);
-			//GOfireBall.accessComponent<Game::AnimationPlayer>()->setAnimation(animFireball360);
+			gameObject.addComponent<Sprite>();
+			gameObject.addComponent<Transform>();			
+			gameObject.addComponent<RigidBody>();
+			gameObject.accessComponent<Sprite>()->setCurrentSprite(mapSheet_64);
 
 			//filling raycaster lines with 0
 			for (int i = 0; i < w; i++)
@@ -335,10 +332,9 @@ namespace Engin
 			animPlayer2d.update();
 
 			//gameObjects
-			GOfireBall.accessComponent<Transform>()->setXPosition(5.0f);
-			GOfireBall.accessComponent<Transform>()->setYPosition(15.0f);
-
-			GOfireBall.update();
+			gameObject.accessComponent<Transform>()->setXPosition(600.0f);
+			gameObject.accessComponent<Transform>()->setYPosition(800.0f);
+			gameObject.update();
 		}
 
 		void Pseudo3D::interpolate(GLfloat alpha)
@@ -347,8 +343,10 @@ namespace Engin
 
 		void Pseudo3D::draw()
 		{
-			//Raycast draw test
+			//obj draw test
+			gameObject.accessComponent<Sprite>()->draw();
 
+			//Raycast draw test
 			//Roof and floor
 			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, w, h), -1600.0f, h / 2, w, h / 2, 0.0f, 0.0f, 0.0f, 1.0f, {0.75,0.5,0.0}, 1.0f, 0.0f);
 			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, w, h), -1600.0f, 0.0f, w, h / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
@@ -454,9 +452,7 @@ namespace Engin
 						}
 					}
 				}
-			}	
-
-			GOfireBall.accessComponent<Sprite>()->draw();
+			}			
 			//---------------
 
 			//2D camera draw

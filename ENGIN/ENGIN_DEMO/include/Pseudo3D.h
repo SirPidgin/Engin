@@ -80,7 +80,7 @@ namespace Engin
 			std::array<double, 5> fireball2;
 			std::array<double, 5> fireball3;
 
-			GameObject GOfireBall;
+			GameObject gameObject;
 			
 			float alpha;
 
