@@ -127,6 +127,15 @@ namespace Engin
 			spriteContainer.push_back(fireball2);
 			spriteContainer.push_back(fireball3);
 
+			//GameObjects.							TODO: All sprites should be made as game objects
+			//GOfireBall.addComponent<Game::AnimationPlayer>();
+			GOfireBall.addComponent<Sprite>();
+			GOfireBall.addComponent<Transform>();			
+			GOfireBall.addComponent<RigidBody>();
+
+			GOfireBall.accessComponent<Sprite>()->setCurrentSprite(mapSheet_64);
+			//GOfireBall.accessComponent<Game::AnimationPlayer>()->setAnimation(animFireball360);
+
 			//filling raycaster lines with 0
 			for (int i = 0; i < w; i++)
 			{
@@ -135,7 +144,7 @@ namespace Engin
 					DDAlines[i][j] = 0;
 				}
 			}
-
+			
 			DDASpriteDrawData.resize(spriteContainer.size());
 
 			//filling world with 0
@@ -262,6 +271,10 @@ namespace Engin
 
 			//Saving player rotation
 			player[2] = -glm::atan(dirX, dirY);
+			if (player[2] < 0)
+			{
+				player[2] += glm::radians(360.0f);
+			}
 			
 			//rotating sprites in radians
 			spriteContainer[5][2] += 0.05f;
@@ -274,7 +287,7 @@ namespace Engin
 			spriteContainer[0][1] = 15.0f + sin(spriteContainer[0][2]);
 
 			spriteContainer[10][0] = 5.0f - cos(spriteContainer[0][2]); //fireball
-			spriteContainer[10][1] = 18.0f - sin(spriteContainer[0][2]);
+			spriteContainer[10][1] = 15.0f - sin(spriteContainer[0][2]);
 
 			spriteContainer[4][0] = 15.0f + 3 * glm::cos(alpha);
 			spriteContainer[6][1] = 10.0f + 4 * glm::sin(alpha);
@@ -309,7 +322,7 @@ namespace Engin
 			camera2->setRotation(glm::degrees(player[2]));
 
 			//Information		
-			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player[0]) + " " + std::to_string(player[1]), 255, 100, 0);
+			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player[0]) + " " + std::to_string(player[1]) + " angle: " + std::to_string(glm::degrees(player[2])), 255, 100, 0);
 			text3 = textCreator3.getTexture();
 			myTimer.pause();
 			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
@@ -320,6 +333,12 @@ namespace Engin
 			animPlayerFire3.update();
 			animPlayerFire4.update();
 			animPlayer2d.update();
+
+			//gameObjects
+			GOfireBall.accessComponent<Transform>()->setXPosition(5.0f);
+			GOfireBall.accessComponent<Transform>()->setYPosition(15.0f);
+
+			GOfireBall.update();
 		}
 
 		void Pseudo3D::interpolate(GLfloat alpha)
@@ -435,7 +454,9 @@ namespace Engin
 						}
 					}
 				}
-			}			
+			}	
+
+			GOfireBall.accessComponent<Sprite>()->draw();
 			//---------------
 
 			//2D camera draw
@@ -658,6 +679,8 @@ namespace Engin
 					}
 				}
 				
+			
+
 				spriteAnimIndex = getSpriteAnimIndex(spriteAngle, spriteContainer[i][3]);
 
 				//Saving data

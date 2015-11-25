@@ -13,6 +13,8 @@
 #include "Engin\Resources\Font.h"
 #include "Engin\Game\AnimationPlayer.h"
 #include "Engin\Resources\Animation.h"
+#include "Engin\Game\GameObject.h"
+#include <Engin\Game\Sprite.h>
 
 #include <array>
 
@@ -77,6 +79,8 @@ namespace Engin
 			std::array<double, 5> fireball1;
 			std::array<double, 5> fireball2;
 			std::array<double, 5> fireball3;
+
+			GameObject GOfireBall;
 			
 			float alpha;
 
@@ -91,12 +95,12 @@ namespace Engin
 			//DDA
 			Resources::Animation* animFurball360;
 			Resources::Animation* animFireball360;
-			Game::AnimationPlayer animPlayerFur;
-			Game::AnimationPlayer animPlayerFire1;
-			Game::AnimationPlayer animPlayerFire2;
-			Game::AnimationPlayer animPlayerFire3;
-			Game::AnimationPlayer animPlayerFire4;
-			Game::AnimationPlayer animPlayer2d;
+			AnimationPlayer animPlayerFur;
+			AnimationPlayer animPlayerFire1;
+			AnimationPlayer animPlayerFire2;
+			AnimationPlayer animPlayerFire3;
+			AnimationPlayer animPlayerFire4;
+			AnimationPlayer animPlayer2d;
 
 			int w;
 			int h;
