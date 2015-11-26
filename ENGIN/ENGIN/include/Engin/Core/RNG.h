@@ -1,6 +1,6 @@
 #pragma once
 
-typedef unsigned long long int ullongint;
+#include <random>
 
 
 namespace Engin
@@ -11,46 +11,29 @@ namespace Engin
 		{
 		public:
 			RNG();
-			RNG(ullongint initSeed);
-
-			void setSeed(ullongint newSeed);
-			ullongint getSeed();
-			void resetSeed();
-
-			//Pseudorandom Number Generation = Same seed always returns the same "random" numbers in the same order
-			//(?)
-			template<typename type> type getRandomNumberFromSeed();
-			template<typename type> type getRandomNumberFromSeed(type min, type max);
+			RNG(unsigned int initSeed);
+			
+			//Pseudorandom Number Generation = Same seed always returns the same "random" numbers in the same order			
+			void setSeed(unsigned int newSeed);
+			unsigned int getSeed();
+			void resetRandomSeedEngine();
+			unsigned int getRandomNumberFromSeed();
+			void discardNext(int amount = 1);
+			unsigned int getMax();
+			unsigned int getMin();
 
 			//Random Pseudorandom Number Generation
-				//Returns only relatively small values (RAND_MAX)
+			//Returns only relatively small values (RAND_MAX)
 			int getRandomSInt();
 			int getRandomUInt();
 			int getRandomInt(int min, int max);
-				//Floats are very inaccurate with large min and/or max values
-			float getRandomFloat(float min, float max);	//absolute values of min and max should not be larger than RAND_MAX/2 to be accurate
+			float getRandomFloat(float min, float max); //6 decimal accuracy
 
 		private:
 			void initialize();
-			ullongint seed;
+			float getRandomDecimals();
+			unsigned int seed;
+			std::mt19937 MTEngine;
 		};
-
-
-		//Template Methods
-		
-		template<typename type>
-		type RNG::getRandomNumberFromSeed()
-		{
-			//Mersenne Twister Engine
-			//mt19937
-			//Xorshift?
-		}
-
-
-		template<typename type>
-		type RNG::getRandomNumberFromSeed(type min, type max)
-		{
-
-		}
 	}
 }
