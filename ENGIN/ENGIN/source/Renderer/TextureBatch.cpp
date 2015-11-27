@@ -19,6 +19,10 @@ namespace Engin
 		{
 			glDeleteBuffers(1, &IBO);
 			glDeleteBuffers(1, &VBO);
+
+			vertices.clear();
+			indices.clear();
+			sortedTextures.clear();
 		}
 
 		void TextureBatch::begin()
@@ -158,10 +162,10 @@ namespace Engin
 		{
 			glGenBuffers(1, &VBO);
 			glBindBuffer(GL_ARRAY_BUFFER, VBO);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * maxBatchSize * vertiecsPerTexture, nullptr, GL_DYNAMIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * maxBatchSize * verticesPerTexture, nullptr, GL_DYNAMIC_DRAW);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			vertices.reserve(initialQueueSize * vertiecsPerTexture);
 
+			createVertices();
 			createIndexValues();
 
 			glGenBuffers(1, &IBO);
@@ -170,12 +174,23 @@ namespace Engin
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		}
 
+		void TextureBatch::createVertices()
+		{
+			size_t size = maxBatchSize * verticesPerTexture;
+			vertices.reserve(size);
+
+			for (size_t i = 0; i < size; i++)
+			{
+				vertices.push_back(Vertex());
+			}
+		}
+
 		void TextureBatch::createIndexValues()
 		{
 			size_t size = maxBatchSize * indicesPerTexture;
 			indices.reserve(size);
 
-			for (unsigned short i = 0; i < size; i += vertiecsPerTexture)
+			for (unsigned short i = 0; i < size; i += verticesPerTexture)
 			{
 				indices.push_back(i);
 				indices.push_back(i + 1);
@@ -189,34 +204,35 @@ namespace Engin
 
 		void TextureBatch::prepareForRendering()
 		{
-			glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
 			const TextureInfo* t = nullptr;
 
-			for (size_t i = 0; i < textureQueueCount; i++)
+			for (size_t i = 0, j = 0; i < textureQueueCount; i++)
 			{
 				t = sortedTextures[i];
-				vertices.push_back(Vertex(t->topLeft.x, t->topLeft.y, t->depth, 
+				vertices[j++].set(
+					t->topLeft.x, t->topLeft.y, t->depth, 
 					t->color.r, t->color.g, t->color.b, t->color.a, 
-					t->texCoords.x, t->texCoords.y));
+					t->texCoords.x, t->texCoords.y);
 
-				vertices.push_back(Vertex(t->topRight.x, t->topRight.y, t->depth,
+				vertices[j++].set(
+					t->topRight.x, t->topRight.y, t->depth,
 					t->color.r, t->color.g, t->color.b, t->color.a,
-					t->texCoords.z, t->texCoords.y));
+					t->texCoords.z, t->texCoords.y);
 	
-				vertices.push_back(Vertex(t->bottomLeft.x, t->bottomLeft.y, t->depth,
+				vertices[j++].set(
+					t->bottomLeft.x, t->bottomLeft.y, t->depth,
 					t->color.r, t->color.g, t->color.b, t->color.a,
-					t->texCoords.x, t->texCoords.w));
+					t->texCoords.x, t->texCoords.w);
 
-				vertices.push_back(Vertex(t->bottomRight.x, t->bottomRight.y, t->depth,
+				vertices[j++].set(
+					t->bottomRight.x, t->bottomRight.y, t->depth,
 					t->color.r, t->color.g, t->color.b, t->color.a,
-					t->texCoords.z, t->texCoords.w));
+					t->texCoords.z, t->texCoords.w);
 			}
 
-			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vertex) * vertices.size(), (void*)(vertices.data()));
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Vertex) * textureQueueCount * verticesPerTexture, (void*)(vertices.data()));
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-			vertices.clear();
 		}
 
 		void TextureBatch::growTextureQueue()
