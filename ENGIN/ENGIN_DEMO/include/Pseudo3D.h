@@ -17,6 +17,7 @@
 #include <Engin\Game\Sprite.h>
 
 #include <array>
+#include <vector>
 
 namespace Engin
 {
@@ -80,7 +81,8 @@ namespace Engin
 			std::array<double, 5> fireball2;
 			std::array<double, 5> fireball3;
 
-			GameObject gameObject;
+			std::vector<GameObject*> gameObjects;
+			//GameObject gameObject;
 			
 			float alpha;
 

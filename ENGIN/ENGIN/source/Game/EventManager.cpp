@@ -50,9 +50,11 @@ namespace Engin
 					mouseInput->moveMouseWheel(inputEvent.wheel.y);
 					break;
 
-				case SDL_JOYBUTTONDOWN:
-					break;
-				case SDL_JOYBUTTONUP:
+				//case SDL_JOYBUTTONDOWN:
+				//	gamepadInput->pressButton(inputEvent.jbutton.button);
+				//	break;
+				//case SDL_JOYBUTTONUP:
+				//	gamepadInput->releaseButton(inputEvent.jbutton.button);
 					break;
 				case SDL_JOYAXISMOTION:
 					break;

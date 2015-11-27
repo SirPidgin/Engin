@@ -2,6 +2,7 @@
 
 #include "Engin\HID\KeyboardInput.h"
 #include "Engin\HID\MouseInput.h"
+#include "Engin\HID\GamepadInput.h"
 
 
 namespace Engin
@@ -24,6 +25,7 @@ namespace Engin
 
 			HID::KeyboardInput* keyboardInput;
 			HID::MouseInput* mouseInput;
+			HID::GamepadInput* gamepadInput;
 
 			bool quitState;
 		};

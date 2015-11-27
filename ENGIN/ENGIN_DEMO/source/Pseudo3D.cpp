@@ -9,7 +9,7 @@ namespace Engin
 {
 	namespace Game
 	{
-		Pseudo3D::Pseudo3D(Engin* engine) : gameObject("test", &alphaBatch), camera(createWorldCamera()), camera2(createWorldCamera()), camera3(createGuiCamera())
+		Pseudo3D::Pseudo3D(Engin* engine) : camera(createWorldCamera()), camera2(createWorldCamera()), camera3(createGuiCamera())
 		{
 #pragma region INIT
 			this->engine = engine;
@@ -128,10 +128,11 @@ namespace Engin
 			spriteContainer.push_back(fireball3);
 
 			//GameObjects.							TODO: All sprites should be made as game objects
-			gameObject.addComponent<Sprite>();
-			gameObject.addComponent<Transform>();			
-			gameObject.addComponent<RigidBody>();
-			gameObject.accessComponent<Sprite>()->setCurrentSprite(mapSheet_64);
+			gameObjects.push_back(new GameObject(&alphaBatch));
+			gameObjects.back()->addComponent<Sprite>();
+			gameObjects.back()->addComponent<Transform>();
+			gameObjects.back()->addComponent<RigidBody>();
+			gameObjects.back()->accessComponent<Sprite>()->setCurrentSprite(mapSheet_64);
 
 			//filling raycaster lines with 0
 			for (int i = 0; i < w; i++)
@@ -332,9 +333,9 @@ namespace Engin
 			animPlayer2d.update();
 
 			//gameObjects
-			gameObject.accessComponent<Transform>()->setXPosition(600.0f);
-			gameObject.accessComponent<Transform>()->setYPosition(800.0f);
-			gameObject.update();
+			gameObjects[0]->accessComponent<Transform>()->setXPosition(600.0f);
+			gameObjects[0]->accessComponent<Transform>()->setYPosition(800.0f);
+			gameObjects[0]->update();
 		}
 
 		void Pseudo3D::interpolate(GLfloat alpha)
@@ -344,7 +345,7 @@ namespace Engin
 		void Pseudo3D::draw()
 		{
 			//obj draw test
-			gameObject.accessComponent<Sprite>()->draw();
+			gameObjects[0]->accessComponent<Sprite>()->draw();
 
 			//Raycast draw test
 			//Roof and floor
@@ -464,7 +465,7 @@ namespace Engin
 					float offset = 32.0f;
 					if (objectTiles[j][i] != 0)
 					{
-						opaqueBatch.draw(mapSheet_64, &glm::vec4((int(objectTiles[j][i])-1) * 64, 0.0f, 64, 64), (j * tileSize2d) + 800 + offset, i * tileSize2d+offset, 64.0f, 64.0f, 32.0f, 32.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.0f);
+						opaqueBatch.draw(mapSheet_64, &glm::vec4((int(objectTiles[j][i])-1) * 64, 0.0f, 64, 64), (j * tileSize2d) + 800 + offset, i * tileSize2d+offset, 64.0f, 64.0f, 32.0f, 32.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
 					}
 				}				
 			}

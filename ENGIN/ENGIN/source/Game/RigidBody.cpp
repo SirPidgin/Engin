@@ -15,8 +15,8 @@ namespace Engin
 
 		void RigidBody::update()
 		{
-			position = getPosition();
-			rotation = getRotation();
+			position = ownerObject->accessComponent<Transform>()->getPosition();
+			rotation = ownerObject->accessComponent<Transform>()->getRotation();
 		}
 
 
@@ -52,7 +52,7 @@ namespace Engin
 
 		bool RigidBody::isColliding(GameObject* other)
 		{
-			float distance = glm::length(glm::vec2(position - other->accessComponent<RigidBody>()->getPosition()));
+			float distance = glm::length(glm::vec2(position - other->accessComponent<Transform>()->getPosition()));
 			if (distance <= this->collisionRadius + other->accessComponent<RigidBody>()->getCollisionCircleRadius())
 			{
 				return true;

@@ -21,6 +21,7 @@ namespace Engin
 			float getYPosition() { return position.y; }
 			float getScale() { return scale; }
 			float getRotation() { return rotation; }
+			float getDepth() { return depth; }
 
 			//Setters
 			void setPosition(glm::vec2 newPos) { position = newPos; }
@@ -28,11 +29,13 @@ namespace Engin
 			void setYPosition(float yPos) { position.y = yPos; }
 			void setRotation(float newRot) { rotation = newRot; }
 			void setScale(float newScale) { scale = newScale; }
+			void setDepth(float newDepth) { depth = newDepth; }
 
 		private:
 			glm::vec2 position = glm::vec2(0.0f, 0.0f);
 			float rotation = 0.0f;
 			float scale = 1.0f;
+			float depth = 0.0f;
 		};
 	}
 }
