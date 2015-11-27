@@ -98,44 +98,46 @@ namespace Engin
 			planeX = 0.0f, planeY = 0.5; //the 2d raycaster version of camera plane
 
 			//adding sprites
-			sprite = { { 5.0f, 15.0f, 0.0f, 40 , 1 } }; //x, y, rotation(radians), how many sides, spritetype 
-			sprite1 = { { 12.0f, 18.3f, 0.0f, 40, 1 } };
-			sprite2 = { { 13.5f, 12.7f, 0.0f, 40, 1 } };
-			sprite3 = { {14.0f, 12.0f, 0.0f, 40, 1 } };
-			sprite4 = { {15.0f, 13.8f, 0.0f, 40, 1 } };
-			sprite5 = { { 16.0f, 4.0f, 0.0f, 40, 1 } };
-			sprite6 = { { 18.0f, 13.0f, 0.0f, 40, 1 } };
-			sprite7 = { { 12.4f, 14.9f, 0.0f, 40, 1 } };
-			sprite8 = { { 23.0f, 15.0f, 0.0f, 40, 1 } };
-			sprite9 = { { 12.199f, 16.2f, 0.0f, 40, 1 } };
-			fireball = { { 5.0f, 15.0f, glm::radians(180.0f), 8, 2 } };
-			fireball1 = { { 7.0f, 10.0f, glm::radians(180.0f), 8, 3 } };
-			fireball2 = { { 8.0f, 10.0f, 0.0f, 8, 4 } };
-			fireball3 = { { 9.0f, 10.0f, glm::radians(180.0f), 8, 5 } };
-			spriteContainer.push_back(sprite);
-			spriteContainer.push_back(sprite1);
-			spriteContainer.push_back(sprite2);
-			spriteContainer.push_back(sprite3);
-			spriteContainer.push_back(sprite4);
-			spriteContainer.push_back(sprite5);
-			spriteContainer.push_back(sprite6);
-			spriteContainer.push_back(sprite7);
-			spriteContainer.push_back(sprite8);
-			spriteContainer.push_back(sprite9);
-			spriteContainer.push_back(fireball);
-			spriteContainer.push_back(fireball1);
-			spriteContainer.push_back(fireball2);
-			spriteContainer.push_back(fireball3);
+			//sprite = { { 5.0f, 15.0f, 0.0f, 40 , 1 } }; //x, y, rotation(radians), how many sides, spritetype 
+			//sprite1 = { { 12.0f, 18.3f, 0.0f, 40, 1 } };
+			//sprite2 = { { 13.5f, 12.7f, 0.0f, 40, 1 } };
+			//sprite3 = { {14.0f, 12.0f, 0.0f, 40, 1 } };
+			//sprite4 = { {15.0f, 13.8f, 0.0f, 40, 1 } };
+			//sprite5 = { { 16.0f, 4.0f, 0.0f, 40, 1 } };
+			//sprite6 = { { 18.0f, 13.0f, 0.0f, 40, 1 } };
+			//sprite7 = { { 12.4f, 14.9f, 0.0f, 40, 1 } };
+			//sprite8 = { { 23.0f, 15.0f, 0.0f, 40, 1 } };
+			//sprite9 = { { 12.199f, 16.2f, 0.0f, 40, 1 } };
+			//fireball = { { 5.0f, 15.0f, glm::radians(180.0f), 8, 2 } };
+			//fireball1 = { { 7.0f, 10.0f, glm::radians(180.0f), 8, 3 } };
+			//fireball2 = { { 8.0f, 10.0f, 0.0f, 8, 4 } };
+			//fireball3 = { { 9.0f, 10.0f, glm::radians(180.0f), 8, 5 } };
+			//spriteContainer.push_back(sprite);
+			//spriteContainer.push_back(sprite1);
+			//spriteContainer.push_back(sprite2);
+			//spriteContainer.push_back(sprite3);
+			//spriteContainer.push_back(sprite4);
+			//spriteContainer.push_back(sprite5);
+			//spriteContainer.push_back(sprite6);
+			//spriteContainer.push_back(sprite7);
+			//spriteContainer.push_back(sprite8);
+			//spriteContainer.push_back(sprite9);
+			//spriteContainer.push_back(fireball);
+			//spriteContainer.push_back(fireball1);
+			//spriteContainer.push_back(fireball2);
+			//spriteContainer.push_back(fireball3);
 
 			//GameObjects.							TODO: All sprites should be made as game objects
-			gameObjects.push_back(new GameObject(&alphaBatch));
-			gameObjects.back()->addComponent<Sprite>();
-			gameObjects.back()->addComponent<Transform>();
-			gameObjects.back()->addComponent<RigidBody>();
-			gameObjects.back()->addComponent<AnimationPlayer>();
-			gameObjects.back()->addComponent<userData>();
-			
-			createFurball(5.0f, 15.0f, 0.0f, 40, 0.0f, 0.0f, 0.0f,0.0f,0.0f);			
+			createFurball(15.0f, 5.0f, 0.0f);
+			createFurball(12.0f, 18.3f, 0.0f);
+			createFurball(13.5f, 12.7f, 0.0f);
+			createFurball(14.0f, 12.0f, 0.0f);
+			createFurball(15.0f, 13.8f, 0.0f);
+			createFurball(16.0f, 4.0f, 0.0f);
+			createFurball(18.0f, 13.0f, 0.0f);
+			createFurball(12.4f, 14.9f, 0.0f);
+			createFurball(23.0f, 15.0f, 0.0f);
+			createFurball(12.199f, 16.2f, 0.0f);
 
 			//filling raycaster lines with 0
 			for (int i = 0; i < raycastW; i++)
@@ -146,7 +148,7 @@ namespace Engin
 				}
 			}
 			
-			DDASpriteDrawData.resize(spriteContainer.size());
+			//DDASpriteDrawData.resize(spriteContainer.size());
 
 			//filling world with 0
 			for (int i = 0; i < 25; i++)
@@ -277,45 +279,45 @@ namespace Engin
 				player[2] += glm::radians(360.0f);
 			}
 			
-			//rotating sprites in radians
-			spriteContainer[5][2] += 0.05f;
-			spriteContainer[0][2] += 0.01f;
-			spriteContainer[4][2] += 0.03f;
-			spriteContainer[10][2] += 0.01f; //fireball
+			////rotating sprites in radians
+			//spriteContainer[5][2] += 0.05f;
+			//spriteContainer[0][2] += 0.01f;
+			//spriteContainer[4][2] += 0.03f;
+			//spriteContainer[10][2] += 0.01f; //fireball
 
-			//moving sprites TODO: Make some logic and translate sprites with them.
-			spriteContainer[0][0] = 5.0f + cos(spriteContainer[0][2]);
-			spriteContainer[0][1] = 15.0f + sin(spriteContainer[0][2]);
+			////moving sprites TODO: Make some logic and translate sprites with them.
+			//spriteContainer[0][0] = 5.0f + cos(spriteContainer[0][2]);
+			//spriteContainer[0][1] = 15.0f + sin(spriteContainer[0][2]);
 
-			spriteContainer[10][0] = 5.0f - cos(spriteContainer[0][2]); //fireball
-			spriteContainer[10][1] = 15.0f - sin(spriteContainer[0][2]);
+			//spriteContainer[10][0] = 5.0f - cos(spriteContainer[0][2]); //fireball
+			//spriteContainer[10][1] = 15.0f - sin(spriteContainer[0][2]);
 
-			spriteContainer[4][0] = 15.0f + 3 * glm::cos(alpha);
-			spriteContainer[6][1] = 10.0f + 4 * glm::sin(alpha);
+			//spriteContainer[4][0] = 15.0f + 3 * glm::cos(alpha);
+			//spriteContainer[6][1] = 10.0f + 4 * glm::sin(alpha);
 
-			//moving the three fireballs
-			static float firex = 24.0f;
-			if (firex > 11.0f)
-			{
-				firex -= 0.05f;				
-			}
-			else
-			{
-				firex = 24.0f;
-			}
-			spriteContainer[11][1] = firex;			
-			spriteContainer[13][1] = firex;
+			////moving the three fireballs
+			//static float firex = 24.0f;
+			//if (firex > 11.0f)
+			//{
+			//	firex -= 0.05f;				
+			//}
+			//else
+			//{
+			//	firex = 24.0f;
+			//}
+			//spriteContainer[11][1] = firex;			
+			//spriteContainer[13][1] = firex;
 
-			static float firex2 = 11.0f;
-			if (firex2 < 24.0f)
-			{
-				firex2 += 0.05f;
-			}
-			else
-			{
-				firex2 = 11.0f;
-			}
-			spriteContainer[12][1] = firex2;
+			//static float firex2 = 11.0f;
+			//if (firex2 < 24.0f)
+			//{
+			//	firex2 += 0.05f;
+			//}
+			//else
+			//{
+			//	firex2 = 11.0f;
+			//}
+			//spriteContainer[12][1] = firex2;
 
 
 			//2d camera
@@ -336,8 +338,11 @@ namespace Engin
 			animPlayer2d.update();
 
 			//gameObjects
-
-			gameObjects[0]->update();
+			for (int i = 0; i < gameObjects.size(); i++)
+			{
+				gameObjects[i]->update();
+			}
+			
 		}
 
 		void Pseudo3D::interpolate(GLfloat alpha)
@@ -346,10 +351,13 @@ namespace Engin
 
 		void Pseudo3D::draw()
 		{
-			//obj draw test
-			gameObjects[0]->accessComponent<Sprite>()->draw();
-
 			//Raycast draw test
+			//obj draw test
+			for (int i = 0; i < gameObjects.size(); i++)
+			{
+				gameObjects[i]->accessComponent<FurballSpriteDraw>()->drawPseudoFurball();
+			}
+						
 			//Roof and floor
 			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -1600.0f, raycastH / 2, raycastW, raycastH / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.75, 0.5, 0.0 }, 1.0f, 0.0f);
 			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -1600.0f, 0.0f, raycastW, raycastH / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
@@ -380,84 +388,6 @@ namespace Engin
 			}
 #pragma endregion
 			
-			//"3D" sprites
-			if (DDASpriteDrawData.size() > 0)
-			{
-				for (int i = 0; i < DDASpriteDrawData.size(); i++)
-				{
-					if (DDASpriteDrawData[i][0] > -raycastW && DDASpriteDrawData[i][0] < (raycastW + tileSize) && DDASpriteDrawData[i][3]>0)
-					{
-						if (DDASpriteDrawData[i][1] <= 0)
-						{
-							depth = 2.0; //disappear
-						}
-						else
-						{
-							depth = (1.0f / DDASpriteDrawData[i][1]);
-						}						
-						
-						if (int(spriteContainer[i][4]) == 1) //furball with different directions
-						{					
-							animPlayerFur.setCurrentFrame(int(DDASpriteDrawData[i][4]));
-							alphaBatch.draw(animPlayerFur.getTexture(), animPlayerFur.getCurrentFrameTexCoords(),
-								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1],
-								256, 256, 0.0f, 0.0f, 0.0f,
-								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
-						}
-						//TODO: Change all sprites to use engine sprites
-						if (int(spriteContainer[i][4]) == 2) //animated flame
-						{				
-							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
-							spriteEndFrame = int(DDASpriteDrawData[i][4]) * 10 + 9;		
-							
-							animPlayerFire1.setLoopStartFrame(spriteStartFrame);						
-							animPlayerFire1.setLoopEndFrame(spriteEndFrame);
-							
-							alphaBatch.draw(animPlayerFire1.getTexture(), animPlayerFire1.getCurrentFrameTexCoords(),
-								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,
-								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
-						}	
-						if (int(spriteContainer[i][4]) == 3) //animated flame1
-						{
-							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
-							spriteEndFrame = int(DDASpriteDrawData[i][4]) * 10 + 9;
-
-							animPlayerFire2.setLoopStartFrame(spriteStartFrame);
-							animPlayerFire2.setLoopEndFrame(spriteEndFrame);
-
-							alphaBatch.draw(animPlayerFire2.getTexture(), animPlayerFire2.getCurrentFrameTexCoords(),
-								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,
-								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
-						}
-						if (int(spriteContainer[i][4]) == 4) //animated flame1
-						{
-							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
-							spriteEndFrame = int(DDASpriteDrawData[i][4]) * 10 + 9;
-
-							animPlayerFire3.setLoopStartFrame(spriteStartFrame);
-							animPlayerFire3.setLoopEndFrame(spriteEndFrame);
-
-							alphaBatch.draw(animPlayerFire3.getTexture(), animPlayerFire3.getCurrentFrameTexCoords(),
-								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,
-								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
-						}
-						if (int(spriteContainer[i][4]) == 5) //animated flame1
-						{
-							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
-							spriteEndFrame = int(DDASpriteDrawData[i][4]) * 10 + 9;
-
-							animPlayerFire4.setLoopStartFrame(spriteStartFrame);
-							animPlayerFire4.setLoopEndFrame(spriteEndFrame);
-
-							alphaBatch.draw(animPlayerFire4.getTexture(), animPlayerFire4.getCurrentFrameTexCoords(),
-								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,
-								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
-						}
-					}
-				}
-			}			
-			//---------------
-
 			//2D camera draw
 			//walls. TODO: Fix the cropping.
 			for (int i = 0; i <= mapY; i++)
@@ -472,21 +402,19 @@ namespace Engin
 				}				
 			}
 			//sprites
-			for (int i = 0; i < spriteContainer.size(); i++)
+			for (int i = 0; i < gameObjects.size(); i++)
 			{
-				if (int(spriteContainer[i][4]) == 1)
-				{
 					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
-						spriteContainer[i][0] * tileSize2d + 800, spriteContainer[i][1] * tileSize2d, furball->getWidth(), 
-						furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(spriteContainer[i][2]), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.01f);
-				}
+						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d + 800, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, furball->getWidth(),
+						furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(gameObjects[i]->accessComponent<Transform>()->getRotation()), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.01f);
 
-				else if (int(spriteContainer[i][4]) == 2 || int(spriteContainer[i][4]) == 3 || int(spriteContainer[i][4]) == 4 || int(spriteContainer[i][4]) == 5)
+				//TODO: 2d fireball
+				/*else if (int(spriteContainer[i][4]) == 2 || int(spriteContainer[i][4]) == 3 || int(spriteContainer[i][4]) == 4 || int(spriteContainer[i][4]) == 5)
 				{
 					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
 						spriteContainer[i][0] * tileSize2d + 800, spriteContainer[i][1] * tileSize2d, 256, 256, 256 / 2, 256 / 2, glm::degrees(spriteContainer[i][2]) + 90.0f,
 						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.01f);
-				}
+				}*/
 			}
 
 			//player
@@ -639,10 +567,10 @@ namespace Engin
 
 		void Pseudo3D::RaycastingSprites()
 		{
-			for (int i = 0; i < spriteContainer.size(); i++)
+			for (int i = 0; i < gameObjects.size(); i++)
 			{
-				spriteX = spriteContainer[i][0] - player[0];
-				spriteY = spriteContainer[i][1] - player[1];
+				spriteX = gameObjects[i]->accessComponent<Transform>()->getXPosition() - player[0];
+				spriteY = gameObjects[i]->accessComponent<Transform>()->getYPosition() - player[1];
 
 				glm::vec2 transform;
 
@@ -666,9 +594,9 @@ namespace Engin
 				}
 
 				//Sprites own facing changes the angle
-				if (spriteContainer[i][2] != 0.0f)
+				if (gameObjects[i]->accessComponent<Transform>()->getRotation() != 0.0f)
 				{
-					convertToFloat = float(spriteContainer[i][2]);
+					convertToFloat = float(gameObjects[i]->accessComponent<Transform>()->getRotation());
 					spriteFacing = glm::mod((-convertToFloat + glm::radians(360.0f)), glm::radians(360.0f));
 					spriteAngle -= spriteFacing;
 
@@ -676,18 +604,26 @@ namespace Engin
 					{
 						spriteAngle += glm::radians(360.0f);
 					}
+				}			
+
+				spriteAnimIndex = getSpriteAnimIndex(spriteAngle, gameObjects[i]->accessComponent<UserData>()->sides);
+
+				//Saving data //Muista siirtää sijainnit miinuksen puolelle 1600
+				gameObjects[i]->accessComponent<UserData>()->spriteXout =(spriteXout-1600.0f);
+				gameObjects[i]->accessComponent<UserData>()->spriteYout = (spriteYout);
+				gameObjects[i]->accessComponent<Transform>()->setScale(spriteScale);
+				gameObjects[i]->accessComponent<UserData>()->transformY = transform.y;
+				gameObjects[0]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
+
+				if (spriteYout <= 0)
+				{
+					depth = 2.0; //disappear
 				}
-				
-			
-
-				spriteAnimIndex = getSpriteAnimIndex(spriteAngle, spriteContainer[i][3]);
-
-				//Saving data
-				DDASpriteDrawData[i][0] = spriteXout;
-				DDASpriteDrawData[i][1] = spriteYout;
-				DDASpriteDrawData[i][2] = spriteScale;
-				DDASpriteDrawData[i][3] = transform.y;
-				DDASpriteDrawData[i][4] = spriteAnimIndex;
+				else
+				{
+					depth = (1.0f / spriteYout);
+				}
+				gameObjects[i]->accessComponent<Transform>()->setDepth(depth);
 			}			
 		}
 
@@ -709,17 +645,32 @@ namespace Engin
 			}
 		}
 
-		void Pseudo3D::createFurball(float x, float y, float rotation, int sides, double spriteXout, double spriteYout, double spriteScale, double transformY, int animationIndex)
+		//Raycast furball sprite
+		void Pseudo3D::createFurball(float x, float y, float rotation)
 		{
-			gameObjects.push_back(new GameObject());
+			gameObjects.push_back(new GameObject(&alphaBatch));
+			gameObjects.back()->addComponent<Transform>();
+			gameObjects.back()->addComponent<RigidBody>();
+			gameObjects.back()->addComponent<Sprite>();
+			gameObjects.back()->addComponent<AnimationPlayer>();
+			gameObjects.back()->addComponent<UserData>();
+			gameObjects.back()->addComponent<FurballSpriteDraw>();
+
 			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animFurball360);
 			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->pause();
 			gameObjects.back()->accessComponent<AnimationPlayer>()->setCurrentFrame(0);			
 			gameObjects.back()->accessComponent<Transform>()->setXPosition(x);
 			gameObjects.back()->accessComponent<Transform>()->setYPosition(y);
-			gameObjects.back()->accessComponent<Transform>()->setDepth(0.0f);
+			gameObjects.back()->accessComponent<Transform>()->setRotation(rotation);
 
-			
+			//userdata				
+			//how many sides, spriteXout(raycast), spriteYout(raycast), transform.y(from raycast), spriteAnimIndex(raycast)
+			gameObjects.back()->accessComponent<UserData>()->sides = 40;
+			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
+			gameObjects.back()->accessComponent<UserData>()->transformY = 0.0f;
+			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
+			gameObjects.back()->accessComponent<FurballSpriteDraw>()->setTextureBatch(&alphaBatch);
 		}
 	}
 }
