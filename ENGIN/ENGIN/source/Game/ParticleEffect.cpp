@@ -61,29 +61,32 @@ namespace Engin
 			this->textureID = textureID;
 			timeUntilNextStep = 0;
 			angle = 0;
+			particleVertices.reserve(NUM_PARTICLES);
 
 			for (int i = 0; i < NUM_PARTICLES; i++)
 			{
 				createParticle(particles + i);
+				Particle* p = particles + i;
+				p->position = glm::vec3(0.0f, 0.0f, 0.0001f * i);
 			}
 
 			for (int i = 0; i < 5 / TIMESTEP; i++)
 			{
 				step();
 			}
-		}
 
-		glm::vec2 ParticleEffect::curVelocity()
-		{
-			return glm::vec2(2 * cos(angle), 2.0f);
+			glGenBuffers(1, &VBO);
+			glBindBuffer(GL_ARRAY_BUFFER, VBO);
+			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * particleVertices.size(), particleVertices.data(), GL_DYNAMIC_DRAW);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 
 		void ParticleEffect::createParticle(Particle* p)
 		{
 			float randNum = distribution(generator);
 
-			p->position = glm::vec2(0.0f, 0.0f);
-			p->velocity = curVelocity() + glm::vec2(0.5f * randNum - 0.25);
+			p->position = glm::vec3(0.0f);
+			p->velocity = glm::vec2(1.0f * randNum * randNum * cos(angle) + 1.0f);
 			p->color = glm::vec4(1.0f, 1.0f, 1.0f, 0.0f);
 			p->age = 0.0f;
 			p->lifetime = randNum + 1;
@@ -91,7 +94,7 @@ namespace Engin
 
 		bool ParticleEffect::compareParticles(Particle* p1, Particle* p2)
 		{
-			return p1->position[1] < p2->position[1];
+			return p1->position[2] < p2->position[2];
 		}
 
 
@@ -107,9 +110,9 @@ namespace Engin
 			for (int i = 0; i < NUM_PARTICLES; i++)
 			{
 				Particle* p = particles + i;
-				p->position += p->velocity * TIMESTEP;
+				p->position += glm::vec3(p->velocity * TIMESTEP, 0.0f);
 				p->velocity += glm::vec2(0.0f, -GRAVITY * TIMESTEP);
-				p->age += TIMESTEP;
+				p->age += TIMESTEP * 3;
 
 				if (p->age > p->lifetime) { createParticle(p); }
 			}
