@@ -24,6 +24,7 @@ namespace Engin
 
 		HID::KeyboardInput* keyboardInput;
 		HID::MouseInput* mouseInput;
+		HID::GamepadInput* gamepadInput;
 	private:
 		void handleEvents();
 		void update(float deltaTime);
