@@ -39,6 +39,16 @@ namespace Engin
 				return frames[index];
 			}
 
+			int getFrameWidth()
+			{
+				return frameWidth;
+			}
+
+			int getFrameHeight()
+			{
+				return frameHeight;
+			}
+
 			glm::vec4* getTexCoords(size_t index)
 			{
 				assert(index < frames.size());
@@ -49,6 +59,8 @@ namespace Engin
 		private:
 			Texture* texture;
 			std::vector<Frame> frames;
+			int frameWidth;
+			int frameHeight;
 		};
 
 

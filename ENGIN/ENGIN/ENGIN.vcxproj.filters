@@ -195,6 +195,9 @@
     <ClInclude Include="include\Engin\Game\ParticleEffect.h">
       <Filter>Header Files\Game\Components</Filter>
     </ClInclude>
+    <ClInclude Include="include\Engin\Core\RNG.h">
+      <Filter>Header Files\Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Renderer\Window.cpp">
@@ -287,9 +290,6 @@
     <ClCompile Include="source\Renderer\TextRenderer.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
-    <ClCompile Include="source\Game\RigidBody.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\Renderer\TextureBatch.cpp">
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
@@ -303,6 +303,12 @@
       <Filter>Source Files\Game\Components</Filter>
     </ClCompile>
     <ClCompile Include="source\Game\Component.cpp">
+      <Filter>Source Files\Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Core\RNG.cpp">
+      <Filter>Source Files\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Game\RigidBody.cpp">
       <Filter>Source Files\Game\Components</Filter>
     </ClCompile>
   </ItemGroup>

@@ -4,7 +4,7 @@ namespace Engin
 {
 	namespace Game
 	{
-		AnimationPlayer::AnimationPlayer() : loop(false), currentFrame(0.0f)
+		AnimationPlayer::AnimationPlayer() : loop(false), currentFrame(0.0f), loopStartFrame(0), loopEndFrame(0)
 		{
 
 		}
@@ -19,7 +19,11 @@ namespace Engin
 			{
 				if (timer.getLocalTime() > animation->getFrame(currentFrame).duration)
 				{
-					if (++currentFrame >= animation->getNumberOfFrames())
+					if (currentFrame < loopStartFrame)
+					{
+						currentFrame = loopStartFrame;
+					}
+					if (++currentFrame >= animation->getNumberOfFrames() || currentFrame >= loopEndFrame )
 					{
 						stop();
 

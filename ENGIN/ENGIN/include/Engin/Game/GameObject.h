@@ -31,7 +31,7 @@ namespace Engin
 
 			void setNameTag(std::string newNameTag);
 			template <typename type> void addComponent();
-			template <typename type> Component* accessComponent();
+			template <typename type> type* accessComponent();
 
 			Renderer::TextureBatch* getTextureBatch();
 			
@@ -59,7 +59,7 @@ namespace Engin
 		}
 
 		template <typename type>
-		Component* GameObject::accessComponent()
+		type* GameObject::accessComponent()
 		{
 			type* temp;
 			for (unsigned int i = 0; i < components.size(); i++)
@@ -68,7 +68,7 @@ namespace Engin
 				temp = dynamic_cast<type*>(components[i]);
 				if (temp != nullptr)
 				{
-					return components[i];
+					return dynamic_cast<type*>(components[i]);
 				}
 			}
 			std::cout << "Component not found!" << std::endl;
