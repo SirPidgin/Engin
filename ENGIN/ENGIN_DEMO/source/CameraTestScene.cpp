@@ -47,7 +47,7 @@ namespace Engin
 			alphaBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
 
 			doge = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/doge.png");
-			SoundEngine->play2D("resources/rossini.mp3", GL_TRUE);
+			//SoundEngine->play2D("resources/rossini.mp3", GL_TRUE);
 		
 			textString = "Press T to get Global time";
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");

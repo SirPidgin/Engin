@@ -132,7 +132,14 @@ namespace Engin
 			gameObjects.back()->addComponent<Sprite>();
 			gameObjects.back()->addComponent<Transform>();
 			gameObjects.back()->addComponent<RigidBody>();
-			gameObjects.back()->accessComponent<Sprite>()->setCurrentSprite(mapSheet_64);
+			gameObjects.back()->addComponent<AnimationPlayer>();
+			//gameObjects.back()->accessComponent<Sprite>()->setCurrentSprite(mapSheet_64);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animFurball360);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->start();
+			gameObjects.back()->accessComponent<Transform>()->setXPosition(600.0f);
+			gameObjects.back()->accessComponent<Transform>()->setYPosition(800.0f);
+			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
 
 			//filling raycaster lines with 0
 			for (int i = 0; i < raycastW; i++)
@@ -333,8 +340,7 @@ namespace Engin
 			animPlayer2d.update();
 
 			//gameObjects
-			gameObjects[0]->accessComponent<Transform>()->setXPosition(600.0f);
-			gameObjects[0]->accessComponent<Transform>()->setYPosition(800.0f);
+
 			gameObjects[0]->update();
 		}
 

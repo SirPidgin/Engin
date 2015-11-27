@@ -4,10 +4,16 @@ namespace Engin
 {
 	namespace Game
 	{
-		AnimationPlayer::AnimationPlayer() : loop(false), currentFrame(0.0f), loopStartFrame(0), loopEndFrame(0)
+		AnimationPlayer::AnimationPlayer(GameObject* o) : Component(o), loop(false), currentFrame(0.0f), loopStartFrame(0), loopEndFrame(0)
 		{
 
 		}
+
+		AnimationPlayer::AnimationPlayer() : Component(nullptr), loop(false), currentFrame(0.0f), loopStartFrame(0), loopEndFrame(0)
+		{
+
+		}
+
 		AnimationPlayer::~AnimationPlayer()
 		{
 			animation = nullptr;
@@ -23,7 +29,7 @@ namespace Engin
 					{
 						currentFrame = loopStartFrame;
 					}
-					if (++currentFrame >= animation->getNumberOfFrames() || currentFrame >= loopEndFrame )
+					if (++currentFrame >= loopEndFrame || currentFrame >= animation->getNumberOfFrames())
 					{
 						stop();
 
@@ -45,6 +51,7 @@ namespace Engin
 			if (animation)
 			{
 				this->animation = animation;
+				loopEndFrame = animation->getNumberOfFrames();
 			}
 		}
 	}

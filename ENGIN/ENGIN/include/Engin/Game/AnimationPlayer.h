@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Engin\Game\Component.h"
 #include "Engin\Resources\Animation.h"
 #include "Engin\Core\Timer.h"
 
@@ -7,9 +8,10 @@ namespace Engin
 {
 	namespace Game
 	{
-		class AnimationPlayer
+		class AnimationPlayer : public Component
 		{
 		public:
+			AnimationPlayer(GameObject* o);
 			AnimationPlayer();
 			~AnimationPlayer();
 			void update();

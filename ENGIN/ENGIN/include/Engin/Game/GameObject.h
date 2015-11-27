@@ -50,11 +50,11 @@ namespace Engin
 		{
 			type* cast = new type(this);
 
-			if (std::is_base_of<Component, type>::value == false)
-			{
-				std::cout << "Given type in not a Component!" << std::endl;
-				return;
-			}
+			//if (std::is_base_of<Component, type>::value == false)
+			//{
+			//	std::cout << "Given type in not a Component!" << std::endl;
+			//	return;
+			//}
 			components.push_back(cast);
 		}
 
