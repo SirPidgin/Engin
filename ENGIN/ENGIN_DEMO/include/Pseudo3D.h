@@ -15,6 +15,7 @@
 #include "Engin\Resources\Animation.h"
 #include "Engin\Game\GameObject.h"
 #include <Engin\Game\Sprite.h>
+#include "Engin\Game\Component.h"
 
 #include <array>
 #include <vector>
@@ -37,6 +38,23 @@ namespace Engin
 
 			void Raycasting();
 			void RaycastingSprites();
+
+			void createFurball(float x, float y, float rotation, int sides, double spriteXout, double spriteYout, double spriteScale,  double transformY, int animationIndex);
+
+			class userData : public Component
+			{
+			public:
+				//how many sides, spriteXout(raycast), spriteYout(raycast) spriteScale(raycast), transform.y(from raycast), spriteAnimIndex(raycast)
+				float x;
+				float y; 
+				float rotation; 
+				int sides; 
+				double spriteXout; 
+				double spriteYout; 
+				double spriteScale; 
+				double transformY;
+				int animationIndex;
+			};
 			
 		private:
 			int getSpriteAnimIndex(double angle, double sides);
@@ -63,7 +81,7 @@ namespace Engin
 			Resources::Font* font;
 			Core::Timer myTimer;
 
-			std::array<std::array<int,25>,25> objectTiles; //Notice the world size mapX and mapY
+			std::array<std::array<int,25>,25> wallTiles; //Notice the world size mapX and mapY
 			std::vector<std::array<double, 5>> spriteContainer;
 			std::array<double,5> player;
 			std::array<double,5> sprite;
@@ -82,7 +100,6 @@ namespace Engin
 			std::array<double, 5> fireball3;
 
 			std::vector<GameObject*> gameObjects;
-			//GameObject gameObject;
 			
 			float alpha;
 

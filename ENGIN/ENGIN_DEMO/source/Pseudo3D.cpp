@@ -133,13 +133,9 @@ namespace Engin
 			gameObjects.back()->addComponent<Transform>();
 			gameObjects.back()->addComponent<RigidBody>();
 			gameObjects.back()->addComponent<AnimationPlayer>();
-			//gameObjects.back()->accessComponent<Sprite>()->setCurrentSprite(mapSheet_64);
-			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animFurball360);
-			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
-			gameObjects.back()->accessComponent<AnimationPlayer>()->start();
-			gameObjects.back()->accessComponent<Transform>()->setXPosition(600.0f);
-			gameObjects.back()->accessComponent<Transform>()->setYPosition(800.0f);
-			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
+			gameObjects.back()->addComponent<userData>();
+			
+			createFurball(5.0f, 15.0f, 0.0f, 40, 0.0f, 0.0f, 0.0f,0.0f,0.0f);			
 
 			//filling raycaster lines with 0
 			for (int i = 0; i < raycastW; i++)
@@ -157,7 +153,7 @@ namespace Engin
 			{
 				for (int j = 0; j < 25; j++)
 				{
-					objectTiles[i][j] = 0;
+					wallTiles[i][j] = 0;
 				}				
 			}
 
@@ -224,26 +220,26 @@ namespace Engin
 			//move forward if no wall in front of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_W))
 			{
-				if (objectTiles[int((player[0] + dirX * moveSpeed))][int(player[1])] == false) player[0] += dirX * moveSpeed;
-				if (objectTiles[int(player[0])][int(player[1] + dirY * moveSpeed)] == false) player[1] += dirY * moveSpeed;
+				if (wallTiles[int((player[0] + dirX * moveSpeed))][int(player[1])] == false) player[0] += dirX * moveSpeed;
+				if (wallTiles[int(player[0])][int(player[1] + dirY * moveSpeed)] == false) player[1] += dirY * moveSpeed;
 			}
 			//move backwards if no wall behind you
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_S))
 			{
-				if (objectTiles[int(player[0] - dirX * moveSpeed)][int(player[1])] == false) player[0] -= dirX * moveSpeed;
-				if (objectTiles[int(player[0])][int(player[1] - dirY * moveSpeed)] == false) player[1] -= dirY * moveSpeed;
+				if (wallTiles[int(player[0] - dirX * moveSpeed)][int(player[1])] == false) player[0] -= dirX * moveSpeed;
+				if (wallTiles[int(player[0])][int(player[1] - dirY * moveSpeed)] == false) player[1] -= dirY * moveSpeed;
 			}
 			//strafe left if no wall in left of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_A))
 			{
-				if (objectTiles[int(player[0] - planeX * moveSpeed)][int(player[1])] == false) player[0] -= planeX * moveSpeed;
-				if (objectTiles[int(player[0])][int(player[1] - planeY * moveSpeed)] == false) player[1] -= planeY * moveSpeed;
+				if (wallTiles[int(player[0] - planeX * moveSpeed)][int(player[1])] == false) player[0] -= planeX * moveSpeed;
+				if (wallTiles[int(player[0])][int(player[1] - planeY * moveSpeed)] == false) player[1] -= planeY * moveSpeed;
 			}
 			//strafe right if no wall in right of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_D))
 			{
-				if (objectTiles[int((player[0] + planeX * moveSpeed))][int(player[1])] == false) player[0] += planeX * moveSpeed;
-				if (objectTiles[int(player[0])][int(player[1] + planeY * moveSpeed)] == false) player[1] += planeY * moveSpeed;
+				if (wallTiles[int((player[0] + planeX * moveSpeed))][int(player[1])] == false) player[0] += planeX * moveSpeed;
+				if (wallTiles[int(player[0])][int(player[1] + planeY * moveSpeed)] == false) player[1] += planeY * moveSpeed;
 			}
 			//rotate to the right   
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
@@ -469,9 +465,9 @@ namespace Engin
 				for (int j = 0; j <= mapX; j++)
 				{
 					float offset = 32.0f;
-					if (objectTiles[j][i] != 0)
+					if (wallTiles[j][i] != 0)
 					{
-						opaqueBatch.draw(mapSheet_64, &glm::vec4((int(objectTiles[j][i])-1) * 64, 0.0f, 64, 64), (j * tileSize2d) + 800 + offset, i * tileSize2d+offset, 64.0f, 64.0f, 32.0f, 32.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
+						opaqueBatch.draw(mapSheet_64, &glm::vec4((int(wallTiles[j][i])-1) * 64, 0.0f, 64, 64), (j * tileSize2d) + 800 + offset, i * tileSize2d+offset, 64.0f, 64.0f, 32.0f, 32.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
 					}
 				}				
 			}
@@ -513,7 +509,7 @@ namespace Engin
 			{
 				if (xy.x >= 0 && xy.y >= 0)
 				{
-					objectTiles[xy.x][xy.y] = tiletype;
+					wallTiles[xy.x][xy.y] = tiletype;
 				}
 				break;
 			}
@@ -584,7 +580,7 @@ namespace Engin
 						side = 1;
 					}
 					//Check if ray has hit a wall
-					if (objectTiles[raycastX][raycastY] > 0)
+					if (wallTiles[raycastX][raycastY] > 0)
 					{
 						hit = 1;
 					}
@@ -607,7 +603,7 @@ namespace Engin
 				if (drawEnd >= raycastH)drawEnd = raycastH - 1;
 
 				//texturing calculations
-				texNum = objectTiles[raycastX][raycastY] - 1; //1 subtracted from it so that texture 0 can be used!
+				texNum = wallTiles[raycastX][raycastY] - 1; //1 subtracted from it so that texture 0 can be used!
 
 				//calculate value of wallX
 				wallX; //where exactly the wall was hit
@@ -621,7 +617,7 @@ namespace Engin
 				if (side == 1 && rayDirY < 0) texX = tileSize - texX - 1;
 
 				//choose wall color			
-				switch (objectTiles[raycastX][raycastY])
+				switch (wallTiles[raycastX][raycastY])
 				{
 				case 1:  raycastTileIndex = 1;  break; //red
 				case 2:  raycastTileIndex = 2;  break; //green
@@ -711,6 +707,19 @@ namespace Engin
 			{
 				return (glm::degrees(angle) + (spriteSideAngle / 2.0f)) / spriteSideAngle;
 			}
+		}
+
+		void Pseudo3D::createFurball(float x, float y, float rotation, int sides, double spriteXout, double spriteYout, double spriteScale, double transformY, int animationIndex)
+		{
+			gameObjects.push_back(new GameObject());
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animFurball360);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setCurrentFrame(0);			
+			gameObjects.back()->accessComponent<Transform>()->setXPosition(x);
+			gameObjects.back()->accessComponent<Transform>()->setYPosition(y);
+			gameObjects.back()->accessComponent<Transform>()->setDepth(0.0f);
+
+			
 		}
 	}
 }
