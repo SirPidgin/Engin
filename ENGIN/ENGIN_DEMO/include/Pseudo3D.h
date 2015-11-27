@@ -40,12 +40,12 @@ namespace Engin
 			void RaycastingSprites();
 
 			void createFurball(float x, float y, float rotation);
+			void createFireball(float x, float y, float rotation);
 
 			class UserData : public Component
 			{
 			public:
 				UserData(GameObject* o) : Component(o){}
-				//how many sides, spriteXout(raycast), spriteYout(raycast), transform.y(from raycast), spriteAnimIndex(raycast)
 				int sides; 
 				double transformY;
 				int animationIndex;
@@ -53,23 +53,22 @@ namespace Engin
 				int tileSize = 256;
 				double spriteXout;
 				double spriteYout;
+				bool isFireball = false;
+				int animationLoopStartFrame = 0;
+				int animationLoopEndFrame = 0;
 			};
 
-			class FurballSpriteDraw : public Component
+			class PseudoSpriteDraw : public Component
 			{
 			public:
-				FurballSpriteDraw(GameObject* o) : Component(o){}
+				PseudoSpriteDraw(GameObject* o) : Component(o){}
 				void setTextureBatch(Renderer::TextureBatch* newTextrBatch) { textureBatch = newTextrBatch; }
 				void drawPseudoFurball()
-				{
+				{					
 					if (ownerObject->accessComponent<UserData>()->spriteXout > -ownerObject->accessComponent<UserData>()->raycastW -1600
 						&& ownerObject->accessComponent<UserData>()->spriteXout < (ownerObject->accessComponent<UserData>()->raycastW -1600 + ownerObject->accessComponent<UserData>()->tileSize) 
 						&& ownerObject->accessComponent<UserData>()->transformY > 0)
 					{
-						//				alphaBatch.draw(animPlayerFur.getTexture(), animPlayerFur.getCurrentFrameTexCoords(),
-						//					DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1],
-						//					256, 256, 0.0f, 0.0f, 0.0f,
-						//					DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
 						textureBatch->draw(ownerObject->accessComponent<AnimationPlayer>()->getTexture(), ownerObject->accessComponent<AnimationPlayer>()->getCurrentFrameTexCoords(),
 							ownerObject->accessComponent<UserData>()->spriteXout, ownerObject->accessComponent<UserData>()->spriteYout,
 							ownerObject->accessComponent<AnimationPlayer>()->getFrameWidth(), ownerObject->accessComponent<AnimationPlayer>()->getFrameHeight(),
@@ -109,22 +108,7 @@ namespace Engin
 			Core::Timer myTimer;
 
 			std::array<std::array<int,25>,25> wallTiles; //Notice the world size mapX and mapY
-			//std::vector<std::array<double, 5>> spriteContainer;
 			std::array<double,5> player;
-			/*std::array<double,5> sprite;
-			std::array<double,5> sprite1;
-			std::array<double,5> sprite2;
-			std::array<double,5> sprite3;
-			std::array<double,5> sprite4;
-			std::array<double,5> sprite5;
-			std::array<double,5> sprite6;
-			std::array<double,5> sprite7;
-			std::array<double,5> sprite8;
-			std::array<double,5> sprite9;
-			std::array<double,5> fireball;
-			std::array<double, 5> fireball1;
-			std::array<double, 5> fireball2;
-			std::array<double, 5> fireball3;*/
 
 			std::vector<GameObject*> gameObjects;
 			
@@ -141,11 +125,6 @@ namespace Engin
 			//Raycasting
 			Resources::Animation* animFurball360;
 			Resources::Animation* animFireball360;
-			AnimationPlayer animPlayerFur;
-			AnimationPlayer animPlayerFire1;
-			AnimationPlayer animPlayerFire2;
-			AnimationPlayer animPlayerFire3;
-			AnimationPlayer animPlayerFire4;
 			AnimationPlayer animPlayer2d;
 
 			int raycastW;
@@ -157,7 +136,6 @@ namespace Engin
 
 			int raycastTileIndex;
 			std::array<std::array<double,5>, 400> DDAlines; //change DDAlines size accordingly
-			//std::vector<std::array<double,5>> DDASpriteDrawData;
 			int spriteAnimIndex;
 			double depth;
 

@@ -29,7 +29,6 @@ namespace Engin
 			alphaBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
 			guiBatch.setShader(alphaShader);
 			guiBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
-
 			
 			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");			
 			mapSheet_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_64.png");
@@ -37,37 +36,9 @@ namespace Engin
 			roof_16 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/roof.png");
 			
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
-			animPlayerFur.setAnimation(animFurball360);
-			animPlayerFur.loopable(true);
-			animPlayerFur.pause();
-
 			animFireball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/fireball360_8.xml");
-			animPlayerFire1.setAnimation(animFireball360);
-			animPlayerFire1.loopable(true);
-			animPlayerFire1.setLoopStartFrame(0);
-			animPlayerFire1.setLoopEndFrame(9);
-			animPlayerFire1.start();
-
-			animPlayerFire2.setAnimation(animFireball360);
-			animPlayerFire2.loopable(true);
-			animPlayerFire2.setLoopStartFrame(0);
-			animPlayerFire2.setLoopEndFrame(9);
-			animPlayerFire2.start();
-
-			animPlayerFire3.setAnimation(animFireball360);
-			animPlayerFire3.loopable(true);
-			animPlayerFire3.setLoopStartFrame(0);
-			animPlayerFire3.setLoopEndFrame(9);
-			animPlayerFire3.start();
-
-			animPlayerFire4.setAnimation(animFireball360);
-			animPlayerFire4.loopable(true);
-			animPlayerFire4.setLoopStartFrame(0);
-			animPlayerFire4.setLoopEndFrame(9);
-			animPlayerFire4.start();
 
 			animPlayer2d.setAnimation(animFireball360);
-			animPlayer2d.loopable(true);
 			animPlayer2d.setLoopStartFrame(20);
 			animPlayer2d.setLoopEndFrame(29);
 			animPlayer2d.start();
@@ -97,37 +68,7 @@ namespace Engin
 			dirX = -1, dirY = 0; //initial direction vector
 			planeX = 0.0f, planeY = 0.5; //the 2d raycaster version of camera plane
 
-			//adding sprites
-			//sprite = { { 5.0f, 15.0f, 0.0f, 40 , 1 } }; //x, y, rotation(radians), how many sides, spritetype 
-			//sprite1 = { { 12.0f, 18.3f, 0.0f, 40, 1 } };
-			//sprite2 = { { 13.5f, 12.7f, 0.0f, 40, 1 } };
-			//sprite3 = { {14.0f, 12.0f, 0.0f, 40, 1 } };
-			//sprite4 = { {15.0f, 13.8f, 0.0f, 40, 1 } };
-			//sprite5 = { { 16.0f, 4.0f, 0.0f, 40, 1 } };
-			//sprite6 = { { 18.0f, 13.0f, 0.0f, 40, 1 } };
-			//sprite7 = { { 12.4f, 14.9f, 0.0f, 40, 1 } };
-			//sprite8 = { { 23.0f, 15.0f, 0.0f, 40, 1 } };
-			//sprite9 = { { 12.199f, 16.2f, 0.0f, 40, 1 } };
-			//fireball = { { 5.0f, 15.0f, glm::radians(180.0f), 8, 2 } };
-			//fireball1 = { { 7.0f, 10.0f, glm::radians(180.0f), 8, 3 } };
-			//fireball2 = { { 8.0f, 10.0f, 0.0f, 8, 4 } };
-			//fireball3 = { { 9.0f, 10.0f, glm::radians(180.0f), 8, 5 } };
-			//spriteContainer.push_back(sprite);
-			//spriteContainer.push_back(sprite1);
-			//spriteContainer.push_back(sprite2);
-			//spriteContainer.push_back(sprite3);
-			//spriteContainer.push_back(sprite4);
-			//spriteContainer.push_back(sprite5);
-			//spriteContainer.push_back(sprite6);
-			//spriteContainer.push_back(sprite7);
-			//spriteContainer.push_back(sprite8);
-			//spriteContainer.push_back(sprite9);
-			//spriteContainer.push_back(fireball);
-			//spriteContainer.push_back(fireball1);
-			//spriteContainer.push_back(fireball2);
-			//spriteContainer.push_back(fireball3);
-
-			//GameObjects.							TODO: All sprites should be made as game objects
+			//GameObjects.
 			createFurball(15.0f, 5.0f, 0.0f);
 			createFurball(12.0f, 18.3f, 0.0f);
 			createFurball(13.5f, 12.7f, 0.0f);
@@ -138,6 +79,11 @@ namespace Engin
 			createFurball(12.4f, 14.9f, 0.0f);
 			createFurball(23.0f, 15.0f, 0.0f);
 			createFurball(12.199f, 16.2f, 0.0f);
+
+			createFireball(5.0f, 15.0f, 0.0f);
+			createFireball(7.0f, 10.0f, glm::radians(180.0f));
+			createFireball(8.0f, 10.0f, 0.0f);
+			createFireball(9.0f, 10.0f, glm::radians(180.0f));
 
 			//filling raycaster lines with 0
 			for (int i = 0; i < raycastW; i++)
@@ -279,45 +225,45 @@ namespace Engin
 				player[2] += glm::radians(360.0f);
 			}
 			
-			////rotating sprites in radians
-			//spriteContainer[5][2] += 0.05f;
-			//spriteContainer[0][2] += 0.01f;
-			//spriteContainer[4][2] += 0.03f;
-			//spriteContainer[10][2] += 0.01f; //fireball
+			//rotating sprites in radians
+			gameObjects[5]->accessComponent<Transform>()->setRotation(alpha * 5);
+			gameObjects[0]->accessComponent<Transform>()->setRotation(2*alpha);
+			gameObjects[4]->accessComponent<Transform>()->setRotation(alpha + 0.02);
+			gameObjects[10]->accessComponent<Transform>()->setRotation(glm::radians(180.0f) + 2*alpha); //fireball that follows furball
 
-			////moving sprites TODO: Make some logic and translate sprites with them.
-			//spriteContainer[0][0] = 5.0f + cos(spriteContainer[0][2]);
-			//spriteContainer[0][1] = 15.0f + sin(spriteContainer[0][2]);
+			//moving sprites TODO: Make some logic and translate sprites with them.
+			gameObjects[0]->accessComponent<Transform>()->setXPosition(5.0f + glm::cos(gameObjects[0]->accessComponent<Transform>()->getRotation()));
+			gameObjects[0]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[0]->accessComponent<Transform>()->getRotation()));
 
-			//spriteContainer[10][0] = 5.0f - cos(spriteContainer[0][2]); //fireball
-			//spriteContainer[10][1] = 15.0f - sin(spriteContainer[0][2]);
+			gameObjects[10]->accessComponent<Transform>()->setXPosition(5.0f + glm::cos(gameObjects[10]->accessComponent<Transform>()->getRotation())); //fireball
+			gameObjects[10]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[10]->accessComponent<Transform>()->getRotation()));
 
-			//spriteContainer[4][0] = 15.0f + 3 * glm::cos(alpha);
-			//spriteContainer[6][1] = 10.0f + 4 * glm::sin(alpha);
+			gameObjects[4]->accessComponent<Transform>()->setXPosition(15.0f + 3 * glm::cos(alpha));
+			gameObjects[6]->accessComponent<Transform>()->setYPosition(10.0f + 4 * glm::sin(alpha));
 
-			////moving the three fireballs
-			//static float firex = 24.0f;
-			//if (firex > 11.0f)
-			//{
-			//	firex -= 0.05f;				
-			//}
-			//else
-			//{
-			//	firex = 24.0f;
-			//}
-			//spriteContainer[11][1] = firex;			
-			//spriteContainer[13][1] = firex;
+			//moving the three fireballs
+			static float firex = 24.0f;
+			if (firex > 11.0f)
+			{
+				firex -= 0.05f;				
+			}
+			else
+			{
+				firex = 24.0f;
+			}
+			gameObjects[11]->accessComponent<Transform>()->setYPosition(firex);
+			gameObjects[13]->accessComponent<Transform>()->setYPosition(firex);
 
-			//static float firex2 = 11.0f;
-			//if (firex2 < 24.0f)
-			//{
-			//	firex2 += 0.05f;
-			//}
-			//else
-			//{
-			//	firex2 = 11.0f;
-			//}
-			//spriteContainer[12][1] = firex2;
+			static float firex2 = 11.0f;
+			if (firex2 < 24.0f)
+			{
+				firex2 += 0.05f;
+			}
+			else
+			{
+				firex2 = 11.0f;
+			}
+			gameObjects[12]->accessComponent<Transform>()->setYPosition(firex2);
 
 
 			//2d camera
@@ -331,12 +277,7 @@ namespace Engin
 			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
 			text = textCreator.getTexture();
 			
-			animPlayerFire1.update();
-			animPlayerFire2.update();
-			animPlayerFire3.update();
-			animPlayerFire4.update();
 			animPlayer2d.update();
-
 			//gameObjects
 			for (int i = 0; i < gameObjects.size(); i++)
 			{
@@ -355,7 +296,7 @@ namespace Engin
 			//obj draw test
 			for (int i = 0; i < gameObjects.size(); i++)
 			{
-				gameObjects[i]->accessComponent<FurballSpriteDraw>()->drawPseudoFurball();
+				gameObjects[i]->accessComponent<PseudoSpriteDraw>()->drawPseudoFurball();
 			}
 						
 			//Roof and floor
@@ -404,17 +345,19 @@ namespace Engin
 			//sprites
 			for (int i = 0; i < gameObjects.size(); i++)
 			{
+				if (gameObjects[i]->accessComponent<UserData>()->isFireball != true)
+				{
 					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d + 800, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, furball->getWidth(),
 						furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(gameObjects[i]->accessComponent<Transform>()->getRotation()), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.01f);
-
+				}
 				//TODO: 2d fireball
-				/*else if (int(spriteContainer[i][4]) == 2 || int(spriteContainer[i][4]) == 3 || int(spriteContainer[i][4]) == 4 || int(spriteContainer[i][4]) == 5)
+				else
 				{
 					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
-						spriteContainer[i][0] * tileSize2d + 800, spriteContainer[i][1] * tileSize2d, 256, 256, 256 / 2, 256 / 2, glm::degrees(spriteContainer[i][2]) + 90.0f,
+						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d + 800, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, 256, 256, 256 / 2, 256 / 2, glm::degrees(gameObjects[i]->accessComponent<Transform>()->getRotation()) + 90.0f,
 						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.01f);
-				}*/
+				}
 			}
 
 			//player
@@ -608,12 +551,22 @@ namespace Engin
 
 				spriteAnimIndex = getSpriteAnimIndex(spriteAngle, gameObjects[i]->accessComponent<UserData>()->sides);
 
-				//Saving data //Muista siirtää sijainnit miinuksen puolelle 1600
+				//Saving data //Muista siirtää sijainnit miinuksen puolelle 1600 että ei piirry 2d scenen päälle
 				gameObjects[i]->accessComponent<UserData>()->spriteXout =(spriteXout-1600.0f);
 				gameObjects[i]->accessComponent<UserData>()->spriteYout = (spriteYout);
 				gameObjects[i]->accessComponent<Transform>()->setScale(spriteScale);
 				gameObjects[i]->accessComponent<UserData>()->transformY = transform.y;
-				gameObjects[i]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
+
+				if (gameObjects[i]->accessComponent<UserData>()->isFireball == true)
+				{
+					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopStartFrame(int(spriteAnimIndex * 10));
+					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopEndFrame(int(spriteAnimIndex * 10 + 9));
+				}
+				else
+				{
+					gameObjects[i]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
+
+				}
 
 				if (spriteYout <= 0)
 				{
@@ -654,7 +607,7 @@ namespace Engin
 			gameObjects.back()->addComponent<Sprite>();
 			gameObjects.back()->addComponent<AnimationPlayer>();
 			gameObjects.back()->addComponent<UserData>();
-			gameObjects.back()->addComponent<FurballSpriteDraw>();
+			gameObjects.back()->addComponent<PseudoSpriteDraw>();
 
 			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animFurball360);
 			gameObjects.back()->accessComponent<AnimationPlayer>()->setLoopEndFrame(0);
@@ -666,12 +619,41 @@ namespace Engin
 			gameObjects.back()->accessComponent<Transform>()->setRotation(rotation);
 
 			//userdata				
-			//how many sides, spriteXout(raycast), spriteYout(raycast), transform.y(from raycast), spriteAnimIndex(raycast)
 			gameObjects.back()->accessComponent<UserData>()->sides = 40;
 			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
 			gameObjects.back()->accessComponent<UserData>()->transformY = 0.0f;
 			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
-			gameObjects.back()->accessComponent<FurballSpriteDraw>()->setTextureBatch(&alphaBatch);
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
+		}
+
+		//Raycast fireball sprite
+		void Pseudo3D::createFireball(float x, float y, float rotation)
+		{
+			gameObjects.push_back(new GameObject(&alphaBatch));
+			gameObjects.back()->addComponent<Transform>();
+			gameObjects.back()->addComponent<RigidBody>();
+			gameObjects.back()->addComponent<Sprite>();
+			gameObjects.back()->addComponent<AnimationPlayer>();
+			gameObjects.back()->addComponent<UserData>();
+			gameObjects.back()->addComponent<PseudoSpriteDraw>();
+
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animFireball360);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setLoopEndFrame(9);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->start();
+			
+			gameObjects.back()->accessComponent<Transform>()->setXPosition(x);
+			gameObjects.back()->accessComponent<Transform>()->setYPosition(y);
+			gameObjects.back()->accessComponent<Transform>()->setRotation(rotation);
+
+			//userdata
+			gameObjects.back()->accessComponent<UserData>()->sides = 8;
+			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
+			gameObjects.back()->accessComponent<UserData>()->transformY = 0.0f;
+			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
+
+			gameObjects.back()->accessComponent<UserData>()->isFireball = true;
 		}
 	}
 }
