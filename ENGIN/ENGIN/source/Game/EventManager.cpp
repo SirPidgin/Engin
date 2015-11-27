@@ -6,7 +6,7 @@ namespace Engin
 {
 	namespace Game
 	{
-		EventManager::EventManager(HID::KeyboardInput* kbInput, HID::MouseInput* mInput) : quitState(false), keyboardInput(kbInput), mouseInput(mInput)
+		EventManager::EventManager(HID::KeyboardInput* kbInput, HID::MouseInput* mInput, HID::GamepadInput* gpInput) : quitState(false), keyboardInput(kbInput), mouseInput(mInput), gamepadInput(gpInput)
 		{
 		}
 		EventManager::~EventManager()
@@ -29,7 +29,7 @@ namespace Engin
 			{
 				switch (inputEvent.type)
 				{
-					//HID
+					//Keyboard
 				case SDL_KEYDOWN:
 					keyboardInput->pressKey(inputEvent.key.keysym.sym);
 					break;
@@ -37,6 +37,7 @@ namespace Engin
 					keyboardInput->releaseKey(inputEvent.key.keysym.sym);
 					break;
 
+					//Mouse
 				case SDL_MOUSEBUTTONDOWN:
 					mouseInput->pressButton(inputEvent.button.button);
 					break;
@@ -50,24 +51,53 @@ namespace Engin
 					mouseInput->moveMouseWheel(inputEvent.wheel.y);
 					break;
 
-				//case SDL_JOYBUTTONDOWN:
-				//	gamepadInput->pressButton(inputEvent.jbutton.button);
-				//	break;
-				//case SDL_JOYBUTTONUP:
-				//	gamepadInput->releaseButton(inputEvent.jbutton.button);
+					//Gamepad
+					//*Joystick
+				case SDL_JOYBUTTONDOWN:
+					gamepadInput->pressButton(inputEvent.jbutton.button, inputEvent.jbutton.which);
+					break;
+				case SDL_JOYBUTTONUP:
+					gamepadInput->releaseButton(inputEvent.jbutton.button, inputEvent.jbutton.which);
 					break;
 				case SDL_JOYAXISMOTION:
+					gamepadInput->axisMotion(inputEvent.jaxis.axis, inputEvent.jaxis.value, inputEvent.jaxis.which);
 					break;
 				case SDL_JOYBALLMOTION:
+					gamepadInput->ballMotion(inputEvent.jball.ball, inputEvent.jball.xrel, inputEvent.jball.yrel, inputEvent.jball.which);
 					break;
 				case SDL_JOYHATMOTION:
+					gamepadInput->hatMotion(inputEvent.jhat.hat, inputEvent.jhat.value, inputEvent.jhat.which);
 					break;
 				case SDL_JOYDEVICEADDED:
+					gamepadInput->addDevice(inputEvent.jdevice.which);
 					break;
 				case SDL_JOYDEVICEREMOVED:
+					gamepadInput->removeDevice(inputEvent.jdevice.which);
+					break;
+					//*Controller (Is this necessary, or does SDL really handle these separately?)
+				case SDL_CONTROLLERBUTTONDOWN:
+					gamepadInput->pressButton(inputEvent.cbutton.button, inputEvent.cbutton.which);
+					break;
+				case SDL_CONTROLLERBUTTONUP:
+					gamepadInput->pressButton(inputEvent.cbutton.button, inputEvent.cbutton.which);
+					break;
+				case SDL_CONTROLLERAXISMOTION:
+					gamepadInput->axisMotion(inputEvent.caxis.axis, inputEvent.caxis.value, inputEvent.caxis.which);
+					break;
+				case SDL_CONTROLLERDEVICEADDED:
+					gamepadInput->addDevice(inputEvent.cdevice.which);
+					break;
+				case SDL_CONTROLLERDEVICEREMOVED:
+					gamepadInput->removeDevice(inputEvent.cdevice.which);
 					break;
 
-
+					//Touch Events
+				case SDL_FINGERMOTION:
+					break;
+				case SDL_FINGERDOWN:
+					break;
+				case SDL_FINGERUP:
+					break;
 
 					//QUIT
 				case SDL_QUIT:
@@ -75,7 +105,8 @@ namespace Engin
 					break;
 
 					//WINDOW EVENTS
-
+				case SDL_WINDOWEVENT:
+					break;
 
 				}
 			}

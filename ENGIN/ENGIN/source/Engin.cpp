@@ -15,7 +15,8 @@ namespace Engin
 	{
 		keyboardInput = new HID::KeyboardInput();
 		mouseInput = new HID::MouseInput();
-		eventManager = new Game::EventManager(keyboardInput, mouseInput);
+		gamepadInput = new HID::GamepadInput();
+		eventManager = new Game::EventManager(keyboardInput, mouseInput, gamepadInput);
 	}
 
 	Engin::~Engin()
