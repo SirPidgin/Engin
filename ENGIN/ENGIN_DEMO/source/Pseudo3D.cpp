@@ -84,11 +84,11 @@ namespace Engin
 			tileSize2d = 64;
 			alpha = 0.0f;
 
-			//DDA
+			//Raycast init
 			tileSize = 256;
 
-			w = 400; //In pseudo3d header change DDAlines size accordingly
-			h = 400;
+			raycastW = 400; //In pseudo3d header change DDAlines size accordingly
+			raycastH = 400;
 
 			moveSpeed = 0.11f;
 			rotSpeed = 0.02f;
@@ -135,7 +135,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<Sprite>()->setCurrentSprite(mapSheet_64);
 
 			//filling raycaster lines with 0
-			for (int i = 0; i < w; i++)
+			for (int i = 0; i < raycastW; i++)
 			{
 				for (int j = 0; j < 5; j++)
 				{
@@ -264,8 +264,8 @@ namespace Engin
 			alpha += 0.01;			
 			
 			//Raycast calculations.
-			DDA();
-			DDADrawSprites();
+			Raycasting();
+			RaycastingSprites();
 
 			//Saving player rotation
 			player[2] = -glm::atan(dirX, dirY);
@@ -349,8 +349,8 @@ namespace Engin
 
 			//Raycast draw test
 			//Roof and floor
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, w, h), -1600.0f, h / 2, w, h / 2, 0.0f, 0.0f, 0.0f, 1.0f, {0.75,0.5,0.0}, 1.0f, 0.0f);
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, w, h), -1600.0f, 0.0f, w, h / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -1600.0f, raycastH / 2, raycastW, raycastH / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.75, 0.5, 0.0 }, 1.0f, 0.0f);
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -1600.0f, 0.0f, raycastW, raycastH / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
 
 #pragma region WallTileDraw
 			for (int i = 0; i < DDAlines.size(); i++)
@@ -383,11 +383,11 @@ namespace Engin
 			{
 				for (int i = 0; i < DDASpriteDrawData.size(); i++)
 				{
-					if (DDASpriteDrawData[i][0] > -w && DDASpriteDrawData[i][0] < (w + tileSize) && DDASpriteDrawData[i][3]>0)
+					if (DDASpriteDrawData[i][0] > -raycastW && DDASpriteDrawData[i][0] < (raycastW + tileSize) && DDASpriteDrawData[i][3]>0)
 					{
 						if (DDASpriteDrawData[i][1] <= 0)
 						{
-							depth = h; //disappear
+							depth = 2.0; //disappear
 						}
 						else
 						{
@@ -516,20 +516,20 @@ namespace Engin
 			}
 		}
 
-		void Pseudo3D::DDA() //Vector operations are slow, changed to std::arrays, change array sizes accordingly in the Pseudo3D header.
+		void Pseudo3D::Raycasting() //Vector operations are slow, changed to std::arrays, change array sizes accordingly in the Pseudo3D header.
 		{
-			for (int x = 0; x < w; x++)
+			for (int x = 0; x < raycastW; x++)
 			{
 				//calculate ray position and direction 
-				cameraX = 2 * x / double(w) - 1; //x-coordinate in camera space
+				cameraX = 2 * x / double(raycastW) - 1; //x-coordinate in camera space
 				rayPosX = player[0];
 				rayPosY = player[1];
 				rayDirX = dirX + planeX * cameraX;
 				rayDirY = dirY + planeY * cameraX;
 
 				//which box of the map we're in  
-				DDAX = int(rayPosX);
-				DDAY = int(rayPosY);
+				raycastX = int(rayPosX);
+				raycastY = int(rayPosY);
 
 				//length of ray from one x or y-side to next x or y-side
 				deltaDistX = sqrt(1 + (rayDirY * rayDirY) / (rayDirX * rayDirX));
@@ -543,22 +543,22 @@ namespace Engin
 				if (rayDirX < 0)
 				{
 					stepX = -1;
-					sideDistX = (rayPosX - DDAX) * deltaDistX;
+					sideDistX = (rayPosX - raycastX) * deltaDistX;
 				}
 				else
 				{
 					stepX = 1;
-					sideDistX = (DDAX + 1.0 - rayPosX) * deltaDistX;
+					sideDistX = (raycastX + 1.0 - rayPosX) * deltaDistX;
 				}
 				if (rayDirY < 0)
 				{
 					stepY = -1;
-					sideDistY = (rayPosY - DDAY) * deltaDistY;
+					sideDistY = (rayPosY - raycastY) * deltaDistY;
 				}
 				else
 				{
 					stepY = 1;
-					sideDistY = (DDAY + 1.0 - rayPosY) * deltaDistY;
+					sideDistY = (raycastY + 1.0 - rayPosY) * deltaDistY;
 				}
 
 				//perform DDA
@@ -568,17 +568,17 @@ namespace Engin
 					if (sideDistX < sideDistY)
 					{
 						sideDistX += deltaDistX;
-						DDAX += stepX;
+						raycastX += stepX;
 						side = 0;
 					}
 					else
 					{
 						sideDistY += deltaDistY;
-						DDAY += stepY;
+						raycastY += stepY;
 						side = 1;
 					}
 					//Check if ray has hit a wall
-					if (objectTiles[DDAX][DDAY] > 0)
+					if (objectTiles[raycastX][raycastY] > 0)
 					{
 						hit = 1;
 					}
@@ -587,26 +587,26 @@ namespace Engin
 
 				//Calculate distance projected on camera direction (oblique distance will give fisheye effect!)
 				if (side == 0)
-					perpWallDist = fabs((DDAX - rayPosX + (1 - stepX) / 2) / rayDirX);
+					perpWallDist = fabs((raycastX - rayPosX + (1 - stepX) / 2) / rayDirX);
 				else
-					perpWallDist = fabs((DDAY - rayPosY + (1 - stepY) / 2) / rayDirY);
+					perpWallDist = fabs((raycastY - rayPosY + (1 - stepY) / 2) / rayDirY);
 
 				//Calculate height of line to draw on screen
-				lineHeight = glm::abs(int(h / perpWallDist));
+				lineHeight = glm::abs(int(raycastH / perpWallDist));
 
 				//calculate lowest and highest pixel to fill in current stripe
-				drawStart = -lineHeight / 2 + h / 2;
+				drawStart = -lineHeight / 2 + raycastH / 2;
 				if (drawStart < 0)drawStart = 0;
-				drawEnd = lineHeight / 2 + h / 2;
-				if (drawEnd >= h)drawEnd = h - 1;
+				drawEnd = lineHeight / 2 + raycastH / 2;
+				if (drawEnd >= raycastH)drawEnd = raycastH - 1;
 
 				//texturing calculations
-				texNum = objectTiles[DDAX][DDAY] - 1; //1 subtracted from it so that texture 0 can be used!
+				texNum = objectTiles[raycastX][raycastY] - 1; //1 subtracted from it so that texture 0 can be used!
 
 				//calculate value of wallX
 				wallX; //where exactly the wall was hit
-				if (side == 1) wallX = rayPosX + ((DDAY - rayPosY + (1 - stepY) / 2) / rayDirY) * rayDirX;
-				else       wallX = rayPosY + ((DDAX - rayPosX + (1 - stepX) / 2) / rayDirX) * rayDirY;
+				if (side == 1) wallX = rayPosX + ((raycastY - rayPosY + (1 - stepY) / 2) / rayDirY) * rayDirX;
+				else       wallX = rayPosY + ((raycastX - rayPosX + (1 - stepX) / 2) / rayDirX) * rayDirY;
 				wallX -= floor((wallX));
 
 				//x coordinate on the texture
@@ -615,27 +615,27 @@ namespace Engin
 				if (side == 1 && rayDirY < 0) texX = tileSize - texX - 1;
 
 				//choose wall color			
-				switch (objectTiles[DDAX][DDAY])
+				switch (objectTiles[raycastX][raycastY])
 				{
-				case 1:  drawColor = 1;  break; //red
-				case 2:  drawColor = 2;  break; //green
-				case 3:  drawColor = 3;   break; //blue
-				case 4:  drawColor = 4;  break; //white
-				default: drawColor = 5; break; //yellow
+				case 1:  raycastTileIndex = 1;  break; //red
+				case 2:  raycastTileIndex = 2;  break; //green
+				case 3:  raycastTileIndex = 3;   break; //blue
+				case 4:  raycastTileIndex = 4;  break; //white
+				default: raycastTileIndex = 5; break; //yellow
 				}
-				if (side == 1) { drawColor += 5; }
+				if (side == 1) { raycastTileIndex += 5; }
 				
 				//Saving calculated data for camera slice 
 				DDAlines[x][0] = x;
 				DDAlines[x][1] = drawStart;
 				DDAlines[x][2] = drawEnd;
-				DDAlines[x][3] = drawColor;
+				DDAlines[x][3] = raycastTileIndex;
 				DDAlines[x][4] = texX;
 				//---------------------------------------
 			}			
 		}
 
-		void Pseudo3D::DDADrawSprites()
+		void Pseudo3D::RaycastingSprites()
 		{
 			for (int i = 0; i < spriteContainer.size(); i++)
 			{
@@ -648,12 +648,12 @@ namespace Engin
 				transform = glm::vec2(spriteX, spriteY) * glm::inverse(glm::mat2x2(planeX,dirX,planeY,dirY));				
 
 				//Calculating camera y and scale for the sprite
-				spriteHeightWidth = glm::abs(h / transform.y);
-				spriteYout = -spriteHeightWidth / 2 + h / 2;
+				spriteHeightWidth = glm::abs(raycastH / transform.y);
+				spriteYout = -spriteHeightWidth / 2 + raycastH / 2;
 				spriteScale = 1 / (tileSize / spriteHeightWidth);
 
 				//Calculating x position for the sprite				
-				spriteScreenX = (w / 2)*(1 + transform.x / transform.y);
+				spriteScreenX = (raycastW / 2)*(1 + transform.x / transform.y);
 				spriteXout = -spriteHeightWidth / 2 + spriteScreenX;
 
 				//Calculating sprite side				

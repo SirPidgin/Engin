@@ -35,8 +35,8 @@ namespace Engin
 			void renderTexture(Resources::Texture* texture, float x, float y, const Renderer::Camera& camera);
 			void addIntoVector(int vectorAsNumber, glm::vec2 xy, int tiletype);
 
-			void DDA();
-			void DDADrawSprites();
+			void Raycasting();
+			void RaycastingSprites();
 			
 		private:
 			int getSpriteAnimIndex(double angle, double sides);
@@ -94,7 +94,7 @@ namespace Engin
 			int tileSize;
 			int tileSize2d;
 
-			//DDA
+			//Raycasting
 			Resources::Animation* animFurball360;
 			Resources::Animation* animFireball360;
 			AnimationPlayer animPlayerFur;
@@ -104,15 +104,14 @@ namespace Engin
 			AnimationPlayer animPlayerFire4;
 			AnimationPlayer animPlayer2d;
 
-			int w;
-			int h;
+			int raycastW;
+			int raycastH;
 			double dirX, dirY; //initial direction vector
 			double planeX, planeY; //the 2d raycaster version of camera plane
 
-			int DDAX,DDAY;
+			int raycastX, raycastY;
 
-			int DDAtexture;
-			int drawColor;
+			int raycastTileIndex;
 			std::array<std::array<double,5>, 400> DDAlines; //change DDAlines size accordingly
 			std::vector<std::array<double,5>> DDASpriteDrawData;
 			int spriteAnimIndex;
