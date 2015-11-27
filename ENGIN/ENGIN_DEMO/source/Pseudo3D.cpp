@@ -613,7 +613,7 @@ namespace Engin
 				gameObjects[i]->accessComponent<UserData>()->spriteYout = (spriteYout);
 				gameObjects[i]->accessComponent<Transform>()->setScale(spriteScale);
 				gameObjects[i]->accessComponent<UserData>()->transformY = transform.y;
-				gameObjects[0]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
+				gameObjects[i]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
 
 				if (spriteYout <= 0)
 				{
@@ -657,6 +657,7 @@ namespace Engin
 			gameObjects.back()->addComponent<FurballSpriteDraw>();
 
 			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animFurball360);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setLoopEndFrame(0);
 			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
 			gameObjects.back()->accessComponent<AnimationPlayer>()->pause();
 			gameObjects.back()->accessComponent<AnimationPlayer>()->setCurrentFrame(0);			
