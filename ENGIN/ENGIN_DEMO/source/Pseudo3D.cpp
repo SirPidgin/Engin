@@ -41,6 +41,7 @@ namespace Engin
 			animPlayer2d.setAnimation(animFireball360);
 			animPlayer2d.setLoopStartFrame(20);
 			animPlayer2d.setLoopEndFrame(29);
+			animPlayer2d.loopable(true);
 			animPlayer2d.start();
 
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
