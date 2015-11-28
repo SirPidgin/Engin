@@ -13,6 +13,8 @@ namespace Engin
 {
 	namespace Renderer
 	{
+		// Different sort modes used in texture batch.
+
 		enum TextureSortMode
 		{
 			Texture,
@@ -20,20 +22,22 @@ namespace Engin
 			FrontToBack
 		};
 
+		// Fast batch based renderer for textures. 
+
 		class TextureBatch
 		{
 		public:
 			TextureBatch();
 			~TextureBatch();
 
-			void setShader(Resources::ShaderProgram* shader)
+			void setShader(Resources::ShaderProgram* shader) 
 			{ 
 				this->shader = shader; 
 			}
 
 			void setSortMode(TextureSortMode sortMode) 
-			{
-				this->sortMode = sortMode;
+			{ 
+				this->sortMode = sortMode; 
 			}
 
 			void begin();
@@ -44,6 +48,7 @@ namespace Engin
 			void end();
 			void flush(const Camera& camera);
 			void clear();
+
 		private:
 			void createBuffers();
 			void createVertices();
@@ -76,8 +81,8 @@ namespace Engin
 				glm::vec2 uv;
 
 				Vertex() : position(0.0f), uv(0.0f), color(0.0f) {}
-				Vertex(float x, float y, float z, float r, float g, float b, float a, float u, float v)
-					: position(x, y, z), color(r, g, b, a), uv(u, v) {}
+				Vertex(float x, float y, float z, float r, float g, float b, float a, float u, float v) : 
+					position(x, y, z), color(r, g, b, a), uv(u, v) {}
 
 				void set(float x, float y, float z, float r, float g, float b, float a, float u, float v)
 				{

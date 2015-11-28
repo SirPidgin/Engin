@@ -90,16 +90,16 @@ namespace Engin
 			createFireball(9.0f, 10.0f, glm::radians(180.0f));
 
 #pragma endregion
-
-#pragma region WallTiles
 			
+#pragma region WallTiles
+
 			//filling world with 0
 			for (int i = 0; i < 25; i++)
 			{
 				for (int j = 0; j < 25; j++)
 				{
 					wallTiles[i][j] = 0;
-				}
+				}				
 			}
 
 			//MapSides
@@ -282,11 +282,11 @@ namespace Engin
 			
 			animPlayer2d.update();
 			//gameObjects
-			for (int i = 0; i < gameObjects.size(); i++)
+			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
 				gameObjects[i]->update();
 			}
-
+			
 			//Taking time it takes to go trough the update
 			myTimer.pause();
 			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
@@ -311,7 +311,7 @@ namespace Engin
 
 			//Raycast walls
 			DrawRaycastLines();
-			
+
 			//2D camera draw
 			Draw2dVision();
 
@@ -441,7 +441,7 @@ namespace Engin
 
 		void Pseudo3D::RaycastingSprites()
 		{
-			for (int i = 0; i < gameObjects.size(); i++)
+			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
 				spriteX = gameObjects[i]->accessComponent<Transform>()->getXPosition() - player[0];
 				spriteY = gameObjects[i]->accessComponent<Transform>()->getYPosition() - player[1];

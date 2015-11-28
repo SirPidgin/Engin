@@ -242,7 +242,6 @@
     <ClCompile Include="source\Resources\Sound.cpp" />
     <ClCompile Include="source\Resources\Texture.cpp" />
     <ClCompile Include="source\Game\SceneManager.cpp" />
-    <ClCompile Include="source\Renderer\Batch.cpp" />
     <ClCompile Include="source\Renderer\Camera.cpp" />
     <ClCompile Include="source\Renderer\Window.cpp" />
     <ClCompile Include="source\Game\EventManager.cpp">
@@ -310,6 +309,9 @@
     </ClCompile>
     <ClCompile Include="source\Game\RigidBody.cpp">
       <Filter>Source Files\Game\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="source\Renderer\Batch.cpp">
+      <Filter>Source Files\Renderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
