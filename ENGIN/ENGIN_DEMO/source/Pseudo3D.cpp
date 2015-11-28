@@ -279,7 +279,7 @@ namespace Engin
 			
 			animPlayer2d.update();
 			//gameObjects
-			for (int i = 0; i < gameObjects.size(); i++)
+			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
 				gameObjects[i]->update();
 			}
@@ -294,7 +294,7 @@ namespace Engin
 		{
 			//Raycast draw test
 			//obj draw test
-			for (int i = 0; i < gameObjects.size(); i++)
+			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
 				gameObjects[i]->accessComponent<PseudoSpriteDraw>()->drawPseudoFurball();
 			}
@@ -304,7 +304,7 @@ namespace Engin
 			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -1600.0f, 0.0f, raycastW, raycastH / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
 
 #pragma region WallTileDraw
-			for (int i = 0; i < DDAlines.size(); i++)
+			for (size_t i = 0; i < DDAlines.size(); i++)
 			{
 				if (DDAlines[i][2] > 0)
 				{
@@ -343,7 +343,7 @@ namespace Engin
 				}				
 			}
 			//sprites
-			for (int i = 0; i < gameObjects.size(); i++)
+			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
 				if (gameObjects[i]->accessComponent<UserData>()->isFireball != true)
 				{
@@ -510,7 +510,7 @@ namespace Engin
 
 		void Pseudo3D::RaycastingSprites()
 		{
-			for (int i = 0; i < gameObjects.size(); i++)
+			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
 				spriteX = gameObjects[i]->accessComponent<Transform>()->getXPosition() - player[0];
 				spriteY = gameObjects[i]->accessComponent<Transform>()->getYPosition() - player[1];

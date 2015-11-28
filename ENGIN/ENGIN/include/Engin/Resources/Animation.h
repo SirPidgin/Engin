@@ -10,11 +10,17 @@ namespace Engin
 {
 	namespace Resources
 	{
+		// Represents a single frame in the animation.
+
 		struct Frame
 		{
 			float duration;
 			glm::vec4 texCoords;
 		};
+
+		// Animation is a resource used by an animation player. It consist of
+		// a texture sheet (all frames in a single texture) and an animation
+		// data file (in .xml format).
 
 		class Animation : public Resource
 		{
@@ -22,7 +28,7 @@ namespace Engin
 			Animation(const std::string& resourcePath);
 			~Animation();
 
-			size_t getNumberOfFrames()
+			size_t getNumberOfFrames() const
 			{
 				return frames.size();
 			}
@@ -39,12 +45,12 @@ namespace Engin
 				return frames[index];
 			}
 
-			int getFrameWidth()
+			int getFrameWidth() const
 			{
 				return frameWidth;
 			}
 
-			int getFrameHeight()
+			int getFrameHeight() const
 			{
 				return frameHeight;
 			}

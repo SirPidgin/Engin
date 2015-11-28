@@ -6,6 +6,8 @@ namespace Engin
 {
 	namespace Renderer
 	{
+		// Defines a color used in rendering.
+
 		struct Color
 		{
 			GLfloat r;

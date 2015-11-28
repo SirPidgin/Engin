@@ -11,7 +11,10 @@
 
 namespace Engin
 {
-	Engin::Engin() : running(true), accumulator(0.0f), step(0.0f)
+	Engin::Engin() : 
+		running(true), 
+		accumulator(0.0f), 
+		step(0.0f)
 	{
 		keyboardInput = new HID::KeyboardInput();
 		mouseInput = new HID::MouseInput();
@@ -27,12 +30,12 @@ namespace Engin
 		SDL_GL_DeleteContext(glContext);
 	}
 
+	// Initialises the engine.
 	void Engin::init(const std::string& path)
 	{
-		// TODO (eeneku): Get parameters from a file!
-		// TODO (eeneku): Clean this function!
 		SDL_Init(SDL_INIT_EVERYTHING);
 
+		// Open the config file and try to parse it.
 		INIReader reader(path);
 
 		if (reader.ParseError() < 0) 
@@ -44,6 +47,7 @@ namespace Engin
 			std::cout << "Version: " << reader.GetReal("Engine", "version", -1) << std::endl;
 		}
 
+		// Set OpenGL attributes.
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
@@ -56,6 +60,7 @@ namespace Engin
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 		SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, reader.GetInteger("Graphics", "antialiasing", 4));
 		
+		// Create the window. Use data from the config.
 		window.createWindow(reader.Get("Window", "title", "unnamed"),
 			SDL_WINDOWPOS_CENTERED,
 			SDL_WINDOWPOS_CENTERED,
@@ -64,48 +69,56 @@ namespace Engin
 
 		SDL_SetWindowFullscreen(window.getSDLWindow(), reader.GetBoolean("Window", "fullscreen", false));
 
-		step = 1.0f / (float)reader.GetReal("Physics", "step", 60.0f);
+		step = 1.0f / (float)reader.GetReal("Physics", "step", 60.0f); // Read the physic step.
 
-		glContext = SDL_GL_CreateContext(window.getSDLWindow());
+		glContext = SDL_GL_CreateContext(window.getSDLWindow()); // Create context.
 
+		// Initialise glew and TTF.
 		glewExperimental = GL_TRUE;
 		glewInit();
 		TTF_Init();
 
-		glClearColor(0.2f, 0.4f, 0.6f, 1.0f);
+		glClearColor(0.2f, 0.4f, 0.6f, 1.0f); // Set clear color.
 
+		// Enable GL stuff.
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	}
 
+	// Quits the engine.
 	void Engin::quit()
 	{
 		TTF_Quit();
 		SDL_Quit();
 	}
 
+	// Runs the engine.
 	void Engin::run(Game::Scene* scene)
 	{
 		// Variables for deltatime
 		float deltaTime = 0.0f;
 		float newTime = 0.0f;
-		float currentTime = Core::Timer::getGlobalTime() / 1000.0f; // TODO (eeneku): Use own hi-res timer.
+		float currentTime = Core::Timer::getGlobalTime() / 1000.0f;
 
-		sceneManager.change(scene);
+		sceneManager.change(scene); // Add scene to scene manager.
 
+		// Start the main loop.
 		while (running)
 		{
+			// Calculate delta time.
 			newTime = Core::Timer::getGlobalTime() / 1000.0f;
 			deltaTime = std::min(newTime - currentTime, 0.25f);
 			currentTime = newTime;
 
+			// Handle events, update and draw.
 			handleEvents();
 			update(deltaTime);
 			draw();
 		}
 	}
 
+	// Handles the events.
 	void Engin::handleEvents()
 	{
 		if (eventManager->userQuit())
@@ -118,34 +131,43 @@ namespace Engin
 			running = false;
 		}
 
-		//eventManager must be updated last
+		// eventManager must be updated last.
 		eventManager->update();
 	}
 
+	// Updates the engine.
 	void Engin::update(float deltaTime)
 	{
+		// Accumulator is used for fixed timestep. Using this we can
+		// be certain that every update is of the same length. No need
+		// to use delta time variable for game object movement etc.
+		// Note that update can be called multiple times in one loop cycle.
 
-		accumulator += deltaTime;
+		accumulator += deltaTime; // Add delta time to the accumulator.
 
+		// Loop while accumulator is equal or larger than step.
 		while (accumulator >= step)
 		{
-			// TODO (eeneku): Maybe we can only pass alpha (accumulator / step)?
+			// Update the scene manager and decrease accumulator by step.
 			sceneManager.update(step);
 			accumulator -= step;
 
-			// JUUSO HUOM! Nää piti siirtää tähän että toimii kunnolla. Tää looppi saattaa 
-			// ajautua (?!) useamman kerran per mainloop, ja silloin nuo prevKeyt ei päivity
-			// tarvittaessa. Näin toimii täydellisesti!
+			// Update inputs.
 			keyboardInput->update();
 			mouseInput->update();
 		}
 
-		// TODO (eeneku): What about interpolation? Probably handled in Scene or SceneManager.
+		// Handle interpolation.
+		// The above system works nice for physics alone but the graphics may lag behind. 
+		// To fix this we are using interpolation. We use the time left in the
+		// accumulator and divide it by step. Interpolation should be handled in scenes.
 		sceneManager.interpolate(accumulator / step);
 	}
 
+	// Draws the engine.
 	void Engin::draw()
 	{
+		// Clear color and depth buffers, draw scene manager and swap window.
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		sceneManager.draw();
