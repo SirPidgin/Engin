@@ -275,7 +275,7 @@ namespace Engin
 			}
 			camera2->setZoomLevel(zoomByInput);
 			camera2->setPositionRotationOrigin((player[0]*tileSize2d), (player[1]*tileSize2d));
-			camera2->setRotation(glm::degrees(player[2]));
+			camera2->setRotation(player[2]);
 
 			//Information		
 			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player[0]) + " " + std::to_string(player[1]) + " angle: " + std::to_string(glm::degrees(player[2])), 255, 100, 0);

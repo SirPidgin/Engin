@@ -89,7 +89,7 @@ namespace Engin
 
 		void Camera::setRotation(GLfloat rotation)
 		{
-			this->rotation = glm::radians(-rotation); //Camera rotates to the opposite direction.
+			this->rotation = -rotation; //Camera rotates to the opposite direction.
 			rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));			
 		}
 
@@ -100,8 +100,8 @@ namespace Engin
 				root = glm::sqrt(glm::pow(worldX + rotationOriginX, 2.0f) + glm::pow(worldY + rotationOriginY, 2.0f));
 				atani = glm::atan(worldY + rotationOriginY, worldX + rotationOriginX);
 
-				tempX = (root * cos(this->rotation + atani) - rotationOriginX);
-				tempY = (root * sin(this->rotation + atani) - rotationOriginY);
+				tempX = (root * glm::cos(this->rotation + atani) - rotationOriginX);
+				tempY = (root * glm::sin(this->rotation + atani) - rotationOriginY);
 
 				positionMatrix = glm::translate(glm::vec3(-tempX, -tempY, 0.0f));
 			}			
@@ -110,7 +110,7 @@ namespace Engin
 
 		GLfloat Camera::getRotation()
 		{
-			return glm::degrees(-this->rotation);
+			return -this->rotation;
 		}
 
 		GLfloat Camera::getZoomLevel()
