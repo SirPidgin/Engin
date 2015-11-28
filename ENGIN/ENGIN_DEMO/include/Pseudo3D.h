@@ -33,11 +33,11 @@ namespace Engin
 			void update(GLfloat step);
 			void interpolate(GLfloat alpha);
 			void draw();
-			void renderTexture(Resources::Texture* texture, float x, float y, const Renderer::Camera& camera);
-			void addIntoVector(int vectorAsNumber, glm::vec2 xy, int tiletype);
 
 			void Raycasting();
 			void RaycastingSprites();
+			void DrawRaycastLines();
+			void Draw2dVision();
 
 			void createFurball(float x, float y, float rotation);
 			void createFireball(float x, float y, float rotation);
@@ -49,8 +49,6 @@ namespace Engin
 				int sides; 
 				double transformY;
 				int animationIndex;
-				int raycastW = 400;
-				int tileSize = 256;
 				double spriteXout;
 				double spriteYout;
 				bool isFireball = false;
@@ -63,10 +61,10 @@ namespace Engin
 			public:
 				PseudoSpriteDraw(GameObject* o) : Component(o){}
 				void setTextureBatch(Renderer::TextureBatch* newTextrBatch) { textureBatch = newTextrBatch; }
-				void drawPseudoFurball()
+				void drawPseudoSprite()
 				{					
-					if (ownerObject->accessComponent<UserData>()->spriteXout > -ownerObject->accessComponent<UserData>()->raycastW -1600
-						&& ownerObject->accessComponent<UserData>()->spriteXout < (ownerObject->accessComponent<UserData>()->raycastW -1600 + ownerObject->accessComponent<UserData>()->tileSize) 
+					if (ownerObject->accessComponent<UserData>()->spriteXout > limitLeft
+						&& ownerObject->accessComponent<UserData>()->spriteXout < limitRight 
 						&& ownerObject->accessComponent<UserData>()->transformY > 0)
 					{
 						textureBatch->draw(ownerObject->accessComponent<AnimationPlayer>()->getTexture(), ownerObject->accessComponent<AnimationPlayer>()->getCurrentFrameTexCoords(),
@@ -80,6 +78,9 @@ namespace Engin
 
 			private:
 				Renderer::TextureBatch* textureBatch;
+				int raycastW = 800;
+				int limitLeft = -raycastW - 2400;
+				int limitRight = raycastW - 2400;
 			};
 			
 		private:
@@ -122,6 +123,7 @@ namespace Engin
 			int tileSize;
 			int tileSize2d;
 
+			//-------------------------------------------------------------------
 			//Raycasting
 			Resources::Animation* animFurball360;
 			Resources::Animation* animFireball360;
@@ -135,7 +137,7 @@ namespace Engin
 			int raycastX, raycastY;
 
 			int raycastTileIndex;
-			std::array<std::array<double,5>, 400> DDAlines; //change DDAlines size accordingly
+			std::array<std::array<double,5>, 800> DDAlines; //change DDAlines size accordingly into sprite draw template
 			int spriteAnimIndex;
 			double depth;
 

@@ -16,8 +16,8 @@ namespace Engin
 
 			std::cout << "Scene started" << std::endl;
 
-			camera->initCamera(0.0f, 0.0f, 800.0f, 800.0f, -1600.0f, 0.0f, 0, 0);
-			camera->setZoomLevel(2); //Use zoom if raycasting image smaller than 800. (example: raycast w = 400, zoom = 2, example1: raycast w = 200, zoom = 4) 
+			camera->initCamera(0.0f, 0.0f, 800.0f, 800.0f, -2400.0f, 0.0f, 0, 0);
+			//camera->setZoomLevel(2); //Use zoom if raycasting image smaller than 800. (example: raycast w = 400, zoom = 2, example1: raycast w = 200, zoom = 4) 
 			camera2->initCamera(800.0f, 0.0f, 800.0f, 800.0f, 0.0f, 0.0f, 400, 100);
 			camera3->initCamera(0.0f, 0.0f, 1600.0f, 800.0f, 0.0f, 0.0f, 800, 400);
 
@@ -50,20 +50,24 @@ namespace Engin
 			textCreator3.createTextTexture(font, "|", 255, 100, 0);
 			text3 = textCreator3.getTexture();
 
+			//world size
 			mapX = 24;
 			mapY = 24;
+			//2d tilesize
 			tileSize2d = 64;
+			//alpha used for rotating things
 			alpha = 0.0f;
 
 			//Raycast init
 			tileSize = 256;
 
-			raycastW = 400; //In pseudo3d header change DDAlines size accordingly
-			raycastH = 400;
+			//How many lines for pseudo 3d
+			raycastW = 800; //In pseudo3d header change DDAlines size accordingly and into sprite draw template
+			raycastH = 800;
 
 			moveSpeed = 0.11f;
 			rotSpeed = 0.02f;
-			player = { { 22.0f, 12.0f, 0.0f, 0 , 1} }; //x,y,rotation(radians), howmany sides drawn, spritetype
+			player = { { 22.0f, 12.0f, 0.0f, 0 , 1} }; //x,y,rotation(radians), how many sides drawn, spritetype
 
 			dirX = -1, dirY = 0; //initial direction vector
 			planeX = 0.0f, planeY = 0.5; //the 2d raycaster version of camera plane
@@ -85,72 +89,60 @@ namespace Engin
 			createFireball(8.0f, 10.0f, 0.0f);
 			createFireball(9.0f, 10.0f, glm::radians(180.0f));
 
-			//filling raycaster lines with 0
-			for (int i = 0; i < raycastW; i++)
-			{
-				for (int j = 0; j < 5; j++)
-				{
-					DDAlines[i][j] = 0;
-				}
-			}
-			
-			//DDASpriteDrawData.resize(spriteContainer.size());
+#pragma endregion
 
+#pragma region WallTiles
+			
 			//filling world with 0
 			for (int i = 0; i < 25; i++)
 			{
 				for (int j = 0; j < 25; j++)
 				{
 					wallTiles[i][j] = 0;
-				}				
+				}
 			}
-
-#pragma endregion
-
-#pragma region WallTiles
 
 			//MapSides
 			for (int i = 0; i < mapY; i++)
 			{
-				addIntoVector(1, glm::vec2(0, i), 1);
+				wallTiles[0][i] = 1;
 			}
 
 			for (int i = 0; i <= mapY; i++)
 			{
-				addIntoVector(1, glm::vec2(mapX, i), 1);
+				wallTiles[mapX][i] = 1;
 			}
 
 			for (int i = 0; i < mapX; i++)
 			{
-				addIntoVector(1, glm::vec2(i, mapY), 1);
+				wallTiles[i][mapY] = 1;
 			}
 
 			for (int i = 0; i < mapX; i++)
 			{
-				addIntoVector(1, glm::vec2(i, 0), 3);
+				wallTiles[i][0] = 3;
 			}
 			//---------------------
 
 			for (int i = 1; i < 10; i++)
 			{
-				addIntoVector(1, glm::vec2(i, 10), 2);
+				wallTiles[i][10] = 2;
 			}
 
 			for (int i = 1; i < 13; i++)
 			{
-				addIntoVector(1, glm::vec2(10, i), 2);
+				wallTiles[10][i] = 2;
 			}
 
 			for (int i = 17; i < 23; i++)
 			{
-				addIntoVector(1, glm::vec2(i, 17), 4);
+				wallTiles[i][17] = 4;
 			}
 
 			for (int i = 17; i < 23; i++)
 			{
-				addIntoVector(1, glm::vec2(i, 19), 5);
+				wallTiles[i][19] = 5;
 			}
-
 
 #pragma endregion
 			
@@ -163,8 +155,10 @@ namespace Engin
 
 		void Pseudo3D::update(GLfloat step)
 		{
+			//Taking time it takes to go trough the update
 			myTimer.start();
-#pragma region DDAMovement
+
+#pragma region RaycastMovement
 			//move forward if no wall in front of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_W))
 			{
@@ -212,6 +206,7 @@ namespace Engin
 				planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
 			}
 #pragma endregion
+
 			alpha += 0.01;			
 			
 			//Raycast calculations.
@@ -229,17 +224,17 @@ namespace Engin
 			gameObjects[5]->accessComponent<Transform>()->setRotation(alpha * 5);
 			gameObjects[0]->accessComponent<Transform>()->setRotation(2*alpha);
 			gameObjects[4]->accessComponent<Transform>()->setRotation(alpha + 0.02);
-			gameObjects[10]->accessComponent<Transform>()->setRotation(glm::radians(180.0f) + 2*alpha); //fireball that follows furball
+			gameObjects[10]->accessComponent<Transform>()->setRotation(glm::radians(315.0f) + 2*alpha); //fireball that follows the furball
 
 			//moving sprites TODO: Make some logic and translate sprites with them.
-			gameObjects[0]->accessComponent<Transform>()->setXPosition(5.0f + glm::cos(gameObjects[0]->accessComponent<Transform>()->getRotation()));
+			gameObjects[0]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[0]->accessComponent<Transform>()->getRotation()));
 			gameObjects[0]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[0]->accessComponent<Transform>()->getRotation()));
-
-			gameObjects[10]->accessComponent<Transform>()->setXPosition(5.0f + glm::cos(gameObjects[10]->accessComponent<Transform>()->getRotation())); //fireball
-			gameObjects[10]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[10]->accessComponent<Transform>()->getRotation()));
 
 			gameObjects[4]->accessComponent<Transform>()->setXPosition(15.0f + 3 * glm::cos(alpha));
 			gameObjects[6]->accessComponent<Transform>()->setYPosition(10.0f + 4 * glm::sin(alpha));
+
+			gameObjects[10]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[10]->accessComponent<Transform>()->getRotation()));
+			gameObjects[10]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[10]->accessComponent<Transform>()->getRotation()));
 
 			//moving the three fireballs
 			static float firex = 24.0f;
@@ -267,15 +262,23 @@ namespace Engin
 
 
 			//2d camera
-			camera2->setPositionRotationOrigin((player[0]*tileSize2d) + 800, (player[1]*tileSize2d));
+			static float zoomByInput = 1.0f;
+			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP))
+			{
+				if (zoomByInput > 0.0f)
+					zoomByInput -= glm::radians(2.0f);
+			}
+			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_DOWN))
+			{
+				zoomByInput += glm::radians(2.0f);
+			}
+			camera2->setZoomLevel(zoomByInput);
+			camera2->setPositionRotationOrigin((player[0]*tileSize2d), (player[1]*tileSize2d));
 			camera2->setRotation(glm::degrees(player[2]));
 
 			//Information		
 			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player[0]) + " " + std::to_string(player[1]) + " angle: " + std::to_string(glm::degrees(player[2])), 255, 100, 0);
 			text3 = textCreator3.getTexture();
-			myTimer.pause();
-			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
-			text = textCreator.getTexture();
 			
 			animPlayer2d.update();
 			//gameObjects
@@ -283,7 +286,11 @@ namespace Engin
 			{
 				gameObjects[i]->update();
 			}
-			
+
+			//Taking time it takes to go trough the update
+			myTimer.pause();
+			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
+			text = textCreator.getTexture();			
 		}
 
 		void Pseudo3D::interpolate(GLfloat alpha)
@@ -292,101 +299,25 @@ namespace Engin
 
 		void Pseudo3D::draw()
 		{
-			//Raycast draw test
-			//obj draw test
+			//Raycast draw
 			for (int i = 0; i < gameObjects.size(); i++)
 			{
-				gameObjects[i]->accessComponent<PseudoSpriteDraw>()->drawPseudoFurball();
+				gameObjects[i]->accessComponent<PseudoSpriteDraw>()->drawPseudoSprite();
 			}
 						
-			//Roof and floor
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -1600.0f, raycastH / 2, raycastW, raycastH / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.75, 0.5, 0.0 }, 1.0f, 0.0f);
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -1600.0f, 0.0f, raycastW, raycastH / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
+			//Roof and floor for raycast
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, raycastH / 2, raycastW, raycastH / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.75, 0.5, 0.0 }, 1.0f, 0.0f);
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, 0.0f, raycastW, raycastH / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
 
-#pragma region WallTileDraw
-			for (int i = 0; i < DDAlines.size(); i++)
-			{
-				if (DDAlines[i][2] > 0)
-				{
-					if (DDAlines[i][1] <= 0)
-					{
-						depth = 0.99f;
-					}
-					else
-					{
-						depth = (1.0f / DDAlines[i][1]);
-					}
-
-					if (int(DDAlines[i][3]) < 6)
-					{
-						opaqueBatch.draw(mapSheet_256, &glm::vec4(DDAlines[i][4] + (int(DDAlines[i][3])-1) * tileSize, 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
-					}
-					else
-					{
-						opaqueBatch.draw(mapSheet_256, &glm::vec4(DDAlines[i][4] + (int(DDAlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
-					}
-				}
-			}
-#pragma endregion
+			//Raycast walls
+			DrawRaycastLines();
 			
 			//2D camera draw
-			//walls. TODO: Fix the cropping.
-			for (int i = 0; i <= mapY; i++)
-			{
-				for (int j = 0; j <= mapX; j++)
-				{
-					float offset = 32.0f;
-					if (wallTiles[j][i] != 0)
-					{
-						opaqueBatch.draw(mapSheet_64, &glm::vec4((int(wallTiles[j][i])-1) * 64, 0.0f, 64, 64), (j * tileSize2d) + 800 + offset, i * tileSize2d+offset, 64.0f, 64.0f, 32.0f, 32.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
-					}
-				}				
-			}
-			//sprites
-			for (int i = 0; i < gameObjects.size(); i++)
-			{
-				if (gameObjects[i]->accessComponent<UserData>()->isFireball != true)
-				{
-					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
-						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d + 800, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, furball->getWidth(),
-						furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(gameObjects[i]->accessComponent<Transform>()->getRotation()), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.01f);
-				}
-				//TODO: 2d fireball
-				else
-				{
-					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
-						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d + 800, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, 256, 256, 256 / 2, 256 / 2, glm::degrees(gameObjects[i]->accessComponent<Transform>()->getRotation()) + 90.0f,
-						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.01f);
-				}
-			}
-
-			//player
-			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player[0]*tileSize2d + 800, player[1]*tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(player[2]), 1.0f, Renderer::clrRed, 1.0f, 0.8f);
-			
-			//floor
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d), 800.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d,0.0f, 0.0f, 0.0f, 1.0f, { 0.5, 0.5, 0.5 }, 1.0f, 0.0f);
-			//---------------
+			Draw2dVision();
 
 			//Hud
 			guiBatch.draw(text, &glm::vec4(0.0f, 0.0f, text->getWidth(), text->getHeight()), camera3->getPositionRotationOrigin()[0] + glm::cos(alpha)*400.0f, camera3->getPositionRotationOrigin()[1] + 350, text->getWidth(), text->getHeight(), text->getWidth() / 2, text->getHeight() / 2, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
 			guiBatch.draw(text3, &glm::vec4(0.0f, 0.0f, text3->getWidth(), text3->getHeight()), camera3->getPositionRotationOrigin()[0], camera3->getPositionRotationOrigin()[1] + 300, text3->getWidth(), text3->getHeight(), text3->getWidth() / 2, text3->getHeight() / 2, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
-		}
-
-		void Pseudo3D::addIntoVector(int vectorAsNumber, glm::vec2 xy, int tiletype)
-		{
-			switch (vectorAsNumber)
-			{
-			case 1:
-			{
-				if (xy.x >= 0 && xy.y >= 0)
-				{
-					wallTiles[xy.x][xy.y] = tiletype;
-				}
-				break;
-			}
-			default:
-				break;
-			}
 		}
 
 		void Pseudo3D::Raycasting() //Vector operations are slow, changed to std::arrays, change array sizes accordingly in the Pseudo3D header.
@@ -552,7 +483,7 @@ namespace Engin
 				spriteAnimIndex = getSpriteAnimIndex(spriteAngle, gameObjects[i]->accessComponent<UserData>()->sides);
 
 				//Saving data //Muista siirtää sijainnit miinuksen puolelle 1600 että ei piirry 2d scenen päälle
-				gameObjects[i]->accessComponent<UserData>()->spriteXout =(spriteXout-1600.0f);
+				gameObjects[i]->accessComponent<UserData>()->spriteXout =(spriteXout-2400.0f);
 				gameObjects[i]->accessComponent<UserData>()->spriteYout = (spriteYout);
 				gameObjects[i]->accessComponent<Transform>()->setScale(spriteScale);
 				gameObjects[i]->accessComponent<UserData>()->transformY = transform.y;
@@ -565,7 +496,6 @@ namespace Engin
 				else
 				{
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
-
 				}
 
 				if (spriteYout <= 0)
@@ -596,6 +526,73 @@ namespace Engin
 			{
 				return (glm::degrees(angle) + (spriteSideAngle / 2.0f)) / spriteSideAngle;
 			}
+		}
+
+		void Pseudo3D::DrawRaycastLines()
+		{
+			for (int i = 0; i < DDAlines.size(); i++)
+			{
+				if (DDAlines[i][2] > 0)
+				{
+					if (DDAlines[i][1] <= 0)
+					{
+						depth = 0.99f;
+					}
+					else
+					{
+						depth = (1.0f / DDAlines[i][1]);
+					}
+
+					if (int(DDAlines[i][3]) < 6)
+					{
+						opaqueBatch.draw(mapSheet_256, &glm::vec4(DDAlines[i][4] + (int(DDAlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), DDAlines[i][0] -2400, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+					}
+					else
+					{
+						opaqueBatch.draw(mapSheet_256, &glm::vec4(DDAlines[i][4] + (int(DDAlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), DDAlines[i][0] -2400, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
+					}
+				}
+			}
+		}
+
+		void Pseudo3D::Draw2dVision()
+		{
+			//walls.
+			for (int i = 0; i <= mapY; i++)
+			{
+				for (int j = 0; j <= mapX; j++)
+				{
+					float offset = 32.0f;
+					if (wallTiles[j][i] != 0)
+					{
+						opaqueBatch.draw(mapSheet_64, &glm::vec4((int(wallTiles[j][i]) - 1) * 66, 1.0f, 64, 64), (j * tileSize2d) + offset, i * tileSize2d + offset, 64.0f, 64.0f, 32.0f, 32.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
+					}
+				}
+			}
+			//sprites
+			for (int i = 0; i < gameObjects.size(); i++)
+			{
+				if (gameObjects[i]->accessComponent<UserData>()->isFireball != true)
+				{
+					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
+						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, furball->getWidth(),
+						furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(gameObjects[i]->accessComponent<Transform>()->getRotation()), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.01f);
+				}
+				//if fireball
+				else
+				{
+					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
+						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, 256, 256, 256 / 2, 256 / 2, glm::degrees(gameObjects[i]->accessComponent<Transform>()->getRotation()) + 90.0f,
+						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.01f);
+				}
+			}
+
+			//player
+			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player[0] * tileSize2d, player[1] * tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(player[2]), 1.0f, Renderer::clrRed, 1.0f, 0.8f);
+
+			//2d floor
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d), 0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d, 0.0f, 0.0f, 0.0f, 1.0f, { 0.5, 0.5, 0.5 }, 1.0f, 0.0f);
+			//---------------
 		}
 
 		//Raycast furball sprite
