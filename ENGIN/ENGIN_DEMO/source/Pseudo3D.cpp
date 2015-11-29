@@ -32,7 +32,7 @@ namespace Engin
 			
 			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");			
 			mapSheet_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_64.png");
-			mapSheet_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_256.png");
+			mapSheet_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_256_shadows.png");
 			roof_16 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/roof.png");
 			
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
@@ -111,7 +111,7 @@ namespace Engin
 
 			for (int i = 0; i <= mapY; i++)
 			{
-				wallTiles[mapX][i] = 1;
+				wallTiles[mapX][i] = 3;
 			}
 
 			for (int i = 0; i < mapX; i++)
@@ -422,11 +422,11 @@ namespace Engin
 				//choose wall color			
 				switch (wallTiles[raycastX][raycastY])
 				{
-				case 1:  raycastTileIndex = 1;  break; //red
-				case 2:  raycastTileIndex = 2;  break; //green
-				case 3:  raycastTileIndex = 3;   break; //blue
-				case 4:  raycastTileIndex = 4;  break; //white
-				default: raycastTileIndex = 5; break; //yellow
+				case 1:  raycastTileIndex = 1;  break;
+				case 2:  raycastTileIndex = 2;  break;
+				case 3:  raycastTileIndex = 3;   break;
+				case 4:  raycastTileIndex = 4;  break;
+				default: raycastTileIndex = 5; break;
 				}
 				if (side == 1) { raycastTileIndex += 5; }
 				
@@ -544,14 +544,7 @@ namespace Engin
 						depth = (1.0f / DDAlines[i][1]);
 					}
 
-					if (int(DDAlines[i][3]) < 6)
-					{
-						opaqueBatch.draw(mapSheet_256, &glm::vec4(DDAlines[i][4] + (int(DDAlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), DDAlines[i][0] -2400, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
-					}
-					else
-					{
-						opaqueBatch.draw(mapSheet_256, &glm::vec4(DDAlines[i][4] + (int(DDAlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), DDAlines[i][0] -2400, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
-					}
+					opaqueBatch.draw(mapSheet_256, &glm::vec4(DDAlines[i][4] + (int(DDAlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), DDAlines[i][0] - 2400, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 				}
 			}
 		}
