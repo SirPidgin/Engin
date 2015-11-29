@@ -81,8 +81,6 @@ namespace Engin
 				textureInfo->texCoords = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f); // Default region is the whole texture.
 			}
 
-			float angle = glm::radians(rotation); // Get the rotation in degrees.
-
 			// Scale the position of the texture by the scale parameter.
 			rotateOriginX *= scale;
 			rotateOriginY *= scale;
@@ -93,14 +91,13 @@ namespace Engin
 
 			// Add the details to the texture info.
 			textureInfo->texture = texture;
-			textureInfo->rotation = rotation;
 			textureInfo->scale = scale;
 			textureInfo->depth = depth;
 			textureInfo->color = glm::vec4(color.r, color.g, color.b, opacity);
-			textureInfo->topLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-rotateOriginX, height - rotateOriginY), angle);
-			textureInfo->topRight = glm::vec2(x, y) + glm::rotate(glm::vec2(width - rotateOriginX, height - rotateOriginY), angle);
-			textureInfo->bottomLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-rotateOriginX, -rotateOriginY), angle);
-			textureInfo->bottomRight = glm::vec2(x, y) + glm::rotate(glm::vec2(width - rotateOriginX, -rotateOriginY), angle);
+			textureInfo->topLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-rotateOriginX, height - rotateOriginY), rotation);
+			textureInfo->topRight = glm::vec2(x, y) + glm::rotate(glm::vec2(width - rotateOriginX, height - rotateOriginY), rotation);
+			textureInfo->bottomLeft = glm::vec2(x, y) + glm::rotate(glm::vec2(-rotateOriginX, -rotateOriginY), rotation);
+			textureInfo->bottomRight = glm::vec2(x, y) + glm::rotate(glm::vec2(width - rotateOriginX, -rotateOriginY), rotation);
 
 			textureQueueCount++; // Grow the texture queue count.
 		}

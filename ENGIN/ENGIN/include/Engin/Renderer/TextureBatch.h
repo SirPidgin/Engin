@@ -71,7 +71,6 @@ namespace Engin
 				Resources::Texture* texture;
 				float depth;
 				float scale;
-				float rotation;
 			};
 
 			struct Vertex
