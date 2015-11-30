@@ -41,6 +41,17 @@ namespace Engin
 
 			void createFurball(float x, float y, float rotation);
 			void createFireball(float x, float y, float rotation);
+			void createProjectile(float x, float y, float rotation);
+
+			class Projectile : public Component
+			{
+			public:
+				Projectile(GameObject* o) : Component(o) {}
+				void update();
+
+			private:
+				float speed = 0.1f;
+			};
 
 			class UserData : public Component
 			{
