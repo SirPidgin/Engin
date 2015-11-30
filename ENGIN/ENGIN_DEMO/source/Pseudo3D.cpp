@@ -16,8 +16,6 @@ namespace Engin
 
 			std::cout << "Scene started" << std::endl;
 
-			camera->initCamera(0.0f, 0.0f, 800.0f, 800.0f, -2400.0f, 0.0f, 0, 0);
-			//camera->setZoomLevel(2); //Use zoom if raycasting image smaller than 800. (example: raycast w = 400, zoom = 2, example1: raycast w = 200, zoom = 4) 
 			camera2->initCamera(800.0f, 0.0f, 800.0f, 800.0f, 0.0f, 0.0f, 400, 100);
 			camera3->initCamera(0.0f, 0.0f, 1600.0f, 800.0f, 0.0f, 0.0f, 800, 400);
 
@@ -37,6 +35,7 @@ namespace Engin
 			
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
 			animFireball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/fireball360_8.xml");
+			furballShadow = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_shadow_256.png");
 
 			animPlayer2d.setAnimation(animFireball360);
 			animPlayer2d.setLoopStartFrame(20);
@@ -59,12 +58,16 @@ namespace Engin
 			//alpha used for rotating things
 			alpha = 0.0f;
 
+			//----------------------
 			//Raycast init
 			tileSize = 256;
 
 			//How many lines for pseudo 3d
-			raycastW = 800; //In pseudo3d header change DDAlines size accordingly and into sprite draw template
+			raycastW = 800; //In pseudo3d header change Raycastlines array size accordingly
 			raycastH = 800;
+
+			camera->initCamera(0.0f, 0.0f, 800.0f, 800.0f, -2400.0f, 0.0f, 0, 0);
+			//camera->setZoomLevel(2); //Use zoom if raycasting image smaller than 800. (example: raycast w = 400, zoom = 2, example1: raycast w = 200, zoom = 4) 
 
 			moveSpeed = 0.11f;
 			rotSpeed = 0.02f;
@@ -387,7 +390,6 @@ namespace Engin
 					{
 						hit = 1;
 					}
-					//if (worldMap[mapX][mapY] > 0) hit = 1;
 				}
 
 				//Calculate distance projected on camera direction (oblique distance will give fisheye effect!)
@@ -431,11 +433,11 @@ namespace Engin
 				if (side == 1) { raycastTileIndex += 5; }
 				
 				//Saving calculated data for camera slice 
-				DDAlines[x][0] = x;
-				DDAlines[x][1] = drawStart;
-				DDAlines[x][2] = drawEnd;
-				DDAlines[x][3] = raycastTileIndex;
-				DDAlines[x][4] = texX;
+				Raycastlines[x][0] = x;
+				Raycastlines[x][1] = drawStart;
+				Raycastlines[x][2] = drawEnd;
+				Raycastlines[x][3] = raycastTileIndex;
+				Raycastlines[x][4] = texX;
 				//---------------------------------------
 			}			
 		}
@@ -483,7 +485,7 @@ namespace Engin
 
 				spriteAnimIndex = getSpriteAnimIndex(spriteAngle, gameObjects[i]->accessComponent<UserData>()->sides);
 
-				//Saving data //Muista siirtää sijainnit miinuksen puolelle 1600 että ei piirry 2d scenen päälle
+				//Saving data
 				gameObjects[i]->accessComponent<UserData>()->spriteXout =(spriteXout-2400.0f);
 				gameObjects[i]->accessComponent<UserData>()->spriteYout = (spriteYout);
 				gameObjects[i]->accessComponent<Transform>()->setScale(spriteScale);
@@ -531,20 +533,20 @@ namespace Engin
 
 		void Pseudo3D::DrawRaycastLines()
 		{
-			for (int i = 0; i < DDAlines.size(); i++)
+			for (int i = 0; i < Raycastlines.size(); i++)
 			{
-				if (DDAlines[i][2] > 0)
+				if (Raycastlines[i][2] > 0)
 				{
-					if (DDAlines[i][1] <= 0)
+					if (Raycastlines[i][1] <= 0)
 					{
 						depth = 0.99f;
 					}
 					else
 					{
-						depth = (1.0f / DDAlines[i][1]);
+						depth = (1.0f / Raycastlines[i][1]);
 					}
 
-					opaqueBatch.draw(mapSheet_256, &glm::vec4(DDAlines[i][4] + (int(DDAlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), DDAlines[i][0] - 2400, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+					opaqueBatch.draw(mapSheet_256, &glm::vec4(Raycastlines[i][4] + (int(Raycastlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), Raycastlines[i][0] - 2400, Raycastlines[i][1], 1.0f, Raycastlines[i][2] - Raycastlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 				}
 			}
 		}
@@ -615,6 +617,8 @@ namespace Engin
 			gameObjects.back()->accessComponent<UserData>()->transformY = 0.0f;
 			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
+			gameObjects.back()->accessComponent<UserData>()->shadow = furballShadow;
 		}
 
 		//Raycast fireball sprite
@@ -643,6 +647,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<UserData>()->transformY = 0.0f;
 			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 
 			gameObjects.back()->accessComponent<UserData>()->isFireball = true;
 		}

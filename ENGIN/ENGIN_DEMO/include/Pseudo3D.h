@@ -54,6 +54,7 @@ namespace Engin
 				bool isFireball = false;
 				int animationLoopStartFrame = 0;
 				int animationLoopEndFrame = 0;
+				Resources::Texture* shadow;
 			};
 
 			class PseudoSpriteDraw : public Component
@@ -61,7 +62,8 @@ namespace Engin
 			public:
 				PseudoSpriteDraw(GameObject* o) : Component(o){}
 				void setTextureBatch(Renderer::TextureBatch* newTextrBatch) { textureBatch = newTextrBatch; }
-				void drawPseudoSprite()
+				void setRaycastW(int W) { raycastW = W; limitLeft = -raycastW - 2400; limitRight = raycastW - 2400; }
+				void drawPseudoSprite()				   
 				{					
 					if (ownerObject->accessComponent<UserData>()->spriteXout > limitLeft
 						&& ownerObject->accessComponent<UserData>()->spriteXout < limitRight 
@@ -73,14 +75,25 @@ namespace Engin
 							0.0f, 0.0f,	0.0f, 
 							ownerObject->accessComponent<Transform>()->getScale(),
 							Renderer::clrWhite, 1.0f, ownerObject->accessComponent<Transform>()->getDepth());
+
+						//shadow
+						if (ownerObject->accessComponent<UserData>()->isFireball == false)
+						{
+							textureBatch->draw(ownerObject->accessComponent<UserData>()->shadow, &glm::vec4(0.0f, 0.0f, ownerObject->accessComponent<UserData>()->shadow->getWidth(), ownerObject->accessComponent<UserData>()->shadow->getHeight()),
+								ownerObject->accessComponent<UserData>()->spriteXout, ownerObject->accessComponent<UserData>()->spriteYout,
+								ownerObject->accessComponent<UserData>()->shadow->getWidth(), (ownerObject->accessComponent<UserData>()->shadow->getHeight() + ownerObject->accessComponent<Transform>()->getDepth()*50),
+								0.0f, 0.0f, 0.0f,
+								ownerObject->accessComponent<Transform>()->getScale(),Renderer::clrWhite, 1.0f,
+								ownerObject->accessComponent<Transform>()->getDepth()-0.00001);
+						}						
 					}
 				}
 
 			private:
 				Renderer::TextureBatch* textureBatch;
-				int raycastW = 800;
-				int limitLeft = -raycastW - 2400;
-				int limitRight = raycastW - 2400;
+				int raycastW;
+				int limitLeft;
+				int limitRight;
 			};
 			
 		private:
@@ -96,6 +109,7 @@ namespace Engin
 			Resources::ShaderProgram* alphaShader;
 
 			Resources::Texture* furball; //2d
+			Resources::Texture* furballShadow;
 			Resources::Texture* mapSheet_64;
 			Resources::Texture* mapSheet_256;
 			Resources::Texture* roof_16;
@@ -137,7 +151,7 @@ namespace Engin
 			int raycastX, raycastY;
 
 			int raycastTileIndex;
-			std::array<std::array<double,5>, 800> DDAlines; //change DDAlines size accordingly into sprite draw template
+			std::array<std::array<double,5>, 800> Raycastlines; //Size has to be same as raycastW
 			int spriteAnimIndex;
 			double depth;
 
