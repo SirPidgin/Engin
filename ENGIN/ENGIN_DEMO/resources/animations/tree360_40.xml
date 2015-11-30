@@ -1,4 +1,4 @@
-<animation path="resources/tree_360_40_512.png" width="512" height="512" loopable="1">
+<animation path="resources/newtree_360_40_512.png" width="512" height="512" loopable="1">
 	<frame duration="1000" id="0" />
 	<frame duration="1000" id="1" />
 	<frame duration="1000" id="2" />
