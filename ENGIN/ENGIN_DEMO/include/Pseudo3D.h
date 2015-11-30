@@ -41,6 +41,7 @@ namespace Engin
 
 			void createFurball(float x, float y, float rotation);
 			void createFireball(float x, float y, float rotation);
+			void createTree(float x, float y, float rotation);
 
 			class UserData : public Component
 			{
@@ -52,6 +53,7 @@ namespace Engin
 				double spriteXout;
 				double spriteYout;
 				bool isFireball = false;
+				bool hasShadow = false;
 				int animationLoopStartFrame = 0;
 				int animationLoopEndFrame = 0;
 				Resources::Texture* shadow;
@@ -77,7 +79,7 @@ namespace Engin
 							Renderer::clrWhite, 1.0f, ownerObject->accessComponent<Transform>()->getDepth());
 
 						//shadow
-						if (ownerObject->accessComponent<UserData>()->isFireball == false)
+						if (ownerObject->accessComponent<UserData>()->hasShadow == true)
 						{
 							textureBatch->draw(ownerObject->accessComponent<UserData>()->shadow, &glm::vec4(0.0f, 0.0f, ownerObject->accessComponent<UserData>()->shadow->getWidth(), ownerObject->accessComponent<UserData>()->shadow->getHeight()),
 								ownerObject->accessComponent<UserData>()->spriteXout, ownerObject->accessComponent<UserData>()->spriteYout,
@@ -108,8 +110,7 @@ namespace Engin
 			Resources::ShaderProgram* textureShader;
 			Resources::ShaderProgram* alphaShader;
 
-			Resources::Texture* furball; //2d
-			Resources::Texture* furballShadow;
+			Resources::Texture* furball; //2d						
 			Resources::Texture* mapSheet_64;
 			Resources::Texture* mapSheet_256;
 			Resources::Texture* roof_16;
@@ -140,7 +141,10 @@ namespace Engin
 			//-------------------------------------------------------------------
 			//Raycasting
 			Resources::Animation* animFurball360;
+			Resources::Texture* furballShadow;
 			Resources::Animation* animFireball360;
+			Resources::Animation* animTree360;
+			Resources::Texture* treeShadow;
 			AnimationPlayer animPlayer2d;
 
 			int raycastW;

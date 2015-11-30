@@ -36,6 +36,8 @@ namespace Engin
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
 			animFireball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/fireball360_8.xml");
 			furballShadow = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_shadow_256.png");
+			animTree360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/tree360_40.xml");
+			treeShadow = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/tree_shadow_512.png");
 
 			animPlayer2d.setAnimation(animFireball360);
 			animPlayer2d.setLoopStartFrame(20);
@@ -92,6 +94,8 @@ namespace Engin
 			createFireball(7.0f, 10.0f, glm::radians(180.0f));
 			createFireball(8.0f, 10.0f, 0.0f);
 			createFireball(9.0f, 10.0f, glm::radians(180.0f));
+
+			createTree(20.0f, 5.0f, 0.0f);
 
 #pragma endregion
 			
@@ -619,6 +623,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 			gameObjects.back()->accessComponent<UserData>()->shadow = furballShadow;
+			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
 		}
 
 		//Raycast fireball sprite
@@ -650,6 +655,39 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 
 			gameObjects.back()->accessComponent<UserData>()->isFireball = true;
+			gameObjects.back()->accessComponent<UserData>()->hasShadow = false;
+		}
+
+		//Raycast tree sprite
+		void Pseudo3D::createTree(float x, float y, float rotation)
+		{
+			gameObjects.push_back(new GameObject(&alphaBatch));
+			gameObjects.back()->addComponent<Transform>();
+			gameObjects.back()->addComponent<RigidBody>();
+			gameObjects.back()->addComponent<Sprite>();
+			gameObjects.back()->addComponent<AnimationPlayer>();
+			gameObjects.back()->addComponent<UserData>();
+			gameObjects.back()->addComponent<PseudoSpriteDraw>();
+
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animTree360);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setLoopEndFrame(0);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->pause();
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setCurrentFrame(0);
+			gameObjects.back()->accessComponent<Transform>()->setXPosition(x);
+			gameObjects.back()->accessComponent<Transform>()->setYPosition(y);
+			gameObjects.back()->accessComponent<Transform>()->setRotation(rotation);
+
+			//userdata				
+			gameObjects.back()->accessComponent<UserData>()->sides = 40;
+			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
+			gameObjects.back()->accessComponent<UserData>()->transformY = 0.0f;
+			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
+
+			gameObjects.back()->accessComponent<UserData>()->shadow = treeShadow;
+			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
 		}
 	}
 }
