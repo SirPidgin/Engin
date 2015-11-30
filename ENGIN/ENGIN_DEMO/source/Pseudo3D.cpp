@@ -227,6 +227,18 @@ namespace Engin
 			{
 				player[2] += glm::radians(360.0f);
 			}
+
+#pragma region Shooting
+			// Shoot a projectile
+			static int projectiles = 0;
+			static const int projectilesMax = 5;
+
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE))
+			{
+				createProjectile(player[0], player[1], player[2]);
+			}
+
+#pragma endregion
 			
 			//rotating sprites in radians
 			gameObjects[5]->accessComponent<Transform>()->setRotation(alpha * 5);
@@ -570,7 +582,7 @@ namespace Engin
 				}
 			}
 			//sprites
-			for (int i = 0; i < gameObjects.size(); i++)
+			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
 				if (gameObjects[i]->accessComponent<UserData>()->isFireball != true)
 				{
@@ -688,6 +700,45 @@ namespace Engin
 
 			gameObjects.back()->accessComponent<UserData>()->shadow = treeShadow;
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
+		}
+
+		//Raycast fireball projectile
+		void Pseudo3D::createProjectile(float x, float y, float rotation)
+		{
+			gameObjects.push_back(new GameObject(&alphaBatch));
+			gameObjects.back()->addComponent<Transform>();
+			gameObjects.back()->addComponent<RigidBody>();
+			gameObjects.back()->addComponent<Sprite>();
+			gameObjects.back()->addComponent<AnimationPlayer>();
+			gameObjects.back()->addComponent<UserData>();
+			gameObjects.back()->addComponent<PseudoSpriteDraw>();
+			gameObjects.back()->addComponent<Projectile>();
+
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animFireball360);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setLoopEndFrame(9);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->start();
+
+			gameObjects.back()->accessComponent<Transform>()->setXPosition(x);
+			gameObjects.back()->accessComponent<Transform>()->setYPosition(y);
+			gameObjects.back()->accessComponent<Transform>()->setRotation(rotation);
+
+			//userdata
+			gameObjects.back()->accessComponent<UserData>()->sides = 8;
+			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
+			gameObjects.back()->accessComponent<UserData>()->transformY = 0.0f;
+			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
+
+			gameObjects.back()->accessComponent<UserData>()->isFireball = true;
+		}
+
+		void Pseudo3D::Projectile::update()
+		{
+			Transform* t = ownerObject->accessComponent<Transform>();
+			t->setXPosition(t->getXPosition() + speed * cosf(t->getRotation() + glm::radians(90.0f)));
+			t->setYPosition(t->getYPosition() + speed * sinf(t->getRotation() + glm::radians(90.0f)));
 		}
 	}
 }

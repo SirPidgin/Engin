@@ -41,6 +41,17 @@ namespace Engin
 
 			void createFurball(float x, float y, float rotation);
 			void createFireball(float x, float y, float rotation);
+			void createProjectile(float x, float y, float rotation);
+
+			class Projectile : public Component
+			{
+			public:
+				Projectile(GameObject* o) : Component(o) {}
+				void update();
+
+			private:
+				float speed = 0.1f;
+			};
 			void createTree(float x, float y, float rotation);
 
 			class UserData : public Component
@@ -110,7 +121,7 @@ namespace Engin
 			Resources::ShaderProgram* textureShader;
 			Resources::ShaderProgram* alphaShader;
 
-			Resources::Texture* furball; //2d						
+			Resources::Texture* furball; //2d
 			Resources::Texture* mapSheet_64;
 			Resources::Texture* mapSheet_256;
 			Resources::Texture* roof_16;
