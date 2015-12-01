@@ -72,6 +72,7 @@ namespace Engin
 				int hitAnimStart = 0;
 				int hitAnimEnd = 0;
 				int tileOverSize = 0;
+				bool isTree = false;
 				void isHit()
 				{
 					if (hitAnimStart > 0)
@@ -138,6 +139,7 @@ namespace Engin
 			Resources::ShaderProgram* alphaShader;
 
 			Resources::Texture* furball; //2d
+			Resources::Texture* tree_64; //2d
 			Resources::Texture* mapSheet_64;
 			Resources::Texture* mapSheet_256;
 			Resources::Texture* roof_16;

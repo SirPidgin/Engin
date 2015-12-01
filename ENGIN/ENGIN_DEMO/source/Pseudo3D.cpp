@@ -28,7 +28,7 @@ namespace Engin
 			guiBatch.setShader(alphaShader);
 			guiBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
 			
-			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");			
+			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");	
 			mapSheet_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_64.png");
 			mapSheet_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_256_shadows.png");
 			mapSheet_256->changeParameters(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
@@ -40,6 +40,7 @@ namespace Engin
 			furballShadow = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_shadow_256.png");
 			animTree360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/tree360_40.xml");
 			treeShadow = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/tree_shadow_512.png");
+			tree_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/tree_up_64.png");
 
 			animPlayer2d.setAnimation(animFireball360);
 			animPlayer2d.setLoopStartFrame(20);
@@ -642,12 +643,18 @@ namespace Engin
 			//sprites
 			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
-				if (gameObjects[i]->accessComponent<UserData>()->isFireball != true)
+				if (gameObjects[i]->accessComponent<UserData>()->isTree == true)
+				{
+					alphaBatch.draw(tree_64, &glm::vec4(0.0f, 0.0f, tree_64->getWidth(), tree_64->getHeight()),
+						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, tree_64->getWidth(),
+						tree_64->getHeight(), tree_64->getWidth() / 2, tree_64->getHeight() / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.8f + i*0.000001f);
+				}
+				else if (gameObjects[i]->accessComponent<UserData>()->isFireball != true)
 				{
 					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, furball->getWidth(),
 						furball->getHeight(), tileSize2d / 2, tileSize2d / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.000001f);
-				}
+				}				
 				//if fireball
 				else
 				{
@@ -761,6 +768,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 			gameObjects.back()->accessComponent<UserData>()->tileOverSize = 256;
+			gameObjects.back()->accessComponent<UserData>()->isTree = true;
 
 			gameObjects.back()->accessComponent<UserData>()->shadow = treeShadow;
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
