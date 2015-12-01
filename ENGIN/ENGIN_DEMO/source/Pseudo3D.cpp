@@ -307,6 +307,21 @@ namespace Engin
 				gameObjects[i]->update();
 			}
 
+			//fast test for rigid
+			for (int i = 10; i < gameObjects.size()-1; i++)
+			{
+				for (int j = 0; j < 10; j++)
+				{
+					if (gameObjects[i]->accessComponent<RigidBody>()->isColliding(gameObjects[j]))
+					{
+						if (gameObjects[i]->accessComponent<UserData>()->isFireball == true)
+						{
+							gameObjects[i]->kill();
+						}						
+					}
+				}				
+			}
+
 			// Delete dead objects
 			deleteDeadObjects();
 			
@@ -639,6 +654,9 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 			gameObjects.back()->accessComponent<UserData>()->shadow = furballShadow;
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
+
+			//rigidBody
+			gameObjects.back()->accessComponent<RigidBody>()->setCollisionRadius(0.5f);
 		}
 
 		//Raycast fireball sprite
@@ -735,6 +753,9 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 
 			gameObjects.back()->accessComponent<UserData>()->isFireball = true;
+
+			//rigidBody
+			gameObjects.back()->accessComponent<RigidBody>()->setCollisionRadius(0.5f);
 		}
 
 		void Pseudo3D::Projectile::update()
