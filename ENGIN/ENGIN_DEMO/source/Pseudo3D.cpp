@@ -31,6 +31,8 @@ namespace Engin
 			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");			
 			mapSheet_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_64.png");
 			mapSheet_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_256_shadows.png");
+			mapSheet_256->changeParameters(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+			mapSheet_256->changeParameters(GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 			roof_16 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/roof.png");
 			
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
@@ -484,8 +486,6 @@ namespace Engin
 				spriteX = gameObjects[i]->accessComponent<Transform>()->getXPosition() - player[0];
 				spriteY = gameObjects[i]->accessComponent<Transform>()->getYPosition() - player[1];
 
-				glm::vec2 transform;
-
 				//Creating sprite transform vector
 				transform = glm::vec2(spriteX, spriteY) * glm::inverse(glm::mat2x2(planeX,dirX,planeY,dirY));				
 
@@ -521,7 +521,7 @@ namespace Engin
 				spriteAnimIndex = getSpriteAnimIndex(spriteAngle, gameObjects[i]->accessComponent<UserData>()->sides);
 
 				//Saving data
-				gameObjects[i]->accessComponent<UserData>()->spriteXout =(spriteXout-2400.0f);
+				gameObjects[i]->accessComponent<UserData>()->spriteXout = (spriteXout - 2400.0f);
 				gameObjects[i]->accessComponent<UserData>()->spriteYout = (spriteYout);
 				gameObjects[i]->accessComponent<Transform>()->setScale(spriteScale);
 				gameObjects[i]->accessComponent<UserData>()->transformY = transform.y;
@@ -531,19 +531,23 @@ namespace Engin
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopStartFrame(int(spriteAnimIndex * 10));
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopEndFrame(int(spriteAnimIndex * 10 + 9));
 				}
+				//Is the object hit
 				else if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.isStarted() == true)
 				{
+					//Is the cooldown gone
 					if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.getLocalTime() > 2000)
 					{
 						gameObjects[i]->accessComponent<UserData>()->hitCoolDown.stop();
 						gameObjects[i]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
 					}					
 				}
+				//If not hit then change index
 				else
 				{
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
 				}
 
+				//Scaling for the sprite
 				if (spriteYout <= 0)
 				{
 					depth = 2.0; //disappear
@@ -729,6 +733,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
+			gameObjects.back()->accessComponent<UserData>()->tileOverSize = 256;
 
 			gameObjects.back()->accessComponent<UserData>()->shadow = treeShadow;
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;

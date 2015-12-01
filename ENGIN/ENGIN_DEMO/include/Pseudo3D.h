@@ -71,6 +71,7 @@ namespace Engin
 				Core::Timer hitCoolDown;
 				int hitAnimStart = 0;
 				int hitAnimEnd = 0;
+				int tileOverSize = 0;
 				void isHit()
 				{
 					if (hitAnimStart > 0)
@@ -89,11 +90,11 @@ namespace Engin
 			public:
 				PseudoSpriteDraw(GameObject* o) : Component(o){}
 				void setTextureBatch(Renderer::TextureBatch* newTextrBatch) { textureBatch = newTextrBatch; }
-				void setRaycastW(int W) { raycastW = W; limitLeft = -raycastW - 2400; limitRight = raycastW - 2400; }
+				void setRaycastW(int W) { raycastW = W; limitLeft = -raycastW - 2656; limitRight = raycastW - 2400; }
 				void drawPseudoSprite()				   
 				{					
 					if (ownerObject->accessComponent<UserData>()->spriteXout > limitLeft
-						&& ownerObject->accessComponent<UserData>()->spriteXout < limitRight 
+						&& ownerObject->accessComponent<UserData>()->spriteXout < limitRight
 						&& ownerObject->accessComponent<UserData>()->transformY > 0)
 					{
 						textureBatch->draw(ownerObject->accessComponent<AnimationPlayer>()->getTexture(), ownerObject->accessComponent<AnimationPlayer>()->getCurrentFrameTexCoords(),
@@ -221,6 +222,7 @@ namespace Engin
 
 			double spriteX;
 			double spriteY;
+			glm::vec2 transform;
 			double spriteXout;
 			double spriteYout;
 			double spriteScreenX;
