@@ -317,6 +317,7 @@ namespace Engin
 						if (gameObjects[i]->accessComponent<UserData>()->isFireball == true)
 						{
 							gameObjects[i]->kill();
+							gameObjects[j]->accessComponent<UserData>()->isHit();
 						}						
 					}
 				}				
@@ -530,6 +531,14 @@ namespace Engin
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopStartFrame(int(spriteAnimIndex * 10));
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopEndFrame(int(spriteAnimIndex * 10 + 9));
 				}
+				else if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.isStarted() == true)
+				{
+					if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.getLocalTime() > 2000)
+					{
+						gameObjects[i]->accessComponent<UserData>()->hitCoolDown.stop();
+						gameObjects[i]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
+					}					
+				}
 				else
 				{
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
@@ -654,6 +663,8 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 			gameObjects.back()->accessComponent<UserData>()->shadow = furballShadow;
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
+			gameObjects.back()->accessComponent<UserData>()->hitAnimStart = 40;
+			gameObjects.back()->accessComponent<UserData>()->hitAnimEnd = 63;
 
 			//rigidBody
 			gameObjects.back()->accessComponent<RigidBody>()->setCollisionRadius(0.4f);

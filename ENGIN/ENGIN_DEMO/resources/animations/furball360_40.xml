@@ -1,4 +1,4 @@
-<animation path="resources/furball360_40_256.png" width="256" height="256" loopable="1">
+<animation path="resources/furball360_40X_256.png" width="256" height="256" loopable="1">
 	<frame duration="1000" id="0" />
 	<frame duration="1000" id="1" />
 	<frame duration="1000" id="2" />
@@ -39,4 +39,29 @@
   <frame duration="1000" id="37" />
   <frame duration="1000" id="38" />
   <frame duration="1000" id="39" />
+   <frame duration="100" id="40" />
+	<frame duration="100" id="41" />
+	<frame duration="100" id="42" />
+	  <frame duration="100" id="43" />
+  <frame duration="100" id="44" />
+  <frame duration="100" id="45" />
+  <frame duration="100" id="46" />
+  <frame duration="100" id="47" />
+  <frame duration="100" id="48" />
+  <frame duration="100" id="49" />
+  <frame duration="100" id="50" />
+    <frame duration="100" id="51" />
+  <frame duration="100" id="52" />
+  <frame duration="100" id="53" />
+  <frame duration="100" id="54" />
+  <frame duration="100" id="55" />
+   <frame duration="100" id="56" />
+	<frame duration="100" id="57" />
+	<frame duration="100" id="58" />
+	  <frame duration="100" id="59" />
+  <frame duration="100" id="60" />
+  <frame duration="100" id="61" />
+  <frame duration="100" id="62" />
+  <frame duration="100" id="63" />
+
 </animation>

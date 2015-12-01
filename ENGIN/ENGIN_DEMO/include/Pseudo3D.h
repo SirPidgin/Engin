@@ -68,6 +68,20 @@ namespace Engin
 				int animationLoopStartFrame = 0;
 				int animationLoopEndFrame = 0;
 				Resources::Texture* shadow;
+				Core::Timer hitCoolDown;
+				int hitAnimStart = 0;
+				int hitAnimEnd = 0;
+				void isHit()
+				{
+					if (hitAnimStart > 0)
+					{
+						hitCoolDown.start();
+						ownerObject->accessComponent<AnimationPlayer>()->setLoopStartFrame(hitAnimStart);
+						ownerObject->accessComponent<AnimationPlayer>()->setLoopEndFrame(hitAnimEnd);
+						ownerObject->accessComponent<AnimationPlayer>()->start();
+						ownerObject->accessComponent<AnimationPlayer>()->setCurrentFrame(hitAnimStart);
+					}					
+				}
 			};
 
 			class PseudoSpriteDraw : public Component
