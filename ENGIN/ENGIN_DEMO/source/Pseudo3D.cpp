@@ -75,7 +75,7 @@ namespace Engin
 
 			moveSpeed = 0.11f;
 			rotSpeed = 0.02f;
-			player = { { 22.0f, 12.0f, 0.0f, 0 , 1} }; //x,y,rotation(radians), how many sides drawn, spritetype
+			player = { { 22.0f, 9.5f, 0.0f, 0 , 1} }; //x,y,rotation(radians), how many sides drawn, spritetype
 
 			dirX = -1, dirY = 0; //initial direction vector
 			planeX = 0.0f, planeY = 0.5; //the 2d raycaster version of camera plane
@@ -98,6 +98,33 @@ namespace Engin
 			createFireball(9.0f, 10.0f, glm::radians(180.0f));
 
 			createTree(20.0f, 5.0f, 0.0f);
+			createTree(20.0f, 6.0f, 0.0f);
+			createTree(21.0f, 5.0f, 0.0f);
+			createTree(20.0f, 7.0f, 0.0f);
+			createTree(22.0f, 5.0f, 0.0f);
+			createTree(20.0f, 8.0f, 0.0f);
+			createTree(23.0f, 5.0f, 0.0f);
+			createTree(23.0f, 8.0f, 0.0f);
+			createTree(23.0f, 6.0f, 0.0f);
+			createTree(21.0f, 8.0f, 0.0f);
+			createTree(23.0f, 7.0f, 0.0f);
+			createTree(22.0f, 8.0f, 0.0f);
+			createTree(23.0f, 8.0f, 0.0f);
+
+			createTree(20.0f, 5.0f + 6.0f, 0.0f);
+			createTree(20.0f, 6.0f + 6.0f, 0.0f);
+			createTree(21.0f, 5.0f + 6.0f, 0.0f);
+			createTree(20.0f, 7.0f + 6.0f, 0.0f);
+			createTree(22.0f, 5.0f + 6.0f, 0.0f);
+			createTree(20.0f, 8.0f + 6.0f, 0.0f);
+			createTree(23.0f, 5.0f + 6.0f, 0.0f);
+			createTree(23.0f, 8.0f + 6.0f, 0.0f);
+			createTree(23.0f, 6.0f + 6.0f, 0.0f);
+			createTree(21.0f, 8.0f + 6.0f, 0.0f);
+			createTree(23.0f, 7.0f + 6.0f, 0.0f);
+			createTree(22.0f, 8.0f + 6.0f, 0.0f);
+			createTree(23.0f, 8.0f + 6.0f, 0.0f);
+
 
 #pragma endregion
 			
@@ -619,7 +646,7 @@ namespace Engin
 				{
 					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, furball->getWidth(),
-						furball->getHeight(), tileSize2d / 2, tileSize2d / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.01f);
+						furball->getHeight(), tileSize2d / 2, tileSize2d / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.000001f);
 				}
 				//if fireball
 				else
