@@ -521,7 +521,7 @@ namespace Engin
 				spriteAnimIndex = getSpriteAnimIndex(spriteAngle, gameObjects[i]->accessComponent<UserData>()->sides);
 
 				//Saving data
-				gameObjects[i]->accessComponent<UserData>()->spriteXout = (spriteXout - 2400.0f);
+				gameObjects[i]->accessComponent<UserData>()->spriteXout = (spriteXout - 2400.0f - (gameObjects[i]->accessComponent<UserData>()->tileOverSize/2)*spriteScale);
 				gameObjects[i]->accessComponent<UserData>()->spriteYout = (spriteYout);
 				gameObjects[i]->accessComponent<Transform>()->setScale(spriteScale);
 				gameObjects[i]->accessComponent<UserData>()->transformY = transform.y;
