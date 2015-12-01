@@ -7,7 +7,7 @@ namespace Engin
 {
 	namespace Game
 	{
-		GameObject::GameObject() : nameTag("default"), textureBatch(nullptr)
+		GameObject::GameObject() : alive(true), nameTag("default"), textureBatch(nullptr)
 		{
 		}
 		GameObject::GameObject(Renderer::TextureBatch* refTextureBatch) : nameTag("default"), textureBatch(refTextureBatch)

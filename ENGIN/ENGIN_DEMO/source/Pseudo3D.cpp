@@ -306,11 +306,14 @@ namespace Engin
 			{
 				gameObjects[i]->update();
 			}
+
+			// Delete dead objects
+			deleteDeadObjects();
 			
 			//Taking time it takes to go trough the update
 			myTimer.pause();
 			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
-			text = textCreator.getTexture();			
+			text = textCreator.getTexture();		
 		}
 
 		void Pseudo3D::interpolate(GLfloat alpha)
@@ -595,7 +598,7 @@ namespace Engin
 				{
 					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, 256, 256, 256 / 2, 256 / 2, gameObjects[i]->accessComponent<Transform>()->getRotation() + glm::radians(90.0f),
-						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.01f);
+						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.001f);
 				}
 			}
 
@@ -739,6 +742,31 @@ namespace Engin
 			Transform* t = ownerObject->accessComponent<Transform>();
 			t->setXPosition(t->getXPosition() + speed * cosf(t->getRotation() + glm::radians(90.0f)));
 			t->setYPosition(t->getYPosition() + speed * sinf(t->getRotation() + glm::radians(90.0f)));
+
+			if (t->getXPosition() < 1.0f || t->getXPosition() > 24.0f || t->getYPosition() < 1.0f || t->getYPosition() > 24.0f)
+			{
+				ownerObject->kill();
+			}
+		}
+
+		void Pseudo3D::deleteDeadObjects()
+		{
+			gameObjects.erase(std::remove_if(gameObjects.begin(), gameObjects.end(), [&](GameObject *obj)
+			{ 
+				if (!obj->isAlive())
+				{
+					deadObjects.push_back(obj);
+					return true;
+				}
+				return false;
+			}), gameObjects.end());
+
+			for (auto deadObject : deadObjects)
+			{
+				delete deadObject;
+			}
+
+			deadObjects.clear();
 		}
 	}
 }

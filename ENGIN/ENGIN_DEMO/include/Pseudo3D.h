@@ -111,6 +111,7 @@ namespace Engin
 			
 		private:
 			int getSpriteAnimIndex(double angle, double sides);
+			void deleteDeadObjects();
 			Engin* engine;
 
 			Renderer::Camera* camera;
@@ -138,6 +139,7 @@ namespace Engin
 			std::array<double,5> player;
 
 			std::vector<GameObject*> gameObjects;
+			std::vector<GameObject*> deadObjects;
 			
 			float alpha;
 
