@@ -41,7 +41,7 @@ namespace Engin
 				Frame frame;
 				frame.duration = float(atoi(i->first_attribute("duration")->value())); // Read the duration of frame.
 
-				// Calculate the index and the texture coordinates of the frame.
+				// Calculate the texture coordinates of the frame.
 				int index = atoi(i->first_attribute("id")->value());
 				frame.texCoords.x = float((index % framesInARow) * frameWidth);
 				frame.texCoords.y = float((index / framesInARow) * frameHeight);
