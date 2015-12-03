@@ -31,8 +31,8 @@ namespace Engin
 			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");	
 			mapSheet_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_64.png");
 			mapSheet_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_256_shadows.png");
-			mapSheet_256->changeParameters(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-			mapSheet_256->changeParameters(GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+			//mapSheet_256->changeParameters(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+			//mapSheet_256->changeParameters(GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 			roof_16 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/roof.png");
 			
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
