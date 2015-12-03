@@ -168,6 +168,9 @@ namespace Engin
 			int tileSize;
 			int tileSize2d;
 
+			//turret timer
+			Core::Timer turretCoolDown;
+
 			//-------------------------------------------------------------------
 			//Raycasting
 			Resources::Animation* animFurball360;

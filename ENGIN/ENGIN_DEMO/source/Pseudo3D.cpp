@@ -31,8 +31,8 @@ namespace Engin
 			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");	
 			mapSheet_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_64.png");
 			mapSheet_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_256_shadows.png");
-			//mapSheet_256->changeParameters(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-			//mapSheet_256->changeParameters(GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+			mapSheet_256->changeParameters(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+			mapSheet_256->changeParameters(GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 			roof_16 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/roof.png");
 			
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
@@ -93,10 +93,7 @@ namespace Engin
 			createFurball(23.0f, 15.0f, 0.0f);
 			createFurball(12.199f, 16.2f, 0.0f);
 
-			createFireball(5.0f, 15.0f, 0.0f);
-			createFireball(7.0f, 10.0f, glm::radians(180.0f));
-			createFireball(8.0f, 10.0f, 0.0f);
-			createFireball(9.0f, 10.0f, glm::radians(180.0f));
+			createTree(0.0f, 0.0f, 0.0f); //furball drag
 
 			createTree(20.0f, 5.0f, 0.0f);
 			createTree(20.0f, 6.0f, 0.0f);
@@ -112,6 +109,7 @@ namespace Engin
 			createTree(23.0f, 8.0f, 0.0f);
 			
 			createTree(20.0f, 5.0f+ 6.0f, 0.0f);
+			createTree(20.0f, 5.0f+ 6.0f, 0.0f);
 			createTree(20.0f, 6.0f+ 6.0f, 0.0f);
 			createTree(20.0f, 7.0f+ 6.0f, 0.0f);
 			createTree(20.0f, 8.0f+ 6.0f, 0.0f);
@@ -124,7 +122,7 @@ namespace Engin
 			createTree(23.0f, 7.0f+ 6.0f, 0.0f);
 			createTree(23.0f, 8.0f+ 6.0f, 0.0f);
 			
-		
+			turretCoolDown.start();
 
 
 #pragma endregion
@@ -286,29 +284,21 @@ namespace Engin
 			gameObjects[10]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[10]->accessComponent<Transform>()->getRotation()));
 			gameObjects[10]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[10]->accessComponent<Transform>()->getRotation()));
 
-			//moving the three fireballs
-			static float firex = 24.0f;
-			if (firex > 11.0f)
+#pragma region Launchers
+			//fireball launchers	
+			if (turretCoolDown.isStarted() == false)
 			{
-				firex -= 0.05f;				
+				turretCoolDown.start();
 			}
-			else
-			{
-				firex = 24.0f;
-			}
-			gameObjects[11]->accessComponent<Transform>()->setYPosition(firex);
-			gameObjects[13]->accessComponent<Transform>()->setYPosition(firex);
 
-			static float firex2 = 11.0f;
-			if (firex2 < 24.0f)
+			if (turretCoolDown.getLocalTime() > 2500.0f)
 			{
-				firex2 += 0.05f;
+				createProjectile(6, 11, 0);
+				createProjectile(8, 11, 0);
+				createProjectile(7, 24, glm::radians(180.0f));
+				turretCoolDown.stop();
 			}
-			else
-			{
-				firex2 = 11.0f;
-			}
-			gameObjects[12]->accessComponent<Transform>()->setYPosition(firex2);
+#pragma endregion
 
 
 			//2d camera
@@ -574,7 +564,7 @@ namespace Engin
 				else if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.isStarted() == true)
 				{
 					//Is the cooldown gone
-					if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.getLocalTime() > 2000)
+					if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.getLocalTime() > 2000.0f) //TODO: add cooldown time to userdata
 					{
 						gameObjects[i]->accessComponent<UserData>()->hitCoolDown.stop();
 						gameObjects[i]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
@@ -717,38 +707,6 @@ namespace Engin
 
 			//rigidBody
 			gameObjects.back()->accessComponent<RigidBody>()->setCollisionRadius(0.4f);
-		}
-
-		//Raycast fireball sprite
-		void Pseudo3D::createFireball(float x, float y, float rotation)
-		{
-			gameObjects.push_back(new GameObject(&alphaBatch));
-			gameObjects.back()->addComponent<Transform>();
-			gameObjects.back()->addComponent<RigidBody>();
-			gameObjects.back()->addComponent<Sprite>();
-			gameObjects.back()->addComponent<AnimationPlayer>();
-			gameObjects.back()->addComponent<UserData>();
-			gameObjects.back()->addComponent<PseudoSpriteDraw>();
-
-			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animFireball360);
-			gameObjects.back()->accessComponent<AnimationPlayer>()->setLoopEndFrame(9);
-			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
-			gameObjects.back()->accessComponent<AnimationPlayer>()->start();
-			
-			gameObjects.back()->accessComponent<Transform>()->setXPosition(x);
-			gameObjects.back()->accessComponent<Transform>()->setYPosition(y);
-			gameObjects.back()->accessComponent<Transform>()->setRotation(rotation);
-
-			//userdata
-			gameObjects.back()->accessComponent<UserData>()->sides = 8;
-			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
-			gameObjects.back()->accessComponent<UserData>()->transformY = 0.0f;
-			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
-			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
-			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
-
-			gameObjects.back()->accessComponent<UserData>()->isFireball = true;
-			gameObjects.back()->accessComponent<UserData>()->hasShadow = false;
 		}
 
 		//Raycast tree sprite
