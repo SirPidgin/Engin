@@ -258,9 +258,6 @@ namespace Engin
 
 #pragma region Shooting
 			// Shoot a projectile
-			static int projectiles = 0;
-			static const int projectilesMax = 5;
-
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE))
 			{
 				createProjectile(player[0], player[1], player[2]);
@@ -286,17 +283,13 @@ namespace Engin
 
 #pragma region Launchers
 			//fireball launchers	
-			if (turretCoolDown.isStarted() == false)
-			{
-				turretCoolDown.start();
-			}
 
 			if (turretCoolDown.getLocalTime() > 2500.0f)
 			{
 				createProjectile(6, 11, 0);
 				createProjectile(8, 11, 0);
 				createProjectile(7, 24, glm::radians(180.0f));
-				turretCoolDown.stop();
+				turretCoolDown.start();
 			}
 #pragma endregion
 

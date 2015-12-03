@@ -50,7 +50,7 @@ namespace Engin
 				void update();
 
 			private:
-				float speed = 0.1f;
+				float speed = 0.15f;
 			};
 			void createTree(float x, float y, float rotation);
 
