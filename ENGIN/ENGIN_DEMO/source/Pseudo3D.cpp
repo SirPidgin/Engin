@@ -83,7 +83,7 @@ namespace Engin
 
 			//GameObjects.
 			createFurball(15.0f, 5.0f, 0.0f);
-			createFurball(12.0f, 18.3f, 0.0f);
+			createFurball(8.0f, 18.3f, 0.0f);
 			createFurball(13.5f, 12.7f, 0.0f);
 			createFurball(14.0f, 12.0f, 0.0f);
 			createFurball(15.0f, 13.8f, 0.0f);
@@ -269,7 +269,9 @@ namespace Engin
 			gameObjects[5]->accessComponent<Transform>()->setRotation(alpha * 5);
 			gameObjects[0]->accessComponent<Transform>()->setRotation(2*alpha);
 			gameObjects[4]->accessComponent<Transform>()->setRotation(alpha + 0.02);
-			gameObjects[10]->accessComponent<Transform>()->setRotation(glm::radians(315.0f) + 2*alpha); //fireball that follows the furball
+			gameObjects[10]->accessComponent<Transform>()->setRotation(glm::radians(315.0f) + 2*alpha);
+
+			gameObjects[1]->accessComponent<Transform>()->setRotation(2 * alpha);
 
 			//moving sprites TODO: Make some logic and translate sprites with them.
 			gameObjects[0]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[0]->accessComponent<Transform>()->getRotation()));
@@ -280,6 +282,8 @@ namespace Engin
 
 			gameObjects[10]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[10]->accessComponent<Transform>()->getRotation()));
 			gameObjects[10]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[10]->accessComponent<Transform>()->getRotation()));
+
+			gameObjects[1]->accessComponent<Transform>()->setXPosition(8.0f + 4.0f * glm::cos(alpha));
 
 #pragma region Launchers
 			//fireball launchers	
