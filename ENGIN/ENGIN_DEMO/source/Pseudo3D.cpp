@@ -335,6 +335,17 @@ namespace Engin
 			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
 				gameObjects[i]->update();
+
+				// Kills the fireball if it hits a wall.
+				if (gameObjects[i]->accessComponent<UserData>()->isFireball)
+				{
+					Transform* t = gameObjects[i]->accessComponent<Transform>();
+
+					if (wallTiles[int(t->getXPosition())][int(t->getYPosition())] != false)
+					{
+						gameObjects[i]->kill();
+					}
+				}
 			}
 
 			//fast test for rigid
@@ -814,11 +825,6 @@ namespace Engin
 			Transform* t = ownerObject->accessComponent<Transform>();
 			t->setXPosition(t->getXPosition() + speed * cosf(t->getRotation() + glm::radians(90.0f)));
 			t->setYPosition(t->getYPosition() + speed * sinf(t->getRotation() + glm::radians(90.0f)));
-
-			if (t->getXPosition() < 1.0f || t->getXPosition() > 24.0f || t->getYPosition() < 1.0f || t->getYPosition() > 24.0f)
-			{
-				ownerObject->kill();
-			}
 		}
 
 		void Pseudo3D::deleteDeadObjects()

@@ -66,7 +66,7 @@ namespace Engin
 				growTextureQueue();
 			}
 
-			TextureInfo* textureInfo = &textureQueue[textureQueueCount]; //Get pointer to the texture info we will be using.
+			TextureInfo* textureInfo = &textureQueue[textureQueueCount]; // Get pointer to the texture info we will be using.
 
 			// Get the texture region if given.
 			if (textureRegion)
