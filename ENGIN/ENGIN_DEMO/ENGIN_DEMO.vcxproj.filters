@@ -59,6 +59,12 @@
     <None Include="resources\shaders\texture_shader.vertex">
       <Filter>Resource Files\Shaders</Filter>
     </None>
+    <None Include="particle_shader.fragment">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
+    <None Include="particle_shader.vertex">
+      <Filter>Resource Files\Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\CameraTestScene.h">
