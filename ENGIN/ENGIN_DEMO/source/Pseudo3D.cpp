@@ -254,30 +254,31 @@ namespace Engin
 			static int lastMouseY = 0;
 			static int currMouseX = 0;
 			static int currMouseY = 0;
+			static float realRotSpeed = rotSpeed;
 			engine->mouseInput->getRelativeMouseState(&currMouseX, &currMouseY);
 			//rotate to the right
-				//if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
-			if (lastMouseX < currMouseX)
+			realRotSpeed = rotSpeed + (float) (abs(currMouseX) - abs(lastMouseX));
+			realRotSpeed /= 200.0f;
+			if (lastMouseX < currMouseX || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
 			{
 				//both camera direction and camera plane must be rotated
 				double oldDirX = dirX;
-				dirX = dirX * cos(-rotSpeed) - dirY * sin(-rotSpeed);
-				dirY = oldDirX * sin(-rotSpeed) + dirY * cos(-rotSpeed);
+				dirX = dirX * cos(-realRotSpeed) - dirY * sin(-realRotSpeed);
+				dirY = oldDirX * sin(-realRotSpeed) + dirY * cos(-realRotSpeed);
 				double oldPlaneX = planeX;
-				planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
-				planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
+				planeX = planeX * cos(-realRotSpeed) - planeY * sin(-realRotSpeed);
+				planeY = oldPlaneX * sin(-realRotSpeed) + planeY * cos(-realRotSpeed);
 			}
 			//rotate to the left
-				//if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
-			if (lastMouseX > currMouseX)
+			if (lastMouseX > currMouseX || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
 			{
 				//both camera direction and camera plane must be rotated
 				double oldDirX = dirX;
-				dirX = dirX * cos(rotSpeed) - dirY * sin(rotSpeed);
-				dirY = oldDirX * sin(rotSpeed) + dirY * cos(rotSpeed);
+				dirX = dirX * cos(realRotSpeed) - dirY * sin(realRotSpeed);
+				dirY = oldDirX * sin(realRotSpeed) + dirY * cos(realRotSpeed);
 				double oldPlaneX = planeX;
-				planeX = planeX * cos(rotSpeed) - planeY * sin(rotSpeed);
-				planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
+				planeX = planeX * cos(realRotSpeed) - planeY * sin(realRotSpeed);
+				planeY = oldPlaneX * sin(realRotSpeed) + planeY * cos(realRotSpeed);
 			}
 			engine->mouseInput->getRelativeMouseState(&lastMouseX, &lastMouseY);
 #pragma endregion
@@ -804,7 +805,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 			gameObjects.back()->accessComponent<UserData>()->tileOverSize = 256;
 			gameObjects.back()->accessComponent<UserData>()->isTree = true;
-			gameObjects.back()->accessComponent<UserData>()->depthRandom = randomGenerator.getRandomFloat(0.000001, 0.0000001);
+			gameObjects.back()->accessComponent<UserData>()->depthRandom = randomGenerator.getRandomFloat(0.0000001, 0.000001);
 
 			gameObjects.back()->accessComponent<UserData>()->shadow = treeShadow;
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
