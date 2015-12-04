@@ -419,7 +419,33 @@ namespace Engin
 			}
 #pragma endregion
 
-			//2d camera
+			//2d "player"
+
+		/*	if (wallTiles[static_cast<int>(player[0] + dirX * moveSpeed * multiplier)][static_cast<int>(player[1])] == false)
+			{
+				player[0] += dirX * moveSpeed * multiplier;
+			}
+
+			if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + dirY * moveSpeed * multiplier)] == false)
+			{
+				player[1] += dirY * moveSpeed * multiplier;
+			}*/
+
+			static float player2X = 12.0f;
+			static float player2Y = 12.0f;
+
+		/*	if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_KP_8))
+			{
+				if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition() + glm::cos(gameObjects[2]->accessComponent<Transform>()->getRotation() * moveSpeed))] == false)
+				{
+					gameObjects[2]->accessComponent<Transform>()->setXPosition(player2X + glm::cos(gameObjects[2]->accessComponent<Transform>()->getRotation())*moveSpeed);
+				}
+				if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition())][static_cast<int>(player[1] + dirY * moveSpeed)] == false)
+				{
+					gameObjects[2]->accessComponent<Transform>()->setXPosition(player2X + glm::cos(gameObjects[2]->accessComponent<Transform>()->getRotation())*moveSpeed);
+				}
+			}*/
+
 			static float zoomByInput = 1.0f;
 			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP))
 			{
@@ -433,8 +459,8 @@ namespace Engin
 				zoomByInput += glm::radians(2.0f);
 			}
 			camera2->setZoomLevel(zoomByInput);
-			camera2->setPositionRotationOrigin((player[0]*tileSize2d), (player[1]*tileSize2d));
-			camera2->setRotation(player[2]);
+			camera2->setPositionRotationOrigin(gameObjects[2]->accessComponent<Transform>()->getXPosition()*tileSize2d, gameObjects[2]->accessComponent<Transform>()->getYPosition()*tileSize2d);
+			camera2->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation());
 
 			//Information		
 			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player[0]) + " " + std::to_string(player[1]) + " angle: " + std::to_string(glm::degrees(player[2])), 255, 100, 0);

@@ -48,7 +48,7 @@ namespace Engin
 			this->worldX = worldX*coordMultip - rotationOriginX;
 			this->worldY = worldY*coordMultip - rotationOriginY;
 
-			positionMatrix = glm::translate(glm::vec3(-this->worldX, -this->worldY, 0.0f)); //Camera translate is to an opposite direction
+			positionMatrix = glm::translate(glm::vec3(-this->worldX, -this->worldY, 0.0f)); // Camera translate is to an opposite direction
 		}
 
 		glm::vec2 Camera::getPositionRotationOrigin()
@@ -56,7 +56,7 @@ namespace Engin
 			return glm::vec2((worldX + rotationOriginX), (worldY + rotationOriginY))*getMethodCoordMultip;
 		}
 
-		void Camera::setZoomLevel(GLfloat size) //Test this more.
+		void Camera::setZoomLevel(GLfloat size)
 		{
 			GLfloat tempWorldX = getPositionRotationOrigin().x;
 			GLfloat tempWorldY = getPositionRotationOrigin().y;
@@ -69,7 +69,7 @@ namespace Engin
 				scaleMatrix = glm::scale(glm::vec3(size, size, 1.0f));
 				setPositionRotationOrigin(tempWorldX, tempWorldY);
 			}
-			if (size <= 0.0f)//if zoom is 0 you cant see how it moves. negative zoom neglected
+			if (size <= 0.0f) // If zoom is 0 you cant see how it moves. negative zoom neglected
 			{
 				zoomLevel = 0.0f;
 				coordMultip = 1.0f;
@@ -89,7 +89,7 @@ namespace Engin
 
 		void Camera::setRotation(GLfloat rotation)
 		{
-			this->rotation = -rotation; //Camera rotates to the opposite direction.
+			this->rotation = -rotation; // Camera rotates to the opposite direction.
 			rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));			
 		}
 

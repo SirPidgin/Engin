@@ -53,7 +53,7 @@ namespace Engin
 
 			private:
 				float speed = 0.10f;
-				float spread = 10.0f;
+				float spread = 5.0f;
 				Core::RNG rng; // Should be static?
 			};
 			void createTree(float x, float y, float rotation);
