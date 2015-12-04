@@ -86,7 +86,7 @@ namespace Engin
 			float randNum = distribution(generator);
 
 			p->position = glm::vec3(0.0f);
-			p->velocity = glm::vec2(1.0f * randNum * randNum * cos(angle) + 1.0f);
+			p->velocity = glm::vec2(1.0f * randNum * cos(angle) + 1.0f);
 			p->color = glm::vec4(1.0f, 1.0f, 1.0f, 0.0f);
 			p->age = 0.0f;
 			p->lifetime = randNum + 1;
