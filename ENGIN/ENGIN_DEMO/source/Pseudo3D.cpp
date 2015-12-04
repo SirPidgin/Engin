@@ -39,7 +39,7 @@ namespace Engin
 			mapSheet_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_256_shadows.png");
 			mapSheet_256->changeParameters(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 			mapSheet_256->changeParameters(GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
-			roof_16 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/roof.png");
+			floor_16 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/roof.png");
 			floor_800 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/floor.png");
 			
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
@@ -48,6 +48,8 @@ namespace Engin
 			animTree360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/tree360_40.xml");
 			treeShadow = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/tree_shadow_512.png");
 			tree_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/tree_up_64.png");
+
+			animFurballHit = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/fireball_hit_36.xml");
 
 			animPlayer2d.setAnimation(animFireball360);
 			animPlayer2d.setLoopStartFrame(20);
@@ -355,10 +357,6 @@ namespace Engin
 #pragma endregion
 
 			alpha += 0.01;			
-			
-			// Raycast calculations.
-			Raycasting();
-			RaycastingSprites();
 
 			// Saving player rotation.
 			player[2] = glm::atan(dirY, dirX);
@@ -513,9 +511,15 @@ namespace Engin
 						gameObjects[i]->kill();
 					}
 				}
+
+				// Kill hit animations
+				if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.getLocalTime() > gameObjects[i]->accessComponent<UserData>()->cooldownLenght)
+				{
+ 					gameObjects[i]->kill();
+				}
 			}
 
-			//fast test for rigid
+			// Collision test for rigid.
 			for (size_t i = 10; i < gameObjects.size(); i++)
 			{
 				for (int j = 0; j < 10; j++)
@@ -524,8 +528,10 @@ namespace Engin
 					{
 						if (gameObjects[i]->accessComponent<UserData>()->isFireball == true)
 						{
-							gameObjects[i]->kill();
-							gameObjects[j]->accessComponent<UserData>()->isHit();
+							// Kill the projectile.
+							gameObjects[i]->kill(); 
+							// Create hit animation.
+							createHitFireball(gameObjects[j]->accessComponent<Transform>()->getXPosition(), gameObjects[j]->accessComponent<Transform>()->getYPosition());
 						}						
 					}
 				}				
@@ -533,8 +539,12 @@ namespace Engin
 
 			// Delete dead objects
 			deleteDeadObjects();
+
+			// Raycast calculations.
+			Raycasting();
+			RaycastingSprites();
 			
-			//Taking time it takes to go trough the update
+			// Taking time it takes to go trough the update
 			myTimer.pause();
 			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
 			text = textCreator.getTexture();		
@@ -761,22 +771,16 @@ namespace Engin
 				gameObjects[i]->accessComponent<Transform>()->setScale(spriteScale);
 				gameObjects[i]->accessComponent<UserData>()->transformY = transform.y;
 
+				//TODO: Animations need better system for selecting indexes.
 				if (gameObjects[i]->accessComponent<UserData>()->isFireball == true)
 				{
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopStartFrame(static_cast<int>(spriteAnimIndex * 10));
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopEndFrame(static_cast<int>(spriteAnimIndex * 10 + 9));
 				}
-				//Is the object hit
-				else if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.isStarted() == true)
+				else if (gameObjects[i]->accessComponent<UserData>()->isHitAnimation == true)
 				{
-					//Is the cooldown gone
-					if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.getLocalTime() > 2000.0f) //TODO: add cooldown time to userdata
-					{
-						gameObjects[i]->accessComponent<UserData>()->hitCoolDown.stop();
-						gameObjects[i]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
-					}					
+					//Do nothing
 				}
-				//If not hit then change index
 				else
 				{
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
@@ -874,20 +878,27 @@ namespace Engin
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, tree_64->getWidth(),
 						tree_64->getHeight(), tree_64->getWidth() / 2, tree_64->getHeight() / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.8f + i*0.000001f);
 				}
-				// 2D Furball
-				else if (gameObjects[i]->accessComponent<UserData>()->isFireball != true)
+				// 2D Fireball
+				else if (gameObjects[i]->accessComponent<UserData>()->isFireball == true)
 				{
-					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
-						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, furball->getWidth(),
-						furball->getHeight(), tileSize2d / 2.0f, tileSize2d / 2.0f, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, 
-						Renderer::Color{ gameObjects[i]->accessComponent<UserData>()->spriteColorR, gameObjects[i]->accessComponent<UserData>()->spriteColorG, gameObjects[i]->accessComponent<UserData>()->spriteColorB }, 1.0f, 0.7f + i*0.000001f);
-				}				
-				// 2D fireball
-				else
+					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
+						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, 256, 256, 256 / 2, 256 / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(),
+						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.001f);					
+				}
+
+				else if (gameObjects[i]->accessComponent<UserData>()->isHitAnimation == true)
 				{
 					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, 256, 256, 256 / 2, 256 / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(),
 						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.001f);
+				}
+				// 2D Furball
+				else
+				{
+					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
+						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, furball->getWidth(),
+						furball->getHeight(), tileSize2d / 2.0f, tileSize2d / 2.0f, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f,
+						Renderer::Color{ gameObjects[i]->accessComponent<UserData>()->spriteColorR, gameObjects[i]->accessComponent<UserData>()->spriteColorG, gameObjects[i]->accessComponent<UserData>()->spriteColorB }, 1.0f, 0.7f + i*0.000001f);
 				}
 			}
 
@@ -895,11 +906,11 @@ namespace Engin
 			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player[0] * tileSize2d, player[1] * tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2.0f, tileSize2d / 2.0f, player[2], 1.0f, Renderer::clrRed, 1.0f, 0.8f);
 
 			//2d floor
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d), 0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d, 0.0f, 0.0f, 0.0f, 1.0f, Renderer::Color{ 0.3, 0.3, 0.4 } *3.0f, 1.0f, 0.0f);
+			opaqueBatch.draw(floor_16, &glm::vec4(0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d), 0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d, 0.0f, 0.0f, 0.0f, 1.0f, Renderer::Color{ 0.3, 0.3, 0.4 } *3.0f, 1.0f, 0.0f);
 			//---------------
 		}
 
-		//Raycast furball sprite
+		// Raycast furball sprite.
 		void Pseudo3D::createFurball(float x, float y, float rotation)
 		{
 			gameObjects.push_back(new GameObject(&alphaBatch));
@@ -928,8 +939,6 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 			gameObjects.back()->accessComponent<UserData>()->shadow = furballShadow;
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
-			gameObjects.back()->accessComponent<UserData>()->hitAnimStart = 40;
-			gameObjects.back()->accessComponent<UserData>()->hitAnimEnd = 63;
 			gameObjects.back()->accessComponent<UserData>()->spriteColorR = 1.0f;
 			gameObjects.back()->accessComponent<UserData>()->spriteColorG = 1.0f;
 			gameObjects.back()->accessComponent<UserData>()->spriteColorB = 1.0f;
@@ -938,7 +947,43 @@ namespace Engin
 			gameObjects.back()->accessComponent<RigidBody>()->setCollisionRadius(0.4f);
 		}
 
-		//Raycast tree sprite
+		// Raycast hit animation.
+		void Pseudo3D::createHitFireball(float x, float y)
+		{
+			gameObjects.push_back(new GameObject(&alphaBatch));
+			gameObjects.back()->addComponent<Transform>();
+			gameObjects.back()->addComponent<RigidBody>();
+			gameObjects.back()->addComponent<Sprite>();
+			gameObjects.back()->addComponent<AnimationPlayer>();
+			gameObjects.back()->addComponent<UserData>();
+			gameObjects.back()->addComponent<PseudoSpriteDraw>();
+
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animFurballHit);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setLoopEndFrame(36);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->start();
+
+			gameObjects.back()->accessComponent<Transform>()->setXPosition(x);
+			gameObjects.back()->accessComponent<Transform>()->setYPosition(y);
+			gameObjects.back()->accessComponent<Transform>()->setRotation(0.0f);
+
+			//userdata
+			gameObjects.back()->accessComponent<UserData>()->sides = 1;
+			gameObjects.back()->accessComponent<UserData>()->transformY = 0.0f;
+			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
+			gameObjects.back()->accessComponent<UserData>()->spriteColorR = 1.0f;
+			gameObjects.back()->accessComponent<UserData>()->spriteColorG = 1.0f;
+			gameObjects.back()->accessComponent<UserData>()->spriteColorB = 1.0f;
+			gameObjects.back()->accessComponent<UserData>()->isHitAnimation = true;
+			gameObjects.back()->accessComponent<UserData>()->depthRandom = 0.000001f;
+
+			gameObjects.back()->accessComponent<UserData>()->hitCoolDown.start();
+			gameObjects.back()->accessComponent<UserData>()->cooldownLenght = 1110.0f;
+		}
+
+		// Raycast tree sprite.
 		void Pseudo3D::createTree(float x, float y, float rotation)
 		{
 			gameObjects.push_back(new GameObject(&alphaBatch));
@@ -976,7 +1021,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
 		}
 
-		//Raycast fireball projectile
+		// Raycast fireball projectile.
 		void Pseudo3D::createProjectile(float x, float y, float rotation)
 		{
 			gameObjects.push_back(new GameObject(&alphaBatch));
@@ -997,7 +1042,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<Transform>()->setYPosition(y);
 			gameObjects.back()->accessComponent<Transform>()->setRotation(rotation);
 
-			//userdata
+			// Userdata.
 			gameObjects.back()->accessComponent<UserData>()->sides = 8;
 			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
 			gameObjects.back()->accessComponent<UserData>()->transformY = 0.0f;
@@ -1010,7 +1055,7 @@ namespace Engin
 
 			gameObjects.back()->accessComponent<UserData>()->isFireball = true;
 
-			//rigidBody
+			// RigidBody.
 			gameObjects.back()->accessComponent<RigidBody>()->setCollisionRadius(0.2f);
 		}
 

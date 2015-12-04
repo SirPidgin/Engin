@@ -44,6 +44,7 @@ namespace Engin
 			void createFurball(float x, float y, float rotation);
 			void createFireball(float x, float y, float rotation);
 			void createProjectile(float x, float y, float rotation);
+			void createHitFireball(float x, float y);
 
 			class Projectile : public Component
 			{
@@ -73,25 +74,14 @@ namespace Engin
 				int animationLoopEndFrame = 0;
 				Resources::Texture* shadow;
 				Core::Timer hitCoolDown;
-				int hitAnimStart = 0;
-				int hitAnimEnd = 0;
+				float cooldownLenght = 0.0f;
 				int tileOverSize = 0;
 				bool isTree = false;
 				float depthRandom = 0.0f;
 				float spriteColorR;
 				float spriteColorG;
 				float spriteColorB;
-				void isHit()
-				{
-					if (hitAnimStart > 0)
-					{
-						hitCoolDown.start();
-						ownerObject->accessComponent<AnimationPlayer>()->setLoopStartFrame(hitAnimStart);
-						ownerObject->accessComponent<AnimationPlayer>()->setLoopEndFrame(hitAnimEnd);
-						ownerObject->accessComponent<AnimationPlayer>()->start();
-						ownerObject->accessComponent<AnimationPlayer>()->setCurrentFrame(hitAnimStart);
-					}					
-				}
+				bool isHitAnimation = false;
 			};
 
 			class PseudoSpriteDraw : public Component
@@ -105,7 +95,7 @@ namespace Engin
 					
 					static float colorValue = 0;
 
-					if (ownerObject->accessComponent<UserData>()->isFireball)
+					if (ownerObject->accessComponent<UserData>()->isFireball || ownerObject->accessComponent<UserData>()->isHitAnimation)
 					{
 						colorValue = 1.0f;
 					}
@@ -180,7 +170,7 @@ namespace Engin
 			Resources::Texture* tree_64; //2d
 			Resources::Texture* mapSheet_64;
 			Resources::Texture* mapSheet_256;
-			Resources::Texture* roof_16;
+			Resources::Texture* floor_16;
 			Resources::Texture* floor_800;
 
 			Resources::Texture* text;
@@ -220,6 +210,7 @@ namespace Engin
 			Resources::Animation* animTree360;
 			Resources::Texture* treeShadow;
 			AnimationPlayer animPlayer2d;
+			Resources::Animation* animFurballHit;
 
 			int raycastW;
 			int raycastH;
