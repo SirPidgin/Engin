@@ -75,7 +75,8 @@ namespace Engin
 			//camera->setZoomLevel(2); //Use zoom if raycasting image smaller than 800. (example: raycast w = 400, zoom = 2, example1: raycast w = 200, zoom = 4) 
 
 			moveSpeed = 0.08f;
-			rotSpeed = 0.02f;
+			rotSpeed = 0.03f;
+
 			player = { { 22.0f, 9.5f, 0.0f, 0 , 1} }; //x,y,rotation(radians), how many sides drawn, spritetype
 
 			dirX = -1, dirY = 0; //initial direction vector
@@ -181,7 +182,7 @@ namespace Engin
 			}
 
 #pragma endregion
-			
+
 		}
 
 		Pseudo3D::~Pseudo3D()
@@ -247,28 +248,39 @@ namespace Engin
 					player[1] += planeY * moveSpeed;
 				}
 			}
-			//rotate to the right   
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
+
+			//Mouse rotation
+			static int lastMouseX = 0;
+			static int lastMouseY = 0;
+			static int currMouseX = 0;
+			static int currMouseY = 0;
+			static float realRotSpeed = rotSpeed;
+			engine->mouseInput->getRelativeMouseState(&currMouseX, &currMouseY);
+			//rotate to the right
+			realRotSpeed = rotSpeed + (float) (abs(currMouseX) - abs(lastMouseX));
+			realRotSpeed /= 200.0f;
+			if (lastMouseX < currMouseX || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
 			{
 				//both camera direction and camera plane must be rotated
 				double oldDirX = dirX;
-				dirX = dirX * cos(-rotSpeed) - dirY * sin(-rotSpeed);
-				dirY = oldDirX * sin(-rotSpeed) + dirY * cos(-rotSpeed);
+				dirX = dirX * cos(-realRotSpeed) - dirY * sin(-realRotSpeed);
+				dirY = oldDirX * sin(-realRotSpeed) + dirY * cos(-realRotSpeed);
 				double oldPlaneX = planeX;
-				planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
-				planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
+				planeX = planeX * cos(-realRotSpeed) - planeY * sin(-realRotSpeed);
+				planeY = oldPlaneX * sin(-realRotSpeed) + planeY * cos(-realRotSpeed);
 			}
 			//rotate to the left
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
+			if (lastMouseX > currMouseX || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
 			{
 				//both camera direction and camera plane must be rotated
 				double oldDirX = dirX;
-				dirX = dirX * cos(rotSpeed) - dirY * sin(rotSpeed);
-				dirY = oldDirX * sin(rotSpeed) + dirY * cos(rotSpeed);
+				dirX = dirX * cos(realRotSpeed) - dirY * sin(realRotSpeed);
+				dirY = oldDirX * sin(realRotSpeed) + dirY * cos(realRotSpeed);
 				double oldPlaneX = planeX;
-				planeX = planeX * cos(rotSpeed) - planeY * sin(rotSpeed);
-				planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
+				planeX = planeX * cos(realRotSpeed) - planeY * sin(realRotSpeed);
+				planeY = oldPlaneX * sin(realRotSpeed) + planeY * cos(realRotSpeed);
 			}
+			engine->mouseInput->getRelativeMouseState(&lastMouseX, &lastMouseY);
 #pragma endregion
 
 			alpha += 0.01;			
@@ -638,7 +650,7 @@ namespace Engin
 				}
 				else
 				{
-					depth = (1.0f / spriteYout);
+					depth = (1.0f / spriteYout)*100;
 				}
 				gameObjects[i]->accessComponent<Transform>()->setDepth(depth);
 			}			
@@ -793,6 +805,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 			gameObjects.back()->accessComponent<UserData>()->tileOverSize = 256;
 			gameObjects.back()->accessComponent<UserData>()->isTree = true;
+			gameObjects.back()->accessComponent<UserData>()->depthRandom = randomGenerator.getRandomFloat(0.0000001, 0.000001);
 
 			gameObjects.back()->accessComponent<UserData>()->shadow = treeShadow;
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;

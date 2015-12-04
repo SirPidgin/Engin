@@ -16,6 +16,7 @@
 #include "Engin\Game\GameObject.h"
 #include <Engin\Game\Sprite.h>
 #include "Engin\Game\Component.h"
+#include "Engin\Core\RNG.h"
 
 #include <array>
 #include <vector>
@@ -73,6 +74,7 @@ namespace Engin
 				int hitAnimEnd = 0;
 				int tileOverSize = 0;
 				bool isTree = false;
+				float depthRandom = 0.0f;
 				void isHit()
 				{
 					if (hitAnimStart > 0)
@@ -103,7 +105,8 @@ namespace Engin
 							ownerObject->accessComponent<AnimationPlayer>()->getFrameWidth(), ownerObject->accessComponent<AnimationPlayer>()->getFrameHeight(),
 							0.0f, 0.0f,	0.0f, 
 							ownerObject->accessComponent<Transform>()->getScale(),
-							Renderer::clrWhite, 1.0f, ownerObject->accessComponent<Transform>()->getDepth());
+							Renderer::Color{ 1.0f, 1.0f, 1.0f } * (ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthRandom),
+							1.0f, ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthRandom);
 
 						//shadow
 						if (ownerObject->accessComponent<UserData>()->hasShadow == true)
@@ -113,7 +116,7 @@ namespace Engin
 								ownerObject->accessComponent<UserData>()->shadow->getWidth(), (ownerObject->accessComponent<UserData>()->shadow->getHeight() + ownerObject->accessComponent<Transform>()->getDepth()*50),
 								0.0f, 0.0f, 0.0f,
 								ownerObject->accessComponent<Transform>()->getScale(),Renderer::clrWhite, 1.0f,
-								ownerObject->accessComponent<Transform>()->getDepth()-0.00001);
+								ownerObject->accessComponent<Transform>()->getDepth() - 0.00001 + ownerObject->accessComponent<UserData>()->depthRandom);
 						}						
 					}
 				}
@@ -126,6 +129,8 @@ namespace Engin
 			};
 			
 		private:
+			Core::RNG randomGenerator;
+
 			int getSpriteAnimIndex(double angle, double sides);
 			void deleteDeadObjects();
 			Engin* engine;
