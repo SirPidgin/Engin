@@ -7,7 +7,7 @@ namespace Engin
 		AnimationPlayer::AnimationPlayer(GameObject* o) : 
 			Component(o), 
 			loop(false), 
-			currentFrame(0.0f), 
+			currentFrame(0), 
 			loopStartFrame(0), 
 			loopEndFrame(0)
 		{
@@ -17,7 +17,7 @@ namespace Engin
 		AnimationPlayer::AnimationPlayer() : 
 			Component(nullptr), 
 			loop(false), 
-			currentFrame(0.0f), 
+			currentFrame(0), 
 			loopStartFrame(0), 
 			loopEndFrame(0)
 		{

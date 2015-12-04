@@ -30,14 +30,14 @@ namespace Engin
 				return animation->getTexCoords(currentFrame); 
 			}
 
-			int getFrameWidth() const
-			{ 
-				return animation->getFrameWidth(); 
+			float getFrameWidth() const
+			{
+				return static_cast<float>(animation->getFrameWidth());
 			}
 
-			int getFrameHeight() const
+			float getFrameHeight() const
 			{ 
-				return animation->getFrameHeight(); 
+				return static_cast<float>(animation->getFrameHeight());
 			}
 
 			void pause() 

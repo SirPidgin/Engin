@@ -74,8 +74,9 @@ namespace Engin
 			camera->initCamera(0.0f, 0.0f, 800.0f, 800.0f, -2400.0f, 0.0f, 0, 0);
 			//camera->setZoomLevel(2); //Use zoom if raycasting image smaller than 800. (example: raycast w = 400, zoom = 2, example1: raycast w = 200, zoom = 4) 
 
-			moveSpeed = 0.11f;
+			moveSpeed = 0.08f;
 			rotSpeed = 0.03f;
+
 			player = { { 22.0f, 9.5f, 0.0f, 0 , 1} }; //x,y,rotation(radians), how many sides drawn, spritetype
 
 			dirX = -1, dirY = 0; //initial direction vector
@@ -198,26 +199,54 @@ namespace Engin
 			//move forward if no wall in front of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_W))
 			{
-				if (wallTiles[int((player[0] + dirX * moveSpeed))][int(player[1])] == false) player[0] += dirX * moveSpeed;
-				if (wallTiles[int(player[0])][int(player[1] + dirY * moveSpeed)] == false) player[1] += dirY * moveSpeed;
+				if (wallTiles[static_cast<int>(player[0] + dirX * moveSpeed)][static_cast<int>(player[1])] == false)
+				{
+					player[0] += dirX * moveSpeed;
+				}
+
+				if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + dirY * moveSpeed)] == false)
+				{
+					player[1] += dirY * moveSpeed;
+				}
 			}
 			//move backwards if no wall behind you
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_S))
 			{
-				if (wallTiles[int(player[0] - dirX * moveSpeed)][int(player[1])] == false) player[0] -= dirX * moveSpeed;
-				if (wallTiles[int(player[0])][int(player[1] - dirY * moveSpeed)] == false) player[1] -= dirY * moveSpeed;
+				if (wallTiles[static_cast<int>(player[0] - dirX * moveSpeed)][static_cast<int>(player[1])] == false)
+				{
+					player[0] -= dirX * moveSpeed;
+				}
+
+				if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] - dirY * moveSpeed)] == false)
+				{
+					player[1] -= dirY * moveSpeed;
+				}
 			}
 			//strafe left if no wall in left of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_A))
 			{
-				if (wallTiles[int(player[0] - planeX * moveSpeed)][int(player[1])] == false) player[0] -= planeX * moveSpeed;
-				if (wallTiles[int(player[0])][int(player[1] - planeY * moveSpeed)] == false) player[1] -= planeY * moveSpeed;
+				if (wallTiles[static_cast<int>(player[0] - planeX * moveSpeed)][static_cast<int>(player[1])] == false)
+				{
+					player[0] -= planeX * moveSpeed;
+				}
+
+				if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] - planeY * moveSpeed)] == false)
+				{
+					player[1] -= planeY * moveSpeed;
+				}
 			}
 			//strafe right if no wall in right of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_D))
 			{
-				if (wallTiles[int((player[0] + planeX * moveSpeed))][int(player[1])] == false) player[0] += planeX * moveSpeed;
-				if (wallTiles[int(player[0])][int(player[1] + planeY * moveSpeed)] == false) player[1] += planeY * moveSpeed;
+				if (wallTiles[static_cast<int>(player[0] + planeX * moveSpeed)][static_cast<int>(player[1])] == false)
+				{
+					player[0] += planeX * moveSpeed;
+				}
+
+				if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + planeY * moveSpeed)] == false)
+				{
+					player[1] += planeY * moveSpeed;
+				}
 			}
 
 			//Mouse rotation
@@ -307,13 +336,14 @@ namespace Engin
 			}
 #pragma endregion
 
-
 			//2d camera
 			static float zoomByInput = 1.0f;
 			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP))
 			{
 				if (zoomByInput > 0.0f)
+				{
 					zoomByInput -= glm::radians(2.0f);
+				}
 			}
 			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_DOWN))
 			{
@@ -338,7 +368,7 @@ namespace Engin
 				{
 					Transform* t = gameObjects[i]->accessComponent<Transform>();
 
-					if (wallTiles[int(t->getXPosition())][int(t->getYPosition())] != false)
+					if (wallTiles[static_cast<int>(t->getXPosition())][static_cast<int>(t->getYPosition())] != false)
 					{
 						gameObjects[i]->kill();
 					}
@@ -346,7 +376,7 @@ namespace Engin
 			}
 
 			//fast test for rigid
-			for (int i = 10; i < gameObjects.size(); i++)
+			for (size_t i = 10; i < gameObjects.size(); i++)
 			{
 				for (int j = 0; j < 10; j++)
 				{
@@ -377,14 +407,14 @@ namespace Engin
 		void Pseudo3D::draw()
 		{
 			//Raycast draw
-			for (int i = 0; i < gameObjects.size(); i++)
+			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
 				gameObjects[i]->accessComponent<PseudoSpriteDraw>()->drawPseudoSprite();
 			}
 						
 			//Roof and floor for raycast
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, raycastH / 2, raycastW, raycastH / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.75, 0.5, 0.0 }, 1.0f, 0.0f);
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, 0.0f, raycastW, raycastH / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, raycastH / 2.0f, raycastW, raycastH / 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, { 0.75, 0.5, 0.0 }, 1.0f, 0.0f);
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, 0.0f, raycastW, raycastH / 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
 
 			//Raycast walls
 			DrawRaycastLines();
@@ -402,15 +432,15 @@ namespace Engin
 			for (int x = 0; x < raycastW; x++)
 			{
 				//calculate ray position and direction 
-				cameraX = 2 * x / double(raycastW) - 1; //x-coordinate in camera space
+				cameraX = 2 * x / static_cast<double>(raycastW)-1; //x-coordinate in camera space
 				rayPosX = player[0];
 				rayPosY = player[1];
 				rayDirX = dirX + planeX * cameraX;
 				rayDirY = dirY + planeY * cameraX;
 
 				//which box of the map we're in  
-				raycastX = int(rayPosX);
-				raycastY = int(rayPosY);
+				raycastX = static_cast<int>(rayPosX);
+				raycastY = static_cast<int>(rayPosY);
 
 				//length of ray from one x or y-side to next x or y-side
 				deltaDistX = sqrt(1 + (rayDirY * rayDirY) / (rayDirX * rayDirX));
@@ -431,6 +461,7 @@ namespace Engin
 					stepX = 1;
 					sideDistX = (raycastX + 1.0 - rayPosX) * deltaDistX;
 				}
+
 				if (rayDirY < 0)
 				{
 					stepY = -1;
@@ -467,32 +498,56 @@ namespace Engin
 
 				//Calculate distance projected on camera direction (oblique distance will give fisheye effect!)
 				if (side == 0)
+				{
 					perpWallDist = fabs((raycastX - rayPosX + (1 - stepX) / 2) / rayDirX);
+				}	
 				else
+				{
 					perpWallDist = fabs((raycastY - rayPosY + (1 - stepY) / 2) / rayDirY);
+				}
 
 				//Calculate height of line to draw on screen
-				lineHeight = glm::abs(int(raycastH / perpWallDist));
+				lineHeight = glm::abs(static_cast<int>(raycastH / perpWallDist));
 
 				//calculate lowest and highest pixel to fill in current stripe
 				drawStart = -lineHeight / 2 + raycastH / 2;
-				if (drawStart < 0)drawStart = 0;
+				if (drawStart < 0)
+				{
+					drawStart = 0;
+				}
+
 				drawEnd = lineHeight / 2 + raycastH / 2;
-				if (drawEnd >= raycastH)drawEnd = raycastH - 1;
+				if (drawEnd >= raycastH)
+				{
+					drawEnd = raycastH - 1;
+				}
 
 				//texturing calculations
 				texNum = wallTiles[raycastX][raycastY] - 1; //1 subtracted from it so that texture 0 can be used!
 
 				//calculate value of wallX
 				wallX; //where exactly the wall was hit
-				if (side == 1) wallX = rayPosX + ((raycastY - rayPosY + (1 - stepY) / 2) / rayDirY) * rayDirX;
-				else       wallX = rayPosY + ((raycastX - rayPosX + (1 - stepX) / 2) / rayDirX) * rayDirY;
+				if (side == 1)
+				{
+					wallX = rayPosX + ((raycastY - rayPosY + (1 - stepY) / 2) / rayDirY) * rayDirX;
+				}
+				else
+				{
+					wallX = rayPosY + ((raycastX - rayPosX + (1 - stepX) / 2) / rayDirX) * rayDirY;
+				}
+
 				wallX -= floor((wallX));
 
 				//x coordinate on the texture
-				texX = int(wallX * double(tileSize));
-				if (side == 0 && rayDirX > 0) texX = tileSize - texX - 1;
-				if (side == 1 && rayDirY < 0) texX = tileSize - texX - 1;
+				texX = static_cast<int>(wallX * static_cast<double>(tileSize));
+				if (side == 0 && rayDirX > 0)
+				{
+					texX = tileSize - texX - 1;
+				}
+				else if (side == 1 && rayDirY < 0)
+				{
+					texX = tileSize - texX - 1;
+				}
 
 				//choose wall color			
 				switch (wallTiles[raycastX][raycastY])
@@ -503,7 +558,11 @@ namespace Engin
 				case 4:  raycastTileIndex = 4;  break;
 				default: raycastTileIndex = 5; break;
 				}
-				if (side == 1) { raycastTileIndex += 5; }
+
+				if (side == 1) 
+				{ 
+					raycastTileIndex += 5; 
+				}
 				
 				//Saving calculated data for camera slice 
 				Raycastlines[x][0] = x;
@@ -544,7 +603,7 @@ namespace Engin
 				//Sprites own facing changes the angle
 				if (gameObjects[i]->accessComponent<Transform>()->getRotation() != 0.0f)
 				{
-					convertToFloat = float(gameObjects[i]->accessComponent<Transform>()->getRotation());
+					convertToFloat = static_cast<float>(gameObjects[i]->accessComponent<Transform>()->getRotation());
 					spriteFacing = glm::mod((-convertToFloat + glm::radians(360.0f)), glm::radians(360.0f));
 					spriteAngle -= spriteFacing;
 
@@ -564,8 +623,8 @@ namespace Engin
 
 				if (gameObjects[i]->accessComponent<UserData>()->isFireball == true)
 				{
-					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopStartFrame(int(spriteAnimIndex * 10));
-					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopEndFrame(int(spriteAnimIndex * 10 + 9));
+					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopStartFrame(static_cast<int>(spriteAnimIndex * 10));
+					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopEndFrame(static_cast<int>(spriteAnimIndex * 10 + 9));
 				}
 				//Is the object hit
 				else if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.isStarted() == true)
@@ -610,13 +669,13 @@ namespace Engin
 			}
 			else
 			{
-				return (glm::degrees(angle) + (spriteSideAngle / 2.0f)) / spriteSideAngle;
+				return static_cast<int>((glm::degrees(angle) + (spriteSideAngle / 2.0f)) / spriteSideAngle);
 			}
 		}
 
 		void Pseudo3D::DrawRaycastLines()
 		{
-			for (int i = 0; i < Raycastlines.size(); i++)
+			for (size_t i = 0; i < Raycastlines.size(); i++)
 			{
 				if (Raycastlines[i][2] > 0)
 				{
@@ -629,7 +688,7 @@ namespace Engin
 						depth = (1.0f / Raycastlines[i][1]);
 					}
 
-					opaqueBatch.draw(mapSheet_256, &glm::vec4(Raycastlines[i][4] + (int(Raycastlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), Raycastlines[i][0] - 2400, Raycastlines[i][1], 1.0f, Raycastlines[i][2] - Raycastlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+					opaqueBatch.draw(mapSheet_256, &glm::vec4(Raycastlines[i][4] + (static_cast<int>(Raycastlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), Raycastlines[i][0] - 2400, Raycastlines[i][1], 1.0f, Raycastlines[i][2] - Raycastlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
 				}
 			}
 		}
@@ -644,7 +703,7 @@ namespace Engin
 					float offset = 32.0f;
 					if (wallTiles[j][i] != 0)
 					{
-						opaqueBatch.draw(mapSheet_64, &glm::vec4((int(wallTiles[j][i]) - 1) * 66, 1.0f, 64, 64), (j * tileSize2d) + offset, i * tileSize2d + offset, 64.0f, 64.0f, 32.0f, 32.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
+						opaqueBatch.draw(mapSheet_64, &glm::vec4((static_cast<int>(wallTiles[j][i]) - 1) * 66, 1.0f, 64, 64), (j * tileSize2d) + offset, i * tileSize2d + offset, 64.0f, 64.0f, 32.0f, 32.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
 					}
 				}
 			}
@@ -661,7 +720,7 @@ namespace Engin
 				{
 					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, furball->getWidth(),
-						furball->getHeight(), tileSize2d / 2, tileSize2d / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.000001f);
+						furball->getHeight(), tileSize2d / 2.0f, tileSize2d / 2.0f, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.000001f);
 				}				
 				//if fireball
 				else
@@ -673,7 +732,7 @@ namespace Engin
 			}
 
 			//player
-			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player[0] * tileSize2d, player[1] * tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, player[2], 1.0f, Renderer::clrRed, 1.0f, 0.8f);
+			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player[0] * tileSize2d, player[1] * tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2.0f, tileSize2d / 2.0f, player[2], 1.0f, Renderer::clrRed, 1.0f, 0.8f);
 
 			//2d floor
 			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d), 0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d, 0.0f, 0.0f, 0.0f, 1.0f, { 0.5, 0.5, 0.5 }, 1.0f, 0.0f);
@@ -792,6 +851,7 @@ namespace Engin
 			t->setYPosition(t->getYPosition() + speed * sinf(t->getRotation() + glm::radians(90.0f)));
 		}
 
+		// Deletes killed objects from the gameObjects vector.
 		void Pseudo3D::deleteDeadObjects()
 		{
 			gameObjects.erase(std::remove_if(gameObjects.begin(), gameObjects.end(), [&](GameObject *obj)

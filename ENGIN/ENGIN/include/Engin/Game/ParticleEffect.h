@@ -35,7 +35,7 @@ struct Vertex
 
 
 const float GRAVITY = 3.0f;
-const int NUM_PARTICLES = 10000;
+const int NUM_PARTICLES = 1000;
 const float TIMESTEP = 0.001f;
 const float SIZE = 0.007f;
 const float PI = 3.1316f;
