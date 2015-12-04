@@ -83,15 +83,18 @@ namespace Engin
 
 			moveSpeed = 0.08f;
 			rotSpeed = 0.03f;
-			player = { { 22.0f, 9.5f, 0.0f, 0 , 1} }; //x,y,rotation(radians), how many sides drawn, spritetype
+			player = { { 22.0f, 9.5f, 0.0f, 0 , 1} }; //x,y,rotation(radians), how many sides drawn, spritetype.
 
-			dirX = -1, dirY = 0; //initial direction vector
-			planeX = 0.0f, planeY = 0.5; //the 2d raycaster version of camera plane
+			dirX = 1.0, dirY = 0; //initial direction vector
+			planeX = 0.0f, planeY = -0.5; //the 2d raycaster version of camera plane
 
 			//GameObjects.
 			createFurball(15.0f, 5.0f, 0.0f);
 			createFurball(8.0f, 18.3f, 0.0f);
-			createFurball(13.5f, 12.7f, 0.0f);
+			createFurball(13.5f, 12.7f, 0.0f); // Player 2 currently
+			gameObjects.back()->accessComponent<UserData>()->spriteColorR = 0.5f;
+			gameObjects.back()->accessComponent<UserData>()->spriteColorG = 0.5f;
+			gameObjects.back()->accessComponent<UserData>()->spriteColorB = 5.0f;
 			createFurball(14.0f, 12.0f, 0.0f);
 			createFurball(15.0f, 13.8f, 0.0f);
 			createFurball(16.0f, 4.0f, 0.0f);
@@ -115,7 +118,6 @@ namespace Engin
 			createTree(23.0f, 7.0f, 0.0f);
 			createTree(23.0f, 8.0f, 0.0f);
 			
-			createTree(20.0f, 5.0f+ 6.0f, 0.0f);
 			createTree(20.0f, 5.0f+ 6.0f, 0.0f);
 			createTree(20.0f, 6.0f+ 6.0f, 0.0f);
 			createTree(20.0f, 7.0f+ 6.0f, 0.0f);
@@ -359,7 +361,7 @@ namespace Engin
 			RaycastingSprites();
 
 			// Saving player rotation.
-			player[2] = -glm::atan(dirX, dirY);
+			player[2] = glm::atan(dirY, dirX);
 			if (player[2] < 0)
 			{
 				player[2] += glm::radians(360.0f);
@@ -389,13 +391,13 @@ namespace Engin
 			
 			// Rotating sprites in radians.
 			gameObjects[5]->accessComponent<Transform>()->setRotation(alpha * 5);
-			gameObjects[0]->accessComponent<Transform>()->setRotation(2*alpha);
+			gameObjects[0]->accessComponent<Transform>()->setRotation(glm::radians(0.0f) + 2*alpha);
 			gameObjects[4]->accessComponent<Transform>()->setRotation(alpha + 0.02);
 			gameObjects[10]->accessComponent<Transform>()->setRotation(glm::radians(315.0f) + 2*alpha);
 
 			gameObjects[1]->accessComponent<Transform>()->setRotation(2 * alpha);
 
-			//moving sprites TODO: Make some logic and translate sprites with them.
+			// Moving sprites TODO: Make some logic and translate sprites with them.
 			gameObjects[0]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[0]->accessComponent<Transform>()->getRotation()));
 			gameObjects[0]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[0]->accessComponent<Transform>()->getRotation()));
 
@@ -408,72 +410,86 @@ namespace Engin
 			gameObjects[1]->accessComponent<Transform>()->setXPosition(8.0f + 4.0f * glm::cos(alpha));
 
 #pragma region Launchers
-			//fireball launchers	
+			// Fireball launchers	
 
 			if (turretCoolDown.getLocalTime() > 2500.0f)
 			{
-				createProjectile(6, 11, 0);
-				createProjectile(8, 11, 0);
-				createProjectile(7, 24, glm::radians(180.0f));
+				createProjectile(6, 11, glm::radians(90.0f));
+				createProjectile(8, 11, glm::radians(90.0f));
+				createProjectile(7, 24, glm::radians(270.0f));
 				turretCoolDown.start();
 			}
 #pragma endregion
 
-			{ // Moving player 2. TODO change player 1 to gameobject...
-				float multiplier = 0.0f;
-				float rotX = glm::cos(gameObjects[2]->accessComponent<Transform>()->getRotation());
-				float rotY = glm::sin(gameObjects[2]->accessComponent<Transform>()->getRotation());
-								
-				if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_8) || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_5))
-				{
-					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_8))
+#pragma region Player2
+				{ // Moving player 2. TODO change player 1 to gameobject...
+					float multiplier = 0.0f;
+					float rotX = glm::cos(gameObjects[2]->accessComponent<Transform>()->getRotation());
+					float rotY = glm::sin(gameObjects[2]->accessComponent<Transform>()->getRotation());
+
+					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_8) || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_5))
 					{
-						multiplier = 1.0f;
-					}
-					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_5))
-					{
-						multiplier = -1.0f;
+						if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_8))
+						{
+							multiplier = 1.0f;
+						}
+						if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_5))
+						{
+							multiplier = -1.0f;
+						}
+
+						// Move forwards or backwards.
+						if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition() + rotX * moveSpeed* multiplier)][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition())] == false)
+						{
+							gameObjects[2]->accessComponent<Transform>()->setXPosition(gameObjects[2]->accessComponent<Transform>()->getXPosition() + rotX * moveSpeed * multiplier);
+						}
+						if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition())][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition() + dirY * moveSpeed * multiplier)] == false)
+						{
+							gameObjects[2]->accessComponent<Transform>()->setYPosition(gameObjects[2]->accessComponent<Transform>()->getYPosition() + rotY * moveSpeed * multiplier);
+						}
 					}
 
-					// Move forwards or backwards.
-					if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition() + rotX * moveSpeed* multiplier)][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition())] == false)
+					// Player 2 strafe.
+					/*if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_7));
 					{
-						gameObjects[2]->accessComponent<Transform>()->setXPosition(gameObjects[2]->accessComponent<Transform>()->getXPosition() + rotX * moveSpeed * multiplier);
-					}
-					if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition())][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition() + dirY * moveSpeed * multiplier)] == false)
-					{
-						gameObjects[2]->accessComponent<Transform>()->setYPosition(gameObjects[2]->accessComponent<Transform>()->getYPosition() + rotY * moveSpeed * multiplier);
-					}
-				}			
 
-				if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_4))
-				{
-					gameObjects[2]->accessComponent<Transform>()->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation() + rotSpeed);
+					}
+					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_9));
+					{
+
+					}*/
+
+					// Player 2 rotation.
+					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_4))
+					{
+						gameObjects[2]->accessComponent<Transform>()->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation() + rotSpeed);
+					}
+					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_6))
+					{
+						gameObjects[2]->accessComponent<Transform>()->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation() - rotSpeed);
+					}
 				}
-				if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_6))
-				{
-					gameObjects[2]->accessComponent<Transform>()->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation() - rotSpeed);
-				}
-			}
 
-			// Player 2 camera zoom
-			static float zoomByInput = 1.0f;
-			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP))
-			{
-				if (zoomByInput > 0.0f)
+				// Player 2 camera zoom
+				static float zoomByInput = 1.0f;
+				if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP))
 				{
-					zoomByInput -= glm::radians(2.0f);
+					if (zoomByInput > 0.0f)
+					{
+						zoomByInput -= glm::radians(2.0f);
+					}
 				}
-			}
-			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_DOWN))
-			{
-				zoomByInput += glm::radians(2.0f);
-			}
+				if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_DOWN))
+				{
+					zoomByInput += glm::radians(2.0f);
+				}
 
-			// Camera for player 2.
-			camera2->setZoomLevel(zoomByInput);
-			camera2->setPositionRotationOrigin(gameObjects[2]->accessComponent<Transform>()->getXPosition()*tileSize2d, gameObjects[2]->accessComponent<Transform>()->getYPosition()*tileSize2d);
-			camera2->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f));
+				// Camera for player 2.
+				camera2->setZoomLevel(zoomByInput);
+				camera2->setPositionRotationOrigin(gameObjects[2]->accessComponent<Transform>()->getXPosition()*tileSize2d, gameObjects[2]->accessComponent<Transform>()->getYPosition()*tileSize2d);
+				camera2->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f));
+#pragma endregion
+
 
 			// Information display.		
 			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player[0]) + " " + std::to_string(player[1]) + " angle: " + std::to_string(glm::degrees(player[2])), 255, 100, 0);
@@ -537,9 +553,7 @@ namespace Engin
 			}
 						
 			//Roof and floor for raycast
-			//opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, raycastH / 2.0f, raycastW, raycastH / 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, { 0.75, 0.5, 0.0 }, 1.0f, 0.0f);
 			opaqueBatch.draw(floor_800, &glm::vec4(0.0f, 0.0f, floor_800->getWidth(), floor_800->getHeight()), -2400.0f, 400.0f, floor_800->getWidth(), floor_800->getHeight(), 0.0f, 0.0f, 0.0f, 1.0f, Renderer::Color{ 0.5, 0.2, 0.0 } * 2.0f, 1.0f, 0.0f);
-
 			opaqueBatch.draw(floor_800, &glm::vec4(0.0f, 0.0f, floor_800->getWidth(), floor_800->getHeight()), -2400.0f, 0.0f, floor_800->getWidth(), floor_800->getHeight(), 0.0f, 0.0f, 0.0f, 1.0f, Renderer::Color{ 0.3, 0.3, 0.4 } * 3.0f, 1.0f, 0.0f);
 
 			//Raycast walls
@@ -720,7 +734,7 @@ namespace Engin
 				spriteXout = -spriteHeightWidth / 2 + spriteScreenX;
 
 				//Calculating sprite side				
-				spriteAngle = (glm::atan(-spriteX , -spriteY));
+				spriteAngle = (glm::atan(-spriteX, -spriteY)) - glm::radians(90.0f);  // TODO: Fix rotation 90 degrees differently.
 				if (spriteAngle < 0.0f)
 				{
 					spriteAngle += glm::radians(360.0f);
@@ -853,23 +867,26 @@ namespace Engin
 			//sprites
 			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
+				// 2D Tree
 				if (gameObjects[i]->accessComponent<UserData>()->isTree == true)
 				{
 					alphaBatch.draw(tree_64, &glm::vec4(0.0f, 0.0f, tree_64->getWidth(), tree_64->getHeight()),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, tree_64->getWidth(),
 						tree_64->getHeight(), tree_64->getWidth() / 2, tree_64->getHeight() / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.8f + i*0.000001f);
 				}
+				// 2D Furball
 				else if (gameObjects[i]->accessComponent<UserData>()->isFireball != true)
 				{
 					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, furball->getWidth(),
-						furball->getHeight(), tileSize2d / 2.0f, tileSize2d / 2.0f, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.000001f);
+						furball->getHeight(), tileSize2d / 2.0f, tileSize2d / 2.0f, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, 
+						Renderer::Color{ gameObjects[i]->accessComponent<UserData>()->spriteColorR, gameObjects[i]->accessComponent<UserData>()->spriteColorG, gameObjects[i]->accessComponent<UserData>()->spriteColorB }, 1.0f, 0.7f + i*0.000001f);
 				}				
-				//if fireball
+				// 2D fireball
 				else
 				{
 					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
-						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, 256, 256, 256 / 2, 256 / 2, gameObjects[i]->accessComponent<Transform>()->getRotation() + glm::radians(90.0f),
+						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, 256, 256, 256 / 2, 256 / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(),
 						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.001f);
 				}
 			}
@@ -878,7 +895,7 @@ namespace Engin
 			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player[0] * tileSize2d, player[1] * tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2.0f, tileSize2d / 2.0f, player[2], 1.0f, Renderer::clrRed, 1.0f, 0.8f);
 
 			//2d floor
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d), 0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d, 0.0f, 0.0f, 0.0f, 1.0f, { 0.5, 0.5, 0.5 }, 1.0f, 0.0f);
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d), 0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d, 0.0f, 0.0f, 0.0f, 1.0f, Renderer::Color{ 0.3, 0.3, 0.4 } *3.0f, 1.0f, 0.0f);
 			//---------------
 		}
 
@@ -913,6 +930,9 @@ namespace Engin
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
 			gameObjects.back()->accessComponent<UserData>()->hitAnimStart = 40;
 			gameObjects.back()->accessComponent<UserData>()->hitAnimEnd = 63;
+			gameObjects.back()->accessComponent<UserData>()->spriteColorR = 1.0f;
+			gameObjects.back()->accessComponent<UserData>()->spriteColorG = 1.0f;
+			gameObjects.back()->accessComponent<UserData>()->spriteColorB = 1.0f;
 
 			//rigidBody
 			gameObjects.back()->accessComponent<RigidBody>()->setCollisionRadius(0.4f);
@@ -948,6 +968,9 @@ namespace Engin
 			gameObjects.back()->accessComponent<UserData>()->tileOverSize = 256;
 			gameObjects.back()->accessComponent<UserData>()->isTree = true;
 			gameObjects.back()->accessComponent<UserData>()->depthRandom = randomGenerator.getRandomFloat(-0.000001, 0.000001);
+			gameObjects.back()->accessComponent<UserData>()->spriteColorR = 1.0f;
+			gameObjects.back()->accessComponent<UserData>()->spriteColorG = 1.0f;
+			gameObjects.back()->accessComponent<UserData>()->spriteColorB = 1.0f;
 
 			gameObjects.back()->accessComponent<UserData>()->shadow = treeShadow;
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
@@ -981,6 +1004,9 @@ namespace Engin
 			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
+			gameObjects.back()->accessComponent<UserData>()->spriteColorR = 1.0f;
+			gameObjects.back()->accessComponent<UserData>()->spriteColorG = 1.0f;
+			gameObjects.back()->accessComponent<UserData>()->spriteColorB = 1.0f;
 
 			gameObjects.back()->accessComponent<UserData>()->isFireball = true;
 
@@ -991,8 +1017,8 @@ namespace Engin
 		void Pseudo3D::Projectile::update()
 		{
 			Transform* t = ownerObject->accessComponent<Transform>();
-			t->setXPosition(t->getXPosition() + speed * cosf(t->getRotation() + glm::radians(90.0f + rng.getRandomFloat(-spread, spread))));
-			t->setYPosition(t->getYPosition() + speed * sinf(t->getRotation() + glm::radians(90.0f + rng.getRandomFloat(-spread, spread))));
+			t->setXPosition(t->getXPosition() + speed * cosf(t->getRotation() + glm::radians(rng.getRandomFloat(-spread, spread))));
+			t->setYPosition(t->getYPosition() + speed * sinf(t->getRotation() + glm::radians(rng.getRandomFloat(-spread, spread))));
 		}
 
 		// Deletes killed objects from the gameObjects vector.

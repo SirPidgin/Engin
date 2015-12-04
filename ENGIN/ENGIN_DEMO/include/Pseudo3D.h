@@ -78,6 +78,9 @@ namespace Engin
 				int tileOverSize = 0;
 				bool isTree = false;
 				float depthRandom = 0.0f;
+				float spriteColorR;
+				float spriteColorG;
+				float spriteColorB;
 				void isHit()
 				{
 					if (hitAnimStart > 0)
@@ -127,7 +130,8 @@ namespace Engin
 							ownerObject->accessComponent<UserData>()->spriteXout, ownerObject->accessComponent<UserData>()->spriteYout,
 							ownerObject->accessComponent<AnimationPlayer>()->getFrameWidth(), ownerObject->accessComponent<AnimationPlayer>()->getFrameHeight(),
 							0.0f, 0.0f,	0.0f, 
-							ownerObject->accessComponent<Transform>()->getScale(), Renderer::Color{ 1.0f, 1.0f, 1.0f } *colorValue,
+							ownerObject->accessComponent<Transform>()->getScale(), 
+							Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } *colorValue,
 							1.0f, ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthRandom);
 
 						//shadow
@@ -137,7 +141,8 @@ namespace Engin
 								ownerObject->accessComponent<UserData>()->spriteXout, ownerObject->accessComponent<UserData>()->spriteYout,
 								ownerObject->accessComponent<UserData>()->shadow->getWidth(), (ownerObject->accessComponent<UserData>()->shadow->getHeight() + ownerObject->accessComponent<Transform>()->getDepth()*50),
 								0.0f, 0.0f, 0.0f,
-								ownerObject->accessComponent<Transform>()->getScale(), Renderer::Color{ 1.0f, 1.0f, 1.0f } *colorValue, 1.0f,
+								ownerObject->accessComponent<Transform>()->getScale(), 
+								Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } *colorValue, 1.0f,
 								ownerObject->accessComponent<Transform>()->getDepth() - 0.00001 + ownerObject->accessComponent<UserData>()->depthRandom);
 						}						
 					}
