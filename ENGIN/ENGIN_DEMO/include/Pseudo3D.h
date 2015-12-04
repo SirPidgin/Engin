@@ -9,12 +9,13 @@
 #include "Engin\Resources\Texture.h"
 #include "Engin\Resources\ShaderProgram.h"
 #include "Engin\Core\Timer.h"
+#include "Engin\Core\RNG.h"
 #include "Engin\Renderer\TextRenderer.h"
 #include "Engin\Resources\Font.h"
 #include "Engin\Game\AnimationPlayer.h"
 #include "Engin\Resources\Animation.h"
 #include "Engin\Game\GameObject.h"
-#include <Engin\Game\Sprite.h>
+#include "Engin\Game\Sprite.h"
 #include "Engin\Game\Component.h"
 
 #include <array>
@@ -51,6 +52,8 @@ namespace Engin
 
 			private:
 				float speed = 0.10f;
+				float spread = 10.0f;
+				Core::RNG rng; // Should be static?
 			};
 			void createTree(float x, float y, float rotation);
 
@@ -126,8 +129,14 @@ namespace Engin
 			};
 			
 		private:
+			// Private methods.
 			int getSpriteAnimIndex(double angle, double sides);
 			void deleteDeadObjects();
+			float getAxisMultiplier(HID::GamepadAxis axis, int GPIndex);
+			void movePlayer(float multiplier);
+			void strafePlayer(float multiplier);
+			void rotatePlayer(float multiplier);
+
 			Engin* engine;
 
 			Renderer::Camera* camera;
@@ -167,6 +176,8 @@ namespace Engin
 			int mapY;
 			int tileSize;
 			int tileSize2d;
+
+			bool useGamePad;
 
 			//turret timer
 			Core::Timer turretCoolDown;

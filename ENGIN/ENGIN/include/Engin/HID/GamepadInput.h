@@ -25,6 +25,8 @@ namespace Engin
 {
 	namespace HID
 	{
+		const float AXIS_MAX = 32767.0f;
+
 		enum GamepadButton : int
 		{
 			GAMEPAD_BUTTON_INVALID = -1,
@@ -79,7 +81,7 @@ namespace Engin
 			~GamepadInput();
 			void update();
 
-			int getAxisValue(GamepadButton buttonID, int GPindex);
+			int getAxisValue(GamepadAxis buttonID, int GPindex);
 			bool buttonIsPressed(GamepadButton buttonID, int GPindex);
 			bool buttonWasPressed(GamepadButton buttonID, int GPindex);
 			bool buttonWasReleased(GamepadButton buttonID, int GPindex);
@@ -94,6 +96,7 @@ namespace Engin
 			int getNumHats(int GPindex);
 
 			void setAxisControlDeadZone(short value, int GPindex);
+			short getAxisControlDeadZone(int GPindex);
 
 		protected:
 			void pressButton(unsigned int buttonID, int GPindex);

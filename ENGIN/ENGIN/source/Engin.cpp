@@ -155,6 +155,7 @@ namespace Engin
 			// Update inputs.
 			keyboardInput->update();
 			mouseInput->update();
+			gamepadInput->update();
 		}
 
 		// Handle interpolation.
