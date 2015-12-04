@@ -34,7 +34,7 @@ namespace Engin
 			guiBatch.setShader(alphaShader);
 			guiBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
 			
-			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");	
+			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside_64.png");	
 			mapSheet_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_64.png");
 			mapSheet_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_256_shadows.png");
 			mapSheet_256->changeParameters(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
@@ -428,11 +428,11 @@ namespace Engin
 				{
 					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_8))
 					{
-						multiplier = -1.0f;
+						multiplier = 1.0f;
 					}
 					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_5))
 					{
-						multiplier = 1.0f;
+						multiplier = -1.0f;
 					}
 
 					// Move forwards or backwards.
@@ -473,7 +473,7 @@ namespace Engin
 			// Camera for player 2.
 			camera2->setZoomLevel(zoomByInput);
 			camera2->setPositionRotationOrigin(gameObjects[2]->accessComponent<Transform>()->getXPosition()*tileSize2d, gameObjects[2]->accessComponent<Transform>()->getYPosition()*tileSize2d);
-			camera2->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation() + glm::radians(90.0f));
+			camera2->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f));
 
 			// Information display.		
 			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player[0]) + " " + std::to_string(player[1]) + " angle: " + std::to_string(glm::degrees(player[2])), 255, 100, 0);
