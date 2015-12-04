@@ -1,11 +1,14 @@
 #include "Engin\HID\MouseInput.h"
 
+#include "SDL\SDL.h"
+
 namespace Engin
 {
 	namespace HID
 	{
 		MouseInput::MouseInput()
 		{
+			SDL_SetRelativeMouseMode(SDL_TRUE);
 		}
 		MouseInput::~MouseInput()
 		{
@@ -89,6 +92,12 @@ namespace Engin
 				}
 			}
 			return false;
+		}
+
+
+		void MouseInput::getRelativeMouseState(int* x, int*y)
+		{
+			SDL_GetRelativeMouseState(x, y);
 		}
 
 

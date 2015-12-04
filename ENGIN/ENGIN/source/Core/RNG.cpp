@@ -74,7 +74,9 @@ namespace Engin
 
 		int RNG::getRandomInt(int min, int max)
 		{
-			if (min < 0)
+			if (min == 0 && max == 0)
+				return 0;
+			else if (min < 0)
 				return (rand() % (abs(min) + (max + 1))) - abs(min);
 			else
 				return rand() % (max - min) + min;

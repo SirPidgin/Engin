@@ -75,7 +75,7 @@ namespace Engin
 			//camera->setZoomLevel(2); //Use zoom if raycasting image smaller than 800. (example: raycast w = 400, zoom = 2, example1: raycast w = 200, zoom = 4) 
 
 			moveSpeed = 0.11f;
-			rotSpeed = 0.02f;
+			rotSpeed = 0.03f;
 			player = { { 22.0f, 9.5f, 0.0f, 0 , 1} }; //x,y,rotation(radians), how many sides drawn, spritetype
 
 			dirX = -1, dirY = 0; //initial direction vector
@@ -219,8 +219,16 @@ namespace Engin
 				if (wallTiles[int((player[0] + planeX * moveSpeed))][int(player[1])] == false) player[0] += planeX * moveSpeed;
 				if (wallTiles[int(player[0])][int(player[1] + planeY * moveSpeed)] == false) player[1] += planeY * moveSpeed;
 			}
-			//rotate to the right   
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
+
+			//Mouse rotation
+			static int lastMouseX = 0;
+			static int lastMouseY = 0;
+			static int currMouseX = 0;
+			static int currMouseY = 0;
+			engine->mouseInput->getRelativeMouseState(&currMouseX, &currMouseY);
+			//rotate to the right
+				//if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
+			if (lastMouseX < currMouseX)
 			{
 				//both camera direction and camera plane must be rotated
 				double oldDirX = dirX;
@@ -231,7 +239,8 @@ namespace Engin
 				planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
 			}
 			//rotate to the left
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
+				//if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
+			if (lastMouseX > currMouseX)
 			{
 				//both camera direction and camera plane must be rotated
 				double oldDirX = dirX;
@@ -241,6 +250,7 @@ namespace Engin
 				planeX = planeX * cos(rotSpeed) - planeY * sin(rotSpeed);
 				planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
 			}
+			engine->mouseInput->getRelativeMouseState(&lastMouseX, &lastMouseY);
 #pragma endregion
 
 			alpha += 0.01;			
