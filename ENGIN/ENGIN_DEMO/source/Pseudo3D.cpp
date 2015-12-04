@@ -196,7 +196,7 @@ namespace Engin
 			std::cout << "Scene shutdown" << std::endl;
 		}
 
-		// Moves player.
+		// Moves player. TODO change player 1 to gameObject and move it like player 2. Change raycasting to take gameObject in to make it work. dirX and dirY components can be calculated from rotation direction.
 		void Pseudo3D::movePlayer(float multiplier)
 		{
 			if (wallTiles[static_cast<int>(player[0] + dirX * moveSpeed * multiplier)][static_cast<int>(player[1])] == false)
@@ -419,33 +419,44 @@ namespace Engin
 			}
 #pragma endregion
 
-			//2d "player"
+			{ // Moving player 2. TODO change player 1 to gameobject...
+				float multiplier = 0.0f;
+				float rotX = glm::cos(gameObjects[2]->accessComponent<Transform>()->getRotation());
+				float rotY = glm::sin(gameObjects[2]->accessComponent<Transform>()->getRotation());
+								
+				if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_8) || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_5))
+				{
+					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_8))
+					{
+						multiplier = -1.0f;
+					}
+					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_5))
+					{
+						multiplier = 1.0f;
+					}
 
-		/*	if (wallTiles[static_cast<int>(player[0] + dirX * moveSpeed * multiplier)][static_cast<int>(player[1])] == false)
-			{
-				player[0] += dirX * moveSpeed * multiplier;
+					// Move forwards or backwards.
+					if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition() + rotX * moveSpeed* multiplier)][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition())] == false)
+					{
+						gameObjects[2]->accessComponent<Transform>()->setXPosition(gameObjects[2]->accessComponent<Transform>()->getXPosition() + rotX * moveSpeed * multiplier);
+					}
+					if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition())][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition() + dirY * moveSpeed * multiplier)] == false)
+					{
+						gameObjects[2]->accessComponent<Transform>()->setYPosition(gameObjects[2]->accessComponent<Transform>()->getYPosition() + rotY * moveSpeed * multiplier);
+					}
+				}			
+
+				if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_4))
+				{
+					gameObjects[2]->accessComponent<Transform>()->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation() + rotSpeed);
+				}
+				if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_6))
+				{
+					gameObjects[2]->accessComponent<Transform>()->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation() - rotSpeed);
+				}
 			}
 
-			if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + dirY * moveSpeed * multiplier)] == false)
-			{
-				player[1] += dirY * moveSpeed * multiplier;
-			}*/
-
-			static float player2X = 12.0f;
-			static float player2Y = 12.0f;
-
-		/*	if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_KP_8))
-			{
-				if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition() + glm::cos(gameObjects[2]->accessComponent<Transform>()->getRotation() * moveSpeed))] == false)
-				{
-					gameObjects[2]->accessComponent<Transform>()->setXPosition(player2X + glm::cos(gameObjects[2]->accessComponent<Transform>()->getRotation())*moveSpeed);
-				}
-				if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition())][static_cast<int>(player[1] + dirY * moveSpeed)] == false)
-				{
-					gameObjects[2]->accessComponent<Transform>()->setXPosition(player2X + glm::cos(gameObjects[2]->accessComponent<Transform>()->getRotation())*moveSpeed);
-				}
-			}*/
-
+			// Player 2 camera zoom
 			static float zoomByInput = 1.0f;
 			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP))
 			{
@@ -458,16 +469,20 @@ namespace Engin
 			{
 				zoomByInput += glm::radians(2.0f);
 			}
+
+			// Camera for player 2.
 			camera2->setZoomLevel(zoomByInput);
 			camera2->setPositionRotationOrigin(gameObjects[2]->accessComponent<Transform>()->getXPosition()*tileSize2d, gameObjects[2]->accessComponent<Transform>()->getYPosition()*tileSize2d);
-			camera2->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation());
+			camera2->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation() + glm::radians(90.0f));
 
-			//Information		
+			// Information display.		
 			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player[0]) + " " + std::to_string(player[1]) + " angle: " + std::to_string(glm::degrees(player[2])), 255, 100, 0);
 			text3 = textCreator3.getTexture();
 			
+			// 2D animation player for 2D fireballs.
 			animPlayer2d.update();
-			//gameObjects
+			
+			// GameObjects.
 			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
 				gameObjects[i]->update();
