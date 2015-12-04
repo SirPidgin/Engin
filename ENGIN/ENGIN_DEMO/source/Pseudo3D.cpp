@@ -181,7 +181,7 @@ namespace Engin
 			}
 
 #pragma endregion
-			
+
 		}
 
 		Pseudo3D::~Pseudo3D()
@@ -638,7 +638,7 @@ namespace Engin
 				}
 				else
 				{
-					depth = (1.0f / spriteYout);
+					depth = (1.0f / spriteYout)*100;
 				}
 				gameObjects[i]->accessComponent<Transform>()->setDepth(depth);
 			}			
@@ -793,6 +793,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 			gameObjects.back()->accessComponent<UserData>()->tileOverSize = 256;
 			gameObjects.back()->accessComponent<UserData>()->isTree = true;
+			gameObjects.back()->accessComponent<UserData>()->depthRandom = randomGenerator.getRandomInt(1,10) * 0.00001f;
 
 			gameObjects.back()->accessComponent<UserData>()->shadow = treeShadow;
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
