@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#include <iostream> //FOR ERRORCHECKING!
+
 #include "Engin\Core\RNG.h"
 
 namespace Engin
@@ -74,8 +76,13 @@ namespace Engin
 
 		int RNG::getRandomInt(int min, int max)
 		{
-			if (min == 0 && max == 0)
-				return 0;
+			if (min > max)
+			{
+				std::cout << "MAX value is smaller than MIN!" << std::endl;
+				return NULL;
+			}
+			if (min == max)
+				return min;
 			else if (min < 0)
 				return (rand() % (abs(min) + (max + 1))) - abs(min);
 			else
@@ -84,24 +91,14 @@ namespace Engin
 
 		float RNG::getRandomFloat(float min, float max)
 		{
-			static int value;
-			value = getRandomInt((int) min, (int) max);
-			if (value >= max)
+			if (min > max)
 			{
-				value = max - 1;
+				std::cout << "MAX value is smaller than MIN!" << std::endl;
+				return NULL;
 			}
-			else if (value <= min)
-			{
-				value = min + 1;
-			}
-			return value + getRandomDecimals();
-		}
-
-		float RNG::getRandomDecimals()
-		{
-			static int value;
-			value = getRandomInt(-10000, 10000);
-			return 0.0001 * value;
+			float random = ((float) getRandomUInt() / (float) RAND_MAX);
+			float range = max - min;
+			return (random*range) + min;
 		}
 	}
 }

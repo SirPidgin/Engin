@@ -95,7 +95,27 @@ namespace Engin
 				void setTextureBatch(Renderer::TextureBatch* newTextrBatch) { textureBatch = newTextrBatch; }
 				void setRaycastW(int W) { raycastW = W; limitLeft = -raycastW - 2656; limitRight = raycastW - 2400; }
 				void drawPseudoSprite()				   
-				{					
+				{		
+					
+					static float colorValue = 0;
+
+					if (ownerObject->accessComponent<UserData>()->isFireball)
+					{
+						colorValue = 1.0f;
+					}
+					else
+					{
+						colorValue = (ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthRandom) * 6;
+						if (colorValue > 0.8f)
+						{
+							colorValue = 0.8f;
+						}
+						else if (colorValue < 0.4f)
+						{
+							colorValue = 0.4f;
+						}
+					}				
+
 					if (ownerObject->accessComponent<UserData>()->spriteXout > limitLeft
 						&& ownerObject->accessComponent<UserData>()->spriteXout < limitRight
 						&& ownerObject->accessComponent<UserData>()->transformY > 0)
@@ -104,8 +124,7 @@ namespace Engin
 							ownerObject->accessComponent<UserData>()->spriteXout, ownerObject->accessComponent<UserData>()->spriteYout,
 							ownerObject->accessComponent<AnimationPlayer>()->getFrameWidth(), ownerObject->accessComponent<AnimationPlayer>()->getFrameHeight(),
 							0.0f, 0.0f,	0.0f, 
-							ownerObject->accessComponent<Transform>()->getScale(),
-							Renderer::Color{ 1.0f, 1.0f, 1.0f } * (ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthRandom),
+							ownerObject->accessComponent<Transform>()->getScale(), Renderer::Color{ 1.0f, 1.0f, 1.0f } *colorValue,
 							1.0f, ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthRandom);
 
 						//shadow
@@ -115,7 +134,7 @@ namespace Engin
 								ownerObject->accessComponent<UserData>()->spriteXout, ownerObject->accessComponent<UserData>()->spriteYout,
 								ownerObject->accessComponent<UserData>()->shadow->getWidth(), (ownerObject->accessComponent<UserData>()->shadow->getHeight() + ownerObject->accessComponent<Transform>()->getDepth()*50),
 								0.0f, 0.0f, 0.0f,
-								ownerObject->accessComponent<Transform>()->getScale(),Renderer::clrWhite, 1.0f,
+								ownerObject->accessComponent<Transform>()->getScale(), Renderer::Color{ 1.0f, 1.0f, 1.0f } *colorValue, 1.0f,
 								ownerObject->accessComponent<Transform>()->getDepth() - 0.00001 + ownerObject->accessComponent<UserData>()->depthRandom);
 						}						
 					}
@@ -148,6 +167,7 @@ namespace Engin
 			Resources::Texture* mapSheet_64;
 			Resources::Texture* mapSheet_256;
 			Resources::Texture* roof_16;
+			Resources::Texture* floor_800;
 
 			Resources::Texture* text;
 			Resources::Texture* text2;

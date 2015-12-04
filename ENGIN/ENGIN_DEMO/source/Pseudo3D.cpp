@@ -34,6 +34,7 @@ namespace Engin
 			mapSheet_256->changeParameters(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 			mapSheet_256->changeParameters(GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 			roof_16 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/roof.png");
+			floor_800 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/floor.png");
 			
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
 			animFireball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/fireball360_8.xml");
@@ -254,30 +255,31 @@ namespace Engin
 			static int lastMouseY = 0;
 			static int currMouseX = 0;
 			static int currMouseY = 0;
+			static float realRotSpeed = rotSpeed;
 			engine->mouseInput->getRelativeMouseState(&currMouseX, &currMouseY);
 			//rotate to the right
-				//if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
-			if (lastMouseX < currMouseX)
+			realRotSpeed = rotSpeed + (float) (abs(currMouseX) - abs(lastMouseX));
+			realRotSpeed /= 200.0f;
+			if (lastMouseX < currMouseX || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
 			{
 				//both camera direction and camera plane must be rotated
 				double oldDirX = dirX;
-				dirX = dirX * cos(-rotSpeed) - dirY * sin(-rotSpeed);
-				dirY = oldDirX * sin(-rotSpeed) + dirY * cos(-rotSpeed);
+				dirX = dirX * cos(-realRotSpeed) - dirY * sin(-realRotSpeed);
+				dirY = oldDirX * sin(-realRotSpeed) + dirY * cos(-realRotSpeed);
 				double oldPlaneX = planeX;
-				planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
-				planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
+				planeX = planeX * cos(-realRotSpeed) - planeY * sin(-realRotSpeed);
+				planeY = oldPlaneX * sin(-realRotSpeed) + planeY * cos(-realRotSpeed);
 			}
 			//rotate to the left
-				//if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
-			if (lastMouseX > currMouseX)
+			if (lastMouseX > currMouseX || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
 			{
 				//both camera direction and camera plane must be rotated
 				double oldDirX = dirX;
-				dirX = dirX * cos(rotSpeed) - dirY * sin(rotSpeed);
-				dirY = oldDirX * sin(rotSpeed) + dirY * cos(rotSpeed);
+				dirX = dirX * cos(realRotSpeed) - dirY * sin(realRotSpeed);
+				dirY = oldDirX * sin(realRotSpeed) + dirY * cos(realRotSpeed);
 				double oldPlaneX = planeX;
-				planeX = planeX * cos(rotSpeed) - planeY * sin(rotSpeed);
-				planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
+				planeX = planeX * cos(realRotSpeed) - planeY * sin(realRotSpeed);
+				planeY = oldPlaneX * sin(realRotSpeed) + planeY * cos(realRotSpeed);
 			}
 			engine->mouseInput->getRelativeMouseState(&lastMouseX, &lastMouseY);
 #pragma endregion
@@ -413,8 +415,10 @@ namespace Engin
 			}
 						
 			//Roof and floor for raycast
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, raycastH / 2.0f, raycastW, raycastH / 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, { 0.75, 0.5, 0.0 }, 1.0f, 0.0f);
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, 0.0f, raycastW, raycastH / 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
+			//opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, raycastH / 2.0f, raycastW, raycastH / 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, { 0.75, 0.5, 0.0 }, 1.0f, 0.0f);
+			opaqueBatch.draw(floor_800, &glm::vec4(0.0f, 0.0f, floor_800->getWidth(), floor_800->getHeight()), -2400.0f, 400.0f, floor_800->getWidth(), floor_800->getHeight(), 0.0f, 0.0f, 0.0f, 1.0f, Renderer::Color{ 0.5, 0.2, 0.0 } * 2.0f, 1.0f, 0.0f);
+
+			opaqueBatch.draw(floor_800, &glm::vec4(0.0f, 0.0f, floor_800->getWidth(), floor_800->getHeight()), -2400.0f, 0.0f, floor_800->getWidth(), floor_800->getHeight(), 0.0f, 0.0f, 0.0f, 1.0f, Renderer::Color{ 0.3, 0.3, 0.4 } * 3.0f, 1.0f, 0.0f);
 
 			//Raycast walls
 			DrawRaycastLines();
@@ -649,7 +653,7 @@ namespace Engin
 				}
 				else
 				{
-					depth = (1.0f / spriteYout)*100.0f;
+					depth = 1.0f - (spriteYout / 400.0f);
 				}
 				gameObjects[i]->accessComponent<Transform>()->setDepth(depth);
 			}			
@@ -685,16 +689,27 @@ namespace Engin
 					}
 					else
 					{
-						depth = (1.0f / Raycastlines[i][1])*100.0f;
+						depth = 1.0f - (Raycastlines[i][1]/400.0f);
 					}
 					if (depth > 1.0f)
 					{
 						depth = 1.0f;
 					}
 
+					static float colorValue = 0;
+					colorValue = depth * 6;
+					if (colorValue > 0.8f)
+					{
+						colorValue = 0.8f;
+					}
+					else if (colorValue < 0.4f)
+					{
+						colorValue = 0.4f;
+					}
+
 					opaqueBatch.draw(mapSheet_256, &glm::vec4(Raycastlines[i][4] + (static_cast<int>(Raycastlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), 
 						Raycastlines[i][0] - 2400, Raycastlines[i][1], 1.0f, Raycastlines[i][2] - Raycastlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, 
-						Renderer::Color{ 1.0f, 1.0f, 1.0f } * (depth*depth), 1.0f, depth);
+						Renderer::Color{ 1.0f, 1.0f, 1.0f } * colorValue, 1.0f, depth);
 				}
 			}
 		}
@@ -810,7 +825,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 			gameObjects.back()->accessComponent<UserData>()->tileOverSize = 256;
 			gameObjects.back()->accessComponent<UserData>()->isTree = true;
-			//gameObjects.back()->accessComponent<UserData>()->depthRandom = randomGenerator.getRandomFloat(0.00001f,0.0001f);
+			gameObjects.back()->accessComponent<UserData>()->depthRandom = randomGenerator.getRandomFloat(-0.000001, 0.000001);
 
 			gameObjects.back()->accessComponent<UserData>()->shadow = treeShadow;
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
