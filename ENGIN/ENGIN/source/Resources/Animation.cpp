@@ -33,20 +33,20 @@ namespace Engin
 			frameHeight = atoi(root->first_attribute("height")->value());
 			texture = Resources::ResourceManager::getInstance().load<Texture>(root->first_attribute("path")->value());
 
-			int framesInARow = texture->getWidth() / frameWidth; // Calculate the number of frames in one a row in the texture sheet.
+			int framesInARow = static_cast<int>(texture->getWidth()) / frameWidth; // Calculate the number of frames in one a row in the texture sheet.
 
 			// Read the frames.
 			for (rapidxml::xml_node<>* i = root->first_node("frame"); i; i = i->next_sibling())
 			{
 				Frame frame;
-				frame.duration = float(atoi(i->first_attribute("duration")->value())); // Read the duration of frame.
+				frame.duration = static_cast<float>(atoi(i->first_attribute("duration")->value())); // Read the duration of frame.
 
 				// Calculate the texture coordinates of the frame.
 				int index = atoi(i->first_attribute("id")->value());
-				frame.texCoords.x = float((index % framesInARow) * frameWidth);
-				frame.texCoords.y = float((index / framesInARow) * frameHeight);
-				frame.texCoords.z = frameWidth;
-				frame.texCoords.w = frameHeight;
+				frame.texCoords.x = static_cast<float>((index % framesInARow) * frameWidth);
+				frame.texCoords.y = static_cast<float>((index / framesInARow) * frameHeight);
+				frame.texCoords.z = static_cast<float>(frameWidth);
+				frame.texCoords.w = static_cast<float>(frameHeight);
 
 				frames.push_back(frame);
 			}

@@ -19,14 +19,14 @@ namespace Engin
 			void bind(GLenum textureUnit);
 			void unbind();
 
-			GLuint getWidth()
+			float getWidth()
 			{ 
-				return width;
+				return static_cast<float> (width);
 			}
 
-			GLuint getHeight() 
+			float getHeight() 
 			{
-				return height;
+				return static_cast<float> (height);
 			}
 
 			GLuint getID()
