@@ -53,6 +53,7 @@ namespace Engin
 			bool buttonWasReleased(MouseButton buttonID);
 			bool mouseWheelWasMoved(MouseWheel direction);
 			bool mouseWasMoved();
+			void getRelativeMouseState(int* x, int*y);
 
 			//Getters
 			glm::ivec2 getMousePosition() { return mousePosition; }

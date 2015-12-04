@@ -13,6 +13,15 @@ namespace Engin
 			GLfloat r;
 			GLfloat g;
 			GLfloat b;
+
+			const Color& operator*(float f)
+			{
+				r *= f;
+				g *= f;
+				b *= f;
+
+				return *this;
+			}
 		};
 
 		static const Color clrRed = { 1.0f, 0.0f, 0.0f };

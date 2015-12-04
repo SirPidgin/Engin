@@ -45,9 +45,18 @@
 
 namespace Engin
 {
-	namespace Renderer
+	namespace Game
 	{
-		ParticleEffect::ParticleEffect() : distribution(1.0, 3.0)
+		ParticleEffect::ParticleEffect(GameObject* ownerObject) :
+			distribution(1.0, 3.0),
+			Component(ownerObject),
+			currentTexture(nullptr)
+		{
+			this->textureBatch = ownerObject->getTextureBatch();
+		}
+
+		ParticleEffect::ParticleEffect() :
+			distribution(1.0, 3.0)
 		{
 		}
 
@@ -56,9 +65,9 @@ namespace Engin
 		{
 		}
 
-		void ParticleEffect::init(GLuint textureID)
+		void ParticleEffect::init(Resources::Texture* texture)
 		{
-			this->textureID = textureID;
+			currentTexture = texture;
 			timeUntilNextStep = 0;
 			angle = 0;
 			particleVertices.reserve(NUM_PARTICLES);
@@ -74,19 +83,16 @@ namespace Engin
 			{
 				step();
 			}
-
-			glGenBuffers(1, &VBO);
-			glBindBuffer(GL_ARRAY_BUFFER, VBO);
-			glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex) * particleVertices.size(), particleVertices.data(), GL_DYNAMIC_DRAW);
-			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 
 		void ParticleEffect::createParticle(Particle* p)
 		{
 			float randNum = distribution(generator);
 
-			p->position = glm::vec3(0.0f);
-			p->velocity = glm::vec2(1.0f * randNum * randNum * cos(angle) + 1.0f);
+			p->position = 
+				glm::vec3(ownerObject->accessComponent<Transform>()->getPosition(),
+				ownerObject->accessComponent<Transform>()->getDepth());
+			p->velocity = (glm::vec2(glm::cos(ownerObject->accessComponent<Transform>()->getRotation()), glm::sin(ownerObject->accessComponent<Transform>()->getRotation()))  * 500.0f);
 			p->color = glm::vec4(1.0f, 1.0f, 1.0f, 0.0f);
 			p->age = 0.0f;
 			p->lifetime = randNum + 1;
@@ -147,11 +153,11 @@ namespace Engin
 
 			step();
 
-			glEnable(GL_TEXTURE_2D);
-			glBindTexture(GL_TEXTURE_2D, textureID);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-			glBegin(GL_QUADS);
+			//glEnable(GL_TEXTURE_2D);
+			//glBindTexture(GL_TEXTURE_2D, textureID);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			//glBegin(GL_QUADS);
 
 			for (unsigned int i = 0; i < ps.size(); i++)
 			{
@@ -159,16 +165,23 @@ namespace Engin
 				glColor4f(p->color[0], p->color[1], p->color[2], 1 - p->age / p->lifetime);
 				float size = SIZE / 2;
 
-				glTexCoord2f(0, 1);
+			/*	glTexCoord2f(0, 1);
 				glVertex2f(p->position[0] - size, p->position[1] - size);
 				glTexCoord2f(0, 0);
 				glVertex2f(p->position[0] - size, p->position[1] + size);
 				glTexCoord2f(1, 0);
 				glVertex2f(p->position[0] + size, p->position[1] + size);
 				glTexCoord2f(1, 1);
-				glVertex2f(p->position[0] + size, p->position[1] - size);
+				glVertex2f(p->position[0] + size, p->position[1] - size);*/
+
+				textureBatch->draw(currentTexture, nullptr,
+					p->position.x, p->position.y,
+					currentTexture->getWidth(), currentTexture->getHeight(),
+					currentTexture->getWidth() / 2.0f, currentTexture->getHeight() / 2.0f,
+					p->rotation, SIZE,
+					Renderer::clrWhite, 1.0f, p->position.z);
 			}
-			glEnd();
+			//glEnd();
 		}
 	}
 }

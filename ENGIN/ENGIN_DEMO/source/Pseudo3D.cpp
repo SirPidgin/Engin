@@ -40,6 +40,7 @@ namespace Engin
 			mapSheet_256->changeParameters(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 			mapSheet_256->changeParameters(GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 			roof_16 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/roof.png");
+			floor_800 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/floor.png");
 			
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
 			animFireball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/fireball360_8.xml");
@@ -211,21 +212,21 @@ namespace Engin
 
 		// Strafes player.
 		void Pseudo3D::strafePlayer(float multiplier)
-		{
+				{
 			if (wallTiles[static_cast<int>(player[0] + planeX * moveSpeed * multiplier)][static_cast<int>(player[1])] == false)
 			{
 				player[0] += planeX * moveSpeed * multiplier;
-			}
+				}
 
 			if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + planeY * moveSpeed * multiplier)] == false)
-			{
+				{
 				player[1] += planeY * moveSpeed * multiplier;
+				}
 			}
-		}
 
 		// Rotates player.
 		void Pseudo3D::rotatePlayer(float multiplier)
-		{
+			{
 			float tempSpeed = -(rotSpeed * multiplier);
 
 			// Both camera direction and camera plane must be rotated.
@@ -239,12 +240,12 @@ namespace Engin
 
 		// Get requested axis multiplier of given gamepad.
 		float Pseudo3D::getAxisMultiplier(HID::GamepadAxis axis, int GPIndex)
-		{
+				{
 			return engine->gamepadInput->getAxisValue(axis, GPIndex) / HID::AXIS_MAX;
-		}
+				}
 
 		void Pseudo3D::update(GLfloat step)
-		{
+				{
 			// Taking time it takes to go trough the update.
 			myTimer.start();
 
@@ -258,7 +259,7 @@ namespace Engin
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_W))
 			{
 				movePlayer(1.0f);
-			}
+				}
 			// Move backwards if no wall behind you.
 			else if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_S))
 			{
@@ -274,18 +275,18 @@ namespace Engin
 					movePlayer(axisMultiplier);
 				}
 				
-			}
+				}
 
 			// Strafe left.
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_A))
-			{
+				{
 				strafePlayer(-1.0f);
 			}
 			// Strafe right.
 			else if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_D))
-			{
+				{
 				strafePlayer(1.0f);
-			}
+				}
 			// Check pad movement.
 			else if (useGamePad)
 			{
@@ -297,16 +298,39 @@ namespace Engin
 				}
 
 			}
-			
-			// Rotate to the right.
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
+
+			//Mouse rotation
+			static int lastMouseX = 0;
+			static int lastMouseY = 0;
+			static int currMouseX = 0;
+			static int currMouseY = 0;
+			static float realRotSpeed = rotSpeed;
+			static float mouseSens = 300.0f;
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_PAGEUP))
 			{
-				rotatePlayer(1.0f);
+				mouseSens -= 5.0f;
 			}
-			// Rotate to the left.
-			else if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
+			else if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_PAGEDOWN))
 			{
-				rotatePlayer(-1.0f);
+				mouseSens += 5.0f;
+			}
+			if (mouseSens <= 0.0f)
+			{
+				mouseSens = 1.0f;
+			}
+			engine->mouseInput->getRelativeMouseState(&currMouseX, &currMouseY);
+			realRotSpeed = rotSpeed + (float) (abs(currMouseX) - abs(lastMouseX));
+			realRotSpeed /= mouseSens;
+			//rotate to the right
+			if (lastMouseX < currMouseX || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
+			{
+				//both camera direction and camera plane must be rotated
+				double oldDirX = dirX;
+				dirX = dirX * cos(-realRotSpeed) - dirY * sin(-realRotSpeed);
+				dirY = oldDirX * sin(-realRotSpeed) + dirY * cos(-realRotSpeed);
+				double oldPlaneX = planeX;
+				planeX = planeX * cos(-realRotSpeed) - planeY * sin(-realRotSpeed);
+				planeY = oldPlaneX * sin(-realRotSpeed) + planeY * cos(-realRotSpeed);
 			}
 			// Check pad movement.
 			else if (useGamePad)
@@ -314,12 +338,21 @@ namespace Engin
 				axisMultiplier = getAxisMultiplier(HID::GAMEPAD_AXIS_RIGHTX, 0);
 
 				if (axisMultiplier < -deadzone || axisMultiplier > deadzone)
-				{
+			//rotate to the left
+			if (lastMouseX > currMouseX || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
+			{
 					rotatePlayer(axisMultiplier);
 				}
 
+				//both camera direction and camera plane must be rotated
+				double oldDirX = dirX;
+				dirX = dirX * cos(realRotSpeed) - dirY * sin(realRotSpeed);
+				dirY = oldDirX * sin(realRotSpeed) + dirY * cos(realRotSpeed);
+				double oldPlaneX = planeX;
+				planeX = planeX * cos(realRotSpeed) - planeY * sin(realRotSpeed);
+				planeY = oldPlaneX * sin(realRotSpeed) + planeY * cos(realRotSpeed);
 			}
-
+			engine->mouseInput->getRelativeMouseState(&lastMouseX, &lastMouseY);
 #pragma endregion
 
 			alpha += 0.01;			
@@ -350,7 +383,7 @@ namespace Engin
 				if (axisMultiplier > 0.0f && (!shootTimer.isStarted() || shootTimer.getLocalTime() > (1.0f - axisMultiplier + 0.1f) * 1000.0f))
 				{
 
-					createProjectile(player[0], player[1], player[2]);
+				createProjectile(player[0], player[1], player[2]);
 					shootTimer.start();
 				}
 			}
@@ -466,8 +499,10 @@ namespace Engin
 			}
 						
 			//Roof and floor for raycast
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, raycastH / 2.0f, raycastW, raycastH / 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, { 0.75, 0.5, 0.0 }, 1.0f, 0.0f);
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, 0.0f, raycastW, raycastH / 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
+			//opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, raycastH / 2.0f, raycastW, raycastH / 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, { 0.75, 0.5, 0.0 }, 1.0f, 0.0f);
+			opaqueBatch.draw(floor_800, &glm::vec4(0.0f, 0.0f, floor_800->getWidth(), floor_800->getHeight()), -2400.0f, 400.0f, floor_800->getWidth(), floor_800->getHeight(), 0.0f, 0.0f, 0.0f, 1.0f, Renderer::Color{ 0.5, 0.2, 0.0 } * 2.0f, 1.0f, 0.0f);
+
+			opaqueBatch.draw(floor_800, &glm::vec4(0.0f, 0.0f, floor_800->getWidth(), floor_800->getHeight()), -2400.0f, 0.0f, floor_800->getWidth(), floor_800->getHeight(), 0.0f, 0.0f, 0.0f, 1.0f, Renderer::Color{ 0.3, 0.3, 0.4 } * 3.0f, 1.0f, 0.0f);
 
 			//Raycast walls
 			DrawRaycastLines();
@@ -702,7 +737,7 @@ namespace Engin
 				}
 				else
 				{
-					depth = (1.0f / spriteYout);
+					depth = 1.0f - (spriteYout / 400.0f);
 				}
 				gameObjects[i]->accessComponent<Transform>()->setDepth(depth);
 			}			
@@ -738,10 +773,27 @@ namespace Engin
 					}
 					else
 					{
-						depth = (1.0f / Raycastlines[i][1]);
+						depth = 1.0f - (Raycastlines[i][1]/400.0f);
+					}
+					if (depth > 1.0f)
+					{
+						depth = 1.0f;
 					}
 
-					opaqueBatch.draw(mapSheet_256, &glm::vec4(Raycastlines[i][4] + (static_cast<int>(Raycastlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), Raycastlines[i][0] - 2400, Raycastlines[i][1], 1.0f, Raycastlines[i][2] - Raycastlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+					static float colorValue = 0;
+					colorValue = depth * 6;
+					if (colorValue > 0.8f)
+					{
+						colorValue = 0.8f;
+					}
+					else if (colorValue < 0.4f)
+					{
+						colorValue = 0.4f;
+					}
+
+					opaqueBatch.draw(mapSheet_256, &glm::vec4(Raycastlines[i][4] + (static_cast<int>(Raycastlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), 
+						Raycastlines[i][0] - 2400, Raycastlines[i][1], 1.0f, Raycastlines[i][2] - Raycastlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, 
+						Renderer::Color{ 1.0f, 1.0f, 1.0f } * colorValue, 1.0f, depth);
 				}
 			}
 		}
@@ -857,6 +909,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 			gameObjects.back()->accessComponent<UserData>()->tileOverSize = 256;
 			gameObjects.back()->accessComponent<UserData>()->isTree = true;
+			gameObjects.back()->accessComponent<UserData>()->depthRandom = randomGenerator.getRandomFloat(-0.000001, 0.000001);
 
 			gameObjects.back()->accessComponent<UserData>()->shadow = treeShadow;
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;

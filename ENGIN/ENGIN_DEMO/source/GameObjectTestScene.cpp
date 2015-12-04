@@ -8,6 +8,7 @@
 #include <Engin\Game\RigidBody.h>
 #include <Engin\Game\Sprite.h>
 #include <Engin\Game\Transform.h>
+#include <Engin\Game\ParticleEffect.h>
 
 GameObjectTestScene::GameObjectTestScene(Engin::Engin* engine) : gameObject("main_object", &alphaBatch), camera(createWorldCamera())
 {
@@ -22,7 +23,7 @@ GameObjectTestScene::GameObjectTestScene(Engin::Engin* engine) : gameObject("mai
 	gameObject.addComponent<Engin::Game::Sprite>();
 	gameObject.addComponent<Engin::Game::Transform>();
 	gameObject.addComponent<Engin::Game::RigidBody>();
-	gameObject.addComponent<HP_Component>();
+	gameObject.addComponent<Engin::Game::ParticleEffect>();
 
 
 	camera->setPositionRotationOrigin(3.0f*32.0f, 9.0f*32.0f);
@@ -37,6 +38,7 @@ GameObjectTestScene::GameObjectTestScene(Engin::Engin* engine) : gameObject("mai
 	doge = Engin::Resources::ResourceManager::getInstance().load<Engin::Resources::Texture>("resources/doge.png");
 
 	gameObject.accessComponent<Engin::Game::Sprite>()->setCurrentSprite(doge);
+	gameObject.accessComponent<Engin::Game::ParticleEffect>()->init(doge);
 }
 
 GameObjectTestScene::~GameObjectTestScene()
@@ -60,7 +62,7 @@ void GameObjectTestScene::update(GLfloat step)
 
 	static float moveByInputX = 0.0f;
 	static float moveByInputY = 0.0f;
-	static float moveSpeed = 64.0f;
+	static float moveSpeed = 16.0f;
 	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_W))
 	{
 		moveByInputY += moveSpeed;
@@ -81,7 +83,7 @@ void GameObjectTestScene::update(GLfloat step)
 	gameObject.accessComponent<Engin::Game::Transform>()->setYPosition(moveByInputY);
 			
 	static float rotateByInput = 0.0f;
-	static float rotateSpeed = 1.0f;
+	static float rotateSpeed = 0.05f;
 	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_LEFT))
 	{
 		rotateByInput += rotateSpeed;
@@ -98,4 +100,5 @@ void GameObjectTestScene::update(GLfloat step)
 void GameObjectTestScene::draw()
 {
 	gameObject.accessComponent<Engin::Game::Sprite>()->draw();
+	gameObject.accessComponent<Engin::Game::ParticleEffect>()->draw();
 }

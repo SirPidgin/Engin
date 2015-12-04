@@ -67,9 +67,10 @@ namespace Engin
 			textCreator = new Renderer::TextRenderer();
 			textCreator->createTextTexture(font, textString, 255 ,255, 255);
 			textTexture = textCreator->getTexture();
+			
+			particleGenerator.init(doge);
 
 			Resources::ResourceManager::getInstance().printResources();
-			particleGenerator.init(doge->getID());
 		}
 
 		CameraTestScene::~CameraTestScene()

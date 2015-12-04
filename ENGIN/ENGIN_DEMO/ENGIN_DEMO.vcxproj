@@ -97,6 +97,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="alpha_shader.vertex" />
+    <None Include="particle_shader.fragment" />
+    <None Include="particle_shader.vertex" />
     <None Include="resources\engine.ini" />
     <None Include="resources\shaders\alpha_shader.fragment" />
     <None Include="resources\shaders\shader.fragment" />

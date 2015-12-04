@@ -27,11 +27,10 @@ namespace Engin
 			int getRandomSInt();
 			int getRandomUInt();
 			int getRandomInt(int min, int max);
-			float getRandomFloat(float min, float max); //6 decimal accuracy
+			float getRandomFloat(float min, float max);
 
 		private:
 			void initialize();
-			float getRandomDecimals();
 			unsigned int seed;
 			std::mt19937 MTEngine;
 		};

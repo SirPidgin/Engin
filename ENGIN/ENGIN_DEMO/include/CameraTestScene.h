@@ -56,7 +56,7 @@ namespace Engin
 			Game::AnimationPlayer animationPlayer;
 			Game::AnimationPlayer animationPlayer1;
 
-			Renderer::ParticleEffect particleGenerator;
+			Game::ParticleEffect particleGenerator;
 		};
 	}
 }
