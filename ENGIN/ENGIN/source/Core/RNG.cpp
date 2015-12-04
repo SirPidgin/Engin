@@ -75,7 +75,7 @@ namespace Engin
 		int RNG::getRandomInt(int min, int max)
 		{
 			if (min < 0)
-				return (rand() % (abs(min) + max)) - abs(min);
+				return (rand() % (abs(min) + (max + 1))) - abs(min);
 			else
 				return rand() % (max - min) + min;
 		}
@@ -84,11 +84,11 @@ namespace Engin
 		{
 			static int value;
 			value = getRandomInt((int) min, (int) max);
-			if (value > max)
+			if (value >= max)
 			{
 				value = max - 1;
 			}
-			else if (value < min)
+			else if (value <= min)
 			{
 				value = min + 1;
 			}
@@ -98,8 +98,8 @@ namespace Engin
 		float RNG::getRandomDecimals()
 		{
 			static int value;
-			value = getRandomInt(-999999, 999999);
-			return 0.000001 * value;
+			value = getRandomInt(-10000, 10000);
+			return 0.0001 * value;
 		}
 	}
 }

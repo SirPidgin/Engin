@@ -17,7 +17,7 @@ namespace Engin
 			void setSeed(unsigned int newSeed);
 			unsigned int getSeed();
 			void resetRandomSeedEngine();
-			unsigned int getRandomNumberFromSeed();
+			unsigned int getRandomNumberFromSeed(); //returns a large unsigned int from seed
 			void discardNext(int amount = 1);
 			unsigned int getMax();
 			unsigned int getMin();

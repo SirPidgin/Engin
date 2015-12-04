@@ -26,7 +26,7 @@ namespace Engin
 
 			void setRotation(GLfloat rotation);
 			//Place this at the end of update to fix coordinates because camera rotates from the corner.
-			void fixCoordinatesForRotationAtTheEndOfUpdate();
+			void calculateVP();
 
 			GLfloat getRotation();
 			GLfloat getZoomLevel();

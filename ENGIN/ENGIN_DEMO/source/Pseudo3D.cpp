@@ -16,8 +16,6 @@ namespace Engin
 
 			std::cout << "Scene started" << std::endl;
 
-			camera->initCamera(0.0f, 0.0f, 800.0f, 800.0f, -1600.0f, 0.0f, 0, 0);
-			camera->setZoomLevel(2); //Use zoom if raycasting image smaller than 800. (example: raycast w = 400, zoom = 2, example1: raycast w = 200, zoom = 4) 
 			camera2->initCamera(800.0f, 0.0f, 800.0f, 800.0f, 0.0f, 0.0f, 400, 100);
 			camera3->initCamera(0.0f, 0.0f, 1600.0f, 800.0f, 0.0f, 0.0f, 800, 400);
 
@@ -29,47 +27,25 @@ namespace Engin
 			alphaBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
 			guiBatch.setShader(alphaShader);
 			guiBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
-
 			
-			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");			
+			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside2_64.png");	
 			mapSheet_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_64.png");
-			mapSheet_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_256.png");
+			mapSheet_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_256_shadows.png");
+			mapSheet_256->changeParameters(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
+			mapSheet_256->changeParameters(GL_TEXTURE_MAG_FILTER, GL_NEAREST_MIPMAP_LINEAR);
 			roof_16 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/roof.png");
 			
 			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
-			animPlayerFur.setAnimation(animFurball360);
-			animPlayerFur.loopable(true);
-			animPlayerFur.pause();
-
 			animFireball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/fireball360_8.xml");
-			animPlayerFire1.setAnimation(animFireball360);
-			animPlayerFire1.loopable(true);
-			animPlayerFire1.setLoopStartFrame(0);
-			animPlayerFire1.setLoopEndFrame(9);
-			animPlayerFire1.start();
-
-			animPlayerFire2.setAnimation(animFireball360);
-			animPlayerFire2.loopable(true);
-			animPlayerFire2.setLoopStartFrame(0);
-			animPlayerFire2.setLoopEndFrame(9);
-			animPlayerFire2.start();
-
-			animPlayerFire3.setAnimation(animFireball360);
-			animPlayerFire3.loopable(true);
-			animPlayerFire3.setLoopStartFrame(0);
-			animPlayerFire3.setLoopEndFrame(9);
-			animPlayerFire3.start();
-
-			animPlayerFire4.setAnimation(animFireball360);
-			animPlayerFire4.loopable(true);
-			animPlayerFire4.setLoopStartFrame(0);
-			animPlayerFire4.setLoopEndFrame(9);
-			animPlayerFire4.start();
+			furballShadow = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_shadow_256.png");
+			animTree360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/tree360_40.xml");
+			treeShadow = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/tree_shadow_512.png");
+			tree_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/tree_up_64.png");
 
 			animPlayer2d.setAnimation(animFireball360);
-			animPlayer2d.loopable(true);
 			animPlayer2d.setLoopStartFrame(20);
 			animPlayer2d.setLoopEndFrame(29);
+			animPlayer2d.loopable(true);
 			animPlayer2d.start();
 
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
@@ -79,134 +55,130 @@ namespace Engin
 			textCreator3.createTextTexture(font, "|", 255, 100, 0);
 			text3 = textCreator3.getTexture();
 
+			//world size
 			mapX = 24;
 			mapY = 24;
+			//2d tilesize
 			tileSize2d = 64;
+			//alpha used for rotating things
 			alpha = 0.0f;
 
-			//DDA
+			//----------------------
+			//Raycast init
 			tileSize = 256;
 
-			w = 400; //In pseudo3d header change DDAlines size accordingly
-			h = 400;
+			//How many lines for pseudo 3d
+			raycastW = 800; //In pseudo3d header change Raycastlines array size accordingly
+			raycastH = 800;
 
-			moveSpeed = 0.11f;
+			camera->initCamera(0.0f, 0.0f, 800.0f, 800.0f, -2400.0f, 0.0f, 0, 0);
+			//camera->setZoomLevel(2); //Use zoom if raycasting image smaller than 800. (example: raycast w = 400, zoom = 2, example1: raycast w = 200, zoom = 4) 
+
+			moveSpeed = 0.08f;
 			rotSpeed = 0.02f;
-			player = { { 22.0f, 12.0f, 0.0f, 0 , 1} }; //x,y,rotation(radians), howmany sides drawn, spritetype
+			player = { { 22.0f, 9.5f, 0.0f, 0 , 1} }; //x,y,rotation(radians), how many sides drawn, spritetype
 
 			dirX = -1, dirY = 0; //initial direction vector
 			planeX = 0.0f, planeY = 0.5; //the 2d raycaster version of camera plane
 
-			//adding sprites
-			sprite = { { 5.0f, 15.0f, 0.0f, 40 , 1 } }; //x, y, rotation(radians), how many sides, spritetype 
-			sprite1 = { { 12.0f, 18.3f, 0.0f, 40, 1 } };
-			sprite2 = { { 13.5f, 12.7f, 0.0f, 40, 1 } };
-			sprite3 = { {14.0f, 12.0f, 0.0f, 40, 1 } };
-			sprite4 = { {15.0f, 13.8f, 0.0f, 40, 1 } };
-			sprite5 = { { 16.0f, 4.0f, 0.0f, 40, 1 } };
-			sprite6 = { { 18.0f, 13.0f, 0.0f, 40, 1 } };
-			sprite7 = { { 12.4f, 14.9f, 0.0f, 40, 1 } };
-			sprite8 = { { 23.0f, 15.0f, 0.0f, 40, 1 } };
-			sprite9 = { { 12.199f, 16.2f, 0.0f, 40, 1 } };
-			fireball = { { 5.0f, 15.0f, glm::radians(180.0f), 8, 2 } };
-			fireball1 = { { 7.0f, 10.0f, glm::radians(180.0f), 8, 3 } };
-			fireball2 = { { 8.0f, 10.0f, 0.0f, 8, 4 } };
-			fireball3 = { { 9.0f, 10.0f, glm::radians(180.0f), 8, 5 } };
-			spriteContainer.push_back(sprite);
-			spriteContainer.push_back(sprite1);
-			spriteContainer.push_back(sprite2);
-			spriteContainer.push_back(sprite3);
-			spriteContainer.push_back(sprite4);
-			spriteContainer.push_back(sprite5);
-			spriteContainer.push_back(sprite6);
-			spriteContainer.push_back(sprite7);
-			spriteContainer.push_back(sprite8);
-			spriteContainer.push_back(sprite9);
-			spriteContainer.push_back(fireball);
-			spriteContainer.push_back(fireball1);
-			spriteContainer.push_back(fireball2);
-			spriteContainer.push_back(fireball3);
+			//GameObjects.
+			createFurball(15.0f, 5.0f, 0.0f);
+			createFurball(8.0f, 18.3f, 0.0f);
+			createFurball(13.5f, 12.7f, 0.0f);
+			createFurball(14.0f, 12.0f, 0.0f);
+			createFurball(15.0f, 13.8f, 0.0f);
+			createFurball(16.0f, 4.0f, 0.0f);
+			createFurball(18.0f, 13.0f, 0.0f);
+			createFurball(12.4f, 14.9f, 0.0f);
+			createFurball(23.0f, 15.0f, 0.0f);
+			createFurball(12.199f, 16.2f, 0.0f);
 
-			//GameObjects.							TODO: All sprites should be made as game objects
-			gameObjects.push_back(new GameObject(&alphaBatch));
-			gameObjects.back()->addComponent<Sprite>();
-			gameObjects.back()->addComponent<Transform>();
-			gameObjects.back()->addComponent<RigidBody>();
-			gameObjects.back()->addComponent<AnimationPlayer>();
-			//gameObjects.back()->accessComponent<Sprite>()->setCurrentSprite(mapSheet_64);
-			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animFurball360);
-			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
-			gameObjects.back()->accessComponent<AnimationPlayer>()->start();
-			gameObjects.back()->accessComponent<Transform>()->setXPosition(600.0f);
-			gameObjects.back()->accessComponent<Transform>()->setYPosition(800.0f);
-			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
+			createTree(0.0f, 0.0f, 0.0f); //furball drag
 
-			//filling raycaster lines with 0
-			for (int i = 0; i < w; i++)
-			{
-				for (int j = 0; j < 5; j++)
-				{
-					DDAlines[i][j] = 0;
-				}
-			}
+			createTree(20.0f, 5.0f, 0.0f);
+			createTree(20.0f, 6.0f, 0.0f);
+			createTree(20.0f, 7.0f, 0.0f);
+			createTree(20.0f, 8.0f, 0.0f);
+			createTree(21.0f, 5.0f, 0.0f);
+			createTree(21.0f, 8.0f, 0.0f);			
+			createTree(22.0f, 5.0f, 0.0f);
+			createTree(22.0f, 8.0f, 0.0f);
+			createTree(23.0f, 5.0f, 0.0f);			
+			createTree(23.0f, 6.0f, 0.0f);			
+			createTree(23.0f, 7.0f, 0.0f);
+			createTree(23.0f, 8.0f, 0.0f);
 			
-			DDASpriteDrawData.resize(spriteContainer.size());
+			createTree(20.0f, 5.0f+ 6.0f, 0.0f);
+			createTree(20.0f, 5.0f+ 6.0f, 0.0f);
+			createTree(20.0f, 6.0f+ 6.0f, 0.0f);
+			createTree(20.0f, 7.0f+ 6.0f, 0.0f);
+			createTree(20.0f, 8.0f+ 6.0f, 0.0f);
+			createTree(21.0f, 5.0f+ 6.0f, 0.0f);
+			createTree(21.0f, 8.0f+ 6.0f, 0.0f);
+			createTree(22.0f, 5.0f+ 6.0f, 0.0f);
+			createTree(22.0f, 8.0f+ 6.0f, 0.0f);
+			createTree(23.0f, 5.0f+ 6.0f, 0.0f);
+			createTree(23.0f, 6.0f+ 6.0f, 0.0f);
+			createTree(23.0f, 7.0f+ 6.0f, 0.0f);
+			createTree(23.0f, 8.0f+ 6.0f, 0.0f);
+			
+			turretCoolDown.start();
+
+
+#pragma endregion
+			
+#pragma region WallTiles
 
 			//filling world with 0
 			for (int i = 0; i < 25; i++)
 			{
 				for (int j = 0; j < 25; j++)
 				{
-					objectTiles[i][j] = 0;
+					wallTiles[i][j] = 0;
 				}				
 			}
-
-#pragma endregion
-
-#pragma region WallTiles
 
 			//MapSides
 			for (int i = 0; i < mapY; i++)
 			{
-				addIntoVector(1, glm::vec2(0, i), 1);
+				wallTiles[0][i] = 1;
 			}
 
 			for (int i = 0; i <= mapY; i++)
 			{
-				addIntoVector(1, glm::vec2(mapX, i), 1);
+				wallTiles[mapX][i] = 3;
 			}
 
 			for (int i = 0; i < mapX; i++)
 			{
-				addIntoVector(1, glm::vec2(i, mapY), 1);
+				wallTiles[i][mapY] = 1;
 			}
 
 			for (int i = 0; i < mapX; i++)
 			{
-				addIntoVector(1, glm::vec2(i, 0), 3);
+				wallTiles[i][0] = 3;
 			}
 			//---------------------
 
 			for (int i = 1; i < 10; i++)
 			{
-				addIntoVector(1, glm::vec2(i, 10), 2);
+				wallTiles[i][10] = 2;
 			}
 
 			for (int i = 1; i < 13; i++)
 			{
-				addIntoVector(1, glm::vec2(10, i), 2);
+				wallTiles[10][i] = 2;
 			}
 
 			for (int i = 17; i < 23; i++)
 			{
-				addIntoVector(1, glm::vec2(i, 17), 4);
+				wallTiles[i][17] = 4;
 			}
 
 			for (int i = 17; i < 23; i++)
 			{
-				addIntoVector(1, glm::vec2(i, 19), 5);
+				wallTiles[i][19] = 5;
 			}
-
 
 #pragma endregion
 			
@@ -219,31 +191,61 @@ namespace Engin
 
 		void Pseudo3D::update(GLfloat step)
 		{
+			//Taking time it takes to go trough the update
 			myTimer.start();
-#pragma region DDAMovement
+
+#pragma region RaycastMovement
 			//move forward if no wall in front of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_W))
 			{
-				if (objectTiles[int((player[0] + dirX * moveSpeed))][int(player[1])] == false) player[0] += dirX * moveSpeed;
-				if (objectTiles[int(player[0])][int(player[1] + dirY * moveSpeed)] == false) player[1] += dirY * moveSpeed;
+				if (wallTiles[static_cast<int>(player[0] + dirX * moveSpeed)][static_cast<int>(player[1])] == false)
+				{
+					player[0] += dirX * moveSpeed;
+				}
+
+				if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + dirY * moveSpeed)] == false)
+				{
+					player[1] += dirY * moveSpeed;
+				}
 			}
 			//move backwards if no wall behind you
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_S))
 			{
-				if (objectTiles[int(player[0] - dirX * moveSpeed)][int(player[1])] == false) player[0] -= dirX * moveSpeed;
-				if (objectTiles[int(player[0])][int(player[1] - dirY * moveSpeed)] == false) player[1] -= dirY * moveSpeed;
+				if (wallTiles[static_cast<int>(player[0] - dirX * moveSpeed)][static_cast<int>(player[1])] == false)
+				{
+					player[0] -= dirX * moveSpeed;
+				}
+
+				if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] - dirY * moveSpeed)] == false)
+				{
+					player[1] -= dirY * moveSpeed;
+				}
 			}
 			//strafe left if no wall in left of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_A))
 			{
-				if (objectTiles[int(player[0] - planeX * moveSpeed)][int(player[1])] == false) player[0] -= planeX * moveSpeed;
-				if (objectTiles[int(player[0])][int(player[1] - planeY * moveSpeed)] == false) player[1] -= planeY * moveSpeed;
+				if (wallTiles[static_cast<int>(player[0] - planeX * moveSpeed)][static_cast<int>(player[1])] == false)
+				{
+					player[0] -= planeX * moveSpeed;
+				}
+
+				if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] - planeY * moveSpeed)] == false)
+				{
+					player[1] -= planeY * moveSpeed;
+				}
 			}
 			//strafe right if no wall in right of you			
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_D))
 			{
-				if (objectTiles[int((player[0] + planeX * moveSpeed))][int(player[1])] == false) player[0] += planeX * moveSpeed;
-				if (objectTiles[int(player[0])][int(player[1] + planeY * moveSpeed)] == false) player[1] += planeY * moveSpeed;
+				if (wallTiles[static_cast<int>(player[0] + planeX * moveSpeed)][static_cast<int>(player[1])] == false)
+				{
+					player[0] += planeX * moveSpeed;
+				}
+
+				if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + planeY * moveSpeed)] == false)
+				{
+					player[1] += planeY * moveSpeed;
+				}
 			}
 			//rotate to the right   
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
@@ -268,11 +270,12 @@ namespace Engin
 				planeY = oldPlaneX * sin(rotSpeed) + planeY * cos(rotSpeed);
 			}
 #pragma endregion
+
 			alpha += 0.01;			
 			
 			//Raycast calculations.
-			DDA();
-			DDADrawSprites();
+			Raycasting();
+			RaycastingSprites();
 
 			//Saving player rotation
 			player[2] = -glm::atan(dirX, dirY);
@@ -280,68 +283,110 @@ namespace Engin
 			{
 				player[2] += glm::radians(360.0f);
 			}
+
+#pragma region Shooting
+			// Shoot a projectile
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE))
+			{
+				createProjectile(player[0], player[1], player[2]);
+			}
+
+#pragma endregion
 			
 			//rotating sprites in radians
-			spriteContainer[5][2] += 0.05f;
-			spriteContainer[0][2] += 0.01f;
-			spriteContainer[4][2] += 0.03f;
-			spriteContainer[10][2] += 0.01f; //fireball
+			gameObjects[5]->accessComponent<Transform>()->setRotation(alpha * 5);
+			gameObjects[0]->accessComponent<Transform>()->setRotation(2*alpha);
+			gameObjects[4]->accessComponent<Transform>()->setRotation(alpha + 0.02);
+			gameObjects[10]->accessComponent<Transform>()->setRotation(glm::radians(315.0f) + 2*alpha);
+
+			gameObjects[1]->accessComponent<Transform>()->setRotation(2 * alpha);
 
 			//moving sprites TODO: Make some logic and translate sprites with them.
-			spriteContainer[0][0] = 5.0f + cos(spriteContainer[0][2]);
-			spriteContainer[0][1] = 15.0f + sin(spriteContainer[0][2]);
+			gameObjects[0]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[0]->accessComponent<Transform>()->getRotation()));
+			gameObjects[0]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[0]->accessComponent<Transform>()->getRotation()));
 
-			spriteContainer[10][0] = 5.0f - cos(spriteContainer[0][2]); //fireball
-			spriteContainer[10][1] = 15.0f - sin(spriteContainer[0][2]);
+			gameObjects[4]->accessComponent<Transform>()->setXPosition(15.0f + 3 * glm::cos(alpha));
+			gameObjects[6]->accessComponent<Transform>()->setYPosition(10.0f + 4 * glm::sin(alpha));
 
-			spriteContainer[4][0] = 15.0f + 3 * glm::cos(alpha);
-			spriteContainer[6][1] = 10.0f + 4 * glm::sin(alpha);
+			gameObjects[10]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[10]->accessComponent<Transform>()->getRotation()));
+			gameObjects[10]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[10]->accessComponent<Transform>()->getRotation()));
 
-			//moving the three fireballs
-			static float firex = 24.0f;
-			if (firex > 11.0f)
+			gameObjects[1]->accessComponent<Transform>()->setXPosition(8.0f + 4.0f * glm::cos(alpha));
+
+#pragma region Launchers
+			//fireball launchers	
+
+			if (turretCoolDown.getLocalTime() > 2500.0f)
 			{
-				firex -= 0.05f;				
+				createProjectile(6, 11, 0);
+				createProjectile(8, 11, 0);
+				createProjectile(7, 24, glm::radians(180.0f));
+				turretCoolDown.start();
 			}
-			else
-			{
-				firex = 24.0f;
-			}
-			spriteContainer[11][1] = firex;			
-			spriteContainer[13][1] = firex;
-
-			static float firex2 = 11.0f;
-			if (firex2 < 24.0f)
-			{
-				firex2 += 0.05f;
-			}
-			else
-			{
-				firex2 = 11.0f;
-			}
-			spriteContainer[12][1] = firex2;
-
+#pragma endregion
 
 			//2d camera
-			camera2->setPositionRotationOrigin((player[0]*tileSize2d) + 800, (player[1]*tileSize2d));
-			camera2->setRotation(glm::degrees(player[2]));
+			static float zoomByInput = 1.0f;
+			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP))
+			{
+				if (zoomByInput > 0.0f)
+				{
+					zoomByInput -= glm::radians(2.0f);
+				}
+			}
+			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_DOWN))
+			{
+				zoomByInput += glm::radians(2.0f);
+			}
+			camera2->setZoomLevel(zoomByInput);
+			camera2->setPositionRotationOrigin((player[0]*tileSize2d), (player[1]*tileSize2d));
+			camera2->setRotation(player[2]);
 
 			//Information		
 			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player[0]) + " " + std::to_string(player[1]) + " angle: " + std::to_string(glm::degrees(player[2])), 255, 100, 0);
 			text3 = textCreator3.getTexture();
+			
+			animPlayer2d.update();
+			//gameObjects
+			for (size_t i = 0; i < gameObjects.size(); i++)
+			{
+				gameObjects[i]->update();
+
+				// Kills the fireball if it hits a wall.
+				if (gameObjects[i]->accessComponent<UserData>()->isFireball)
+				{
+					Transform* t = gameObjects[i]->accessComponent<Transform>();
+
+					if (wallTiles[static_cast<int>(t->getXPosition())][static_cast<int>(t->getYPosition())] != false)
+					{
+						gameObjects[i]->kill();
+					}
+				}
+			}
+
+			//fast test for rigid
+			for (size_t i = 10; i < gameObjects.size(); i++)
+			{
+				for (int j = 0; j < 10; j++)
+				{
+					if (gameObjects[i]->accessComponent<RigidBody>()->isColliding(gameObjects[j]))
+					{
+						if (gameObjects[i]->accessComponent<UserData>()->isFireball == true)
+						{
+							gameObjects[i]->kill();
+							gameObjects[j]->accessComponent<UserData>()->isHit();
+						}						
+					}
+				}				
+			}
+
+			// Delete dead objects
+			deleteDeadObjects();
+			
+			//Taking time it takes to go trough the update
 			myTimer.pause();
 			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
-			text = textCreator.getTexture();
-			
-			animPlayerFire1.update();
-			animPlayerFire2.update();
-			animPlayerFire3.update();
-			animPlayerFire4.update();
-			animPlayer2d.update();
-
-			//gameObjects
-
-			gameObjects[0]->update();
+			text = textCreator.getTexture();		
 		}
 
 		void Pseudo3D::interpolate(GLfloat alpha)
@@ -350,192 +395,41 @@ namespace Engin
 
 		void Pseudo3D::draw()
 		{
-			//obj draw test
-			gameObjects[0]->accessComponent<Sprite>()->draw();
-
-			//Raycast draw test
-			//Roof and floor
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, w, h), -1600.0f, h / 2, w, h / 2, 0.0f, 0.0f, 0.0f, 1.0f, {0.75,0.5,0.0}, 1.0f, 0.0f);
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, w, h), -1600.0f, 0.0f, w, h / 2, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
-
-#pragma region WallTileDraw
-			for (int i = 0; i < DDAlines.size(); i++)
+			//Raycast draw
+			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
-				if (DDAlines[i][2] > 0)
-				{
-					if (DDAlines[i][1] <= 0)
-					{
-						depth = 0.99f;
-					}
-					else
-					{
-						depth = (1.0f / DDAlines[i][1]);
-					}
-
-					if (int(DDAlines[i][3]) < 6)
-					{
-						opaqueBatch.draw(mapSheet_256, &glm::vec4(DDAlines[i][4] + (int(DDAlines[i][3])-1) * tileSize, 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
-					}
-					else
-					{
-						opaqueBatch.draw(mapSheet_256, &glm::vec4(DDAlines[i][4] + (int(DDAlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), DDAlines[i][0] - 1600, DDAlines[i][1], 1.0f, DDAlines[i][2] - DDAlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, { 0.5f, 0.5f, 0.5f }, 1.0f, depth);
-					}
-				}
+				gameObjects[i]->accessComponent<PseudoSpriteDraw>()->drawPseudoSprite();
 			}
-#pragma endregion
-			
-			//"3D" sprites
-			if (DDASpriteDrawData.size() > 0)
-			{
-				for (int i = 0; i < DDASpriteDrawData.size(); i++)
-				{
-					if (DDASpriteDrawData[i][0] > -w && DDASpriteDrawData[i][0] < (w + tileSize) && DDASpriteDrawData[i][3]>0)
-					{
-						if (DDASpriteDrawData[i][1] <= 0)
-						{
-							depth = h; //disappear
-						}
-						else
-						{
-							depth = (1.0f / DDASpriteDrawData[i][1]);
-						}						
 						
-						if (int(spriteContainer[i][4]) == 1) //furball with different directions
-						{					
-							animPlayerFur.setCurrentFrame(int(DDASpriteDrawData[i][4]));
-							alphaBatch.draw(animPlayerFur.getTexture(), animPlayerFur.getCurrentFrameTexCoords(),
-								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1],
-								256, 256, 0.0f, 0.0f, 0.0f,
-								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
-						}
-						//TODO: Change all sprites to use engine sprites
-						if (int(spriteContainer[i][4]) == 2) //animated flame
-						{				
-							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
-							spriteEndFrame = int(DDASpriteDrawData[i][4]) * 10 + 9;		
-							
-							animPlayerFire1.setLoopStartFrame(spriteStartFrame);						
-							animPlayerFire1.setLoopEndFrame(spriteEndFrame);
-							
-							alphaBatch.draw(animPlayerFire1.getTexture(), animPlayerFire1.getCurrentFrameTexCoords(),
-								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,
-								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
-						}	
-						if (int(spriteContainer[i][4]) == 3) //animated flame1
-						{
-							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
-							spriteEndFrame = int(DDASpriteDrawData[i][4]) * 10 + 9;
+			//Roof and floor for raycast
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, raycastH / 2.0f, raycastW, raycastH / 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, { 0.75, 0.5, 0.0 }, 1.0f, 0.0f);
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, raycastW, raycastH), -2400.0f, 0.0f, raycastW, raycastH / 2.0f, 0.0f, 0.0f, 0.0f, 1.0f, { 0.4, 0.4, 0.4 }, 1.0f, 0.0f);
 
-							animPlayerFire2.setLoopStartFrame(spriteStartFrame);
-							animPlayerFire2.setLoopEndFrame(spriteEndFrame);
-
-							alphaBatch.draw(animPlayerFire2.getTexture(), animPlayerFire2.getCurrentFrameTexCoords(),
-								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,
-								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
-						}
-						if (int(spriteContainer[i][4]) == 4) //animated flame1
-						{
-							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
-							spriteEndFrame = int(DDASpriteDrawData[i][4]) * 10 + 9;
-
-							animPlayerFire3.setLoopStartFrame(spriteStartFrame);
-							animPlayerFire3.setLoopEndFrame(spriteEndFrame);
-
-							alphaBatch.draw(animPlayerFire3.getTexture(), animPlayerFire3.getCurrentFrameTexCoords(),
-								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,
-								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
-						}
-						if (int(spriteContainer[i][4]) == 5) //animated flame1
-						{
-							spriteStartFrame = int(DDASpriteDrawData[i][4]) * 10;
-							spriteEndFrame = int(DDASpriteDrawData[i][4]) * 10 + 9;
-
-							animPlayerFire4.setLoopStartFrame(spriteStartFrame);
-							animPlayerFire4.setLoopEndFrame(spriteEndFrame);
-
-							alphaBatch.draw(animPlayerFire4.getTexture(), animPlayerFire4.getCurrentFrameTexCoords(),
-								DDASpriteDrawData[i][0] - 1600, DDASpriteDrawData[i][1], 256, 256, 0.0f, 0.0f, 0.0f,
-								DDASpriteDrawData[i][2], Renderer::clrWhite, 1.0f, depth);
-						}
-					}
-				}
-			}			
-			//---------------
+			//Raycast walls
+			DrawRaycastLines();
 
 			//2D camera draw
-			//walls. TODO: Fix the cropping.
-			for (int i = 0; i <= mapY; i++)
-			{
-				for (int j = 0; j <= mapX; j++)
-				{
-					float offset = 32.0f;
-					if (objectTiles[j][i] != 0)
-					{
-						opaqueBatch.draw(mapSheet_64, &glm::vec4((int(objectTiles[j][i])-1) * 64, 0.0f, 64, 64), (j * tileSize2d) + 800 + offset, i * tileSize2d+offset, 64.0f, 64.0f, 32.0f, 32.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
-					}
-				}				
-			}
-			//sprites
-			for (int i = 0; i < spriteContainer.size(); i++)
-			{
-				if (int(spriteContainer[i][4]) == 1)
-				{
-					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
-						spriteContainer[i][0] * tileSize2d + 800, spriteContainer[i][1] * tileSize2d, furball->getWidth(), 
-						furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(spriteContainer[i][2]), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.01f);
-				}
-
-				else if (int(spriteContainer[i][4]) == 2 || int(spriteContainer[i][4]) == 3 || int(spriteContainer[i][4]) == 4 || int(spriteContainer[i][4]) == 5)
-				{
-					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
-						spriteContainer[i][0] * tileSize2d + 800, spriteContainer[i][1] * tileSize2d, 256, 256, 256 / 2, 256 / 2, glm::degrees(spriteContainer[i][2]) + 90.0f,
-						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.01f);
-				}
-			}
-
-			//player
-			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player[0]*tileSize2d + 800, player[1]*tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2, tileSize2d / 2, glm::degrees(player[2]), 1.0f, Renderer::clrRed, 1.0f, 0.8f);
-			
-			//floor
-			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d), 800.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d,0.0f, 0.0f, 0.0f, 1.0f, { 0.5, 0.5, 0.5 }, 1.0f, 0.0f);
-			//---------------
+			Draw2dVision();
 
 			//Hud
 			guiBatch.draw(text, &glm::vec4(0.0f, 0.0f, text->getWidth(), text->getHeight()), camera3->getPositionRotationOrigin()[0] + glm::cos(alpha)*400.0f, camera3->getPositionRotationOrigin()[1] + 350, text->getWidth(), text->getHeight(), text->getWidth() / 2, text->getHeight() / 2, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
 			guiBatch.draw(text3, &glm::vec4(0.0f, 0.0f, text3->getWidth(), text3->getHeight()), camera3->getPositionRotationOrigin()[0], camera3->getPositionRotationOrigin()[1] + 300, text3->getWidth(), text3->getHeight(), text3->getWidth() / 2, text3->getHeight() / 2, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 1.0f);
 		}
 
-		void Pseudo3D::addIntoVector(int vectorAsNumber, glm::vec2 xy, int tiletype)
+		void Pseudo3D::Raycasting() //Vector operations are slow, changed to std::arrays, change array sizes accordingly in the Pseudo3D header.
 		{
-			switch (vectorAsNumber)
-			{
-			case 1:
-			{
-				if (xy.x >= 0 && xy.y >= 0)
-				{
-					objectTiles[xy.x][xy.y] = tiletype;
-				}
-				break;
-			}
-			default:
-				break;
-			}
-		}
-
-		void Pseudo3D::DDA() //Vector operations are slow, changed to std::arrays, change array sizes accordingly in the Pseudo3D header.
-		{
-			for (int x = 0; x < w; x++)
+			for (int x = 0; x < raycastW; x++)
 			{
 				//calculate ray position and direction 
-				cameraX = 2 * x / double(w) - 1; //x-coordinate in camera space
+				cameraX = 2 * x / static_cast<double>(raycastW)-1; //x-coordinate in camera space
 				rayPosX = player[0];
 				rayPosY = player[1];
 				rayDirX = dirX + planeX * cameraX;
 				rayDirY = dirY + planeY * cameraX;
 
 				//which box of the map we're in  
-				DDAX = int(rayPosX);
-				DDAY = int(rayPosY);
+				raycastX = static_cast<int>(rayPosX);
+				raycastY = static_cast<int>(rayPosY);
 
 				//length of ray from one x or y-side to next x or y-side
 				deltaDistX = sqrt(1 + (rayDirY * rayDirY) / (rayDirX * rayDirX));
@@ -549,22 +443,23 @@ namespace Engin
 				if (rayDirX < 0)
 				{
 					stepX = -1;
-					sideDistX = (rayPosX - DDAX) * deltaDistX;
+					sideDistX = (rayPosX - raycastX) * deltaDistX;
 				}
 				else
 				{
 					stepX = 1;
-					sideDistX = (DDAX + 1.0 - rayPosX) * deltaDistX;
+					sideDistX = (raycastX + 1.0 - rayPosX) * deltaDistX;
 				}
+
 				if (rayDirY < 0)
 				{
 					stepY = -1;
-					sideDistY = (rayPosY - DDAY) * deltaDistY;
+					sideDistY = (rayPosY - raycastY) * deltaDistY;
 				}
 				else
 				{
 					stepY = 1;
-					sideDistY = (DDAY + 1.0 - rayPosY) * deltaDistY;
+					sideDistY = (raycastY + 1.0 - rayPosY) * deltaDistY;
 				}
 
 				//perform DDA
@@ -574,92 +469,117 @@ namespace Engin
 					if (sideDistX < sideDistY)
 					{
 						sideDistX += deltaDistX;
-						DDAX += stepX;
+						raycastX += stepX;
 						side = 0;
 					}
 					else
 					{
 						sideDistY += deltaDistY;
-						DDAY += stepY;
+						raycastY += stepY;
 						side = 1;
 					}
 					//Check if ray has hit a wall
-					if (objectTiles[DDAX][DDAY] > 0)
+					if (wallTiles[raycastX][raycastY] > 0)
 					{
 						hit = 1;
 					}
-					//if (worldMap[mapX][mapY] > 0) hit = 1;
 				}
 
 				//Calculate distance projected on camera direction (oblique distance will give fisheye effect!)
 				if (side == 0)
-					perpWallDist = fabs((DDAX - rayPosX + (1 - stepX) / 2) / rayDirX);
+				{
+					perpWallDist = fabs((raycastX - rayPosX + (1 - stepX) / 2) / rayDirX);
+				}	
 				else
-					perpWallDist = fabs((DDAY - rayPosY + (1 - stepY) / 2) / rayDirY);
+				{
+					perpWallDist = fabs((raycastY - rayPosY + (1 - stepY) / 2) / rayDirY);
+				}
 
 				//Calculate height of line to draw on screen
-				lineHeight = glm::abs(int(h / perpWallDist));
+				lineHeight = glm::abs(static_cast<int>(raycastH / perpWallDist));
 
 				//calculate lowest and highest pixel to fill in current stripe
-				drawStart = -lineHeight / 2 + h / 2;
-				if (drawStart < 0)drawStart = 0;
-				drawEnd = lineHeight / 2 + h / 2;
-				if (drawEnd >= h)drawEnd = h - 1;
+				drawStart = -lineHeight / 2 + raycastH / 2;
+				if (drawStart < 0)
+				{
+					drawStart = 0;
+				}
+
+				drawEnd = lineHeight / 2 + raycastH / 2;
+				if (drawEnd >= raycastH)
+				{
+					drawEnd = raycastH - 1;
+				}
 
 				//texturing calculations
-				texNum = objectTiles[DDAX][DDAY] - 1; //1 subtracted from it so that texture 0 can be used!
+				texNum = wallTiles[raycastX][raycastY] - 1; //1 subtracted from it so that texture 0 can be used!
 
 				//calculate value of wallX
 				wallX; //where exactly the wall was hit
-				if (side == 1) wallX = rayPosX + ((DDAY - rayPosY + (1 - stepY) / 2) / rayDirY) * rayDirX;
-				else       wallX = rayPosY + ((DDAX - rayPosX + (1 - stepX) / 2) / rayDirX) * rayDirY;
+				if (side == 1)
+				{
+					wallX = rayPosX + ((raycastY - rayPosY + (1 - stepY) / 2) / rayDirY) * rayDirX;
+				}
+				else
+				{
+					wallX = rayPosY + ((raycastX - rayPosX + (1 - stepX) / 2) / rayDirX) * rayDirY;
+				}
+
 				wallX -= floor((wallX));
 
 				//x coordinate on the texture
-				texX = int(wallX * double(tileSize));
-				if (side == 0 && rayDirX > 0) texX = tileSize - texX - 1;
-				if (side == 1 && rayDirY < 0) texX = tileSize - texX - 1;
+				texX = static_cast<int>(wallX * static_cast<double>(tileSize));
+				if (side == 0 && rayDirX > 0)
+				{
+					texX = tileSize - texX - 1;
+				}
+				else if (side == 1 && rayDirY < 0)
+				{
+					texX = tileSize - texX - 1;
+				}
 
 				//choose wall color			
-				switch (objectTiles[DDAX][DDAY])
+				switch (wallTiles[raycastX][raycastY])
 				{
-				case 1:  drawColor = 1;  break; //red
-				case 2:  drawColor = 2;  break; //green
-				case 3:  drawColor = 3;   break; //blue
-				case 4:  drawColor = 4;  break; //white
-				default: drawColor = 5; break; //yellow
+				case 1:  raycastTileIndex = 1;  break;
+				case 2:  raycastTileIndex = 2;  break;
+				case 3:  raycastTileIndex = 3;   break;
+				case 4:  raycastTileIndex = 4;  break;
+				default: raycastTileIndex = 5; break;
 				}
-				if (side == 1) { drawColor += 5; }
+
+				if (side == 1) 
+				{ 
+					raycastTileIndex += 5; 
+				}
 				
 				//Saving calculated data for camera slice 
-				DDAlines[x][0] = x;
-				DDAlines[x][1] = drawStart;
-				DDAlines[x][2] = drawEnd;
-				DDAlines[x][3] = drawColor;
-				DDAlines[x][4] = texX;
+				Raycastlines[x][0] = x;
+				Raycastlines[x][1] = drawStart;
+				Raycastlines[x][2] = drawEnd;
+				Raycastlines[x][3] = raycastTileIndex;
+				Raycastlines[x][4] = texX;
 				//---------------------------------------
 			}			
 		}
 
-		void Pseudo3D::DDADrawSprites()
+		void Pseudo3D::RaycastingSprites()
 		{
-			for (int i = 0; i < spriteContainer.size(); i++)
+			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
-				spriteX = spriteContainer[i][0] - player[0];
-				spriteY = spriteContainer[i][1] - player[1];
-
-				glm::vec2 transform;
+				spriteX = gameObjects[i]->accessComponent<Transform>()->getXPosition() - player[0];
+				spriteY = gameObjects[i]->accessComponent<Transform>()->getYPosition() - player[1];
 
 				//Creating sprite transform vector
 				transform = glm::vec2(spriteX, spriteY) * glm::inverse(glm::mat2x2(planeX,dirX,planeY,dirY));				
 
 				//Calculating camera y and scale for the sprite
-				spriteHeightWidth = glm::abs(h / transform.y);
-				spriteYout = -spriteHeightWidth / 2 + h / 2;
+				spriteHeightWidth = glm::abs(raycastH / transform.y);
+				spriteYout = -spriteHeightWidth / 2 + raycastH / 2;
 				spriteScale = 1 / (tileSize / spriteHeightWidth);
 
 				//Calculating x position for the sprite				
-				spriteScreenX = (w / 2)*(1 + transform.x / transform.y);
+				spriteScreenX = (raycastW / 2)*(1 + transform.x / transform.y);
 				spriteXout = -spriteHeightWidth / 2 + spriteScreenX;
 
 				//Calculating sprite side				
@@ -670,9 +590,9 @@ namespace Engin
 				}
 
 				//Sprites own facing changes the angle
-				if (spriteContainer[i][2] != 0.0f)
+				if (gameObjects[i]->accessComponent<Transform>()->getRotation() != 0.0f)
 				{
-					convertToFloat = float(spriteContainer[i][2]);
+					convertToFloat = static_cast<float>(gameObjects[i]->accessComponent<Transform>()->getRotation());
 					spriteFacing = glm::mod((-convertToFloat + glm::radians(360.0f)), glm::radians(360.0f));
 					spriteAngle -= spriteFacing;
 
@@ -680,18 +600,47 @@ namespace Engin
 					{
 						spriteAngle += glm::radians(360.0f);
 					}
-				}
-				
-			
+				}			
 
-				spriteAnimIndex = getSpriteAnimIndex(spriteAngle, spriteContainer[i][3]);
+				spriteAnimIndex = getSpriteAnimIndex(spriteAngle, gameObjects[i]->accessComponent<UserData>()->sides);
 
 				//Saving data
-				DDASpriteDrawData[i][0] = spriteXout;
-				DDASpriteDrawData[i][1] = spriteYout;
-				DDASpriteDrawData[i][2] = spriteScale;
-				DDASpriteDrawData[i][3] = transform.y;
-				DDASpriteDrawData[i][4] = spriteAnimIndex;
+				gameObjects[i]->accessComponent<UserData>()->spriteXout = (spriteXout - 2400.0f - (gameObjects[i]->accessComponent<UserData>()->tileOverSize/2)*spriteScale);
+				gameObjects[i]->accessComponent<UserData>()->spriteYout = (spriteYout);
+				gameObjects[i]->accessComponent<Transform>()->setScale(spriteScale);
+				gameObjects[i]->accessComponent<UserData>()->transformY = transform.y;
+
+				if (gameObjects[i]->accessComponent<UserData>()->isFireball == true)
+				{
+					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopStartFrame(static_cast<int>(spriteAnimIndex * 10));
+					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopEndFrame(static_cast<int>(spriteAnimIndex * 10 + 9));
+				}
+				//Is the object hit
+				else if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.isStarted() == true)
+				{
+					//Is the cooldown gone
+					if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.getLocalTime() > 2000.0f) //TODO: add cooldown time to userdata
+					{
+						gameObjects[i]->accessComponent<UserData>()->hitCoolDown.stop();
+						gameObjects[i]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
+					}					
+				}
+				//If not hit then change index
+				else
+				{
+					gameObjects[i]->accessComponent<AnimationPlayer>()->setCurrentFrame(spriteAnimIndex);
+				}
+
+				//Scaling for the sprite
+				if (spriteYout <= 0)
+				{
+					depth = 2.0; //disappear
+				}
+				else
+				{
+					depth = (1.0f / spriteYout);
+				}
+				gameObjects[i]->accessComponent<Transform>()->setDepth(depth);
 			}			
 		}
 
@@ -709,8 +658,207 @@ namespace Engin
 			}
 			else
 			{
-				return (glm::degrees(angle) + (spriteSideAngle / 2.0f)) / spriteSideAngle;
+				return static_cast<int>((glm::degrees(angle) + (spriteSideAngle / 2.0f)) / spriteSideAngle);
 			}
+		}
+
+		void Pseudo3D::DrawRaycastLines()
+		{
+			for (size_t i = 0; i < Raycastlines.size(); i++)
+			{
+				if (Raycastlines[i][2] > 0)
+				{
+					if (Raycastlines[i][1] <= 0)
+					{
+						depth = 0.99f;
+					}
+					else
+					{
+						depth = (1.0f / Raycastlines[i][1]);
+					}
+
+					opaqueBatch.draw(mapSheet_256, &glm::vec4(Raycastlines[i][4] + (static_cast<int>(Raycastlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), Raycastlines[i][0] - 2400, Raycastlines[i][1], 1.0f, Raycastlines[i][2] - Raycastlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+				}
+			}
+		}
+
+		void Pseudo3D::Draw2dVision()
+		{
+			//walls.
+			for (int i = 0; i <= mapY; i++)
+			{
+				for (int j = 0; j <= mapX; j++)
+				{
+					float offset = 32.0f;
+					if (wallTiles[j][i] != 0)
+					{
+						opaqueBatch.draw(mapSheet_64, &glm::vec4((static_cast<int>(wallTiles[j][i]) - 1) * 66, 1.0f, 64, 64), (j * tileSize2d) + offset, i * tileSize2d + offset, 64.0f, 64.0f, 32.0f, 32.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
+					}
+				}
+			}
+			//sprites
+			for (size_t i = 0; i < gameObjects.size(); i++)
+			{
+				if (gameObjects[i]->accessComponent<UserData>()->isTree == true)
+				{
+					alphaBatch.draw(tree_64, &glm::vec4(0.0f, 0.0f, tree_64->getWidth(), tree_64->getHeight()),
+						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, tree_64->getWidth(),
+						tree_64->getHeight(), tree_64->getWidth() / 2, tree_64->getHeight() / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.8f + i*0.000001f);
+				}
+				else if (gameObjects[i]->accessComponent<UserData>()->isFireball != true)
+				{
+					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
+						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, furball->getWidth(),
+						furball->getHeight(), tileSize2d / 2.0f, tileSize2d / 2.0f, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.7f + i*0.000001f);
+				}				
+				//if fireball
+				else
+				{
+					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
+						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, 256, 256, 256 / 2, 256 / 2, gameObjects[i]->accessComponent<Transform>()->getRotation() + glm::radians(90.0f),
+						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.001f);
+				}
+			}
+
+			//player
+			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player[0] * tileSize2d, player[1] * tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2.0f, tileSize2d / 2.0f, player[2], 1.0f, Renderer::clrRed, 1.0f, 0.8f);
+
+			//2d floor
+			opaqueBatch.draw(roof_16, &glm::vec4(0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d), 0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d, 0.0f, 0.0f, 0.0f, 1.0f, { 0.5, 0.5, 0.5 }, 1.0f, 0.0f);
+			//---------------
+		}
+
+		//Raycast furball sprite
+		void Pseudo3D::createFurball(float x, float y, float rotation)
+		{
+			gameObjects.push_back(new GameObject(&alphaBatch));
+			gameObjects.back()->addComponent<Transform>();
+			gameObjects.back()->addComponent<RigidBody>();
+			gameObjects.back()->addComponent<Sprite>();
+			gameObjects.back()->addComponent<AnimationPlayer>();
+			gameObjects.back()->addComponent<UserData>();
+			gameObjects.back()->addComponent<PseudoSpriteDraw>();
+
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animFurball360);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setLoopEndFrame(0);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->pause();
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setCurrentFrame(0);			
+			gameObjects.back()->accessComponent<Transform>()->setXPosition(x);
+			gameObjects.back()->accessComponent<Transform>()->setYPosition(y);
+			gameObjects.back()->accessComponent<Transform>()->setRotation(rotation);
+
+			//userdata				
+			gameObjects.back()->accessComponent<UserData>()->sides = 40;
+			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
+			gameObjects.back()->accessComponent<UserData>()->transformY = 0.0f;
+			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
+			gameObjects.back()->accessComponent<UserData>()->shadow = furballShadow;
+			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
+			gameObjects.back()->accessComponent<UserData>()->hitAnimStart = 40;
+			gameObjects.back()->accessComponent<UserData>()->hitAnimEnd = 63;
+
+			//rigidBody
+			gameObjects.back()->accessComponent<RigidBody>()->setCollisionRadius(0.4f);
+		}
+
+		//Raycast tree sprite
+		void Pseudo3D::createTree(float x, float y, float rotation)
+		{
+			gameObjects.push_back(new GameObject(&alphaBatch));
+			gameObjects.back()->addComponent<Transform>();
+			gameObjects.back()->addComponent<RigidBody>();
+			gameObjects.back()->addComponent<Sprite>();
+			gameObjects.back()->addComponent<AnimationPlayer>();
+			gameObjects.back()->addComponent<UserData>();
+			gameObjects.back()->addComponent<PseudoSpriteDraw>();
+
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animTree360);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setLoopEndFrame(0);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->pause();
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setCurrentFrame(0);
+			gameObjects.back()->accessComponent<Transform>()->setXPosition(x);
+			gameObjects.back()->accessComponent<Transform>()->setYPosition(y);
+			gameObjects.back()->accessComponent<Transform>()->setRotation(rotation);
+
+			//userdata				
+			gameObjects.back()->accessComponent<UserData>()->sides = 40;
+			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
+			gameObjects.back()->accessComponent<UserData>()->transformY = 0.0f;
+			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
+			gameObjects.back()->accessComponent<UserData>()->tileOverSize = 256;
+			gameObjects.back()->accessComponent<UserData>()->isTree = true;
+
+			gameObjects.back()->accessComponent<UserData>()->shadow = treeShadow;
+			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
+		}
+
+		//Raycast fireball projectile
+		void Pseudo3D::createProjectile(float x, float y, float rotation)
+		{
+			gameObjects.push_back(new GameObject(&alphaBatch));
+			gameObjects.back()->addComponent<Transform>();
+			gameObjects.back()->addComponent<RigidBody>();
+			gameObjects.back()->addComponent<Sprite>();
+			gameObjects.back()->addComponent<AnimationPlayer>();
+			gameObjects.back()->addComponent<UserData>();
+			gameObjects.back()->addComponent<PseudoSpriteDraw>();
+			gameObjects.back()->addComponent<Projectile>();
+
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animFireball360);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->setLoopEndFrame(9);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
+			gameObjects.back()->accessComponent<AnimationPlayer>()->start();
+
+			gameObjects.back()->accessComponent<Transform>()->setXPosition(x);
+			gameObjects.back()->accessComponent<Transform>()->setYPosition(y);
+			gameObjects.back()->accessComponent<Transform>()->setRotation(rotation);
+
+			//userdata
+			gameObjects.back()->accessComponent<UserData>()->sides = 8;
+			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
+			gameObjects.back()->accessComponent<UserData>()->transformY = 0.0f;
+			gameObjects.back()->accessComponent<UserData>()->animationIndex = 0;
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setTextureBatch(&alphaBatch);
+			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
+
+			gameObjects.back()->accessComponent<UserData>()->isFireball = true;
+
+			//rigidBody
+			gameObjects.back()->accessComponent<RigidBody>()->setCollisionRadius(0.2f);
+		}
+
+		void Pseudo3D::Projectile::update()
+		{
+			Transform* t = ownerObject->accessComponent<Transform>();
+			t->setXPosition(t->getXPosition() + speed * cosf(t->getRotation() + glm::radians(90.0f)));
+			t->setYPosition(t->getYPosition() + speed * sinf(t->getRotation() + glm::radians(90.0f)));
+		}
+
+		// Deletes killed objects from the gameObjects vector.
+		void Pseudo3D::deleteDeadObjects()
+		{
+			gameObjects.erase(std::remove_if(gameObjects.begin(), gameObjects.end(), [&](GameObject *obj)
+			{ 
+				if (!obj->isAlive())
+				{
+					deadObjects.push_back(obj);
+					return true;
+				}
+				return false;
+			}), gameObjects.end());
+
+			for (auto deadObject : deadObjects)
+			{
+				delete deadObject;
+			}
+
+			deadObjects.clear();
 		}
 	}
 }

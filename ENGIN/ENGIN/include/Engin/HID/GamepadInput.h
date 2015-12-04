@@ -1,12 +1,15 @@
 #pragma once
 
+#include <SDL\SDL.h>
+
 #include <unordered_map>
 
-//Still under construction . . .
+//Doesn't work yet, needs some way of handling gamepad indices.
+//also might be way too slow in it's current state...
 
 //Buttons, Axes, Hats and Balls
-//Call <<<<<TBD>>>>> in EventManager to update --
-//call update() in game loop to update previousButtonMap
+//Call protected functions in EventManager to update maps
+//call update() in game loop to update previousMaps
 //In the game's code you can call e.g. gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_X), which returns a true if X button is pressed.
 
 //Forward Declaration
@@ -24,6 +27,7 @@ namespace Engin
 	{
 		enum GamepadButton : int
 		{
+			GAMEPAD_BUTTON_INVALID = -1,
 			GAMEPAD_BUTTON_A,
 			GAMEPAD_BUTTON_B,
 			GAMEPAD_BUTTON_X,
@@ -43,6 +47,7 @@ namespace Engin
 		};
 		enum GamepadAxis : int
 		{
+			GAMEPAD_AXIS_INVALID = -1,
 			GAMEPAD_AXIS_LEFTX,
 			GAMEPAD_AXIS_LEFTY,
 			GAMEPAD_AXIS_RIGHTX,
@@ -53,6 +58,7 @@ namespace Engin
 		};
 		enum GamepadHatPosition
 		{
+			GAMEPAD_HAT_INVALID = -1,
 			GAMEPAD_HAT_CENTERED = 0x00,
 			GAMEPAD_HAT_UP = 0x01,
 			GAMEPAD_HAT_RIGHT = 0x02,
@@ -71,14 +77,9 @@ namespace Engin
 		public:
 			GamepadInput();
 			~GamepadInput();
-
-			void createGamepad(); 
-			void removeGamepad(int GPindex);
-			bool gamepadIsCreated(int GPindex);
 			void update();
 
-			int getAxisX(GamepadButton buttonID, int GPindex); //Axis thingys?
-			int getAxisY(GamepadButton buttonID, int GPindex);
+			int getAxisValue(GamepadButton buttonID, int GPindex);
 			bool buttonIsPressed(GamepadButton buttonID, int GPindex);
 			bool buttonWasPressed(GamepadButton buttonID, int GPindex);
 			bool buttonWasReleased(GamepadButton buttonID, int GPindex);
@@ -92,18 +93,41 @@ namespace Engin
 			int getNumBalls(int GPindex);
 			int getNumHats(int GPindex);
 
-			void setAxisControlDeadZone(int value, int GPindex);
+			void setAxisControlDeadZone(short value, int GPindex);
 
 		protected:
-			void pressButton(unsigned int buttonID);
-			void releaseButton(unsigned int buttonID);
+			void pressButton(unsigned int buttonID, int GPindex);
+			void releaseButton(unsigned int buttonID, int GPindex);
+			void addDevice(int GPindex);
+			void removeDevice(int GPindex);
+			void hatMotion(int hatIndex, unsigned int hatPosition, int GPindex);
+			void ballMotion(int ballIndex, int xMovement, int yMovement, int GPindex);
+			void axisMotion(int axisIndex, int value, int GPindex);
 
 		private:
+			bool createGamepad(int newGPindex); //returns true if successful
+			void removeGamepad(int GPindex);
+			bool gamepadIsCreated(int GPindex);
 			bool buttonWasDown(GamepadButton buttonID, int GPindex);
 
-			std::unordered_map<unsigned int, bool> buttonMap;
-			std::unordered_map<unsigned int, bool> previousButtonMap;
-			std::unordered_map<unsigned int, short> axisDeadZoneMap;
+			struct GamepadMaps
+			{
+				std::unordered_map<unsigned int, bool> buttonMap;
+				std::unordered_map<unsigned int, bool> previousButtonMap;
+				std::unordered_map<unsigned int, int> axisMap;
+				std::unordered_map<unsigned int, int> previousAxisMap;
+				std::unordered_map<unsigned int, bool> xBallMap;
+				std::unordered_map<unsigned int, bool> previousXBallMap;
+				std::unordered_map<unsigned int, bool> yBallMap;
+				std::unordered_map<unsigned int, bool> previousYBallMap;
+				std::unordered_map<unsigned int, GamepadHatPosition> hatMap;
+				std::unordered_map<unsigned int, GamepadHatPosition> previousHatMap;
+			};
+
+			std::unordered_map<int, GamepadMaps*> gamepads;
+
+			std::unordered_map<int, SDL_Joystick*> joystickIndexMap;
+			std::unordered_map<int, short> axisDeadZoneMap;
 		};
 	}
 }

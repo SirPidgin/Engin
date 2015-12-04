@@ -13,6 +13,8 @@ namespace Engin
 {
 	namespace Renderer
 	{
+		// Different sort modes used in texture batch.
+
 		enum TextureSortMode
 		{
 			Texture,
@@ -20,20 +22,22 @@ namespace Engin
 			FrontToBack
 		};
 
+		// Fast batch based renderer for textures. 
+
 		class TextureBatch
 		{
 		public:
 			TextureBatch();
 			~TextureBatch();
 
-			void setShader(Resources::ShaderProgram* shader)
+			void setShader(Resources::ShaderProgram* shader) 
 			{ 
 				this->shader = shader; 
 			}
 
 			void setSortMode(TextureSortMode sortMode) 
-			{
-				this->sortMode = sortMode;
+			{ 
+				this->sortMode = sortMode; 
 			}
 
 			void begin();
@@ -44,8 +48,10 @@ namespace Engin
 			void end();
 			void flush(const Camera& camera);
 			void clear();
+
 		private:
 			void createBuffers();
+			void createVertices();
 			void createIndexValues();
 			void prepareForRendering();
 			void growTextureQueue();
@@ -65,7 +71,6 @@ namespace Engin
 				Resources::Texture* texture;
 				float depth;
 				float scale;
-				float rotation;
 			};
 
 			struct Vertex
@@ -75,16 +80,23 @@ namespace Engin
 				glm::vec2 uv;
 
 				Vertex() : position(0.0f), uv(0.0f), color(0.0f) {}
-				Vertex(float x, float y, float z, float r, float g, float b, float a, float u, float v)
-					: position(x, y, z), color(r, g, b, a), uv(u, v) {}
+				Vertex(float x, float y, float z, float r, float g, float b, float a, float u, float v) : 
+					position(x, y, z), color(r, g, b, a), uv(u, v) {}
+
+				void set(float x, float y, float z, float r, float g, float b, float a, float u, float v)
+				{
+					position.x = x; position.y = y; position.z = z;
+					color.r = r; color.g = g; color.b = b; color.a = a;
+					uv.x = u; uv.y = v;
+				}
 			};
 
 			std::unique_ptr<TextureInfo[]> textureQueue;
 
-			static const size_t maxBatchSize = 10240;
+			static const size_t maxBatchSize = 2048;
 			static const size_t minBatchSize = 128;
 			static const size_t initialQueueSize = 64;
-			static const size_t vertiecsPerTexture = 4;
+			static const size_t verticesPerTexture = 4;
 			static const size_t indicesPerTexture = 6;
 
 			size_t textureQueueCount;

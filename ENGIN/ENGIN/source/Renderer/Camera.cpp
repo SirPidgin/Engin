@@ -39,8 +39,7 @@ namespace Engin
 
 		void Camera::activateViewPort()
 		{
-			fixCoordinatesForRotationAtTheEndOfUpdate(); //Temporal location. These will go to end of update.
-			VPmatrix = P*positionMatrix*rotationMatrix*scaleMatrix; //Temporal location. These will go to end of update.
+			calculateVP();
 			glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
 		}
 
@@ -90,27 +89,28 @@ namespace Engin
 
 		void Camera::setRotation(GLfloat rotation)
 		{
-			this->rotation = glm::radians(-rotation); //Camera rotates to the opposite direction.
+			this->rotation = -rotation; //Camera rotates to the opposite direction.
 			rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));			
 		}
 
-		void Camera::fixCoordinatesForRotationAtTheEndOfUpdate()
+		void Camera::calculateVP()
 		{
 			if (rotation != 0.0f)
 			{
 				root = glm::sqrt(glm::pow(worldX + rotationOriginX, 2.0f) + glm::pow(worldY + rotationOriginY, 2.0f));
 				atani = glm::atan(worldY + rotationOriginY, worldX + rotationOriginX);
 
-				tempX = (root * cos(this->rotation + atani) - rotationOriginX);
-				tempY = (root * sin(this->rotation + atani) - rotationOriginY);
+				tempX = (root * glm::cos(this->rotation + atani) - rotationOriginX);
+				tempY = (root * glm::sin(this->rotation + atani) - rotationOriginY);
 
 				positionMatrix = glm::translate(glm::vec3(-tempX, -tempY, 0.0f));
 			}			
+			VPmatrix = P*positionMatrix*rotationMatrix*scaleMatrix;
 		}
 
 		GLfloat Camera::getRotation()
 		{
-			return glm::degrees(-this->rotation);
+			return -this->rotation;
 		}
 
 		GLfloat Camera::getZoomLevel()

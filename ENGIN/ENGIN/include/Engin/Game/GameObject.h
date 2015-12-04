@@ -26,6 +26,16 @@ namespace Engin
 			void update();
 			void draw();
 
+			bool isAlive()
+			{
+				return alive;
+			}
+
+			void kill()
+			{
+				alive = false;
+			}
+
 			bool operator!=(const GameObject& other);
 			bool operator==(const GameObject& other);
 
@@ -40,6 +50,7 @@ namespace Engin
 			std::string nameTag;
 			std::vector<Component*> components;
 			Renderer::TextureBatch* textureBatch;
+			bool alive;
 		};
 
 

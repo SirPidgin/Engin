@@ -15,6 +15,7 @@
 #include "Engin\Resources\Animation.h"
 #include "Engin\Game\GameObject.h"
 #include <Engin\Game\Sprite.h>
+#include "Engin\Game\Component.h"
 
 #include <array>
 #include <vector>
@@ -32,14 +33,101 @@ namespace Engin
 			void update(GLfloat step);
 			void interpolate(GLfloat alpha);
 			void draw();
-			void renderTexture(Resources::Texture* texture, float x, float y, const Renderer::Camera& camera);
-			void addIntoVector(int vectorAsNumber, glm::vec2 xy, int tiletype);
 
-			void DDA();
-			void DDADrawSprites();
+			void Raycasting();
+			void RaycastingSprites();
+			void DrawRaycastLines();
+			void Draw2dVision();
+
+			void createFurball(float x, float y, float rotation);
+			void createFireball(float x, float y, float rotation);
+			void createProjectile(float x, float y, float rotation);
+
+			class Projectile : public Component
+			{
+			public:
+				Projectile(GameObject* o) : Component(o) {}
+				void update();
+
+			private:
+				float speed = 0.10f;
+			};
+			void createTree(float x, float y, float rotation);
+
+			class UserData : public Component
+			{
+			public:
+				UserData(GameObject* o) : Component(o){}
+				int sides; 
+				double transformY;
+				int animationIndex;
+				double spriteXout;
+				double spriteYout;
+				bool isFireball = false;
+				bool hasShadow = false;
+				int animationLoopStartFrame = 0;
+				int animationLoopEndFrame = 0;
+				Resources::Texture* shadow;
+				Core::Timer hitCoolDown;
+				int hitAnimStart = 0;
+				int hitAnimEnd = 0;
+				int tileOverSize = 0;
+				bool isTree = false;
+				void isHit()
+				{
+					if (hitAnimStart > 0)
+					{
+						hitCoolDown.start();
+						ownerObject->accessComponent<AnimationPlayer>()->setLoopStartFrame(hitAnimStart);
+						ownerObject->accessComponent<AnimationPlayer>()->setLoopEndFrame(hitAnimEnd);
+						ownerObject->accessComponent<AnimationPlayer>()->start();
+						ownerObject->accessComponent<AnimationPlayer>()->setCurrentFrame(hitAnimStart);
+					}					
+				}
+			};
+
+			class PseudoSpriteDraw : public Component
+			{
+			public:
+				PseudoSpriteDraw(GameObject* o) : Component(o){}
+				void setTextureBatch(Renderer::TextureBatch* newTextrBatch) { textureBatch = newTextrBatch; }
+				void setRaycastW(int W) { raycastW = W; limitLeft = -raycastW - 2656; limitRight = raycastW - 2400; }
+				void drawPseudoSprite()				   
+				{					
+					if (ownerObject->accessComponent<UserData>()->spriteXout > limitLeft
+						&& ownerObject->accessComponent<UserData>()->spriteXout < limitRight
+						&& ownerObject->accessComponent<UserData>()->transformY > 0)
+					{
+						textureBatch->draw(ownerObject->accessComponent<AnimationPlayer>()->getTexture(), ownerObject->accessComponent<AnimationPlayer>()->getCurrentFrameTexCoords(),
+							ownerObject->accessComponent<UserData>()->spriteXout, ownerObject->accessComponent<UserData>()->spriteYout,
+							ownerObject->accessComponent<AnimationPlayer>()->getFrameWidth(), ownerObject->accessComponent<AnimationPlayer>()->getFrameHeight(),
+							0.0f, 0.0f,	0.0f, 
+							ownerObject->accessComponent<Transform>()->getScale(),
+							Renderer::clrWhite, 1.0f, ownerObject->accessComponent<Transform>()->getDepth());
+
+						//shadow
+						if (ownerObject->accessComponent<UserData>()->hasShadow == true)
+						{
+							textureBatch->draw(ownerObject->accessComponent<UserData>()->shadow, &glm::vec4(0.0f, 0.0f, ownerObject->accessComponent<UserData>()->shadow->getWidth(), ownerObject->accessComponent<UserData>()->shadow->getHeight()),
+								ownerObject->accessComponent<UserData>()->spriteXout, ownerObject->accessComponent<UserData>()->spriteYout,
+								ownerObject->accessComponent<UserData>()->shadow->getWidth(), (ownerObject->accessComponent<UserData>()->shadow->getHeight() + ownerObject->accessComponent<Transform>()->getDepth()*50),
+								0.0f, 0.0f, 0.0f,
+								ownerObject->accessComponent<Transform>()->getScale(),Renderer::clrWhite, 1.0f,
+								ownerObject->accessComponent<Transform>()->getDepth()-0.00001);
+						}						
+					}
+				}
+
+			private:
+				Renderer::TextureBatch* textureBatch;
+				int raycastW;
+				int limitLeft;
+				int limitRight;
+			};
 			
 		private:
 			int getSpriteAnimIndex(double angle, double sides);
+			void deleteDeadObjects();
 			Engin* engine;
 
 			Renderer::Camera* camera;
@@ -51,6 +139,7 @@ namespace Engin
 			Resources::ShaderProgram* alphaShader;
 
 			Resources::Texture* furball; //2d
+			Resources::Texture* tree_64; //2d
 			Resources::Texture* mapSheet_64;
 			Resources::Texture* mapSheet_256;
 			Resources::Texture* roof_16;
@@ -63,26 +152,11 @@ namespace Engin
 			Resources::Font* font;
 			Core::Timer myTimer;
 
-			std::array<std::array<int,25>,25> objectTiles; //Notice the world size mapX and mapY
-			std::vector<std::array<double, 5>> spriteContainer;
+			std::array<std::array<int,25>,25> wallTiles; //Notice the world size mapX and mapY
 			std::array<double,5> player;
-			std::array<double,5> sprite;
-			std::array<double,5> sprite1;
-			std::array<double,5> sprite2;
-			std::array<double,5> sprite3;
-			std::array<double,5> sprite4;
-			std::array<double,5> sprite5;
-			std::array<double,5> sprite6;
-			std::array<double,5> sprite7;
-			std::array<double,5> sprite8;
-			std::array<double,5> sprite9;
-			std::array<double,5> fireball;
-			std::array<double, 5> fireball1;
-			std::array<double, 5> fireball2;
-			std::array<double, 5> fireball3;
 
 			std::vector<GameObject*> gameObjects;
-			//GameObject gameObject;
+			std::vector<GameObject*> deadObjects;
 			
 			float alpha;
 
@@ -94,27 +168,27 @@ namespace Engin
 			int tileSize;
 			int tileSize2d;
 
-			//DDA
+			//turret timer
+			Core::Timer turretCoolDown;
+
+			//-------------------------------------------------------------------
+			//Raycasting
 			Resources::Animation* animFurball360;
+			Resources::Texture* furballShadow;
 			Resources::Animation* animFireball360;
-			AnimationPlayer animPlayerFur;
-			AnimationPlayer animPlayerFire1;
-			AnimationPlayer animPlayerFire2;
-			AnimationPlayer animPlayerFire3;
-			AnimationPlayer animPlayerFire4;
+			Resources::Animation* animTree360;
+			Resources::Texture* treeShadow;
 			AnimationPlayer animPlayer2d;
 
-			int w;
-			int h;
+			int raycastW;
+			int raycastH;
 			double dirX, dirY; //initial direction vector
 			double planeX, planeY; //the 2d raycaster version of camera plane
 
-			int DDAX,DDAY;
+			int raycastX, raycastY;
 
-			int DDAtexture;
-			int drawColor;
-			std::array<std::array<double,5>, 400> DDAlines; //change DDAlines size accordingly
-			std::vector<std::array<double,5>> DDASpriteDrawData;
+			int raycastTileIndex;
+			std::array<std::array<double,5>, 800> Raycastlines; //Size has to be same as raycastW
 			int spriteAnimIndex;
 			double depth;
 
@@ -153,6 +227,7 @@ namespace Engin
 
 			double spriteX;
 			double spriteY;
+			glm::vec2 transform;
 			double spriteXout;
 			double spriteYout;
 			double spriteScreenX;

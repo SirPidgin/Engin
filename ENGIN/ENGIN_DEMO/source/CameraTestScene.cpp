@@ -51,7 +51,7 @@ namespace Engin
 		
 			textString = "Press T to get Global time";
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
-			font->setPtSize(250);
+			font->setPtSize(100);
 
 			animation = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/test.xml");
 			animation1 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/testmushroom.xml");
@@ -128,7 +128,7 @@ namespace Engin
 			}
 
 			static float rotateByInput = 0.0f;
-			static float rotateSpeed = 1.0f;
+			static float rotateSpeed = 0.01f;
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
 			{
 				//std::cout << "<-" << std::endl;

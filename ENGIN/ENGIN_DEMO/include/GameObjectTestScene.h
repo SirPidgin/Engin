@@ -47,7 +47,7 @@ public:
 class HP_Component : public Engin::Game::Component
 {
 public:
-	HP_Component(Engin::Game::GameObject* o){}
+	HP_Component(Engin::Game::GameObject* o) : Component(o){}
 	~HP_Component(){}
 
 	void setIntVariable(std::string variableName, int newHp)

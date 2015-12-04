@@ -8,6 +8,9 @@
 
 namespace Engin
 {
+	// Engin is the main class of the Engin engine. It handles the 
+	// initialisation, updating and cleaning of the engine.
+
 	class Engin
 	{
 	public:
@@ -18,12 +21,24 @@ namespace Engin
 		void run(Game::Scene* scene);
 		void quit();
 
-		const Renderer::Window& getWindow() const { return window; }
-		const Game::SceneManager& getSceneManager() const { return sceneManager; }
-		const float getStep() const { return step; }
+		const Renderer::Window& getWindow() const 
+		{ 
+			return window; 
+		}
+
+		const Game::SceneManager& getSceneManager() const 
+		{ 
+			return sceneManager; 
+		}
+
+		const float getStep() const 
+		{ 
+			return step; 
+		}
 
 		HID::KeyboardInput* keyboardInput;
 		HID::MouseInput* mouseInput;
+		HID::GamepadInput* gamepadInput;
 	private:
 		void handleEvents();
 		void update(float deltaTime);

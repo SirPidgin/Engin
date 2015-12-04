@@ -11,6 +11,8 @@ namespace Engin
 {
 	namespace Renderer
 	{
+		// Represents a single vertex of a triangle.
+
 		struct Vertex
 		{
 			glm::vec3 position;
@@ -18,10 +20,13 @@ namespace Engin
 
 			Vertex() : position(0.0f), color(0.0f) {}
 			Vertex(const glm::vec3& position, const glm::vec4& color) : position(position), color(color) {}
-			Vertex(Vertex&& other) { position = std::move(other.position); color = std::move(other.color); }
+			Vertex(Vertex&& other) 
+			{ 
+				position = std::move(other.position); color = std::move(other.color); 
+			}
 		};
 
-		// TODO (eeneku): Batch should also make use of indices
+		// Simple batch renderer for triangles. 
 
 		class Batch
 		{
@@ -35,7 +40,11 @@ namespace Engin
 			void drawTriangle(GLfloat x1, GLfloat y1, GLfloat x2, GLfloat y2, GLfloat x3, GLfloat y3, const Color& color, GLfloat opacity = 1.0f, GLfloat depth = 0.0f);
 			void drawQuad(GLfloat x, GLfloat y, GLfloat width, GLfloat height, const Color& color, GLfloat opacity = 1.0f, GLfloat depth = 0.0f);
 			void flush(const Camera& camera);
-			void clear() { currentVertex = 0; }
+
+			void clear() 
+			{ 
+				currentVertex = 0; 
+			}
 
 		private:
 			std::vector<Vertex> vertices;

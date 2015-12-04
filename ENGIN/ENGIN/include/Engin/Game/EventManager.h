@@ -12,7 +12,7 @@ namespace Engin
 		class EventManager
 		{
 		public:
-			EventManager(HID::KeyboardInput* kbInput, HID::MouseInput* mInput);
+			EventManager(HID::KeyboardInput* kbInput, HID::MouseInput* mInput, HID::GamepadInput* gbInput);
 			~EventManager();
 
 			void update();
