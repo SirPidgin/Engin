@@ -212,45 +212,43 @@ namespace Engin
 
 		// Strafes player.
 		void Pseudo3D::strafePlayer(float multiplier)
-				{
+		{
 			if (wallTiles[static_cast<int>(player[0] + planeX * moveSpeed * multiplier)][static_cast<int>(player[1])] == false)
 			{
 				player[0] += planeX * moveSpeed * multiplier;
-				}
-
-			if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + planeY * moveSpeed * multiplier)] == false)
-				{
-				player[1] += planeY * moveSpeed * multiplier;
-				}
 			}
 
-		// Rotates player.
-		void Pseudo3D::rotatePlayer(float multiplier)
+			if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + planeY * moveSpeed * multiplier)] == false)
 			{
-			float tempSpeed = -(rotSpeed * multiplier);
+				player[1] += planeY * moveSpeed * multiplier;
+			}
+		}
 
+		// Rotates player.
+		void Pseudo3D::rotatePlayer(float speed)
+		{
 			// Both camera direction and camera plane must be rotated.
 			double oldDirX = dirX;
-			dirX = dirX * cos(tempSpeed) - dirY * sin(tempSpeed);
-			dirY = oldDirX * sin(tempSpeed) + dirY * cos(tempSpeed);
+			dirX = dirX * cos(speed) - dirY * sin(speed);
+			dirY = oldDirX * sin(speed) + dirY * cos(speed);
 			double oldPlaneX = planeX;
-			planeX = planeX * cos(tempSpeed) - planeY * sin(tempSpeed);
-			planeY = oldPlaneX * sin(tempSpeed) + planeY * cos(tempSpeed);
+			planeX = planeX * cos(speed) - planeY * sin(speed);
+			planeY = oldPlaneX * sin(speed) + planeY * cos(speed);
 		}
 
 		// Get requested axis multiplier of given gamepad.
 		float Pseudo3D::getAxisMultiplier(HID::GamepadAxis axis, int GPIndex)
-				{
+		{
 			return engine->gamepadInput->getAxisValue(axis, GPIndex) / HID::AXIS_MAX;
-				}
+		}
 
 		void Pseudo3D::update(GLfloat step)
-				{
+		{
 			// Taking time it takes to go trough the update.
 			myTimer.start();
 
 #pragma region RaycastMovement
-			
+
 			// Player movement.
 			float axisMultiplier = 0.0f;
 			float deadzone = 0.175f;
@@ -259,7 +257,7 @@ namespace Engin
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_W))
 			{
 				movePlayer(1.0f);
-				}
+			}
 			// Move backwards if no wall behind you.
 			else if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_S))
 			{
@@ -274,19 +272,19 @@ namespace Engin
 				{
 					movePlayer(axisMultiplier);
 				}
-				
-				}
+
+			}
 
 			// Strafe left.
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_A))
-				{
+			{
 				strafePlayer(-1.0f);
 			}
 			// Strafe right.
 			else if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_D))
-				{
+			{
 				strafePlayer(1.0f);
-				}
+			}
 			// Check pad movement.
 			else if (useGamePad)
 			{
@@ -296,7 +294,6 @@ namespace Engin
 				{
 					strafePlayer(axisMultiplier);
 				}
-
 			}
 
 			//Mouse rotation
@@ -319,18 +316,27 @@ namespace Engin
 				mouseSens = 1.0f;
 			}
 			engine->mouseInput->getRelativeMouseState(&currMouseX, &currMouseY);
-			realRotSpeed = rotSpeed + (float) (abs(currMouseX) - abs(lastMouseX));
+			realRotSpeed = rotSpeed + (float)(abs(currMouseX) - abs(lastMouseX));
 			realRotSpeed /= mouseSens;
-			//rotate to the right
-			if (lastMouseX < currMouseX || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
+			// Keyboard rotate to the right.
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
 			{
-				//both camera direction and camera plane must be rotated
-				double oldDirX = dirX;
-				dirX = dirX * cos(-realRotSpeed) - dirY * sin(-realRotSpeed);
-				dirY = oldDirX * sin(-realRotSpeed) + dirY * cos(-realRotSpeed);
-				double oldPlaneX = planeX;
-				planeX = planeX * cos(-realRotSpeed) - planeY * sin(-realRotSpeed);
-				planeY = oldPlaneX * sin(-realRotSpeed) + planeY * cos(-realRotSpeed);
+				rotatePlayer(rotSpeed * -1.0f);
+			}
+			// Keyboard rotate to the left.
+			else if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
+			{
+				rotatePlayer(rotSpeed);
+			}
+			// Mouse rotate to the right.
+			else if (lastMouseX < currMouseX)
+			{
+				rotatePlayer(-realRotSpeed);
+			}
+			// Mouse rrotate to the left.
+			else if (lastMouseX > currMouseX)
+			{
+				rotatePlayer(realRotSpeed);
 			}
 			// Check pad movement.
 			else if (useGamePad)
@@ -338,20 +344,11 @@ namespace Engin
 				axisMultiplier = getAxisMultiplier(HID::GAMEPAD_AXIS_RIGHTX, 0);
 
 				if (axisMultiplier < -deadzone || axisMultiplier > deadzone)
-			//rotate to the left
-			if (lastMouseX > currMouseX || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
-			{
-					rotatePlayer(axisMultiplier);
+				{
+					rotatePlayer(-axisMultiplier*rotSpeed);
 				}
-
-				//both camera direction and camera plane must be rotated
-				double oldDirX = dirX;
-				dirX = dirX * cos(realRotSpeed) - dirY * sin(realRotSpeed);
-				dirY = oldDirX * sin(realRotSpeed) + dirY * cos(realRotSpeed);
-				double oldPlaneX = planeX;
-				planeX = planeX * cos(realRotSpeed) - planeY * sin(realRotSpeed);
-				planeY = oldPlaneX * sin(realRotSpeed) + planeY * cos(realRotSpeed);
 			}
+
 			engine->mouseInput->getRelativeMouseState(&lastMouseX, &lastMouseY);
 #pragma endregion
 

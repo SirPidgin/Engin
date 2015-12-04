@@ -159,7 +159,7 @@ namespace Engin
 			float getAxisMultiplier(HID::GamepadAxis axis, int GPIndex);
 			void movePlayer(float multiplier);
 			void strafePlayer(float multiplier);
-			void rotatePlayer(float multiplier);
+			void rotatePlayer(float speed);
 
 			Engin* engine;
 
