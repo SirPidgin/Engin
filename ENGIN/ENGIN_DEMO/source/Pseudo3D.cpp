@@ -649,7 +649,7 @@ namespace Engin
 				}
 				else
 				{
-					depth = (1.0f / spriteYout)*100;
+					depth = (1.0f / spriteYout)*100.0f;
 				}
 				gameObjects[i]->accessComponent<Transform>()->setDepth(depth);
 			}			
@@ -685,10 +685,16 @@ namespace Engin
 					}
 					else
 					{
-						depth = (1.0f / Raycastlines[i][1]);
+						depth = (1.0f / Raycastlines[i][1])*100.0f;
+					}
+					if (depth > 1.0f)
+					{
+						depth = 1.0f;
 					}
 
-					opaqueBatch.draw(mapSheet_256, &glm::vec4(Raycastlines[i][4] + (static_cast<int>(Raycastlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), Raycastlines[i][0] - 2400, Raycastlines[i][1], 1.0f, Raycastlines[i][2] - Raycastlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, depth);
+					opaqueBatch.draw(mapSheet_256, &glm::vec4(Raycastlines[i][4] + (static_cast<int>(Raycastlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), 
+						Raycastlines[i][0] - 2400, Raycastlines[i][1], 1.0f, Raycastlines[i][2] - Raycastlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, 
+						Renderer::Color{ 1.0f, 1.0f, 1.0f } * (depth*depth), 1.0f, depth);
 				}
 			}
 		}
@@ -804,7 +810,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 			gameObjects.back()->accessComponent<UserData>()->tileOverSize = 256;
 			gameObjects.back()->accessComponent<UserData>()->isTree = true;
-			gameObjects.back()->accessComponent<UserData>()->depthRandom = randomGenerator.getRandomInt(1,10) * 0.00001f;
+			//gameObjects.back()->accessComponent<UserData>()->depthRandom = randomGenerator.getRandomFloat(0.00001f,0.0001f);
 
 			gameObjects.back()->accessComponent<UserData>()->shadow = treeShadow;
 			gameObjects.back()->accessComponent<UserData>()->hasShadow = true;
