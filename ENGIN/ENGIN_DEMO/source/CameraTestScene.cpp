@@ -68,7 +68,7 @@ namespace Engin
 			textCreator->createTextTexture(font, textString, 255 ,255, 255);
 			textTexture = textCreator->getTexture();
 			
-			particleGenerator.init(doge->getID());
+			particleGenerator.init(doge);
 
 			Resources::ResourceManager::getInstance().printResources();
 		}

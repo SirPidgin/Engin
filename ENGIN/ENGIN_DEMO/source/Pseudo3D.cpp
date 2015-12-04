@@ -256,10 +256,23 @@ namespace Engin
 			static int currMouseX = 0;
 			static int currMouseY = 0;
 			static float realRotSpeed = rotSpeed;
+			static float mouseSens = 300.0f;
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_PAGEUP))
+			{
+				mouseSens -= 5.0f;
+			}
+			else if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_PAGEDOWN))
+			{
+				mouseSens += 5.0f;
+			}
+			if (mouseSens <= 0.0f)
+			{
+				mouseSens = 1.0f;
+			}
 			engine->mouseInput->getRelativeMouseState(&currMouseX, &currMouseY);
-			//rotate to the right
 			realRotSpeed = rotSpeed + (float) (abs(currMouseX) - abs(lastMouseX));
-			realRotSpeed /= 200.0f;
+			realRotSpeed /= mouseSens;
+			//rotate to the right
 			if (lastMouseX < currMouseX || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
 			{
 				//both camera direction and camera plane must be rotated

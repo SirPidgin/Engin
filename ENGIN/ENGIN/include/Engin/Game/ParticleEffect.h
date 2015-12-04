@@ -1,12 +1,13 @@
 #pragma once
 
-#include <GL\glew.h>
-#include <glm\glm.hpp>
 #include <vector>
 #include <random>
 #include <algorithm>
 #include "Engin\Resources\ShaderProgram.h"
 #include "Engin\Resources\Texture.h"
+#include "Engin\Renderer\TextureBatch.h"
+#include "Engin\Game\GameObject.h"
+#include "Engin\Game\Component.h"
 
 struct Particle
 {
@@ -34,10 +35,10 @@ struct Vertex
 };
 
 
-const float GRAVITY = 3.0f;
+const float GRAVITY = 30.0f;
 const int NUM_PARTICLES = 1000;
-const float TIMESTEP = 0.001f;
-const float SIZE = 0.007f;
+const float TIMESTEP = 0.01f;
+const float SIZE = 0.07f;
 const float PI = 3.1316f;
 
 // ParticleGenerator acts as a container for rendering a large number of 
@@ -46,15 +47,16 @@ const float PI = 3.1316f;
 
 namespace Engin
 {
-	namespace Renderer
+	namespace Game
 	{
-		class ParticleEffect
+		class ParticleEffect : public Component
 		{
 		public:
+			ParticleEffect(GameObject* ownerObject);
 			ParticleEffect();
 			~ParticleEffect();
 
-			void init(GLuint textureID);
+			void init(Resources::Texture* texture);
 			void createParticle(Particle* p);
 			bool compareParticles(Particle* p1, Particle* p2);
 
@@ -63,7 +65,7 @@ namespace Engin
 			void draw();
 
 		private:
-			GLuint textureID;
+			Resources::Texture* currentTexture;
 			Particle particles[NUM_PARTICLES];
 			float timeUntilNextStep;
 			float angle;
@@ -71,7 +73,7 @@ namespace Engin
 			std::default_random_engine generator;
 			std::uniform_real_distribution<float> distribution;
 			std::vector<Vertex> particleVertices;
-			GLuint VBO;
+			Renderer::TextureBatch* textureBatch;
 		};
 	}
 }
