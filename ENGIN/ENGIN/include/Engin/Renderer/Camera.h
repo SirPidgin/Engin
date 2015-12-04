@@ -33,15 +33,26 @@ namespace Engin
 
 			// Camera zoom is relative to the camera origin. 0 is infinite far. There is no maximum zoom limit for getting closer.
 			void setZoomLevel(GLfloat size);
+			
+			// Set default level.
 			void setDefaultZoomLevel();
 
+			// Use radians to set rotation facing.
 			void setRotation(GLfloat rotation);
-			// Place this at the end of update to fix coordinates because camera rotates from the corner.
+			
+			// Calculates VP. Run within activateViewPort()
 			void calculateVP();
 
+			// Retuns camera rotation in radians.
 			GLfloat getRotation();
+
+			// Returns camera zoomlevel.
 			GLfloat getZoomLevel();
+
+			// Change camera rotation origin. (0,0) is left down corner, viewport resolution is the up right corner.
 			void setNewRotationOrigin(GLfloat worldX, GLfloat worldY);
+
+			// Returns the current rotation origin.
 			glm::vec2 getRotationOrigin();
 
 		private:
@@ -57,7 +68,7 @@ namespace Engin
 			GLfloat viewPortWidth, viewPortHeight;
 
 			glm::mat4 P;
-			glm::mat4 VPmatrix; //getVP
+			glm::mat4 VPmatrix;
 
 			glm::mat4 scaleMatrix;
 			glm::mat4 positionMatrix;

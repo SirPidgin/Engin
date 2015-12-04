@@ -95,6 +95,7 @@ namespace Engin
 
 		void Camera::calculateVP()
 		{
+			// Check manual for information.
 			if (rotation != 0.0f)
 			{
 				root = glm::sqrt(glm::pow(worldX + rotationOriginX, 2.0f) + glm::pow(worldY + rotationOriginY, 2.0f));
