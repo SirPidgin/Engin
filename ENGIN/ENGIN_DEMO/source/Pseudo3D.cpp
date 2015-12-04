@@ -3,18 +3,24 @@
 #include <iostream>
 #include <Engin\Renderer\Window.h>
 #include <Engin\Renderer\Color.h>
+#include "Engin\Core\RNG.h"
 #include <glm\gtc\type_ptr.hpp>
 
 namespace Engin
 {
 	namespace Game
 	{
-		Pseudo3D::Pseudo3D(Engin* engine) : camera(createWorldCamera()), camera2(createWorldCamera()), camera3(createGuiCamera())
+		Pseudo3D::Pseudo3D(Engin* engine) : camera(createWorldCamera()), camera2(createWorldCamera()), camera3(createGuiCamera()), useGamePad(false)
 		{
 #pragma region INIT
 			this->engine = engine;
 
 			std::cout << "Scene started" << std::endl;
+
+			if (engine->gamepadInput->getNumGamepads() > 0)
+			{
+				useGamePad = true;
+			}
 
 			camera2->initCamera(800.0f, 0.0f, 800.0f, 800.0f, 0.0f, 0.0f, 400, 100);
 			camera3->initCamera(0.0f, 0.0f, 1600.0f, 800.0f, 0.0f, 0.0f, 800, 400);
@@ -77,7 +83,6 @@ namespace Engin
 
 			moveSpeed = 0.08f;
 			rotSpeed = 0.03f;
-
 			player = { { 22.0f, 9.5f, 0.0f, 0 , 1} }; //x,y,rotation(radians), how many sides drawn, spritetype
 
 			dirX = -1, dirY = 0; //initial direction vector
@@ -183,7 +188,7 @@ namespace Engin
 			}
 
 #pragma endregion
-
+			
 		}
 
 		Pseudo3D::~Pseudo3D()
@@ -191,62 +196,103 @@ namespace Engin
 			std::cout << "Scene shutdown" << std::endl;
 		}
 
+		// Moves player.
+		void Pseudo3D::movePlayer(float multiplier)
+		{
+			if (wallTiles[static_cast<int>(player[0] + dirX * moveSpeed * multiplier)][static_cast<int>(player[1])] == false)
+			{
+				player[0] += dirX * moveSpeed * multiplier;
+			}
+
+			if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + dirY * moveSpeed * multiplier)] == false)
+			{
+				player[1] += dirY * moveSpeed * multiplier;
+			}
+		}
+
+		// Strafes player.
+		void Pseudo3D::strafePlayer(float multiplier)
+		{
+			if (wallTiles[static_cast<int>(player[0] + planeX * moveSpeed * multiplier)][static_cast<int>(player[1])] == false)
+			{
+				player[0] += planeX * moveSpeed * multiplier;
+			}
+
+			if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + planeY * moveSpeed * multiplier)] == false)
+			{
+				player[1] += planeY * moveSpeed * multiplier;
+			}
+		}
+
+		// Rotates player.
+		void Pseudo3D::rotatePlayer(float speed)
+		{
+			// Both camera direction and camera plane must be rotated.
+			double oldDirX = dirX;
+			dirX = dirX * cos(speed) - dirY * sin(speed);
+			dirY = oldDirX * sin(speed) + dirY * cos(speed);
+			double oldPlaneX = planeX;
+			planeX = planeX * cos(speed) - planeY * sin(speed);
+			planeY = oldPlaneX * sin(speed) + planeY * cos(speed);
+		}
+
+		// Get requested axis multiplier of given gamepad.
+		float Pseudo3D::getAxisMultiplier(HID::GamepadAxis axis, int GPIndex)
+		{
+			return engine->gamepadInput->getAxisValue(axis, GPIndex) / HID::AXIS_MAX;
+		}
+
 		void Pseudo3D::update(GLfloat step)
 		{
-			//Taking time it takes to go trough the update
+			// Taking time it takes to go trough the update.
 			myTimer.start();
 
 #pragma region RaycastMovement
-			//move forward if no wall in front of you			
+
+			// Player movement.
+			float axisMultiplier = 0.0f;
+			float deadzone = 0.175f;
+
+			// Move forward if no wall in front of you.
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_W))
 			{
-				if (wallTiles[static_cast<int>(player[0] + dirX * moveSpeed)][static_cast<int>(player[1])] == false)
-				{
-					player[0] += dirX * moveSpeed;
-				}
-
-				if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + dirY * moveSpeed)] == false)
-				{
-					player[1] += dirY * moveSpeed;
-				}
+				movePlayer(1.0f);
 			}
-			//move backwards if no wall behind you
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_S))
+			// Move backwards if no wall behind you.
+			else if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_S))
 			{
-				if (wallTiles[static_cast<int>(player[0] - dirX * moveSpeed)][static_cast<int>(player[1])] == false)
+				movePlayer(-1.0f);
+			}
+			// Check pad movement.
+			else if (useGamePad)
+			{
+				axisMultiplier = -getAxisMultiplier(HID::GAMEPAD_AXIS_LEFTY, 0);
+
+				if (axisMultiplier < -deadzone || axisMultiplier > deadzone)
 				{
-					player[0] -= dirX * moveSpeed;
+					movePlayer(axisMultiplier);
 				}
 
-				if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] - dirY * moveSpeed)] == false)
-				{
-					player[1] -= dirY * moveSpeed;
-				}
 			}
-			//strafe left if no wall in left of you			
+
+			// Strafe left.
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_A))
 			{
-				if (wallTiles[static_cast<int>(player[0] - planeX * moveSpeed)][static_cast<int>(player[1])] == false)
-				{
-					player[0] -= planeX * moveSpeed;
-				}
-
-				if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] - planeY * moveSpeed)] == false)
-				{
-					player[1] -= planeY * moveSpeed;
-				}
+				strafePlayer(-1.0f);
 			}
-			//strafe right if no wall in right of you			
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_D))
+			// Strafe right.
+			else if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_D))
 			{
-				if (wallTiles[static_cast<int>(player[0] + planeX * moveSpeed)][static_cast<int>(player[1])] == false)
-				{
-					player[0] += planeX * moveSpeed;
-				}
+				strafePlayer(1.0f);
+			}
+			// Check pad movement.
+			else if (useGamePad)
+			{
+				axisMultiplier = getAxisMultiplier(HID::GAMEPAD_AXIS_LEFTX, 0);
 
-				if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + planeY * moveSpeed)] == false)
+				if (axisMultiplier < -deadzone || axisMultiplier > deadzone)
 				{
-					player[1] += planeY * moveSpeed;
+					strafePlayer(axisMultiplier);
 				}
 			}
 
@@ -270,40 +316,49 @@ namespace Engin
 				mouseSens = 1.0f;
 			}
 			engine->mouseInput->getRelativeMouseState(&currMouseX, &currMouseY);
-			realRotSpeed = rotSpeed + (float) (abs(currMouseX) - abs(lastMouseX));
+			realRotSpeed = rotSpeed + (float)(abs(currMouseX) - abs(lastMouseX));
 			realRotSpeed /= mouseSens;
-			//rotate to the right
-			if (lastMouseX < currMouseX || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
+			// Keyboard rotate to the right.
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
 			{
-				//both camera direction and camera plane must be rotated
-				double oldDirX = dirX;
-				dirX = dirX * cos(-realRotSpeed) - dirY * sin(-realRotSpeed);
-				dirY = oldDirX * sin(-realRotSpeed) + dirY * cos(-realRotSpeed);
-				double oldPlaneX = planeX;
-				planeX = planeX * cos(-realRotSpeed) - planeY * sin(-realRotSpeed);
-				planeY = oldPlaneX * sin(-realRotSpeed) + planeY * cos(-realRotSpeed);
+				rotatePlayer(rotSpeed * -1.0f);
 			}
-			//rotate to the left
-			if (lastMouseX > currMouseX || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
+			// Keyboard rotate to the left.
+			else if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
 			{
-				//both camera direction and camera plane must be rotated
-				double oldDirX = dirX;
-				dirX = dirX * cos(realRotSpeed) - dirY * sin(realRotSpeed);
-				dirY = oldDirX * sin(realRotSpeed) + dirY * cos(realRotSpeed);
-				double oldPlaneX = planeX;
-				planeX = planeX * cos(realRotSpeed) - planeY * sin(realRotSpeed);
-				planeY = oldPlaneX * sin(realRotSpeed) + planeY * cos(realRotSpeed);
+				rotatePlayer(rotSpeed);
 			}
+			// Mouse rotate to the right.
+			else if (lastMouseX < currMouseX)
+			{
+				rotatePlayer(-realRotSpeed);
+			}
+			// Mouse rrotate to the left.
+			else if (lastMouseX > currMouseX)
+			{
+				rotatePlayer(realRotSpeed);
+			}
+			// Check pad movement.
+			else if (useGamePad)
+			{
+				axisMultiplier = getAxisMultiplier(HID::GAMEPAD_AXIS_RIGHTX, 0);
+
+				if (axisMultiplier < -deadzone || axisMultiplier > deadzone)
+				{
+					rotatePlayer(-axisMultiplier*rotSpeed);
+				}
+			}
+
 			engine->mouseInput->getRelativeMouseState(&lastMouseX, &lastMouseY);
 #pragma endregion
 
 			alpha += 0.01;			
 			
-			//Raycast calculations.
+			// Raycast calculations.
 			Raycasting();
 			RaycastingSprites();
 
-			//Saving player rotation
+			// Saving player rotation.
 			player[2] = -glm::atan(dirX, dirY);
 			if (player[2] < 0)
 			{
@@ -311,15 +366,28 @@ namespace Engin
 			}
 
 #pragma region Shooting
-			// Shoot a projectile
+			// Shoot a projectile.
+			static Core::Timer shootTimer;
+
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE))
 			{
 				createProjectile(player[0], player[1], player[2]);
 			}
+			else if (useGamePad)
+			{
+				axisMultiplier = getAxisMultiplier(HID::GAMEPAD_AXIS_TRIGGERRIGHT, 0);
+
+				if (axisMultiplier > 0.0f && (!shootTimer.isStarted() || shootTimer.getLocalTime() > (1.0f - axisMultiplier + 0.1f) * 1000.0f))
+				{
+
+				createProjectile(player[0], player[1], player[2]);
+					shootTimer.start();
+				}
+			}
 
 #pragma endregion
 			
-			//rotating sprites in radians
+			// Rotating sprites in radians.
 			gameObjects[5]->accessComponent<Transform>()->setRotation(alpha * 5);
 			gameObjects[0]->accessComponent<Transform>()->setRotation(2*alpha);
 			gameObjects[4]->accessComponent<Transform>()->setRotation(alpha + 0.02);
@@ -882,8 +950,8 @@ namespace Engin
 		void Pseudo3D::Projectile::update()
 		{
 			Transform* t = ownerObject->accessComponent<Transform>();
-			t->setXPosition(t->getXPosition() + speed * cosf(t->getRotation() + glm::radians(90.0f)));
-			t->setYPosition(t->getYPosition() + speed * sinf(t->getRotation() + glm::radians(90.0f)));
+			t->setXPosition(t->getXPosition() + speed * cosf(t->getRotation() + glm::radians(90.0f + rng.getRandomFloat(-spread, spread))));
+			t->setYPosition(t->getYPosition() + speed * sinf(t->getRotation() + glm::radians(90.0f + rng.getRandomFloat(-spread, spread))));
 		}
 
 		// Deletes killed objects from the gameObjects vector.
