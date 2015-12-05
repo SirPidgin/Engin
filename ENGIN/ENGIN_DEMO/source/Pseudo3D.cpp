@@ -544,6 +544,11 @@ namespace Engin
 							gameObjects[i]->kill(); 
 							// Create hit animation.
 							createHitFireball(gameObjects[j]->accessComponent<Transform>()->getXPosition(), gameObjects[j]->accessComponent<Transform>()->getYPosition());
+							// Color the furball to look like ghost.							
+							gameObjects[j]->accessComponent<UserData>()->spriteColorR = 0.5f;
+							gameObjects[j]->accessComponent<UserData>()->spriteColorG = 0.5f;
+							gameObjects[j]->accessComponent<UserData>()->spriteColorB = 5.0f;
+							gameObjects[j]->accessComponent<UserData>()->spriteColorA = 0.8f;
 						}						
 					}
 				}				
