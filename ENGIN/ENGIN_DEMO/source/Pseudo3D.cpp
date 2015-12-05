@@ -63,10 +63,7 @@ namespace Engin
 			text = textCreator.getTexture();
 			textCreator3.createTextTexture(font, "|", 255, 100, 0);
 			text3 = textCreator3.getTexture();
-
-			//world size
-			mapX = 24;
-			mapY = 24;
+					
 			//2d tilesize
 			tileSize2d = 64;
 			//alpha used for rotating things
@@ -83,12 +80,12 @@ namespace Engin
 			camera->initCamera(0.0f, 0.0f, 800.0f, 800.0f, -2400.0f, 0.0f, 0, 0);
 			//camera->setZoomLevel(2); //Use zoom if raycasting image smaller than 800. (example: raycast w = 400, zoom = 2, example1: raycast w = 200, zoom = 4) 
 
+			// Player Movement
 			moveSpeed = 0.08f;
 			rotSpeed = 0.03f;
-			player = { { 22.0f, 9.5f, 0.0f, 0 , 1} }; //x,y,rotation(radians), how many sides drawn, spritetype.
-
-			dirX = 1.0, dirY = 0; //initial direction vector
-			planeX = 0.0f, planeY = -0.5; //the 2d raycaster version of camera plane
+			player = { { 22.0f, 9.5f, 0.0f, 0 , 1} }; //x,y,rotation(radians, used only in GUI currently), how many sides drawn, spritetype.
+			dirX = 1.0, dirY = 0; // Initial direction vector
+			planeX = 0.0f, planeY = -0.5; // The 2d raycaster version of camera plane
 
 			//GameObjects.
 			createFurball(15.0f, 5.0f, 0.0f);
@@ -137,8 +134,18 @@ namespace Engin
 
 
 #pragma endregion
-			
+
+			// TODO: Make the wall array like this. Dont forget to change worldSize mapX and mapY
+			//{
+			//{{0,0,0,1,2,3,0,0,0,0,0}},
+			//{{0,0,0,1,0,0,0,0,0,0,0}},
+			//{{0,0,0,1,0,0,0,0,0,0,0}}
+			//}
 #pragma region WallTiles
+
+			//world size
+			mapX = 24;
+			mapY = 24;
 
 			//filling world with 0
 			for (int i = 0; i < 25; i++)
@@ -190,6 +197,12 @@ namespace Engin
 			{
 				wallTiles[i][19] = 5;
 			}
+
+			// Holes
+			wallTiles[10][7] = 0;
+			wallTiles[10][6] = 0;
+			wallTiles[1][10] = 0;
+			wallTiles[2][10] = 0;
 
 #pragma endregion
 			
@@ -422,11 +435,19 @@ namespace Engin
 #pragma region Player2
 				{ // Moving player 2. TODO change player 1 to gameobject...
 					float multiplier = 0.0f;
-					float rotX = glm::cos(gameObjects[2]->accessComponent<Transform>()->getRotation());
-					float rotY = glm::sin(gameObjects[2]->accessComponent<Transform>()->getRotation());
 
-					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_8) || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_5))
+					// Player 2 strafe.
+					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_7) || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_9));
 					{
+				
+					}
+
+					// Move forwards or backwards.
+					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_8) || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_5));
+					{
+						float rotX = glm::cos(gameObjects[2]->accessComponent<Transform>()->getRotation());
+						float rotY = glm::sin(gameObjects[2]->accessComponent<Transform>()->getRotation());
+
 						if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_8))
 						{
 							multiplier = 1.0f;
@@ -436,26 +457,15 @@ namespace Engin
 							multiplier = -1.0f;
 						}
 
-						// Move forwards or backwards.
 						if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition() + rotX * moveSpeed* multiplier)][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition())] == false)
 						{
 							gameObjects[2]->accessComponent<Transform>()->setXPosition(gameObjects[2]->accessComponent<Transform>()->getXPosition() + rotX * moveSpeed * multiplier);
 						}
-						if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition())][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition() + dirY * moveSpeed * multiplier)] == false)
+						if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition())][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition() + rotY * moveSpeed * multiplier)] == false)
 						{
 							gameObjects[2]->accessComponent<Transform>()->setYPosition(gameObjects[2]->accessComponent<Transform>()->getYPosition() + rotY * moveSpeed * multiplier);
-						}
-					}
-
-					// Player 2 strafe.
-					/*if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_7));
-					{
-
-					}
-					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_9));
-					{
-
-					}*/
+						}						
+					}				
 
 					// Player 2 rotation.
 					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_4))
@@ -793,7 +803,7 @@ namespace Engin
 				}
 				else
 				{
-					depth = 1.0f - (spriteYout / 400.0f);
+					depth = 1.0f - (spriteYout / (raycastH/2));
 				}
 				gameObjects[i]->accessComponent<Transform>()->setDepth(depth);
 			}			
@@ -829,7 +839,7 @@ namespace Engin
 					}
 					else
 					{
-						depth = 1.0f - (Raycastlines[i][1]/400.0f);
+						depth = 1.0f - (Raycastlines[i][1] / (raycastH / 2));
 					}
 					if (depth > 1.0f)
 					{
@@ -886,11 +896,12 @@ namespace Engin
 						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.001f);					
 				}
 
+				// Hit animation. TODO: use the hit animation. Needs another player.
 				else if (gameObjects[i]->accessComponent<UserData>()->isHitAnimation == true)
 				{
 					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, 256, 256, 256 / 2, 256 / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(),
-						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.001f);
+						0.8f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.001f);
 				}
 				// 2D Furball
 				else
