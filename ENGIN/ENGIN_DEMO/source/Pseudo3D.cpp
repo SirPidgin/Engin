@@ -34,7 +34,8 @@ namespace Engin
 			guiBatch.setShader(alphaShader);
 			guiBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
 			
-			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside_64.png");	
+			furball = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside_64.png");
+			furball_128 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_upside_128.png");
 			mapSheet_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_64.png");
 			mapSheet_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_256_shadows.png");
 			mapSheet_256->changeParameters(GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_LINEAR);
@@ -534,7 +535,7 @@ namespace Engin
 							// Kill the projectile.
 							gameObjects[i]->kill(); 
 							// Create hit animation.
-							createHitFireball(gameObjects[j]->accessComponent<Transform>()->getXPosition(), gameObjects[j]->accessComponent<Transform>()->getYPosition());
+							createHitFireball(gameObjects[j]->accessComponent<Transform>()->getXPosition(), gameObjects[j]->accessComponent<Transform>()->getYPosition(), gameObjects[j]->accessComponent<Transform>());
 							// Color the furball to look like ghost.							
 							gameObjects[j]->accessComponent<UserData>()->spriteColorR = 0.5f;
 							gameObjects[j]->accessComponent<UserData>()->spriteColorG = 0.5f;
@@ -895,12 +896,12 @@ namespace Engin
 						0.25f, Renderer::clrWhite, gameObjects[i]->accessComponent<UserData>()->spriteColorA, 0.8f + i * 0.001f);
 				}
 
-				// Hit animation. TODO: use the hit animation. Needs another player.
+				// Hit animation.
 				else if (gameObjects[i]->accessComponent<UserData>()->isHitAnimation == true)
 				{
-					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
+					alphaBatch.draw(gameObjects[i]->accessComponent<AnimationPlayer>()->getTexture(), gameObjects[i]->accessComponent<AnimationPlayer>()->getCurrentFrameTexCoords(),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, 256, 256, 256 / 2, 256 / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(),
-						0.8f, Renderer::clrWhite, gameObjects[i]->accessComponent<UserData>()->spriteColorA, 0.8f + i * 0.001f);
+						0.3f, Renderer::clrWhite, gameObjects[i]->accessComponent<UserData>()->spriteColorA, 0.8f + i * 0.001f);
 				}
 				// 2D Furball
 				else
@@ -914,7 +915,7 @@ namespace Engin
 			}
 
 			//player
-			alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()), player[0] * tileSize2d, player[1] * tileSize2d, furball->getWidth(), furball->getHeight(), tileSize2d / 2.0f, tileSize2d / 2.0f, player[2], 1.0f, Renderer::clrRed, 1.0f, 0.8f);
+			alphaBatch.draw(furball_128, &glm::vec4(0.0f, 0.0f, furball_128->getWidth(), furball_128->getHeight()), player[0] * tileSize2d, player[1] * tileSize2d, furball_128->getWidth(), furball_128->getHeight(), furball_128->getWidth() / 2.0f, furball_128->getHeight() / 2.0f, player[2], 1.0f, Renderer::clrRed, 1.0f, 0.8f);
 
 			//2d floor
 			opaqueBatch.draw(floor_16, &glm::vec4(0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d), 0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d, 0.0f, 0.0f, 0.0f, 1.0f, Renderer::Color{ 0.3, 0.3, 0.4 } *3.0f, 1.0f, 0.0f);
@@ -959,7 +960,7 @@ namespace Engin
 		}
 
 		// Raycast hit animation.
-		void Pseudo3D::createHitFireball(float x, float y)
+		void Pseudo3D::createHitFireball(float x, float y, Game::Transform* furbalGameobjectTransform)
 		{
 			gameObjects.push_back(new GameObject(&alphaBatch));
 			gameObjects.back()->addComponent<Transform>();

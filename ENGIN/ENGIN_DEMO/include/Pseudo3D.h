@@ -44,7 +44,7 @@ namespace Engin
 			void createFurball(float x, float y, float rotation);
 			void createFireball(float x, float y, float rotation);
 			void createProjectile(float x, float y, float rotation);
-			void createHitFireball(float x, float y);
+			void createHitFireball(float x, float y, Game::Transform* furbalGameobjectTransform);
 
 			class Projectile : public Component
 			{
@@ -169,6 +169,7 @@ namespace Engin
 			Resources::ShaderProgram* alphaShader;
 
 			Resources::Texture* furball; //2d
+			Resources::Texture* furball_128; //2d
 			Resources::Texture* tree_64; //2d
 			Resources::Texture* mapSheet_64;
 			Resources::Texture* mapSheet_256;
