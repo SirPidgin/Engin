@@ -94,6 +94,8 @@ namespace Engin
 			gameObjects.back()->accessComponent<UserData>()->spriteColorR = 0.5f;
 			gameObjects.back()->accessComponent<UserData>()->spriteColorG = 0.5f;
 			gameObjects.back()->accessComponent<UserData>()->spriteColorB = 5.0f;
+			gameObjects.back()->accessComponent<UserData>()->spriteColorA = 0.8f;
+
 			createFurball(14.0f, 12.0f, 0.0f);
 			createFurball(15.0f, 13.8f, 0.0f);
 			createFurball(16.0f, 4.0f, 0.0f);
@@ -886,14 +888,15 @@ namespace Engin
 				{
 					alphaBatch.draw(tree_64, &glm::vec4(0.0f, 0.0f, tree_64->getWidth(), tree_64->getHeight()),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, tree_64->getWidth(),
-						tree_64->getHeight(), tree_64->getWidth() / 2, tree_64->getHeight() / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, Renderer::clrWhite, 1.0f, 0.8f + i*0.000001f);
+						tree_64->getHeight(), tree_64->getWidth() / 2, tree_64->getHeight() / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f, Renderer::clrWhite, 
+						gameObjects[i]->accessComponent<UserData>()->spriteColorA, 0.8f + i*0.000001f);
 				}
 				// 2D Fireball
 				else if (gameObjects[i]->accessComponent<UserData>()->isFireball == true)
 				{
 					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, 256, 256, 256 / 2, 256 / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(),
-						0.25f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.001f);					
+						0.25f, Renderer::clrWhite, gameObjects[i]->accessComponent<UserData>()->spriteColorA, 0.8f + i * 0.001f);
 				}
 
 				// Hit animation. TODO: use the hit animation. Needs another player.
@@ -901,7 +904,7 @@ namespace Engin
 				{
 					alphaBatch.draw(animPlayer2d.getTexture(), animPlayer2d.getCurrentFrameTexCoords(),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, 256, 256, 256 / 2, 256 / 2, gameObjects[i]->accessComponent<Transform>()->getRotation(),
-						0.8f, Renderer::clrWhite, 1.0f, 0.8f + i * 0.001f);
+						0.8f, Renderer::clrWhite, gameObjects[i]->accessComponent<UserData>()->spriteColorA, 0.8f + i * 0.001f);
 				}
 				// 2D Furball
 				else
@@ -909,7 +912,8 @@ namespace Engin
 					alphaBatch.draw(furball, &glm::vec4(0.0f, 0.0f, furball->getWidth(), furball->getHeight()),
 						gameObjects[i]->accessComponent<Transform>()->getXPosition() * tileSize2d, gameObjects[i]->accessComponent<Transform>()->getYPosition() * tileSize2d, furball->getWidth(),
 						furball->getHeight(), tileSize2d / 2.0f, tileSize2d / 2.0f, gameObjects[i]->accessComponent<Transform>()->getRotation(), 1.0f,
-						Renderer::Color{ gameObjects[i]->accessComponent<UserData>()->spriteColorR, gameObjects[i]->accessComponent<UserData>()->spriteColorG, gameObjects[i]->accessComponent<UserData>()->spriteColorB }, 1.0f, 0.7f + i*0.000001f);
+						Renderer::Color{ gameObjects[i]->accessComponent<UserData>()->spriteColorR, gameObjects[i]->accessComponent<UserData>()->spriteColorG, gameObjects[i]->accessComponent<UserData>()->spriteColorB }, 
+						gameObjects[i]->accessComponent<UserData>()->spriteColorA, 0.7f + i*0.000001f);
 				}
 			}
 

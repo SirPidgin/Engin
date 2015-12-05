@@ -81,6 +81,7 @@ namespace Engin
 				float spriteColorR;
 				float spriteColorG;
 				float spriteColorB;
+				float spriteColorA = 1.0f;
 				bool isHitAnimation = false;
 			};
 
@@ -122,7 +123,7 @@ namespace Engin
 							0.0f, 0.0f,	0.0f, 
 							ownerObject->accessComponent<Transform>()->getScale(), 
 							Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } *colorValue,
-							1.0f, ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthRandom);
+							ownerObject->accessComponent<UserData>()->spriteColorA, ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthRandom);
 
 						//shadow
 						if (ownerObject->accessComponent<UserData>()->hasShadow == true)
@@ -132,7 +133,8 @@ namespace Engin
 								ownerObject->accessComponent<UserData>()->shadow->getWidth(), (ownerObject->accessComponent<UserData>()->shadow->getHeight() + ownerObject->accessComponent<Transform>()->getDepth()*50),
 								0.0f, 0.0f, 0.0f,
 								ownerObject->accessComponent<Transform>()->getScale(), 
-								Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } *colorValue, 1.0f,
+								Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } *colorValue, 
+								ownerObject->accessComponent<UserData>()->spriteColorA,
 								ownerObject->accessComponent<Transform>()->getDepth() - 0.00001 + ownerObject->accessComponent<UserData>()->depthRandom);
 						}						
 					}
