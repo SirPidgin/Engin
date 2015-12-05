@@ -510,7 +510,7 @@ namespace Engin
 				{
 					Transform* t = gameObjects[i]->accessComponent<Transform>();
 
-					if (wallTiles[static_cast<int>(mapY - t->getYPosition())][static_cast<int>(t->getXPosition())] != false)
+					if (wallTiles[mapY - static_cast<int>(t->getYPosition())][static_cast<int>(t->getXPosition())] != false)
 					{
 						gameObjects[i]->kill();
 					}
