@@ -137,74 +137,65 @@ namespace Engin
 
 #pragma endregion
 
-			// TODO: Make the wall array like this. Dont forget to change worldSize mapX and mapY
-			//{
-			//{{0,0,0,1,2,3,0,0,0,0,0}},
-			//{{0,0,0,1,0,0,0,0,0,0,0}},
-			//{{0,0,0,1,0,0,0,0,0,0,0}}
-			//}
 #pragma region WallTiles
 
-			//world size
+			// World size, Remember to change the world array size in header.
 			mapX = 24;
-			mapY = 24;
+			mapY = 48;			
 
-			//filling world with 0
-			for (int i = 0; i < 25; i++)
-			{
-				for (int j = 0; j < 25; j++)
-				{
-					wallTiles[i][j] = 0;
-				}				
-			}
-
-			//MapSides
-			for (int i = 0; i < mapY; i++)
-			{
-				wallTiles[0][i] = 1;
-			}
-
-			for (int i = 0; i <= mapY; i++)
-			{
-				wallTiles[mapX][i] = 3;
-			}
-
-			for (int i = 0; i < mapX; i++)
-			{
-				wallTiles[i][mapY] = 1;
-			}
-
-			for (int i = 0; i < mapX; i++)
-			{
-				wallTiles[i][0] = 3;
-			}
-			//---------------------
-
-			for (int i = 1; i < 10; i++)
-			{
-				wallTiles[i][10] = 2;
-			}
-
-			for (int i = 1; i < 13; i++)
-			{
-				wallTiles[10][i] = 2;
-			}
-
-			for (int i = 17; i < 23; i++)
-			{
-				wallTiles[i][17] = 4;
-			}
-
-			for (int i = 17; i < 23; i++)
-			{
-				wallTiles[i][19] = 5;
-			}
-
-			// Holes
-			wallTiles[10][7] = 0;
-			wallTiles[10][6] = 0;
-			wallTiles[1][10] = 0;
-			wallTiles[2][10] = 0;
+			// Tilemap: North up. South down. East right. West left. Remember that degrees 0 is towards east;
+			wallTiles = 
+			{ {
+				{ { 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } },
+				{ { 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 4, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 3, 3, 3, 0, 1, 0, 0, 0, 0, 3 } },
+				{ { 4, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 2, 0, 0, 3, 0, 3, 0, 1, 0, 0, 0, 0, 3 } },
+				{ { 4, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 3, 0, 3, 0, 1, 0, 0, 0, 0, 3 } },
+				{ { 4, 1, 4, 1, 4, 1, 4, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3, 3, 0, 1, 1, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 5 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 5 } },
+				{ { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5 } },
+				{ { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 5 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 5 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 } },
+			} };
 
 #pragma endregion
 			
@@ -218,12 +209,12 @@ namespace Engin
 		// Moves player
 		void Pseudo3D::movePlayer(float multiplier)
 		{
-			if (wallTiles[static_cast<int>(player[0] + dirX * moveSpeed * multiplier)][static_cast<int>(player[1])] == false)
+			if (wallTiles[mapY - static_cast<int>(player[1])][static_cast<int>(player[0] + dirX * moveSpeed * multiplier)] == false)
 			{
 				player[0] += dirX * moveSpeed * multiplier;
 			}
 
-			if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + dirY * moveSpeed * multiplier)] == false)
+			if (wallTiles[mapY - static_cast<int>(player[1] + dirY * moveSpeed * multiplier)][static_cast<int>(player[0])] == false)
 			{
 				player[1] += dirY * moveSpeed * multiplier;
 			}
@@ -232,12 +223,12 @@ namespace Engin
 		// Strafes player.
 		void Pseudo3D::strafePlayer(float multiplier)
 		{
-			if (wallTiles[static_cast<int>(player[0] + planeX * moveSpeed * multiplier)][static_cast<int>(player[1])] == false)
+			if (wallTiles[mapY - static_cast<int>(player[1])][static_cast<int>(player[0] + planeX * moveSpeed * multiplier)] == false)
 			{
 				player[0] += planeX * moveSpeed * multiplier;
 			}
 
-			if (wallTiles[static_cast<int>(player[0])][static_cast<int>(player[1] + planeY * moveSpeed * multiplier)] == false)
+			if (wallTiles[mapY - static_cast<int>(player[1] + planeY * moveSpeed * multiplier)][static_cast<int>(player[0])] == false)
 			{
 				player[1] += planeY * moveSpeed * multiplier;
 			}
@@ -459,11 +450,11 @@ namespace Engin
 							multiplier = -1.0f;
 						}
 
-						if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition() + rotX * moveSpeed* multiplier)][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition())] == false)
+						if (wallTiles[mapY - static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition())][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition() + rotX * moveSpeed* multiplier)] == false)
 						{
 							gameObjects[2]->accessComponent<Transform>()->setXPosition(gameObjects[2]->accessComponent<Transform>()->getXPosition() + rotX * moveSpeed * multiplier);
 						}
-						if (wallTiles[static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition())][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition() + rotY * moveSpeed * multiplier)] == false)
+						if (wallTiles[mapY - static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition() + rotY * moveSpeed * multiplier)][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition())] == false)
 						{
 							gameObjects[2]->accessComponent<Transform>()->setYPosition(gameObjects[2]->accessComponent<Transform>()->getYPosition() + rotY * moveSpeed * multiplier);
 						}						
@@ -518,7 +509,7 @@ namespace Engin
 				{
 					Transform* t = gameObjects[i]->accessComponent<Transform>();
 
-					if (wallTiles[static_cast<int>(t->getXPosition())][static_cast<int>(t->getYPosition())] != false)
+					if (wallTiles[static_cast<int>(mapY - t->getYPosition())][static_cast<int>(t->getXPosition())] != false)
 					{
 						gameObjects[i]->kill();
 					}
@@ -657,7 +648,7 @@ namespace Engin
 						side = 1;
 					}
 					//Check if ray has hit a wall
-					if (wallTiles[raycastX][raycastY] > 0)
+					if (wallTiles[mapY - raycastY][raycastX] > 0)
 					{
 						hit = 1;
 					}
@@ -690,7 +681,7 @@ namespace Engin
 				}
 
 				//texturing calculations
-				texNum = wallTiles[raycastX][raycastY] - 1; //1 subtracted from it so that texture 0 can be used!
+				texNum = wallTiles[mapY - raycastY][raycastX] - 1; //1 subtracted from it so that texture 0 can be used!
 
 				//calculate value of wallX
 				wallX; //where exactly the wall was hit
@@ -717,7 +708,7 @@ namespace Engin
 				}
 
 				//choose wall color			
-				switch (wallTiles[raycastX][raycastY])
+				switch (wallTiles[mapY - raycastY][raycastX])
 				{
 				case 1:  raycastTileIndex = 1;  break;
 				case 2:  raycastTileIndex = 2;  break;
@@ -874,14 +865,14 @@ namespace Engin
 		void Pseudo3D::Draw2dVision()
 		{
 			//walls.
-			for (int i = 0; i <= mapY; i++)
+			for (int i = mapY; i >= 0; i--)
 			{
 				for (int j = 0; j <= mapX; j++)
 				{
 					float offset = 32.0f;
-					if (wallTiles[j][i] != 0)
+					if (wallTiles[i][j] != 0)
 					{
-						opaqueBatch.draw(mapSheet_64, &glm::vec4((static_cast<int>(wallTiles[j][i]) - 1) * 66, 1.0f, 64, 64), (j * tileSize2d) + offset, i * tileSize2d + offset, 64.0f, 64.0f, 32.0f, 32.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
+						opaqueBatch.draw(mapSheet_64, &glm::vec4((static_cast<int>(wallTiles[i][j]) - 1) * 66, 1.0f, 64, 64), (j * tileSize2d) + offset, ((mapY - i) * tileSize2d) + offset, 64.0f, 64.0f, 32.0f, 32.0f, 0.0f, 1.0f, Renderer::clrWhite, 1.0f, 0.1f);
 					}
 				}
 			}

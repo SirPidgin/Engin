@@ -183,7 +183,7 @@ namespace Engin
 			Resources::Font* font;
 			Core::Timer myTimer;
 
-			std::array<std::array<int,25>,25> wallTiles; //Notice the world size mapX and mapY
+			std::array<std::array<int,25>,49> wallTiles; //Notice the world size mapX and mapY
 			std::array<double,5> player;
 
 			std::vector<GameObject*> gameObjects;
