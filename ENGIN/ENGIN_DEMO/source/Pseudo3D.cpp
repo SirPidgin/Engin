@@ -516,11 +516,16 @@ namespace Engin
 					}
 				}
 
+				if (gameObjects[i]->accessComponent<UserData>()->isHitAnimation)
+				{
+					gameObjects[i]->accessComponent<UserData>()->hitAnimationUpdate();
+				}
+
 				// Kill hit animations
 				if (gameObjects[i]->accessComponent<UserData>()->hitCoolDown.getLocalTime() > gameObjects[i]->accessComponent<UserData>()->cooldownLenght)
 				{
  					gameObjects[i]->kill();
-				}
+				}				
 			}
 
 			// Collision test for rigid.
@@ -993,6 +998,8 @@ namespace Engin
 
 			gameObjects.back()->accessComponent<UserData>()->hitCoolDown.start();
 			gameObjects.back()->accessComponent<UserData>()->cooldownLenght = 1110.0f;
+
+			gameObjects.back()->accessComponent<UserData>()->furbalGameobjectTransform = furbalGameobjectTransform;
 		}
 
 		// Raycast tree sprite.

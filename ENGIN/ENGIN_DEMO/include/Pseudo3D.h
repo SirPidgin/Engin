@@ -83,6 +83,13 @@ namespace Engin
 				float spriteColorB;
 				float spriteColorA = 1.0f;
 				bool isHitAnimation = false;
+
+				Game::Transform* furbalGameobjectTransform;
+
+				void hitAnimationUpdate()
+				{
+					ownerObject->accessComponent<Transform>()->setPosition(furbalGameobjectTransform->getPosition());
+				}
 			};
 
 			class PseudoSpriteDraw : public Component
