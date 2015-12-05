@@ -9,11 +9,14 @@ namespace Engin
 	{
 		class TextRenderer
 		{
-		public:
-			//Creates an opengl texture
+		public:			
 			TextRenderer();
 			~TextRenderer();
+			
+			// Creates an opengl texture from the text string. Input: Resources::Font, message and color values.
 			void createTextTexture(Resources::Font* font, std::string message, GLint colorR, GLint colorG, GLint colorB);
+			
+			// Returns the texture.
 			Resources::Texture* getTexture();
 
 		private:

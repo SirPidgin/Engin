@@ -215,7 +215,7 @@ namespace Engin
 			std::cout << "Scene shutdown" << std::endl;
 		}
 
-		// Moves player. TODO change player 1 to gameObject and move it like player 2. Change raycasting to take gameObject in to make it work. dirX and dirY components can be calculated from rotation direction.
+		// Moves player
 		void Pseudo3D::movePlayer(float multiplier)
 		{
 			if (wallTiles[static_cast<int>(player[0] + dirX * moveSpeed * multiplier)][static_cast<int>(player[1])] == false)
@@ -404,21 +404,21 @@ namespace Engin
 			
 			// Rotating sprites in radians.
 			gameObjects[5]->accessComponent<Transform>()->setRotation(alpha * 5);
-			gameObjects[0]->accessComponent<Transform>()->setRotation(glm::radians(0.0f) + 2*alpha);
+			gameObjects[0]->accessComponent<Transform>()->setRotation(2*alpha);
 			gameObjects[4]->accessComponent<Transform>()->setRotation(alpha + 0.02);
 			gameObjects[10]->accessComponent<Transform>()->setRotation(glm::radians(315.0f) + 2*alpha);
 
 			gameObjects[1]->accessComponent<Transform>()->setRotation(2 * alpha);
 
 			// Moving sprites TODO: Make some logic and translate sprites with them.
-			gameObjects[0]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[0]->accessComponent<Transform>()->getRotation()));
-			gameObjects[0]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[0]->accessComponent<Transform>()->getRotation()));
+			gameObjects[0]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[0]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f)));
+			gameObjects[0]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[0]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f)));
 
 			gameObjects[4]->accessComponent<Transform>()->setXPosition(15.0f + 3 * glm::cos(alpha));
 			gameObjects[6]->accessComponent<Transform>()->setYPosition(10.0f + 4 * glm::sin(alpha));
 
-			gameObjects[10]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[10]->accessComponent<Transform>()->getRotation()));
-			gameObjects[10]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[10]->accessComponent<Transform>()->getRotation()));
+			gameObjects[10]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[10]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f)));
+			gameObjects[10]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[10]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f)));
 
 			gameObjects[1]->accessComponent<Transform>()->setXPosition(8.0f + 4.0f * glm::cos(alpha));
 

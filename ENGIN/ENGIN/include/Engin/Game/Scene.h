@@ -14,8 +14,13 @@ namespace Engin
 			Scene();
 			virtual ~Scene(){};
 			
+			// Scene update.
 			virtual void update(GLfloat step) = 0;
+
+			// Scene interpolate.
 			virtual void interpolate(GLfloat alpha) = 0;
+
+			// Scene draw.
 			virtual void draw() = 0;
 			
 			void flushBatches();

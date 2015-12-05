@@ -63,14 +63,14 @@ namespace Engin
 
 		GLfloat Timer::pause()
 		{
-			if (started && paused) //To unpause.
+			if (started && paused) // Unpause.
 			{
 				paused = false;
 				startTime = getGlobalTime() - pauseTime;
 				pauseTime = 0.0f;
 				return startTime;
 			}
-			else if (started == true && paused == false)
+			else if (started == true && paused == false) // Pause
 			{
 				paused = true;
 
