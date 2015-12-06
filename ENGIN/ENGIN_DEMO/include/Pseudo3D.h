@@ -142,7 +142,7 @@ namespace Engin
 								ownerObject->accessComponent<Transform>()->getScale(), 
 								Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } *colorValue, 
 								ownerObject->accessComponent<UserData>()->spriteColorA,
-								ownerObject->accessComponent<Transform>()->getDepth() - 0.00001);
+								ownerObject->accessComponent<Transform>()->getDepth() - 0.00001 + ownerObject->accessComponent<UserData>()->depthAdd);
 						}						
 					}
 				}
