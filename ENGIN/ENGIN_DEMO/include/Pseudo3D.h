@@ -77,12 +77,12 @@ namespace Engin
 				float cooldownLenght = 0.0f;
 				int tileOverSize = 0;
 				bool isTree = false;
-				float depthRandom = 0.0f;
 				float spriteColorR;
 				float spriteColorG;
 				float spriteColorB;
 				float spriteColorA = 1.0f;
 				bool isHitAnimation = false;
+				float depthAdd = 0.0f; // To render things over objects depth wise.
 
 				Game::Transform* furbalGameobjectTransform;
 
@@ -109,7 +109,7 @@ namespace Engin
 					}
 					else
 					{
-						colorValue = (ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthRandom) * 6;
+						colorValue = (ownerObject->accessComponent<Transform>()->getDepth()) * 6;
 						if (colorValue > 0.8f)
 						{
 							colorValue = 0.8f;
@@ -130,7 +130,7 @@ namespace Engin
 							0.0f, 0.0f,	0.0f, 
 							ownerObject->accessComponent<Transform>()->getScale(), 
 							Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } *colorValue,
-							ownerObject->accessComponent<UserData>()->spriteColorA, ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthRandom);
+							ownerObject->accessComponent<UserData>()->spriteColorA, ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthAdd);
 
 						//shadow
 						if (ownerObject->accessComponent<UserData>()->hasShadow == true)
@@ -142,7 +142,7 @@ namespace Engin
 								ownerObject->accessComponent<Transform>()->getScale(), 
 								Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } *colorValue, 
 								ownerObject->accessComponent<UserData>()->spriteColorA,
-								ownerObject->accessComponent<Transform>()->getDepth() - 0.00001 + ownerObject->accessComponent<UserData>()->depthRandom);
+								ownerObject->accessComponent<Transform>()->getDepth() - 0.00001);
 						}						
 					}
 				}
@@ -191,7 +191,7 @@ namespace Engin
 			Resources::Font* font;
 			Core::Timer myTimer;
 
-			std::array<std::array<int,25>,49> wallTiles; //Notice the world size mapX and mapY
+			std::array<std::array<int,25>,49> wallTiles; // Notice the world size mapX and mapY
 			std::array<double,5> player;
 
 			std::vector<GameObject*> gameObjects;

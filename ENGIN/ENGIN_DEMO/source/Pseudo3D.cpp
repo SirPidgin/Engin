@@ -107,31 +107,31 @@ namespace Engin
 
 			createTree(0.0f, 0.0f, 0.0f); //furball drag
 
-			createTree(20.0f, 5.0f, 0.0f);
-			createTree(20.0f, 6.0f, 0.0f);
-			createTree(20.0f, 7.0f, 0.0f);
-			createTree(20.0f, 8.0f, 0.0f);
-			createTree(21.0f, 5.0f, 0.0f);
-			createTree(21.0f, 8.0f, 0.0f);			
-			createTree(22.0f, 5.0f, 0.0f);
-			createTree(22.0f, 8.0f, 0.0f);
-			createTree(23.0f, 5.0f, 0.0f);			
-			createTree(23.0f, 6.0f, 0.0f);			
-			createTree(23.0f, 7.0f, 0.0f);
-			createTree(23.0f, 8.0f, 0.0f);
+			createTree(20.01f, 5.01f, 0.0f);
+			createTree(20.02f, 6.02f, 0.0f);
+			createTree(20.03f, 7.03f, 0.0f);
+			createTree(20.04f, 8.04f, 0.0f);
+			createTree(21.01f, 5.05f, 0.0f);
+			createTree(21.02f, 8.06f, 0.0f);			
+			createTree(22.03f, 5.07f, 0.0f);
+			createTree(22.04f, 8.08f, 0.0f);
+			createTree(23.01f, 5.09f, 0.0f);			
+			createTree(23.02f, 6.10f, 0.0f);			
+			createTree(23.03f, 7.11f, 0.0f);
+			createTree(23.04f, 8.12f, 0.0f);
 			
-			createTree(20.0f, 5.0f+ 6.0f, 0.0f);
-			createTree(20.0f, 6.0f+ 6.0f, 0.0f);
-			createTree(20.0f, 7.0f+ 6.0f, 0.0f);
-			createTree(20.0f, 8.0f+ 6.0f, 0.0f);
-			createTree(21.0f, 5.0f+ 6.0f, 0.0f);
-			createTree(21.0f, 8.0f+ 6.0f, 0.0f);
-			createTree(22.0f, 5.0f+ 6.0f, 0.0f);
-			createTree(22.0f, 8.0f+ 6.0f, 0.0f);
-			createTree(23.0f, 5.0f+ 6.0f, 0.0f);
-			createTree(23.0f, 6.0f+ 6.0f, 0.0f);
-			createTree(23.0f, 7.0f+ 6.0f, 0.0f);
-			createTree(23.0f, 8.0f+ 6.0f, 0.0f);
+			createTree(20.01f, 5.01f + 6.0f, 0.0f);
+			createTree(20.02f, 6.02f + 6.0f, 0.0f);
+			createTree(20.03f, 7.03f + 6.0f, 0.0f);
+			createTree(20.04f, 8.04f + 6.0f, 0.0f);
+			createTree(21.01f, 5.05f + 6.0f, 0.0f);
+			createTree(21.02f, 8.06f + 6.0f, 0.0f);
+			createTree(22.03f, 5.07f + 6.0f, 0.0f);
+			createTree(22.04f, 8.08f + 6.0f, 0.0f);
+			createTree(23.01f, 5.09f + 6.0f, 0.0f);
+			createTree(23.02f, 6.10f + 6.0f, 0.0f);
+			createTree(23.03f, 7.11f + 6.0f, 0.0f);
+			createTree(23.04f, 8.12f + 6.0f, 0.0f);
 			
 			turretCoolDown.start();
 
@@ -161,19 +161,19 @@ namespace Engin
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
-				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
-				{ { 1, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
-				{ { 1, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
-				{ { 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
-				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
-				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5 } },
-				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 5 } },
-				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 5 } },
-				{ { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5 } },
-				{ { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5 } },
-				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 5 } },
-				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 5 } },
-				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 5 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 2, 0, 2, 0, 2, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 2, 0, 2, 0, 2, 0, 0, 0, 3, 3, 3, 3, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 5, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 5, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 3 } },
+				{ { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 3 } },
+				{ { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 5, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 5, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5, 5, 5, 5, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 0, 3 } },
@@ -994,7 +994,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<UserData>()->spriteColorG = 1.0f;
 			gameObjects.back()->accessComponent<UserData>()->spriteColorB = 1.0f;
 			gameObjects.back()->accessComponent<UserData>()->isHitAnimation = true;
-			gameObjects.back()->accessComponent<UserData>()->depthRandom = 0.000001f;
+			gameObjects.back()->accessComponent<UserData>()->depthAdd = 0.000001f;
 
 			gameObjects.back()->accessComponent<UserData>()->hitCoolDown.start();
 			gameObjects.back()->accessComponent<UserData>()->cooldownLenght = 1110.0f;
@@ -1031,7 +1031,6 @@ namespace Engin
 			gameObjects.back()->accessComponent<PseudoSpriteDraw>()->setRaycastW(raycastW);
 			gameObjects.back()->accessComponent<UserData>()->tileOverSize = 256;
 			gameObjects.back()->accessComponent<UserData>()->isTree = true;
-			gameObjects.back()->accessComponent<UserData>()->depthRandom = randomGenerator.getRandomFloat(-0.000001, 0.000001);
 			gameObjects.back()->accessComponent<UserData>()->spriteColorR = 1.0f;
 			gameObjects.back()->accessComponent<UserData>()->spriteColorG = 1.0f;
 			gameObjects.back()->accessComponent<UserData>()->spriteColorB = 1.0f;
@@ -1081,8 +1080,8 @@ namespace Engin
 		void Pseudo3D::Projectile::update()
 		{
 			Transform* t = ownerObject->accessComponent<Transform>();
-			t->setXPosition(t->getXPosition() + speed * cosf(t->getRotation() + glm::radians(rng.getRandomFloat(-spread, spread))));
-			t->setYPosition(t->getYPosition() + speed * sinf(t->getRotation() + glm::radians(rng.getRandomFloat(-spread, spread))));
+			t->setXPosition(t->getXPosition() + speed * cosf(t->getRotation()));
+			t->setYPosition(t->getYPosition() + speed * sinf(t->getRotation()));
 		}
 
 		// Deletes killed objects from the gameObjects vector.
