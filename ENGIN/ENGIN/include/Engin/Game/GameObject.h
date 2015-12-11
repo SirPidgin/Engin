@@ -36,6 +36,10 @@ namespace Engin
 			bool operator==(const GameObject& other);//compares the nameTag of both objects
 
 			void setNameTag(std::string newNameTag);
+			std::string getNameTag()
+			{
+				return nameTag;
+			}
 			template <typename type> void addComponent();
 			template <typename type> type* accessComponent();
 

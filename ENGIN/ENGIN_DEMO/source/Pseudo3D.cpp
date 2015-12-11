@@ -132,6 +132,8 @@ namespace Engin
 			createTree(23.02f, 6.10f + 6.0f, 0.0f);
 			createTree(23.03f, 7.11f + 6.0f, 0.0f);
 			createTree(23.04f, 8.12f + 6.0f, 0.0f);
+
+			createParticleSnow(camera->getPositionRotationOrigin().x + 400, camera->getPositionRotationOrigin().y + 400);
 			
 			turretCoolDown.start();
 
@@ -338,7 +340,7 @@ namespace Engin
 							// Kill the projectile.
 							gameObjects[i]->kill(); 
 							// Create hit animation.
-							createHitFireball(gameObjects[j]->accessComponent<Transform>()->getXPosition(), gameObjects[j]->accessComponent<Transform>()->getYPosition(), gameObjects[j]->accessComponent<Transform>());
+							createHitFireball(gameObjects[j]->accessComponent<Transform>());
 							// Color the furball to look like ghost.							
 							gameObjects[j]->accessComponent<UserData>()->spriteColorR = 0.5f;
 							gameObjects[j]->accessComponent<UserData>()->spriteColorG = 0.5f;
@@ -370,7 +372,14 @@ namespace Engin
 			//Raycast draw
 			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
-				gameObjects[i]->accessComponent<PseudoSpriteDraw>()->drawPseudoSprite();
+				if (gameObjects[i]->getNameTag() != "snow")
+				{
+					gameObjects[i]->accessComponent<PseudoSpriteDraw>()->drawPseudoSprite();
+				}
+				else
+				{
+					gameObjects[i]->accessComponent<ParticleEffect>()->draw();
+				}
 			}
 						
 			//Roof and floor for raycast
@@ -588,7 +597,7 @@ namespace Engin
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopStartFrame(static_cast<int>(spriteAnimIndex * 10));
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopEndFrame(static_cast<int>(spriteAnimIndex * 10 + 9));
 				}
-				else if (gameObjects[i]->accessComponent<UserData>()->isHitAnimation == true)
+				else if (gameObjects[i]->accessComponent<UserData>()->isHitAnimation == true || gameObjects[i]->getNameTag() == "snow")
 				{
 					//Do nothing
 				}
@@ -1041,7 +1050,7 @@ namespace Engin
 		}
 
 		// Raycast hit animation.
-		void Pseudo3D::createHitFireball(float x, float y, Game::Transform* furbalGameobjectTransform)
+		void Pseudo3D::createHitFireball(Game::Transform* furbalGameobjectTransform)
 		{
 			gameObjects.push_back(new GameObject(&alphaBatch));
 			gameObjects.back()->addComponent<Transform>();
@@ -1056,8 +1065,6 @@ namespace Engin
 			gameObjects.back()->accessComponent<AnimationPlayer>()->loopable(true);
 			gameObjects.back()->accessComponent<AnimationPlayer>()->start();
 
-			gameObjects.back()->accessComponent<Transform>()->setXPosition(x);
-			gameObjects.back()->accessComponent<Transform>()->setYPosition(y);
 			gameObjects.back()->accessComponent<Transform>()->setRotation(0.0f);
 
 			//userdata
@@ -1088,6 +1095,7 @@ namespace Engin
 			gameObjects.back()->addComponent<AnimationPlayer>();
 			gameObjects.back()->addComponent<UserData>();
 			gameObjects.back()->addComponent<PseudoSpriteDraw>();
+			
 
 			gameObjects.back()->accessComponent<AnimationPlayer>()->setAnimation(animTree360);
 			gameObjects.back()->accessComponent<AnimationPlayer>()->setLoopEndFrame(0);
@@ -1097,6 +1105,7 @@ namespace Engin
 			gameObjects.back()->accessComponent<Transform>()->setXPosition(x);
 			gameObjects.back()->accessComponent<Transform>()->setYPosition(y);
 			gameObjects.back()->accessComponent<Transform>()->setRotation(rotation);
+			
 
 			//userdata				
 			gameObjects.back()->accessComponent<UserData>()->sides = 40;
@@ -1151,6 +1160,24 @@ namespace Engin
 
 			// RigidBody.
 			gameObjects.back()->accessComponent<RigidBody>()->setCollisionRadius(0.2f);
+		}
+
+		void Pseudo3D::createParticleSnow(float x, float y)
+		{
+			gameObjects.push_back(new GameObject(&alphaBatch));
+			gameObjects.back()->addComponent<ParticleEffect>();
+			gameObjects.back()->addComponent<Transform>();
+			gameObjects.back()->addComponent<RigidBody>();
+			gameObjects.back()->addComponent<Sprite>();
+			gameObjects.back()->addComponent<UserData>();
+			gameObjects.back()->setNameTag("snow");
+
+			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
+
+			gameObjects.back()->accessComponent<Transform>()->setPosition(glm::vec2(x, y));
+
+			gameObjects.back()->accessComponent<ParticleEffect>()->init(tree_64);
+			gameObjects.back()->accessComponent<UserData>()->isTree = true;
 		}
 
 		void Pseudo3D::Projectile::update()
