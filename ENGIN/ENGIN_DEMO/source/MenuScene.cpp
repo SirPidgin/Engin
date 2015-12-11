@@ -20,7 +20,7 @@ namespace Engin
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 			font->setPtSize(100);
 
-			optionFurballsteinCreator.createTextTexture(font, "FURBALLSTEIN", 255.0f, 255.0f, 255.0f);
+			optionFurballsteinCreator.createTextTexture(font, "FURBALLSTEIN 3D", 255.0f, 255.0f, 255.0f);
 			optionFurballstein = optionFurballsteinCreator.getTexture();
 
 			optionOriginalCreator.createTextTexture(font, "ORIGINAL DEMO", 255.0f, 255.0f, 255.0f);

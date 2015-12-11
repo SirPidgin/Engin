@@ -245,9 +245,6 @@ namespace Engin
 
 		void Pseudo3D::update(GLfloat step)
 		{
-			// Taking time it takes to go trough the update.
-			myTimer.start();
-
 			// Back to menu.
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_ESCAPE))
 			{
@@ -359,7 +356,7 @@ namespace Engin
 			RaycastingSprites();
 			
 			// Printing time
-			textCreator.createTextTexture(font, "Time: " + std::to_string(myTimer.getLocalTime() / 1000.0f) + " ms", 255, 100, 0);
+			textCreator.createTextTexture(font, "Time: " + std::to_string(myTimer.getLocalTime() / 1000.0f) + " s", 255, 100, 0);
 			text = textCreator.getTexture();		
 		}
 
