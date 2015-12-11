@@ -4,11 +4,23 @@
 
 #include "Engin\Resources\Texture.h"
 
+/*
+Template for creating new components:
+	class newComponent : public Component
+	{
+		//
+	};
+
+Components can be accessed from gameObject by calling accessComponent<>:
+myGameObject.accessComponent<myComponent>->componentMehtod();
+All components need to be added to the game object with addComponent<>.
+*/
 
 namespace Engin
 {
 	namespace Game
 	{
+		//Collision mode used in Rigid Body component
 		enum CollisionMode
 		{
 			CM_NoCollision,

@@ -4,6 +4,10 @@
 #include "Engin\HID\MouseInput.h"
 #include "Engin\HID\GamepadInput.h"
 
+/*
+Class for managing events.
+Update is handled in engine.cpp.
+*/
 
 namespace Engin
 {

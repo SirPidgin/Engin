@@ -40,6 +40,18 @@ namespace Engin
 		}
 
 
+		bool GameObject::isAlive()
+		{
+			return alive;
+		}
+
+
+		void GameObject::kill()
+		{
+			alive = false;
+		}
+
+
 		bool GameObject::operator!=(const GameObject& other)
 		{
 			if (strcmp(this->nameTag.c_str(), other.nameTag.c_str()))

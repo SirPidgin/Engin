@@ -4,6 +4,9 @@
 
 #include "Component.h"
 
+/*
+Component used for transforming the game object.
+*/
 
 namespace Engin
 {
@@ -15,7 +18,8 @@ namespace Engin
 			Transform(GameObject* o) : Component(o) {}
 			~Transform(){}
 
-			//Getters
+			//Getters:
+
 			glm::vec2 getPosition() { return position; }
 			float getXPosition() { return position.x; }
 			float getYPosition() { return position.y; }
@@ -23,7 +27,9 @@ namespace Engin
 			float getRotation() { return rotation; }
 			float getDepth() { return depth; }
 
-			//Setters
+
+			//Setters:
+
 			void setPosition(glm::vec2 newPos) { position = newPos; }
 			void setXPosition(float xPos) { position.x = xPos; }
 			void setYPosition(float yPos) { position.y = yPos; }

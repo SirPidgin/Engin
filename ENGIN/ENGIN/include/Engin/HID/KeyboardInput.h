@@ -2,13 +2,12 @@
 
 #include <unordered_map>
 
-
-//Call pressKey and releaseKey in EventManager to update keyMap
-//call update() in game loop to update previousKeyMap
-//In the game's code you can call e.g. keyboardInput->keyIsPressed(HID::KEYBOARD_UP), which returns a true if up arrow is pressed.
-
-//TODO: Can iterators be cleaned up?
-
+/*
+	Class for handling keyboard input.
+	pressKey and releaseKey called in EventManager to update keyMap.
+	update() called in engine to update previousKeyMap.
+	In the game's code you can call e.g. keyboardInput->keyIsPressed(HID::KEYBOARD_UP), which returns a true if up arrow is pressed.
+*/
 
 //Forward Declaration
 namespace Engin

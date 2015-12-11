@@ -4,13 +4,14 @@
 
 #include <unordered_map>
 
-//Doesn't work yet, needs some way of handling gamepad indices.
-//also might be way too slow in it's current state...
-
-//Buttons, Axes, Hats and Balls
-//Call protected functions in EventManager to update maps
-//call update() in game loop to update previousMaps
-//In the game's code you can call e.g. gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_X), which returns a true if X button is pressed.
+/*
+	Class for handling gamepad input.
+	Supports Buttons, Axes, Hats and Balls.
+	Gamepads are automatically created when they are connected.
+	Protected functions called in EventManager to update maps.
+	update() called in engine to update previousMaps.
+	In the game's code you can call e.g. gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_X), which returns a true if X button is pressed.
+*/
 
 //Forward Declaration
 namespace Engin
