@@ -33,6 +33,8 @@ namespace Engin
 			~Pseudo3D();
 
 			void update(GLfloat step);
+			void player1Movement();
+			void player2Movement();
 			void interpolate(GLfloat alpha);
 			void draw();
 
