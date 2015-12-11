@@ -5,7 +5,7 @@ namespace Engin
 {
 	namespace Game
 	{
-		SceneManager::SceneManager()
+		SceneManager::SceneManager() : newScene(nullptr), sceneAction(NONE)
 		{
 		}
 
@@ -39,24 +39,65 @@ namespace Engin
 
 		void SceneManager::push(Scene* scene)
 		{
-			scenes.push_back(scene);
+			newScene = scene;
+			sceneAction = PUSH;
 		}
 
 		void SceneManager::pop()
 		{
-			delete scenes.back();
-			scenes.pop_back();
+			sceneAction = POP;
 		}
 
 		void SceneManager::change(Scene* scene)
 		{
-			if (!scenes.empty())
+			newScene = scene;
+			sceneAction = CHANGE;
+		}
+
+		void SceneManager::handleScenes()
+		{
+			switch (sceneAction)
 			{
-				delete scenes.back();
-				scenes.pop_back();
+				case PUSH:
+				{
+					if (newScene)
+					{
+						scenes.push_back(newScene);
+					}
+					break;
+				}
+				case POP:
+				{
+					if (!scenes.empty())
+					{
+						delete scenes.back();
+						scenes.pop_back();
+					}
+					break;
+				}
+				case CHANGE:
+				{
+					if (newScene)
+					{
+						if (!scenes.empty())
+						{
+							delete scenes.back();
+							scenes.pop_back();
+						}
+
+						scenes.push_back(newScene);
+					}
+					break;
+				}
+				case NONE:
+				default:
+				{
+					break;
+				}
 			}
 
-			scenes.push_back(scene);
+			newScene = nullptr;
+			sceneAction = NONE;
 		}
 	}
 }

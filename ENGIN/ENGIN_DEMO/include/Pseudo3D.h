@@ -186,7 +186,6 @@ namespace Engin
 			Resources::Texture* floor_800;
 
 			Resources::Texture* text;
-			Resources::Texture* text2;
 			Resources::Texture* text3;
 			Renderer::TextRenderer textCreator;
 			Renderer::TextRenderer textCreator3;

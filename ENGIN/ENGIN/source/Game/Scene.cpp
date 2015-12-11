@@ -10,6 +10,22 @@ namespace Engin
 			guiBatch.setSortMode(Renderer::TextureSortMode::FrontToBack);
 		}
 
+		Scene::~Scene()
+		{
+			for (auto camera : worldCameras)
+			{
+				delete camera;
+			}
+
+			for (auto camera : guiCameras)
+			{
+				delete camera;
+			}
+
+			worldCameras.clear();
+			guiCameras.clear();
+		}
+
 		Renderer::Camera* Scene::createWorldCamera()
 		{
 			worldCameras.push_back(new Renderer::Camera());

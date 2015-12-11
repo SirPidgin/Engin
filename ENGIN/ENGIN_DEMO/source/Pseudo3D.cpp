@@ -15,7 +15,7 @@ namespace Engin
 #pragma region INIT
 			this->engine = engine;
 
-			std::cout << "Scene started" << std::endl;
+			std::cout << "PSEUDO3D SCENE IS A GO" << std::endl;
 
 			if (engine->gamepadInput->getNumGamepads() > 0)
 			{
@@ -204,13 +204,52 @@ namespace Engin
 
 		Pseudo3D::~Pseudo3D()
 		{
-			std::cout << "Scene shutdown" << std::endl;
+			std::cout << "PSEUDO3D SCENE IS A DIE" << std::endl;
+
+			// Unload resources.
+			Resources::ResourceManager::getInstance().unload(shader->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(textureShader->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(alphaShader->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(furball->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(furball_128->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(tree_64->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(mapSheet_64->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(mapSheet_256->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(floor_16->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(floor_800->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(font->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(animFurball360->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(furballShadow->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(animFireball360->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(animTree360->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(treeShadow->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(animFurballHit->getResourcePath());
+
+			// Delete gameobjects.
+			for (auto gameObject : gameObjects)
+			{
+				delete gameObject;
+			}
+
+			for (auto deadObject : deadObjects)
+			{
+				delete deadObject;
+			}
+			
+			gameObjects.clear();
+			deadObjects.clear();
 		}
 
 		void Pseudo3D::update(GLfloat step)
 		{
 			// Taking time it takes to go trough the update.
 			myTimer.start();
+
+			// Back to menu.
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_ESCAPE))
+			{
+				engine->getSceneManager().pop();
+			}
 
 			player1Movement();
 			player2Movement();

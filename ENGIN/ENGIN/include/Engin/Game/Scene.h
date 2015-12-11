@@ -12,7 +12,7 @@ namespace Engin
 		{
 		public:
 			Scene();
-			virtual ~Scene(){};
+			virtual ~Scene();
 			
 			// Scene update.
 			virtual void update(GLfloat step) = 0;
@@ -30,6 +30,8 @@ namespace Engin
 		protected:
 			Renderer::Camera* createWorldCamera();
 			Renderer::Camera* createGuiCamera();
+
+			void deleteCameras();
 
 			Renderer::TextureBatch opaqueBatch;
 			Renderer::TextureBatch alphaBatch;
