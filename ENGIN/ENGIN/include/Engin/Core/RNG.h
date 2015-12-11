@@ -2,6 +2,9 @@
 
 #include <random>
 
+/*
+Class for generating random numbers and pseudo random numbers from seed.
+*/
 
 namespace Engin
 {
@@ -16,14 +19,14 @@ namespace Engin
 			//Pseudorandom Number Generation = Same seed always returns the same "random" numbers in the same order			
 			void setSeed(unsigned int newSeed);
 			unsigned int getSeed();
-			void resetRandomSeedEngine();
+			void resetRandomSeedEngine(); //Reset with the current seed
 			unsigned int getRandomNumberFromSeed(); //returns a large unsigned int from seed
-			void discardNext(int amount = 1);
+			void discardNext(int amount = 1); //Discards the given amount of seeded random numbers
 			unsigned int getMax();
 			unsigned int getMin();
 
 			//Random Pseudorandom Number Generation
-			//Returns only relatively small values (RAND_MAX)
+				//Returns only relatively small values (RAND_MAX)
 			int getRandomSInt();
 			int getRandomUInt();
 			int getRandomInt(int min, int max);
