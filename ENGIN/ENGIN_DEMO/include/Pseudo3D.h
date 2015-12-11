@@ -17,6 +17,7 @@
 #include "Engin\Game\GameObject.h"
 #include "Engin\Game\Sprite.h"
 #include "Engin\Game\Component.h"
+#include "Engin\Game\ParticleEffect.h"
 #include "Engin\Core\RNG.h"
 
 #include <array>
@@ -44,7 +45,8 @@ namespace Engin
 			void createFurball(float x, float y, float rotation);
 			void createFireball(float x, float y, float rotation);
 			void createProjectile(float x, float y, float rotation);
-			void createHitFireball(float x, float y, Game::Transform* furbalGameobjectTransform);
+			void createHitFireball(Game::Transform* furbalGameobjectTransform);
+			void createParticleSnow(float x, float y);
 
 			class Projectile : public Component
 			{
@@ -102,7 +104,6 @@ namespace Engin
 				{					
 					
 					static float colorValue = 0;
-
 					if (ownerObject->accessComponent<UserData>()->isFireball || ownerObject->accessComponent<UserData>()->isHitAnimation)
 					{
 						colorValue = 1.0f;
@@ -145,6 +146,7 @@ namespace Engin
 								ownerObject->accessComponent<Transform>()->getDepth() - 0.00001 + ownerObject->accessComponent<UserData>()->depthAdd);
 						}						
 					}
+
 				}
 
 			private:

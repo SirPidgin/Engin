@@ -35,10 +35,10 @@ struct Vertex
 };
 
 
-const float GRAVITY = 30.0f;
-const int NUM_PARTICLES = 1000;
+const float GRAVITY = 3.0f;
+const int NUM_PARTICLES = 10;
 const float TIMESTEP = 0.01f;
-const float SIZE = 0.07f;
+const float SIZE = 0.7f;
 const float PI = 3.1316f;
 
 // ParticleGenerator acts as a container for rendering a large number of 
