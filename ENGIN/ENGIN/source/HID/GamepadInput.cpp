@@ -91,7 +91,6 @@ namespace Engin
 				}
 				gpIt++;
 			}
-			//Too much? ._.
 		}
 
 		int GamepadInput::getAxisValue(GamepadAxis buttonID, int GPindex)

@@ -4,11 +4,12 @@
 
 #include <unordered_map>
 
-
-//Call setMousePosition, pressButton and releaseButton in EventManager to update mouse position coordinates and buttonMap
-//call update() in game loop to update previousButtonMap
-//In the game's code you can call e.g. mouseInput->buttonIsPressed(HID::MOUSEBUTTON_LEFT), which returns a true if left mouse button is pressed.
-
+/*
+	Class for handling mouse input.
+	setMousePosition, pressButton and releaseButton called in EventManager to update mouse position coordinates and buttonMap.
+	update() called in engine to update previousButtonMap.
+	In the game's code you can call e.g. mouseInput->buttonIsPressed(HID::MOUSEBUTTON_LEFT), which returns a true if left mouse button is pressed.
+*/
 
 //Forward Declaration
 namespace Engin

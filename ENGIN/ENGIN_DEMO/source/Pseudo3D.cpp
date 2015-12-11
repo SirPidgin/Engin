@@ -135,7 +135,8 @@ namespace Engin
 			
 			turretCoolDown.start();
 
-
+			// Taking time.
+			myTimer.start();
 #pragma endregion
 
 #pragma region WallTiles
@@ -147,13 +148,13 @@ namespace Engin
 			// Tilemap: North up. South down. East right. West left. Remember that degrees 0 is towards east;
 			wallTiles = 
 			{ {
-				{ { 4, 4, 4, 4, 4, 4, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } },
-				{ { 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
-				{ { 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
-				{ { 4, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 3, 3, 3, 0, 1, 0, 0, 0, 0, 3 } },
-				{ { 4, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 2, 0, 0, 3, 0, 3, 0, 1, 0, 0, 0, 0, 3 } },
-				{ { 4, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 3, 0, 3, 0, 1, 0, 0, 0, 0, 3 } },
-				{ { 4, 1, 4, 1, 4, 1, 4, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3, 3, 0, 1, 1, 0, 0, 0, 3 } },
+				{ { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 3, 3, 3, 0, 1, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 2, 0, 0, 3, 0, 3, 0, 1, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 2, 0, 0, 3, 0, 3, 0, 1, 0, 0, 0, 0, 3 } },
+				{ { 1, 1, 4, 1, 4, 1, 4, 0, 0, 0, 0, 0, 2, 2, 0, 3, 3, 3, 0, 1, 1, 0, 0, 0, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
@@ -185,7 +186,7 @@ namespace Engin
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
-				{ { 1, 0, 0, 2, 2, 2, 2, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
+				{ { 1, 0, 0, 1, 1, 1, 1, 1, 1, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
@@ -251,10 +252,11 @@ namespace Engin
 				engine->getSceneManager().pop();
 			}
 
+			// Moving players.
 			player1Movement();
 			player2Movement();
 			
-			// Rotating sprites in radians.
+			// Rotating gameobjects in radians.
 			gameObjects[5]->accessComponent<Transform>()->setRotation(alpha * 5);
 			gameObjects[0]->accessComponent<Transform>()->setRotation(2*alpha);
 			gameObjects[4]->accessComponent<Transform>()->setRotation(alpha + 0.02);
@@ -262,7 +264,7 @@ namespace Engin
 
 			gameObjects[1]->accessComponent<Transform>()->setRotation(2 * alpha);
 
-			// Moving sprites TODO: Make some logic and translate sprites with them.
+			// Moving gameobjects TODO: Make some logic and translate sprites with them.
 			gameObjects[0]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[0]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f)));
 			gameObjects[0]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[0]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f)));
 
@@ -275,8 +277,7 @@ namespace Engin
 			gameObjects[1]->accessComponent<Transform>()->setXPosition(8.0f + 4.0f * glm::cos(alpha));
 
 #pragma region Launchers
-			// Fireball launchers	
-
+			// Fireball launchers.
 			if (turretCoolDown.getLocalTime() > 2500.0f)
 			{
 				createProjectile(6, 11, glm::radians(90.0f));
@@ -287,7 +288,7 @@ namespace Engin
 #pragma endregion
 
 			// Information display.		
-			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player[0]) + " " + std::to_string(player[1]) + " angle: " + std::to_string(glm::degrees(player[2])) + " angle: " + std::to_string(glm::degrees(gameObjects[2]->accessComponent<Transform>()->getRotation())), 255, 100, 0);
+			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player[0]) + " " + std::to_string(player[1]) + " angle: " + std::to_string(glm::degrees(player[2])) + " angle2: " + std::to_string(glm::degrees(gameObjects[2]->accessComponent<Transform>()->getRotation())), 255, 100, 0);
 			text3 = textCreator3.getTexture();
 			
 			// 2D animation player for 2D fireballs.
@@ -306,6 +307,10 @@ namespace Engin
 					if (wallTiles[mapY - static_cast<int>(t->getYPosition())][static_cast<int>(t->getXPosition())] != false)
 					{
 						gameObjects[i]->kill();
+						if (wallTiles[mapY - static_cast<int>(t->getYPosition())][static_cast<int>(t->getXPosition())] != 1 && wallTiles[mapY - static_cast<int>(t->getYPosition())][static_cast<int>(t->getXPosition())] != 3)
+						{
+							wallTiles[mapY - static_cast<int>(t->getYPosition())][static_cast<int>(t->getXPosition())] = 0;
+						}						
 					}
 				}
 
@@ -351,9 +356,8 @@ namespace Engin
 			Raycasting();
 			RaycastingSprites();
 			
-			// Taking time it takes to go trough the update
-			myTimer.pause();
-			textCreator.createTextTexture(font, "Update calculation time: " + std::to_string(myTimer.getLocalTime()) + " ms", 255, 100, 0);
+			// Printing time
+			textCreator.createTextTexture(font, "Time: " + std::to_string(myTimer.getLocalTime() / 1000.0f) + " ms", 255, 100, 0);
 			text = textCreator.getTexture();		
 		}
 
@@ -720,6 +724,9 @@ namespace Engin
 			//---------------
 		}
 
+
+		// Player 1 movement works straight for the raycasting. Has gamepad and mouse controls. TODO: make cleaner code.
+#pragma region RaycastMovement
 		// Moves player
 		void Pseudo3D::movePlayer(float multiplier)
 		{
@@ -768,7 +775,7 @@ namespace Engin
 
 		void Pseudo3D::player1Movement()
 		{
-#pragma region RaycastMovement
+
 
 			// Player movement.
 			float axisMultiplier = 0.0f;
@@ -871,7 +878,6 @@ namespace Engin
 			}
 
 			engine->mouseInput->getRelativeMouseState(&lastMouseX, &lastMouseY);
-#pragma endregion
 
 			alpha += 0.01;
 
@@ -882,7 +888,6 @@ namespace Engin
 				player[2] += glm::radians(360.0f);
 			}
 
-#pragma region Shooting
 			// Shoot a projectile.
 			static Core::Timer shootTimer;
 
@@ -901,10 +906,10 @@ namespace Engin
 					shootTimer.start();
 				}
 			}
-
-#pragma endregion
 		}
+#pragma endregion
 
+		// Player 2 movement works for gameobjects. If using this for pseudo3d movement you have to change raycasting function to calculate rotX, rotY, planeX and planeY.
 		void Pseudo3D::player2Movement()
 		{
 #pragma region Player2
@@ -914,13 +919,13 @@ namespace Engin
 					// Player 2 strafe.
 					if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_7) || engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_9))
 					{
-						float rotX = glm::cos(gameObjects[2]->accessComponent<Transform>()->getRotation());
-						float rotY = glm::sin(gameObjects[2]->accessComponent<Transform>()->getRotation());
+						float rotX = glm::cos(gameObjects[2]->accessComponent<Transform>()->getRotation() + glm::radians(90.0f));
+						float rotY = glm::sin(gameObjects[2]->accessComponent<Transform>()->getRotation() + glm::radians(90.0f));
 
-						glm::vec3 rotVec = glm::normalize(glm::vec3(rotX, rotY, 0.0f));
+						/*glm::vec3 rotVec = glm::normalize(glm::vec3(rotX, rotY, 0.0f));
 						glm::vec3 upVec(0.0f, 0.0f, 1.0f);
 
-						glm::vec3 strafeVec = glm::cross(upVec, rotVec);
+						glm::vec3 strafeVec = glm::cross(upVec, rotVec);*/
 
 						if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_KP_7))
 						{
@@ -930,13 +935,13 @@ namespace Engin
 						{
 							multiplier = -1.0f;
 						}
-						if (wallTiles[mapY - static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition())][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition() + strafeVec.x * moveSpeed* multiplier)] == false)
+						if (wallTiles[mapY - static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition())][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition() + rotX * moveSpeed* multiplier)] == false)
 						{
-							gameObjects[2]->accessComponent<Transform>()->setXPosition(gameObjects[2]->accessComponent<Transform>()->getXPosition() + strafeVec.x * moveSpeed * multiplier);
+							gameObjects[2]->accessComponent<Transform>()->setXPosition(gameObjects[2]->accessComponent<Transform>()->getXPosition() + rotX * moveSpeed * multiplier);
 						}
-						if (wallTiles[mapY - static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition() + strafeVec.y * moveSpeed * multiplier)][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition())] == false)
+						if (wallTiles[mapY - static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getYPosition() + rotY * moveSpeed * multiplier)][static_cast<int>(gameObjects[2]->accessComponent<Transform>()->getXPosition())] == false)
 						{
-							gameObjects[2]->accessComponent<Transform>()->setYPosition(gameObjects[2]->accessComponent<Transform>()->getYPosition() + strafeVec.y * moveSpeed * multiplier);
+							gameObjects[2]->accessComponent<Transform>()->setYPosition(gameObjects[2]->accessComponent<Transform>()->getYPosition() + rotY * moveSpeed * multiplier);
 						}
 
 					}

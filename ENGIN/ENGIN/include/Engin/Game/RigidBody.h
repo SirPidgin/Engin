@@ -6,6 +6,10 @@
 #include "Component.h"
 #include "Transform.h"
 
+/*
+Rigid body (physics) component for game objects.
+Not ready for use since there are currently no physics in the engine.
+*/
 
 namespace Engin
 {
@@ -44,6 +48,7 @@ namespace Engin
 			glm::vec2 getClosestCollidingPoint(glm::vec2 point);
 			glm::vec2 getVelocity();
 			glm::vec2 getRelativeVelocity(glm::vec2 relativePoint);
+			float getMass();
 			float getCollisionCircleRadius();
 
 		private:
