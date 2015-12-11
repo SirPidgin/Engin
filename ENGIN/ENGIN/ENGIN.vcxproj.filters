@@ -317,7 +317,7 @@
       <Filter>Source Files\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="source\Audio\AudioPlayer.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Game\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

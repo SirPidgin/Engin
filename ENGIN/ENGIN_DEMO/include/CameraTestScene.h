@@ -42,7 +42,6 @@ namespace Engin
 			Resources::ShaderProgram* shader;
 			Resources::ShaderProgram* textureShader;
 			Resources::ShaderProgram* alphaShader;
-			Resources::ShaderProgram* particleShader;
 
 			Resources::Texture* doge;
 
@@ -55,8 +54,6 @@ namespace Engin
 
 			Game::AnimationPlayer animationPlayer;
 			Game::AnimationPlayer animationPlayer1;
-
-			Game::ParticleEffect particleGenerator;
 		};
 	}
 }

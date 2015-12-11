@@ -67,14 +67,21 @@ namespace Engin
 			textCreator = new Renderer::TextRenderer();
 			textCreator->createTextTexture(font, textString, 255 ,255, 255);
 			textTexture = textCreator->getTexture();
-			
-			particleGenerator.init(doge);
 
 			Resources::ResourceManager::getInstance().printResources();
 		}
 
 		CameraTestScene::~CameraTestScene()
 		{
+			// Unload resources.
+			Resources::ResourceManager::getInstance().unload(shader->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(textureShader->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(alphaShader->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(doge->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(font->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(animation->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(animation1->getResourcePath());
+
 			std::cout << "Camera scene shutdown" << std::endl;
 		}
 
@@ -158,6 +165,12 @@ namespace Engin
 				textCreator->createTextTexture(font, textString, 255, 255, 255);
 				textTexture = textCreator->getTexture();
 			}
+
+			// Back to menu.
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_ESCAPE))
+			{
+				engine->getSceneManager().pop();
+			}
 		}
 
 		void CameraTestScene::interpolate(GLfloat alpha)
@@ -183,7 +196,6 @@ namespace Engin
 				0.0f, 0.0f, 512.0f, 512.0f, 
 				256.0f, 256.0f,
 				0.0f, 2.0f, Renderer::clrRed, 1.0f, 1.0f);
-			particleGenerator.draw();
 			renderDogemap(0.0f, 0.0f, 64.0f, 64.0f, 20, 20);
 		}
 

@@ -19,6 +19,7 @@ namespace Engin
 
 		void init(const std::string& path);
 		void run(Game::Scene* scene);
+		void stop() { running = false; }
 		void quit();
 
 		const Renderer::Window& getWindow() const 
@@ -26,7 +27,7 @@ namespace Engin
 			return window; 
 		}
 
-		const Game::SceneManager& getSceneManager() const 
+		Game::SceneManager& getSceneManager() 
 		{ 
 			return sceneManager; 
 		}

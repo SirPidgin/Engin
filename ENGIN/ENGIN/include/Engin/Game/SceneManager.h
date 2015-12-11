@@ -12,6 +12,14 @@ namespace Engin
 			SceneManager();
 			~SceneManager();
 
+			enum SceneAction
+			{
+				NONE,
+				CHANGE,
+				PUSH,
+				POP
+			};
+
 			// Scenemanager update.
 			void update(GLfloat step);
 
@@ -29,8 +37,13 @@ namespace Engin
 
 			// Exchange last scene with new one.
 			void change(Scene* scene);
+
+			void handleScenes();
 		private:
 			std::vector<Scene*> scenes;
+
+			SceneAction sceneAction;
+			Scene* newScene;
 		};
 	}
 }

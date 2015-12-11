@@ -24,10 +24,6 @@ namespace Engin
 
 	Engin::~Engin()
 	{
-		delete eventManager;
-		delete keyboardInput;
-		delete mouseInput;
-		SDL_GL_DeleteContext(glContext);
 	}
 
 	// Initialises the engine.
@@ -89,6 +85,11 @@ namespace Engin
 	// Quits the engine.
 	void Engin::quit()
 	{
+		delete eventManager;
+		delete keyboardInput;
+		delete mouseInput;
+		SDL_GL_DeleteContext(glContext);
+
 		TTF_Quit();
 		SDL_Quit();
 	}
@@ -102,6 +103,7 @@ namespace Engin
 		float currentTime = Core::Timer::getGlobalTime() / 1000.0f;
 
 		sceneManager.change(scene); // Add scene to scene manager.
+		sceneManager.handleScenes();
 
 		// Start the main loop.
 		while (running)
@@ -115,6 +117,9 @@ namespace Engin
 			handleEvents();
 			update(deltaTime);
 			draw();
+
+			// Updates current scene etc.
+			sceneManager.handleScenes();
 		}
 	}
 
@@ -122,11 +127,6 @@ namespace Engin
 	void Engin::handleEvents()
 	{
 		if (eventManager->userQuit())
-		{
-			running = false;
-		}
-
-		if (keyboardInput->keyIsPressed(HID::KEYBOARD_ESCAPE))
 		{
 			running = false;
 		}

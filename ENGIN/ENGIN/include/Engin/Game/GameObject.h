@@ -10,6 +10,9 @@
 #include "RigidBody.h"
 #include "Engin\Renderer\TextureBatch.h"
 
+/*
+Game object class.
+*/
 
 namespace Engin
 {
@@ -26,18 +29,11 @@ namespace Engin
 			void update();
 			void draw();
 
-			bool isAlive()
-			{
-				return alive;
-			}
+			bool isAlive();
+			void kill();
 
-			void kill()
-			{
-				alive = false;
-			}
-
-			bool operator!=(const GameObject& other);
-			bool operator==(const GameObject& other);
+			bool operator!=(const GameObject& other);//compares the nameTag of both objects
+			bool operator==(const GameObject& other);//compares the nameTag of both objects
 
 			void setNameTag(std::string newNameTag);
 			std::string getNameTag()
@@ -79,7 +75,6 @@ namespace Engin
 			type* temp;
 			for (unsigned int i = 0; i < components.size(); i++)
 			{
-				//NOTE: dynamic_cast may be a bad thing to use this often (basically every frame; at least once(?)), but for now it's the only solution I could find.
 				temp = dynamic_cast<type*>(components[i]);
 				if (temp != nullptr)
 				{

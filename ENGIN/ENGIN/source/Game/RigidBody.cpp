@@ -97,6 +97,12 @@ namespace Engin
 		}
 
 
+		float RigidBody::getMass()
+		{
+			return mass;
+		}
+
+
 		float RigidBody::getCollisionCircleRadius()
 		{
 			return collisionRadius;

@@ -93,7 +93,9 @@
     <ClCompile Include="source\CameraTestScene.cpp" />
     <ClCompile Include="source\GameObjectTestScene.cpp" />
     <ClCompile Include="source\Main.cpp" />
+    <ClCompile Include="source\MenuScene.cpp" />
     <ClCompile Include="source\Pseudo3D.cpp" />
+    <ClCompile Include="source\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="alpha_shader.vertex" />
@@ -109,7 +111,9 @@
   <ItemGroup>
     <ClInclude Include="include\CameraTestScene.h" />
     <ClInclude Include="include\GameObjectTestScene.h" />
+    <ClInclude Include="include\MenuScene.h" />
     <ClInclude Include="include\Pseudo3D.h" />
+    <ClInclude Include="include\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\cloud_explosion_animation_512.png" />

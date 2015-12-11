@@ -6,6 +6,9 @@
 #include "Engin\Resources\Texture.h"
 #include "Engin\Renderer\TextureBatch.h"
 
+/*
+Component for using textures with game objects.
+*/
 
 namespace Engin
 {
