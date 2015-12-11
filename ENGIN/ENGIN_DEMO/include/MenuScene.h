@@ -26,6 +26,7 @@ namespace Engin
 			{
 				FURBALLSTEIN = 0,
 				ORIGINAL,
+				PARTICLE,
 				QUIT
 			};
 
@@ -40,10 +41,12 @@ namespace Engin
 			Resources::Texture* optionFurballstein;
 			Resources::Texture* optionOriginal;
 			Resources::Texture* optionQuit;
+			Resources::Texture* optionParticle;
 
 			Renderer::TextRenderer optionFurballsteinCreator;
 			Renderer::TextRenderer optionOriginalCreator;
 			Renderer::TextRenderer optionQuitCreator;
+			Renderer::TextRenderer optionParticleCreator;
 
 			Renderer::Camera* camera;
 		};

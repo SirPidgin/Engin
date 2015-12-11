@@ -44,10 +44,20 @@ GameObjectTestScene::GameObjectTestScene(Engin::Engin* engine) : gameObject("mai
 GameObjectTestScene::~GameObjectTestScene()
 {
 	std::cout << "GaneObject scene shutdown" << std::endl;
+
+	Engin::Resources::ResourceManager::getInstance().unload(doge->getResourcePath());
+	Engin::Resources::ResourceManager::getInstance().unload(shader->getResourcePath());
+	Engin::Resources::ResourceManager::getInstance().unload(textureShader->getResourcePath());
+	Engin::Resources::ResourceManager::getInstance().unload(alphaShader->getResourcePath());
 }
 
 void GameObjectTestScene::update(GLfloat step)
 {
+	if (engine->keyboardInput->keyWasPressed(Engin::HID::KEYBOARD_ESCAPE))
+	{
+		engine->getSceneManager().pop();
+	}
+
 	static float zoomByInput = 1.0f;
 	if (engine->mouseInput->mouseWheelWasMoved(Engin::HID::MOUSEWHEEL_UP))
 	{
