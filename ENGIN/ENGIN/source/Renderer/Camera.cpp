@@ -40,7 +40,7 @@ namespace Engin
 		void Camera::activateViewPort()
 		{
 			calculateVP();
-			glViewport(viewPort[0], viewPort[1], viewPort[2], viewPort[3]);
+			glViewport(static_cast<GLint>(viewPort[0]), static_cast<GLint>(viewPort[1]), static_cast<GLsizei>(viewPort[2]), static_cast<GLsizei>(viewPort[3]));
 		}
 
 		void Camera::setPositionRotationOrigin(GLfloat worldX, GLfloat worldY)

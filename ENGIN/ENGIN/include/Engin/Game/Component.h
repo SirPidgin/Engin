@@ -33,7 +33,7 @@ namespace Engin
 		public:
 			Component();
 			Component(GameObject* o);
-			~Component();
+			virtual ~Component();
 
 			virtual void draw();
 			virtual void update();

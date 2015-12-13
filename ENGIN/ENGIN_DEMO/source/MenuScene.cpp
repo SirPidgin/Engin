@@ -20,16 +20,16 @@ namespace Engin
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 			font->setPtSize(100);
 
-			optionFurballsteinCreator.createTextTexture(font, "FURBALLSTEIN 3D", 255.0f, 255.0f, 255.0f);
+			optionFurballsteinCreator.createTextTexture(font, "FURBALLSTEIN 3D", 255, 255, 255);
 			optionFurballstein = optionFurballsteinCreator.getTexture();
 
-			optionOriginalCreator.createTextTexture(font, "ORIGINAL DEMO", 255.0f, 255.0f, 255.0f);
+			optionOriginalCreator.createTextTexture(font, "ORIGINAL DEMO", 255, 255, 255);
 			optionOriginal = optionOriginalCreator.getTexture();
 
-			optionParticleCreator.createTextTexture(font, "PARTICLES", 255.0f, 255.0f, 255.0f);
+			optionParticleCreator.createTextTexture(font, "PARTICLES", 255, 255, 255);
 			optionParticle = optionParticleCreator.getTexture();
 
-			optionQuitCreator.createTextTexture(font, "QUIT", 255.0f, 255.0f, 255.0f);
+			optionQuitCreator.createTextTexture(font, "QUIT", 255, 255, 255);
 			optionQuit = optionQuitCreator.getTexture();
 
 			guiBatch.setShader(shader);

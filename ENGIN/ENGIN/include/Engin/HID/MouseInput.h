@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glm\vec2.hpp>
-
+#include <SDL\SDL.h>
 #include <unordered_map>
 
 /*
@@ -60,6 +60,8 @@ namespace Engin
 			glm::ivec2 getMousePosition() { return mousePosition; }
 			int getMouseXPosition() { return mousePosition.x; }
 			int getMouseYPosition() { return mousePosition.y; }
+			void enableRelativeMousPosition() { SDL_SetRelativeMouseMode(SDL_TRUE); }
+			void disableRelativeMousPosition() { SDL_SetRelativeMouseMode(SDL_FALSE); }
 
 		protected:
 			void pressButton(unsigned int buttonID);

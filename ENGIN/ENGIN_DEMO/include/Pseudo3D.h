@@ -49,44 +49,72 @@ namespace Engin
 			void createProjectile(float x, float y, float rotation);
 			void createHitFireball(Game::Transform* furbalGameobjectTransform);
 			void createParticleSnow(float x, float y);
+			void createTree(float x, float y, float rotation);
 
 			class Projectile : public Component
 			{
 			public:
-				Projectile(GameObject* o) : Component(o) {}
+				Projectile(GameObject* o) : 
+					Component(o),
+					speed(0.10f),
+					spread(5.0f)
+				{
+				}
+
 				void update();
 
 			private:
-				float speed = 0.10f;
-				float spread = 5.0f;
-				Core::RNG rng; // Should be static?
+				float speed;
+				float spread;
+				Core::RNG rng;
 			};
-			void createTree(float x, float y, float rotation);
 
 			class UserData : public Component
 			{
 			public:
-				UserData(GameObject* o) : Component(o){}
+				UserData(GameObject* o) :
+					Component(o),
+					sides(0),
+					transformY(0),
+					animationIndex(0),
+					spriteXout(0),
+					spriteYout(0),
+					isFireball(false),
+					hasShadow(false),
+					animationLoopStartFrame(0),
+					animationLoopEndFrame(0),
+					shadow(nullptr),
+					cooldownLenght(0.0f),
+					tileOverSize(0),
+					isTree(false),
+					spriteColorR(0.0f),
+					spriteColorG(0.0f),
+					spriteColorB(0.0f),
+					spriteColorA(1.0f),
+					isHitAnimation(false),
+					depthAdd(0.0f),
+					furbalGameobjectTransform(nullptr) {}
+
 				int sides; 
 				double transformY;
 				int animationIndex;
 				double spriteXout;
 				double spriteYout;
-				bool isFireball = false;
-				bool hasShadow = false;
-				int animationLoopStartFrame = 0;
-				int animationLoopEndFrame = 0;
+				bool isFireball;
+				bool hasShadow ;
+				int animationLoopStartFrame;
+				int animationLoopEndFrame;
 				Resources::Texture* shadow;
 				Core::Timer hitCoolDown;
-				float cooldownLenght = 0.0f;
-				int tileOverSize = 0;
-				bool isTree = false;
+				float cooldownLenght;
+				int tileOverSize;
+				bool isTree;
 				float spriteColorR;
 				float spriteColorG;
 				float spriteColorB;
-				float spriteColorA = 1.0f;
-				bool isHitAnimation = false;
-				float depthAdd = 0.0f; // To render things over objects depth wise.
+				float spriteColorA;
+				bool isHitAnimation;
+				float depthAdd; // To render things over objects depth wise.
 
 				Game::Transform* furbalGameobjectTransform;
 
@@ -99,7 +127,12 @@ namespace Engin
 			class PseudoSpriteDraw : public Component
 			{
 			public:
-				PseudoSpriteDraw(GameObject* o) : Component(o){}
+				PseudoSpriteDraw(GameObject* o) :
+					Component(o),
+					textureBatch(nullptr),
+					raycastW(0),
+					limitLeft(0),
+					limitRight(0) {}
 				void setTextureBatch(Renderer::TextureBatch* newTextrBatch) { textureBatch = newTextrBatch; }
 				void setRaycastW(int W) { raycastW = W; limitLeft = -raycastW - 2656; limitRight = raycastW - 2400; }
 				void drawPseudoSprite()				   
@@ -128,24 +161,24 @@ namespace Engin
 						&& ownerObject->accessComponent<UserData>()->transformY > 0)
 					{
 						textureBatch->draw(ownerObject->accessComponent<AnimationPlayer>()->getTexture(), ownerObject->accessComponent<AnimationPlayer>()->getCurrentFrameTexCoords(),
-							ownerObject->accessComponent<UserData>()->spriteXout, ownerObject->accessComponent<UserData>()->spriteYout,
+							static_cast<float>(ownerObject->accessComponent<UserData>()->spriteXout), static_cast<float>(ownerObject->accessComponent<UserData>()->spriteYout),
 							ownerObject->accessComponent<AnimationPlayer>()->getFrameWidth(), ownerObject->accessComponent<AnimationPlayer>()->getFrameHeight(),
 							0.0f, 0.0f,	0.0f, 
 							ownerObject->accessComponent<Transform>()->getScale(), 
-							Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } *colorValue,
+							Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } * colorValue,
 							ownerObject->accessComponent<UserData>()->spriteColorA, ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthAdd);
 
 						//shadow
 						if (ownerObject->accessComponent<UserData>()->hasShadow == true)
 						{
 							textureBatch->draw(ownerObject->accessComponent<UserData>()->shadow, &glm::vec4(0.0f, 0.0f, ownerObject->accessComponent<UserData>()->shadow->getWidth(), ownerObject->accessComponent<UserData>()->shadow->getHeight()),
-								ownerObject->accessComponent<UserData>()->spriteXout, ownerObject->accessComponent<UserData>()->spriteYout,
-								ownerObject->accessComponent<UserData>()->shadow->getWidth(), (ownerObject->accessComponent<UserData>()->shadow->getHeight() + ownerObject->accessComponent<Transform>()->getDepth()*50),
+								static_cast<float>(ownerObject->accessComponent<UserData>()->spriteXout), static_cast<float>(ownerObject->accessComponent<UserData>()->spriteYout),
+								ownerObject->accessComponent<UserData>()->shadow->getWidth(), (ownerObject->accessComponent<UserData>()->shadow->getHeight() + ownerObject->accessComponent<Transform>()->getDepth() * 50),
 								0.0f, 0.0f, 0.0f,
 								ownerObject->accessComponent<Transform>()->getScale(), 
-								Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } *colorValue, 
+								Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } * colorValue, 
 								ownerObject->accessComponent<UserData>()->spriteColorA,
-								ownerObject->accessComponent<Transform>()->getDepth() - 0.00001 + ownerObject->accessComponent<UserData>()->depthAdd);
+								ownerObject->accessComponent<Transform>()->getDepth() - 0.00001f + ownerObject->accessComponent<UserData>()->depthAdd);
 						}						
 					}
 
@@ -194,8 +227,8 @@ namespace Engin
 			Resources::Font* font;
 			Core::Timer myTimer;
 
-			std::array<std::array<int,25>,49> wallTiles; // Notice the world size mapX and mapY
-			std::array<double,5> player;
+			std::array<std::array<int, 25>, 49> wallTiles; // Notice the world size mapX and mapY
+			std::array<double, 5> player;
 
 			std::vector<GameObject*> gameObjects;
 			std::vector<GameObject*> deadObjects;
@@ -233,7 +266,7 @@ namespace Engin
 			int raycastX, raycastY;
 
 			int raycastTileIndex;
-			std::array<std::array<double,5>, 800> Raycastlines; //Size has to be same as raycastW
+			std::array<std::array<double, 5>, 800> Raycastlines; //Size has to be same as raycastW
 			int spriteAnimIndex;
 			double depth;
 

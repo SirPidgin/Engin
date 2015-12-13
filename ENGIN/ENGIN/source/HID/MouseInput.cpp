@@ -1,14 +1,12 @@
 #include "Engin\HID\MouseInput.h"
 
-#include "SDL\SDL.h"
-
 namespace Engin
 {
 	namespace HID
 	{
 		MouseInput::MouseInput()
 		{
-			SDL_SetRelativeMouseMode(SDL_TRUE);
+			SDL_SetRelativeMouseMode(SDL_FALSE);
 		}
 		MouseInput::~MouseInput()
 		{

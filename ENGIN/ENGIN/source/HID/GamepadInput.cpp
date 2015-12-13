@@ -243,8 +243,8 @@ namespace Engin
 
 		void GamepadInput::ballMotion(int ballIndex, int xMovement, int yMovement, int GPindex)
 		{
-			gamepads[GPindex]->xBallMap[ballIndex] = xMovement;
-			gamepads[GPindex]->yBallMap[ballIndex] = yMovement;
+			gamepads[GPindex]->xBallMap[ballIndex] = (xMovement > 0) ? true : false;
+			gamepads[GPindex]->yBallMap[ballIndex] = (yMovement > 0) ? true : false;
 		}
 
 		void GamepadInput::axisMotion(int axisIndex, int value, int GPindex)

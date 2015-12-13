@@ -10,12 +10,15 @@ namespace Engin
 		GameObject::GameObject() : alive(true), nameTag("default"), textureBatch(nullptr)
 		{
 		}
-		GameObject::GameObject(Renderer::TextureBatch* refTextureBatch) : nameTag("default"), textureBatch(refTextureBatch)
+
+		GameObject::GameObject(Renderer::TextureBatch* refTextureBatch) : alive(true), nameTag("default"), textureBatch(refTextureBatch)
 		{
 		}
-		GameObject::GameObject(std::string name, Renderer::TextureBatch* refTextureBatch) : nameTag(name), textureBatch(refTextureBatch)
+
+		GameObject::GameObject(std::string name, Renderer::TextureBatch* refTextureBatch) : alive(true), nameTag(name), textureBatch(refTextureBatch)
 		{
 		}
+
 		GameObject::~GameObject()
 		{
 			for (unsigned int i = 0; i < components.size(); i++)

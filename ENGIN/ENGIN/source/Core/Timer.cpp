@@ -18,7 +18,7 @@ namespace Engin
 
 		GLfloat Timer::getGlobalTime()
 		{
-			return SDL_GetTicks();
+			return static_cast<GLfloat>(SDL_GetTicks());
 		}
 
 		GLfloat Timer::getLocalTime()

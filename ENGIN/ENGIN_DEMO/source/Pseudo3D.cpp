@@ -10,11 +10,90 @@ namespace Engin
 {
 	namespace Game
 	{
-		Pseudo3D::Pseudo3D(Engin* engine) : camera(createWorldCamera()), camera2(createWorldCamera()), camera3(createGuiCamera()), useGamePad(false)
+		Pseudo3D::Pseudo3D(Engin* engine) :
+			engine(engine),
+			camera(createWorldCamera()),
+			camera2(createWorldCamera()),
+			camera3(createGuiCamera()),
+			shader(nullptr),
+			textureShader(nullptr),
+			alphaShader(nullptr),
+			furball(nullptr),
+			furball_128(nullptr),
+			tree_64(nullptr),
+			mapSheet_64(nullptr),
+			mapSheet_256(nullptr),
+			floor_16(nullptr),
+			floor_800(nullptr),
+			text(nullptr),
+			text3(nullptr),
+			font(nullptr),
+			alpha(0.0f),
+			endX(0),
+			visibleTilesCount(0),
+			mapX(0),
+			mapY(0),
+			tileSize(0),
+			tileSize2d(0),
+			useGamePad(false),
+			animFurball360(nullptr),
+			furballShadow(nullptr),
+			animFireball360(nullptr),
+			animTree360(nullptr),
+			treeShadow(nullptr),
+			animFurballHit(nullptr),
+			raycastW(0),
+			raycastH(0),
+			dirX(0.0),
+			dirY(0.0),
+			planeX(0.0), 
+			planeY(0.0),
+			raycastX(0),
+			raycastY(0),
+			raycastTileIndex(0),
+			spriteAnimIndex(0),
+			depth(0.0),
+			cameraX(0.0),
+			rayPosX(0.0),
+			rayPosY(0.0),
+			rayDirX(0.0),
+			rayDirY(0.0),
+			sideDistX(0.0),
+			sideDistY(0.0),
+			deltaDistX(0.0),
+			deltaDistY(0.0),
+			perpWallDist(0.0),
+			stepX(0),
+			stepY(0),
+			hit(0),
+			side(0),
+			lineHeight(0),
+			drawStart(0),
+			drawEnd(0),
+			wallX(0.0),
+			texX(0),
+			texNum(0),
+			spriteX(0),
+			spriteY(0),
+			transform(0.0f),
+			spriteXout(0.0),
+			spriteYout(0.0),
+			spriteScreenX(0.0),
+			spriteScale(0.0),
+			spriteHeightWidth(0.0),
+			spriteFacing(0.0),
+			spriteAngle(0.0),
+			spriteSideAngle(0.0f),
+			convertToFloat(0.0f),
+			spriteStartFrame(0),
+			spriteEndFrame(0),
+			moveSpeed(0.0f),
+			rotSpeed(0.0f)
 		{
 #pragma region INIT
-			this->engine = engine;
 
+			engine->mouseInput->enableRelativeMousPosition();
+	
 			std::cout << "PSEUDO3D SCENE IS A GO" << std::endl;
 
 			if (engine->gamepadInput->getNumGamepads() > 0)
@@ -198,7 +277,7 @@ namespace Engin
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
 				{ { 1, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3 } },
-				{ { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 } },
+				{ { 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 } }
 			} };
 
 #pragma endregion
@@ -208,6 +287,8 @@ namespace Engin
 		Pseudo3D::~Pseudo3D()
 		{
 			std::cout << "PSEUDO3D SCENE IS A DIE" << std::endl;
+
+			engine->mouseInput->disableRelativeMousPosition();
 
 			// Unload resources.
 			Resources::ResourceManager::getInstance().unload(shader->getResourcePath());
@@ -256,19 +337,19 @@ namespace Engin
 			player2Movement();
 			
 			// Rotating gameobjects in radians.
-			gameObjects[5]->accessComponent<Transform>()->setRotation(alpha * 5);
-			gameObjects[0]->accessComponent<Transform>()->setRotation(2*alpha);
-			gameObjects[4]->accessComponent<Transform>()->setRotation(alpha + 0.02);
-			gameObjects[10]->accessComponent<Transform>()->setRotation(glm::radians(315.0f) + 2*alpha);
+			gameObjects[5]->accessComponent<Transform>()->setRotation(alpha * 5.0f);
+			gameObjects[0]->accessComponent<Transform>()->setRotation(2.0f * alpha);
+			gameObjects[4]->accessComponent<Transform>()->setRotation(alpha + 0.02f);
+			gameObjects[10]->accessComponent<Transform>()->setRotation(glm::radians(315.0f) + 2.0f * alpha);
 
-			gameObjects[1]->accessComponent<Transform>()->setRotation(2 * alpha);
+			gameObjects[1]->accessComponent<Transform>()->setRotation(2.0f * alpha);
 
 			// Moving gameobjects TODO: Make some logic and translate sprites with them.
 			gameObjects[0]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[0]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f)));
 			gameObjects[0]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[0]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f)));
 
-			gameObjects[4]->accessComponent<Transform>()->setXPosition(15.0f + 3 * glm::cos(alpha));
-			gameObjects[6]->accessComponent<Transform>()->setYPosition(10.0f + 4 * glm::sin(alpha));
+			gameObjects[4]->accessComponent<Transform>()->setXPosition(15.0f + 3.0f * glm::cos(alpha));
+			gameObjects[6]->accessComponent<Transform>()->setYPosition(10.0f + 4.0f * glm::sin(alpha));
 
 			gameObjects[10]->accessComponent<Transform>()->setXPosition(3.0f + glm::cos(gameObjects[10]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f)));
 			gameObjects[10]->accessComponent<Transform>()->setYPosition(15.0f + glm::sin(gameObjects[10]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f)));
@@ -276,14 +357,14 @@ namespace Engin
 			gameObjects[1]->accessComponent<Transform>()->setXPosition(8.0f + 4.0f * glm::cos(alpha));
 
 #pragma region Launchers
-			// Fireball launchers.
-			if (turretCoolDown.getLocalTime() > 2500.0f)
-			{
-				createProjectile(6, 11, glm::radians(90.0f));
-				createProjectile(8, 11, glm::radians(90.0f));
-				createProjectile(7, 24, glm::radians(270.0f));
-				turretCoolDown.start();
-			}
+			//// Fireball launchers.
+			//if (turretCoolDown.getLocalTime() > 2500.0f)
+			//{
+			//	createProjectile(6.0f, 11.0f, glm::radians(90.0f));
+			//	createProjectile(8.0f, 11.0f, glm::radians(90.0f));
+			//	createProjectile(7.0f, 24.0f, glm::radians(270.0f));
+			//	turretCoolDown.start();
+			//}
 #pragma endregion
 
 			// Information display.		
@@ -303,9 +384,11 @@ namespace Engin
 				{
 					Transform* t = gameObjects[i]->accessComponent<Transform>();
 
-					if (wallTiles[mapY - static_cast<int>(t->getYPosition())][static_cast<int>(t->getXPosition())] != false)
+					if (wallTiles[mapY - static_cast<int>(t->getYPosition())][static_cast<int>(t->getXPosition())] > 0)
 					{
+						std::cout << "PROJECTILE KILL: WALL" << std::endl;
 						gameObjects[i]->kill();
+
 						if (wallTiles[mapY - static_cast<int>(t->getYPosition())][static_cast<int>(t->getXPosition())] != 1 && wallTiles[mapY - static_cast<int>(t->getYPosition())][static_cast<int>(t->getXPosition())] != 3)
 						{
 							wallTiles[mapY - static_cast<int>(t->getYPosition())][static_cast<int>(t->getXPosition())] = 0;
@@ -334,6 +417,7 @@ namespace Engin
 					{
 						if (gameObjects[i]->accessComponent<UserData>()->isFireball == true)
 						{
+							std::cout << "PROJECTILE KILL: FURBALL" << std::endl;
 							// Kill the projectile.
 							gameObjects[i]->kill(); 
 							// Create hit animation.
@@ -585,7 +669,7 @@ namespace Engin
 				//Saving data
 				gameObjects[i]->accessComponent<UserData>()->spriteXout = (spriteXout - 2400.0f - (gameObjects[i]->accessComponent<UserData>()->tileOverSize/2)*spriteScale);
 				gameObjects[i]->accessComponent<UserData>()->spriteYout = (spriteYout);
-				gameObjects[i]->accessComponent<Transform>()->setScale(spriteScale);
+				gameObjects[i]->accessComponent<Transform>()->setScale(static_cast<float>(spriteScale));
 				gameObjects[i]->accessComponent<UserData>()->transformY = transform.y;
 
 				//TODO: Animations need better system for selecting indexes.
@@ -610,28 +694,23 @@ namespace Engin
 				}
 				else
 				{
-					depth = 1.0f - (spriteYout / (raycastH/2));
+					depth = 1.0f - (spriteYout / (raycastH / 2));
 				}
-				gameObjects[i]->accessComponent<Transform>()->setDepth(depth);
+				gameObjects[i]->accessComponent<Transform>()->setDepth(static_cast<float>(depth));
 			}			
 		}
 
+		// Returns the index of an animation frame based on the rotation of the sprite.
 		int Pseudo3D::getSpriteAnimIndex(double angle, double sides)
 		{
-			spriteSideAngle = 360.0f / sides;
+			spriteSideAngle = 360.0f / static_cast<float>(sides);
 
-			if (glm::degrees(angle) < (spriteSideAngle/2.0f))
+			if (glm::degrees(angle) < (spriteSideAngle / 2.0f) || glm::degrees(angle) >= (360.0f - (spriteSideAngle / 2.0f)))
 			{
 				return 0;
 			}
-			else if (glm::degrees(angle) >= (360.0f - (spriteSideAngle / 2.0f)))
-			{
-				return 0;
-			}
-			else
-			{
-				return static_cast<int>((glm::degrees(angle) + (spriteSideAngle / 2.0f)) / spriteSideAngle);
-			}
+			
+			return static_cast<int>((glm::degrees(angle) + (spriteSideAngle / 2.0f)) / spriteSideAngle);
 		}
 
 		void Pseudo3D::DrawRaycastLines()
@@ -654,7 +733,8 @@ namespace Engin
 					}
 
 					static float colorValue = 0;
-					colorValue = depth * 6;
+					colorValue = static_cast<float>(depth) * 6.0f;
+
 					if (colorValue > 0.8f)
 					{
 						colorValue = 0.8f;
@@ -664,9 +744,9 @@ namespace Engin
 						colorValue = 0.4f;
 					}
 
-					opaqueBatch.draw(mapSheet_256, &glm::vec4(Raycastlines[i][4] + (static_cast<int>(Raycastlines[i][3]) - 1) * tileSize, 0.0f, 1.0f, tileSize), 
-						Raycastlines[i][0] - 2400, Raycastlines[i][1], 1.0f, Raycastlines[i][2] - Raycastlines[i][1], 0.0f, 0.0f, 0.0f, 1.0f, 
-						Renderer::Color{ 1.0f, 1.0f, 1.0f } * colorValue, 1.0f, depth);
+					opaqueBatch.draw(mapSheet_256, &glm::vec4(static_cast<float>(Raycastlines[i][4] + (static_cast<int>(Raycastlines[i][3]) - 1) * tileSize), 0.0f, 1.0f, static_cast<float>(tileSize)), 
+						static_cast<float>(Raycastlines[i][0] - 2400), static_cast<float>(Raycastlines[i][1]), 1.0f, static_cast<float>(Raycastlines[i][2] - Raycastlines[i][1]), 0.0f, 0.0f, 0.0f, 1.0f, 
+						Renderer::Color{ 1.0f, 1.0f, 1.0f } * colorValue, 1.0f, static_cast<float>(depth));
 				}
 			}
 		}
@@ -723,10 +803,11 @@ namespace Engin
 			}
 
 			//player
-			alphaBatch.draw(furball_128, &glm::vec4(0.0f, 0.0f, furball_128->getWidth(), furball_128->getHeight()), player[0] * tileSize2d, player[1] * tileSize2d, furball_128->getWidth(), furball_128->getHeight(), furball_128->getWidth() / 2.0f, furball_128->getHeight() / 2.0f, player[2], 1.0f, Renderer::clrRed, 1.0f, 0.8f);
+			alphaBatch.draw(furball_128, &glm::vec4(0.0f, 0.0f, furball_128->getWidth(), furball_128->getHeight()), 
+				static_cast<float>(player[0] * tileSize2d), static_cast<float>(player[1] * tileSize2d), furball_128->getWidth(), furball_128->getHeight(), furball_128->getWidth() / 2.0f, furball_128->getHeight() / 2.0f, static_cast<float>(player[2]), 1.0f, Renderer::clrRed, 1.0f, 0.8f);
 
 			//2d floor
-			opaqueBatch.draw(floor_16, &glm::vec4(0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d), 0.0f, 0.0f, mapX * tileSize2d, mapY * tileSize2d, 0.0f, 0.0f, 0.0f, 1.0f, Renderer::Color{ 0.3, 0.3, 0.4 } *3.0f, 1.0f, 0.0f);
+			opaqueBatch.draw(floor_16, &glm::vec4(0.0f, 0.0f, static_cast<float>(mapX * tileSize2d), static_cast<float>(mapY * tileSize2d)), 0.0f, 0.0f, static_cast<float>(mapX * tileSize2d), static_cast<float>(mapY * tileSize2d), 0.0f, 0.0f, 0.0f, 1.0f, Renderer::Color{ 0.3, 0.3, 0.4 } * 3.0f, 1.0f, 0.0f);
 			//---------------
 		}
 
@@ -781,8 +862,6 @@ namespace Engin
 
 		void Pseudo3D::player1Movement()
 		{
-
-
 			// Player movement.
 			float axisMultiplier = 0.0f;
 			float deadzone = 0.175f;
@@ -806,7 +885,6 @@ namespace Engin
 				{
 					movePlayer(axisMultiplier);
 				}
-
 			}
 
 			// Strafe left.
@@ -845,13 +923,16 @@ namespace Engin
 			{
 				mouseSens += 5.0f;
 			}
+
 			if (mouseSens <= 0.0f)
 			{
 				mouseSens = 1.0f;
 			}
+
 			engine->mouseInput->getRelativeMouseState(&currMouseX, &currMouseY);
 			realRotSpeed = rotSpeed + (float)(abs(currMouseX) - abs(lastMouseX));
 			realRotSpeed /= mouseSens;
+
 			// Keyboard rotate to the right.
 			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
 			{
@@ -885,7 +966,7 @@ namespace Engin
 
 			engine->mouseInput->getRelativeMouseState(&lastMouseX, &lastMouseY);
 
-			alpha += 0.01;
+			alpha += 0.01f;
 
 			// Saving player rotation.
 			player[2] = glm::atan(dirY, dirX);
@@ -899,7 +980,7 @@ namespace Engin
 
 			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE))
 			{
-				createProjectile(player[0], player[1], player[2]);
+				createProjectile(static_cast<float>(player[0]), static_cast<float>(player[1]), static_cast<float>(player[2]));
 			}
 			else if (useGamePad)
 			{
@@ -908,7 +989,7 @@ namespace Engin
 				if (axisMultiplier > 0.0f && (!shootTimer.isStarted() || shootTimer.getLocalTime() > (1.0f - axisMultiplier + 0.1f) * 1000.0f))
 				{
 
-					createProjectile(player[0], player[1], player[2]);
+					createProjectile(static_cast<float>(player[0]), static_cast<float>(player[1]), static_cast<float>(player[2]));
 					shootTimer.start();
 				}
 			}

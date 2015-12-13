@@ -21,7 +21,7 @@ namespace Engin
 		}
 		void RNG::initialize()
 		{
-			srand(time(NULL));
+			srand(static_cast<unsigned int>(time(NULL)));
 			MTEngine = std::mt19937(seed);
 		}
 
