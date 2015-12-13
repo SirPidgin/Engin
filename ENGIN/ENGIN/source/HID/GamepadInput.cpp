@@ -26,29 +26,26 @@ namespace Engin
 				return false;
 			}
 
-			/*if (getNumGamepads() > joystickIndexMap.size())
-			{*/
-				joystickIndexMap[newGPindex] = SDL_JoystickOpen(newGPindex);
-				if (joystickIndexMap[newGPindex])
-				{
-					std::cout << "Created gamepad " << newGPindex;
-					std::cout << "\n\tGamepad Name: " << SDL_JoystickName(joystickIndexMap[newGPindex]) << std::endl;
-					gamepads[newGPindex] = new GamepadMaps();
-					return true;
-				}
-				else
-				{
-					std::cout << "Gamepad with index " << newGPindex << " couldn't be created!" << std::endl;
-					return false;
-				}
-			/*}*/
+			joystickIndexMap[newGPindex] = SDL_GameControllerOpen(newGPindex);
+			if (joystickIndexMap[newGPindex])
+			{
+				std::cout << "Created gamepad " << newGPindex;
+				std::cout << "\n\tGamepad Name: " << SDL_GameControllerName(joystickIndexMap[newGPindex]) << std::endl;
+				gamepads[newGPindex] = new GamepadMaps();
+				return true;
+			}
+			else
+			{
+				std::cout << "Gamepad with index " << newGPindex << " couldn't be created!" << std::endl;
+				return false;
+			}
 		}
 
 		void GamepadInput::removeGamepad(int GPindex)
 		{
 			if (gamepadIsCreated(GPindex))
 			{
-				SDL_JoystickClose(joystickIndexMap[GPindex]);
+				SDL_GameControllerClose(joystickIndexMap[GPindex]);
 				delete gamepads[GPindex];
 			}
 		}
@@ -183,26 +180,6 @@ namespace Engin
 		int GamepadInput::getNumGamepads()
 		{
 			return SDL_NumJoysticks();
-		}
-
-		int GamepadInput::getNumAxisControls(int GPindex)
-		{
-			return SDL_JoystickNumAxes(joystickIndexMap[GPindex]);
-		}
-
-		int GamepadInput::getNumButtons(int GPindex)
-		{
-			return SDL_JoystickNumButtons(joystickIndexMap[GPindex]);
-		}
-
-		int GamepadInput::getNumBalls(int GPindex)
-		{
-			return SDL_JoystickNumBalls(joystickIndexMap[GPindex]);
-		}
-
-		int GamepadInput::getNumHats(int GPindex)
-		{
-			return SDL_JoystickNumHats(joystickIndexMap[GPindex]);
 		}
 
 		void GamepadInput::setAxisControlDeadZone(short value, int GPindex)

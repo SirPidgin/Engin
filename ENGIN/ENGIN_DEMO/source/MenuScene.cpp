@@ -8,9 +8,14 @@ namespace Engin
 {
 	namespace Game
 	{
-		MenuScene::MenuScene(Engin* engine) : engine(engine), camera(createGuiCamera()), selected(FURBALLSTEIN)
+		MenuScene::MenuScene(Engin* engine) : engine(engine), camera(createGuiCamera()), selected(FURBALLSTEIN), useGamePad(false)
 		{
 			std::cout << "MENU SCENE IS A GO " << std::endl;
+
+			if (engine->gamepadInput->getNumGamepads() > 0)
+			{
+				useGamePad = true;
+			}
 
 			camera->initCamera(0.0f, 0.0f, 1600.0f, 800.0f, 0.0f, 0.0f, 800.0f, 400.0f);
 
@@ -47,7 +52,9 @@ namespace Engin
 
 		void MenuScene::update(GLfloat step)
 		{
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_RETURN))
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_RETURN) || 
+				engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE) || 
+				(useGamePad && engine->gamepadInput->buttonWasPressed(HID::GAMEPAD_BUTTON_A, 0)))
 			{
 				switch (selected)
 				{
@@ -77,11 +84,14 @@ namespace Engin
 					}
 				}
 			}
-			else if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_ESCAPE))
+			else if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_ESCAPE) ||
+				(useGamePad && engine->gamepadInput->buttonWasPressed(HID::GAMEPAD_BUTTON_B, 0)))
 			{
 				engine->stop();
 			}
-			else if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_UP))
+			else if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_UP) || 
+				engine->keyboardInput->keyWasPressed(HID::KEYBOARD_W) ||
+				(useGamePad && engine->gamepadInput->buttonWasPressed(HID::GAMEPAD_BUTTON_DPAD_UP, 0)))
 			{
 				switch (selected)
 				{
@@ -111,7 +121,9 @@ namespace Engin
 					}
 				}
 			}
-			else if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_DOWN))
+			else if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_DOWN) ||
+				engine->keyboardInput->keyWasPressed(HID::KEYBOARD_S) ||
+				(useGamePad && engine->gamepadInput->buttonWasPressed(HID::GAMEPAD_BUTTON_DPAD_DOWN, 0)))
 			{
 				switch (selected)
 				{

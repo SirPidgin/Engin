@@ -49,6 +49,8 @@ namespace Engin
 			Renderer::TextRenderer optionParticleCreator;
 
 			Renderer::Camera* camera;
+
+			bool useGamePad;
 		};
 	}
 }

@@ -43,6 +43,9 @@ namespace Engin
 			Resources::ResourceManager::getInstance().unload(treeShadow->getResourcePath());
 			Resources::ResourceManager::getInstance().unload(animFurballHit->getResourcePath());
 			Resources::ResourceManager::getInstance().unload(titleTexture->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(explosionAnimation1->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(explosionAnimation2->getResourcePath());
+			Resources::ResourceManager::getInstance().unload(doge->getResourcePath());
 		}
 
 		void TitleScene::update(GLfloat step)
@@ -75,13 +78,16 @@ namespace Engin
 			mapSheet_256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/map_sheet_256_shadows.png");
 			floor_16 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/roof.png");
 			floor_800 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/floor.png");
-			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
-			animFireball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/fireball360_8.xml");
 			furballShadow = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/furball_shadow_256.png");
 			animTree360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/tree360_40.xml");
 			treeShadow = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/tree_shadow_512.png");
 			tree_64 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/tree_up_64.png");
+			doge = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/doge.png");
+			animFurball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/furball360_40.xml");
+			animFireball360 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/fireball360_8.xml");
 			animFurballHit = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/fireball_hit_36.xml");
+			explosionAnimation1 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/test.xml");
+			explosionAnimation2 = Resources::ResourceManager::getInstance().load<Resources::Animation>("resources/animations/testmushroom.xml");
 			font = Resources::ResourceManager::getInstance().load<Resources::Font>("resources/arial.ttf");
 
 			std::cout << "Resources loaded" << std::endl;

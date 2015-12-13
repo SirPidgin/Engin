@@ -91,10 +91,6 @@ namespace Engin
 			GamepadHatPosition getHatPosition(int GPindex, int hatIndex);
 
 			int getNumGamepads();
-			int getNumAxisControls(int GPindex);
-			int getNumButtons(int GPindex);
-			int getNumBalls(int GPindex);
-			int getNumHats(int GPindex);
 
 			void setAxisControlDeadZone(short value, int GPindex);
 			short getAxisControlDeadZone(int GPindex);
@@ -130,7 +126,7 @@ namespace Engin
 
 			std::unordered_map<int, GamepadMaps*> gamepads;
 
-			std::unordered_map<int, SDL_Joystick*> joystickIndexMap;
+			std::unordered_map<int, SDL_GameController*> joystickIndexMap;
 			std::unordered_map<int, short> axisDeadZoneMap;
 		};
 	}

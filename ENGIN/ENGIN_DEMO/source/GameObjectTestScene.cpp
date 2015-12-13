@@ -10,10 +10,15 @@
 #include <Engin\Game\Transform.h>
 #include <Engin\Game\ParticleEffect.h>
 
-GameObjectTestScene::GameObjectTestScene(Engin::Engin* engine) : gameObject("main_object", &alphaBatch), camera(createWorldCamera())
+GameObjectTestScene::GameObjectTestScene(Engin::Engin* engine) : gameObject("main_object", &alphaBatch), camera(createWorldCamera()), useGamePad(false)
 {
 	this->engine = engine;
 	alpha = 0.0f;
+
+	if (engine->gamepadInput->getNumGamepads() > 0)
+	{
+		useGamePad = true;
+	}
 
 	camera->initCamera(0.0f, 0.0f, static_cast<GLfloat>(engine->getWindow().getWindowWidth()), static_cast<GLfloat>(engine->getWindow().getWindowHeight()), 0.0f, 0.0f, engine->getWindow().getWindowWidth() / 2.0f, engine->getWindow().getWindowHeight() / 2.0f);
 
@@ -53,18 +58,21 @@ GameObjectTestScene::~GameObjectTestScene()
 
 void GameObjectTestScene::update(GLfloat step)
 {
-	if (engine->keyboardInput->keyWasPressed(Engin::HID::KEYBOARD_ESCAPE))
+	if (engine->keyboardInput->keyWasPressed(Engin::HID::KEYBOARD_ESCAPE) ||
+		(useGamePad && engine->gamepadInput->buttonWasPressed(Engin::HID::GAMEPAD_BUTTON_B, 0)))
 	{
 		engine->getSceneManager().pop();
 	}
 
 	static float zoomByInput = 1.0f;
-	if (engine->mouseInput->mouseWheelWasMoved(Engin::HID::MOUSEWHEEL_UP))
+	if (engine->mouseInput->mouseWheelWasMoved(Engin::HID::MOUSEWHEEL_UP) ||
+		(useGamePad && engine->gamepadInput->buttonIsPressed(Engin::HID::GAMEPAD_BUTTON_RIGHTSHOULDER, 0)))
 	{
 		if (zoomByInput > 0.0f)
 			zoomByInput -= glm::radians(2.0f);
 	}
-	if (engine->mouseInput->mouseWheelWasMoved(Engin::HID::MOUSEWHEEL_DOWN))
+	if (engine->mouseInput->mouseWheelWasMoved(Engin::HID::MOUSEWHEEL_DOWN) ||
+		(useGamePad && engine->gamepadInput->buttonIsPressed(Engin::HID::GAMEPAD_BUTTON_LEFTSHOULDER, 0)))
 	{
 		zoomByInput += glm::radians(2.0f);
 	}
@@ -73,19 +81,23 @@ void GameObjectTestScene::update(GLfloat step)
 	static float moveByInputX = 0.0f;
 	static float moveByInputY = 0.0f;
 	static float moveSpeed = 16.0f;
-	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_W))
+	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_W) ||
+		(useGamePad && engine->gamepadInput->buttonIsPressed(Engin::HID::GAMEPAD_BUTTON_DPAD_UP, 0)))
 	{
 		moveByInputY += moveSpeed;
 	}
-	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_A))
+	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_A) ||
+		(useGamePad && engine->gamepadInput->buttonIsPressed(Engin::HID::GAMEPAD_BUTTON_DPAD_LEFT, 0)))
 	{
 		moveByInputX -= moveSpeed;
 	}
-	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_S))
+	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_S) ||
+		(useGamePad && engine->gamepadInput->buttonIsPressed(Engin::HID::GAMEPAD_BUTTON_DPAD_DOWN, 0)))
 	{
 		moveByInputY -= moveSpeed;
 	}
-	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_D))
+	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_D) ||
+		(useGamePad && engine->gamepadInput->buttonIsPressed(Engin::HID::GAMEPAD_BUTTON_DPAD_RIGHT, 0)))
 	{
 		moveByInputX += moveSpeed;
 	}
@@ -94,11 +106,13 @@ void GameObjectTestScene::update(GLfloat step)
 			
 	static float rotateByInput = 0.0f;
 	static float rotateSpeed = 0.05f;
-	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_LEFT))
+	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_LEFT) ||
+		(useGamePad && engine->gamepadInput->buttonIsPressed(Engin::HID::GAMEPAD_BUTTON_X, 0)))
 	{
 		rotateByInput += rotateSpeed;
 	}
-	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_RIGHT))
+	if (engine->keyboardInput->keyIsPressed(Engin::HID::KEYBOARD_RIGHT) ||
+		(useGamePad && engine->gamepadInput->buttonIsPressed(Engin::HID::GAMEPAD_BUTTON_Y, 0)))
 	{
 		rotateByInput -= rotateSpeed;
 	}

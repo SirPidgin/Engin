@@ -20,15 +20,17 @@ namespace Engin
 			void draw();
 
 		private:
-			Resources::Texture* titleTexture;
-			Resources::ShaderProgram* textureShader;
+			
+			
 			Renderer::Camera* camera;
 
-			// Resources. Used in Pseudo 3D.
+			// Resources.
 			void loadResources();
 
 			Resources::ShaderProgram* shader;
 			Resources::ShaderProgram* alphaShader;
+			Resources::ShaderProgram* textureShader;
+			Resources::Texture* titleTexture;
 			Resources::Texture* furball;
 			Resources::Texture* furball_128;
 			Resources::Texture* tree_64;
@@ -36,13 +38,16 @@ namespace Engin
 			Resources::Texture* mapSheet_256;
 			Resources::Texture* floor_16;
 			Resources::Texture* floor_800;
+			Resources::Texture* treeShadow;
+			Resources::Texture* furballShadow;
+			Resources::Texture* doge;
 			Resources::Font* font;
 			Resources::Animation* animFurball360;
-			Resources::Texture* furballShadow;
 			Resources::Animation* animFireball360;
 			Resources::Animation* animTree360;
-			Resources::Texture* treeShadow;
 			Resources::Animation* animFurballHit;
+			Resources::Animation* explosionAnimation1;
+			Resources::Animation* explosionAnimation2;
 
 			Engin* engine;
 		};

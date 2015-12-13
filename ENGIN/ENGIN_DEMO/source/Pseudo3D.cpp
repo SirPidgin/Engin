@@ -327,7 +327,8 @@ namespace Engin
 		void Pseudo3D::update(GLfloat step)
 		{
 			// Back to menu.
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_ESCAPE))
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_ESCAPE) ||
+				(useGamePad && engine->gamepadInput->buttonWasPressed(HID::GAMEPAD_BUTTON_B, 0)))
 			{
 				engine->getSceneManager().pop();
 			}
@@ -386,7 +387,6 @@ namespace Engin
 
 					if (wallTiles[mapY - static_cast<int>(t->getYPosition())][static_cast<int>(t->getXPosition())] > 0)
 					{
-						std::cout << "PROJECTILE KILL: WALL" << std::endl;
 						gameObjects[i]->kill();
 
 						if (wallTiles[mapY - static_cast<int>(t->getYPosition())][static_cast<int>(t->getXPosition())] != 1 && wallTiles[mapY - static_cast<int>(t->getYPosition())][static_cast<int>(t->getXPosition())] != 3)
@@ -417,7 +417,6 @@ namespace Engin
 					{
 						if (gameObjects[i]->accessComponent<UserData>()->isFireball == true)
 						{
-							std::cout << "PROJECTILE KILL: FURBALL" << std::endl;
 							// Kill the projectile.
 							gameObjects[i]->kill(); 
 							// Create hit animation.
@@ -988,7 +987,6 @@ namespace Engin
 
 				if (axisMultiplier > 0.0f && (!shootTimer.isStarted() || shootTimer.getLocalTime() > (1.0f - axisMultiplier + 0.1f) * 1000.0f))
 				{
-
 					createProjectile(static_cast<float>(player[0]), static_cast<float>(player[1]), static_cast<float>(player[2]));
 					shootTimer.start();
 				}

@@ -30,7 +30,7 @@ namespace Engin
 			void renderTilemap(float startX, float startY, float tileWidth, float tileHeight, size_t worldWidth, size_t worldHeight, Renderer::Batch& batch);
 			void renderDogemap(float startX, float startY, float tileWidth, float tileHeight, size_t worldWidth, size_t worldHeight);
 			void renderTexture(Resources::Texture* texture, float x, float y, const Renderer::Camera& camera);
-		public:
+		private:
 			GLfloat alpha;
 
 			Engin* engine;
@@ -54,6 +54,8 @@ namespace Engin
 
 			Game::AnimationPlayer animationPlayer;
 			Game::AnimationPlayer animationPlayer1;
+
+			bool useGamePad;
 		};
 	}
 }

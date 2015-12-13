@@ -41,6 +41,9 @@ public:
 	Engin::Renderer::Batch batch;
 	Engin::Renderer::TextureBatch textureBatch;
 	Engin::Renderer::TextureBatch alphaTextureBatch;
+
+private:
+	bool useGamePad;
 };
 
 

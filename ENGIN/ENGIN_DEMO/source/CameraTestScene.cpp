@@ -12,10 +12,14 @@ namespace Engin
 {
 	namespace Game
 	{
-		CameraTestScene::CameraTestScene(Engin* engine) : camera(createWorldCamera()), camera1(createWorldCamera()), camera2(createWorldCamera())
+		CameraTestScene::CameraTestScene(Engin* engine) : engine(engine), camera(createWorldCamera()), camera1(createWorldCamera()), camera2(createWorldCamera()), useGamePad(false)
 		{
-			this->engine = engine;
 			alpha = 0.0f;
+
+			if (engine->gamepadInput->getNumGamepads() > 0)
+			{
+				useGamePad = true;
+			}
 
 			//camera = createGuiCamera();
 
@@ -88,18 +92,21 @@ namespace Engin
 		void CameraTestScene::update(GLfloat step)
 		{
 			static float zoomByInput = 1.0f;
-			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP))
+			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_RIGHTSHOULDER, 0)))
 			{
 				if (zoomByInput > 0.0f)
 				zoomByInput -= glm::radians(2.0f); //???? Eikös glm::radians(2.0f) ole aina 0.034 ja risat
 			}
-			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_DOWN))
+			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_DOWN) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_LEFTSHOULDER, 0)))
 			{
 				zoomByInput += glm::radians(2.0f);
 			}
 			camera2->setZoomLevel(zoomByInput); //by input
 			
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_P))
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_P) ||
+				(useGamePad && engine->gamepadInput->buttonWasPressed(HID::GAMEPAD_BUTTON_START, 0)))
 			{
 				animationPlayer.pause();
 			}
@@ -107,41 +114,48 @@ namespace Engin
 			static float moveByInputX = 0.0f;
 			static float moveByInputY = 0.0f;
 			static float moveSpeed = 64.0f;
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_W))
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_W) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_DPAD_UP, 0)))
 			{
 				//std::cout << "W" << std::endl;
 				moveByInputY += moveSpeed;
 			}
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_A))
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_A) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_DPAD_LEFT, 0)))
 			{
 				//std::cout << "A" << std::endl;
 				moveByInputX -= moveSpeed;
 			}
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_S))
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_S) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_DPAD_DOWN, 0)))
 			{
 				//std::cout << "S" << std::endl;
 				moveByInputY -= moveSpeed;
 			}
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_D))
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_D) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_DPAD_RIGHT, 0)))
 			{
 				//std::cout << "D" << std::endl;
 				moveByInputX += moveSpeed;
 			}
 			camera2->setPositionRotationOrigin(moveByInputX, moveByInputY); //by input
 			
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE))
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_SPACE) ||
+				(useGamePad && engine->gamepadInput->buttonWasPressed(HID::GAMEPAD_BUTTON_BACK, 0)))
 			{
 				std::cout << camera2->getPositionRotationOrigin().x << " - " << camera2->getPositionRotationOrigin().y << std::endl;
 			}
 
 			static float rotateByInput = 0.0f;
 			static float rotateSpeed = 0.01f;
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT))
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_LEFT) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_X, 0)))
 			{
 				//std::cout << "<-" << std::endl;
 				rotateByInput += rotateSpeed;
 			}
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT))
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_RIGHT) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_Y, 0)))
 			{
 				//std::cout << "->" << std::endl;
 				rotateByInput -= rotateSpeed;
@@ -158,7 +172,8 @@ namespace Engin
 			animationPlayer1.update();
 
 			//Test:
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_T))
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_T) ||
+				(useGamePad && engine->gamepadInput->buttonWasPressed(HID::GAMEPAD_BUTTON_A, 0)))
 			{
 				GLfloat time = Core::Timer::getGlobalTime()/1000.0f;
 				textString = "Global time: " + std::to_string(time) + " seconds";
@@ -167,7 +182,8 @@ namespace Engin
 			}
 
 			// Back to menu.
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_ESCAPE))
+			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_ESCAPE) ||
+				(useGamePad && engine->gamepadInput->buttonWasPressed(HID::GAMEPAD_BUTTON_B, 0)))
 			{
 				engine->getSceneManager().pop();
 			}
