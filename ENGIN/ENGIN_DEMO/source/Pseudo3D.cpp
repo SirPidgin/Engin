@@ -212,7 +212,7 @@ namespace Engin
 			createTree(23.03f, 7.11f + 6.0f, 0.0f);
 			createTree(23.04f, 8.12f + 6.0f, 0.0f);
 
-			createParticleSnow(camera->getPositionRotationOrigin().x + 400, camera->getPositionRotationOrigin().y + 400);
+			createParticleSnow(camera->getPositionRotationOrigin().x + 64, camera->getPositionRotationOrigin().y + 736);
 			
 			turretCoolDown.start();
 
@@ -357,14 +357,14 @@ namespace Engin
 			gameObjects[1]->accessComponent<Transform>()->setXPosition(8.0f + 4.0f * glm::cos(alpha));
 
 #pragma region Launchers
-			//// Fireball launchers.
-			//if (turretCoolDown.getLocalTime() > 2500.0f)
-			//{
-			//	createProjectile(6.0f, 11.0f, glm::radians(90.0f));
-			//	createProjectile(8.0f, 11.0f, glm::radians(90.0f));
-			//	createProjectile(7.0f, 24.0f, glm::radians(270.0f));
-			//	turretCoolDown.start();
-			//}
+			// Fireball launchers.
+			if (turretCoolDown.getLocalTime() > 2500.0f)
+			{
+				createProjectile(6.0f, 11.0f, glm::radians(90.0f));
+				createProjectile(8.0f, 11.0f, glm::radians(90.0f));
+				createProjectile(7.0f, 24.0f, glm::radians(270.0f));
+				turretCoolDown.start();
+			}
 #pragma endregion
 
 			// Information display.		
@@ -626,9 +626,14 @@ namespace Engin
 		}
 
 		void Pseudo3D::RaycastingSprites()
-		{
+		{			
 			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
+				// If you dont want some object to raycast. Raycast changes transform depth and -scale!
+				if (gameObjects[i]->getNameTag() == "snow")
+				{
+					continue;
+				}
 				spriteX = gameObjects[i]->accessComponent<Transform>()->getXPosition() - player[0];
 				spriteY = gameObjects[i]->accessComponent<Transform>()->getYPosition() - player[1];
 
@@ -678,7 +683,7 @@ namespace Engin
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopStartFrame(static_cast<int>(spriteAnimIndex * 10));
 					gameObjects[i]->accessComponent<AnimationPlayer>()->setLoopEndFrame(static_cast<int>(spriteAnimIndex * 10 + 9));
 				}
-				else if (gameObjects[i]->accessComponent<UserData>()->isHitAnimation == true || gameObjects[i]->getNameTag() == "snow")
+				else if (gameObjects[i]->accessComponent<UserData>()->isHitAnimation == true)
 				{
 					//Do nothing
 				}
