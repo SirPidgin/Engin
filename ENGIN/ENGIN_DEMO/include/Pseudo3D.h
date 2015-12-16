@@ -17,7 +17,6 @@
 #include "Engin\Game\GameObject.h"
 #include "Engin\Game\Sprite.h"
 #include "Engin\Game\Component.h"
-#include "Engin\Game\ParticleEffect.h"
 #include "Engin\Core\RNG.h"
 
 #include <array>
@@ -48,7 +47,6 @@ namespace Engin
 			void createFireball(float x, float y, float rotation);
 			void createProjectile(float x, float y, float rotation);
 			void createHitFireball(Game::Transform* furbalGameobjectTransform);
-			void createParticleSnow(float x, float y);
 			void createTree(float x, float y, float rotation);
 
 			class Projectile : public Component

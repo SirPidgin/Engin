@@ -1,4 +1,4 @@
-<animation path="resources/furball360_40X_256.png" width="256" height="256" loopable="1">
+<animation path="resources/furball360_40_256.png" width="256" height="256" loopable="1">
 	<frame duration="1000" id="0" />
 	<frame duration="1000" id="1" />
 	<frame duration="1000" id="2" />

@@ -211,8 +211,6 @@ namespace Engin
 			createTree(23.02f, 6.10f + 6.0f, 0.0f);
 			createTree(23.03f, 7.11f + 6.0f, 0.0f);
 			createTree(23.04f, 8.12f + 6.0f, 0.0f);
-
-			createParticleSnow(camera->getPositionRotationOrigin().x + 64, camera->getPositionRotationOrigin().y + 736);
 			
 			turretCoolDown.start();
 
@@ -452,14 +450,7 @@ namespace Engin
 			//Raycast draw
 			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
-				if (gameObjects[i]->getNameTag() != "snow")
-				{
 					gameObjects[i]->accessComponent<PseudoSpriteDraw>()->drawPseudoSprite();
-				}
-				else
-				{
-					gameObjects[i]->accessComponent<ParticleEffect>()->draw();
-				}
 			}
 						
 			//Roof and floor for raycast
@@ -629,7 +620,7 @@ namespace Engin
 			for (size_t i = 0; i < gameObjects.size(); i++)
 			{
 				// If you dont want some object to raycast. Raycast changes transform depth and -scale!
-				if (gameObjects[i]->getNameTag() == "snow")
+				if (gameObjects[i]->getNameTag() == "nameofthegameobject")
 				{
 					continue;
 				}
@@ -1241,24 +1232,6 @@ namespace Engin
 
 			// RigidBody.
 			gameObjects.back()->accessComponent<RigidBody>()->setCollisionRadius(0.2f);
-		}
-
-		void Pseudo3D::createParticleSnow(float x, float y)
-		{
-			gameObjects.push_back(new GameObject(&alphaBatch));
-			gameObjects.back()->addComponent<ParticleEffect>();
-			gameObjects.back()->addComponent<Transform>();
-			gameObjects.back()->addComponent<RigidBody>();
-			gameObjects.back()->addComponent<Sprite>();
-			gameObjects.back()->addComponent<UserData>();
-			gameObjects.back()->setNameTag("snow");
-
-			gameObjects.back()->accessComponent<Transform>()->setDepth(1.0f);
-
-			gameObjects.back()->accessComponent<Transform>()->setPosition(glm::vec2(x, y));
-
-			gameObjects.back()->accessComponent<ParticleEffect>()->init(tree_64);
-			gameObjects.back()->accessComponent<UserData>()->isTree = true;
 		}
 
 		void Pseudo3D::Projectile::update()
