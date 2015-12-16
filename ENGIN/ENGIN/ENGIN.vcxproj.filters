@@ -19,23 +19,11 @@
     <Filter Include="Header Files\Renderer">
       <UniqueIdentifier>{6ae202ce-a1d5-4c0d-920c-dcbd38da70f8}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Audio">
-      <UniqueIdentifier>{820c9bce-7248-4e7d-8481-2855e28b537e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Core">
       <UniqueIdentifier>{57da7697-6c49-4c53-9c58-c3fb69181554}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Physics">
-      <UniqueIdentifier>{b4fde06a-f69a-4971-8252-d71f410d4bef}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Audio">
-      <UniqueIdentifier>{f0304add-b2b9-4b81-b26e-30fcfdd6aade}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Core">
       <UniqueIdentifier>{a0dbe176-81fb-45d9-8b0c-2ab725e2f9f4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Physics">
-      <UniqueIdentifier>{33e5de78-64a2-4b5c-a04e-1a74f501f975}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Resources">
       <UniqueIdentifier>{1178caff-a08e-4949-ad27-bd61f3856239}</UniqueIdentifier>
@@ -102,16 +90,10 @@
     <ClInclude Include="include\Engin\Game\SceneManager.h">
       <Filter>Header Files\Game</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engin\Resources\Sound.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
     <ClInclude Include="include\Engin\Resources\Texture.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
     <ClInclude Include="include\Engin\Resources\Animation.h">
-      <Filter>Header Files\Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="include\Engin\Resources\Music.h">
       <Filter>Header Files\Resources</Filter>
     </ClInclude>
     <ClInclude Include="include\Engin\Resources\Resource.h">
@@ -198,9 +180,6 @@
     <ClInclude Include="include\Engin\Core\RNG.h">
       <Filter>Header Files\Core</Filter>
     </ClInclude>
-    <ClInclude Include="include\Engin\Audio\AudioPlayer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="source\Renderer\Window.cpp">
@@ -215,16 +194,10 @@
     <ClCompile Include="source\Resources\Animation.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
-    <ClCompile Include="source\Resources\Music.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
     <ClCompile Include="source\Resources\Resource.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
     <ClCompile Include="source\Resources\ResourceManager.cpp">
-      <Filter>Source Files\Resources</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Resources\Sound.cpp">
       <Filter>Source Files\Resources</Filter>
     </ClCompile>
     <ClCompile Include="source\Resources\Texture.cpp">
@@ -315,9 +288,6 @@
     </ClCompile>
     <ClCompile Include="source\Renderer\Batch.cpp">
       <Filter>Source Files\Renderer</Filter>
-    </ClCompile>
-    <ClCompile Include="source\Audio\AudioPlayer.cpp">
-      <Filter>Source Files\Game\Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
