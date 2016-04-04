@@ -94,6 +94,7 @@
     <ClCompile Include="source\GameObjectTestScene.cpp" />
     <ClCompile Include="source\Main.cpp" />
     <ClCompile Include="source\MenuScene.cpp" />
+    <ClCompile Include="source\PhysicsDemo.cpp" />
     <ClCompile Include="source\Pseudo3D.cpp" />
     <ClCompile Include="source\TitleScene.cpp" />
   </ItemGroup>
@@ -112,6 +113,7 @@
     <ClInclude Include="include\CameraTestScene.h" />
     <ClInclude Include="include\GameObjectTestScene.h" />
     <ClInclude Include="include\MenuScene.h" />
+    <ClInclude Include="include\PhysicsDemo.h" />
     <ClInclude Include="include\Pseudo3D.h" />
     <ClInclude Include="include\TitleScene.h" />
   </ItemGroup>

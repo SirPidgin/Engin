@@ -2,6 +2,7 @@
 #include "Pseudo3D.h"
 #include "CameraTestScene.h"
 #include "GameObjectTestScene.h"
+#include "PhysicsDemo.h"
 #include <iostream>
 
 namespace Engin
@@ -33,6 +34,9 @@ namespace Engin
 
 			optionParticleCreator.createTextTexture(font, "PARTICLES", 255, 255, 255);
 			optionParticle = optionParticleCreator.getTexture();
+
+			optionPhysicsCreator.createTextTexture(font, "PHYSICS DEMO", 255, 255, 255);
+			optionPhysics = optionPhysicsCreator.getTexture();
 
 			optionQuitCreator.createTextTexture(font, "QUIT", 255, 255, 255);
 			optionQuit = optionQuitCreator.getTexture();
@@ -73,6 +77,11 @@ namespace Engin
 						engine->getSceneManager().push(new GameObjectTestScene(engine));
 						break;
 					}
+					case PHYSICS:
+					{
+						engine->getSceneManager().push(new PhysicsDemo(engine));
+						break;
+					}
 					case QUIT:
 					{
 						engine->stop();
@@ -110,9 +119,14 @@ namespace Engin
 						selected = ORIGINAL;
 						break;
 					}
-					case QUIT:
+					case PHYSICS:
 					{
 						selected = PARTICLE;
+						break;
+					}
+					case QUIT:
+					{
+						selected = PHYSICS;
 						break;
 					}
 					default:
@@ -138,6 +152,11 @@ namespace Engin
 						break;
 					}
 					case PARTICLE:
+					{
+						selected = PHYSICS;
+						break;
+					}
+					case PHYSICS:
 					{
 						selected = QUIT;
 						break;
@@ -169,28 +188,40 @@ namespace Engin
 				guiBatch.draw(optionFurballstein, 350.0f, 180, optionFurballstein->getWidth(), optionFurballstein->getHeight(), Renderer::clrRed, 1.0f, 0.1f);
 				guiBatch.draw(optionOriginal, 350.0f, 60.0f, optionOriginal->getWidth(), optionOriginal->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
 				guiBatch.draw(optionParticle, 350.0f, -60.0f, optionParticle->getWidth(), optionParticle->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
-				guiBatch.draw(optionQuit, 350.0f, -180.0f, optionQuit->getWidth(), optionQuit->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
+				guiBatch.draw(optionPhysics, 350.0f, -180.0f, optionPhysics->getWidth(), optionPhysics->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
+				guiBatch.draw(optionQuit, 350.0f, -300.0f, optionQuit->getWidth(), optionQuit->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
 			}
 			else if (selected == ORIGINAL)
 			{
 				guiBatch.draw(optionFurballstein, 350.0f, 180, optionFurballstein->getWidth(), optionFurballstein->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
 				guiBatch.draw(optionOriginal, 350.0f, 60.0f, optionOriginal->getWidth(), optionOriginal->getHeight(), Renderer::clrRed, 1.0f, 0.1f);
 				guiBatch.draw(optionParticle, 350.0f, -60.0f, optionParticle->getWidth(), optionParticle->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
-				guiBatch.draw(optionQuit, 350.0f, -180.0f, optionQuit->getWidth(), optionQuit->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
+				guiBatch.draw(optionPhysics, 350.0f, -180.0f, optionPhysics->getWidth(), optionPhysics->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
+				guiBatch.draw(optionQuit, 350.0f, -300.0f, optionQuit->getWidth(), optionQuit->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
 			}
 			else if (selected == PARTICLE)
 			{
 				guiBatch.draw(optionFurballstein, 350.0f, 180, optionFurballstein->getWidth(), optionFurballstein->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
 				guiBatch.draw(optionOriginal, 350.0f, 60.0f, optionOriginal->getWidth(), optionOriginal->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
 				guiBatch.draw(optionParticle, 350.0f, -60.0f, optionParticle->getWidth(), optionParticle->getHeight(), Renderer::clrRed, 1.0f, 0.1f);
-				guiBatch.draw(optionQuit, 350.0f, -180.0f, optionQuit->getWidth(), optionQuit->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
+				guiBatch.draw(optionPhysics, 350.0f, -180.0f, optionPhysics->getWidth(), optionPhysics->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
+				guiBatch.draw(optionQuit, 350.0f, -300.0f, optionQuit->getWidth(), optionQuit->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
+			}
+			else if (selected == PHYSICS)
+			{
+				guiBatch.draw(optionFurballstein, 350.0f, 180, optionFurballstein->getWidth(), optionFurballstein->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
+				guiBatch.draw(optionOriginal, 350.0f, 60.0f, optionOriginal->getWidth(), optionOriginal->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
+				guiBatch.draw(optionParticle, 350.0f, -60.0f, optionParticle->getWidth(), optionParticle->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
+				guiBatch.draw(optionPhysics, 350.0f, -180.0f, optionPhysics->getWidth(), optionPhysics->getHeight(), Renderer::clrRed, 1.0f, 0.1f);
+				guiBatch.draw(optionQuit, 350.0f, -300.0f, optionQuit->getWidth(), optionQuit->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
 			}
 			else if (selected == QUIT)
 			{
 				guiBatch.draw(optionFurballstein, 350.0f, 180, optionFurballstein->getWidth(), optionFurballstein->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
 				guiBatch.draw(optionOriginal, 350.0f, 60.0f, optionOriginal->getWidth(), optionOriginal->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
 				guiBatch.draw(optionParticle, 350.0f, -60.0f, optionParticle->getWidth(), optionParticle->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
-				guiBatch.draw(optionQuit, 350.0f, -180.0f, optionQuit->getWidth(), optionQuit->getHeight(), Renderer::clrRed, 1.0f, 0.1f);
+				guiBatch.draw(optionPhysics, 350.0f, -180.0f, optionPhysics->getWidth(), optionPhysics->getHeight(), Renderer::clrBlack, 1.0f, 0.1f);
+				guiBatch.draw(optionQuit, 350.0f, -300.0f, optionQuit->getWidth(), optionQuit->getHeight(), Renderer::clrRed, 1.0f, 0.1f);
 			}
 		}
 	}
