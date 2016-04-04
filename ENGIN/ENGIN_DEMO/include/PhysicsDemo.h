@@ -10,7 +10,7 @@
 #include "Engin\Game\GameObject.h"
 #include "Engin\Game\Sprite.h"
 #include "Engin\Game\Component.h"
-
+#include "Engin\Core\RNG.h"
 #include <array>
 #include <vector>
 

@@ -37,11 +37,11 @@ namespace Engin
 			alphaBatch.setShader(alphaShader);
 			guiBatch.setShader(alphaShader);
 
-			tile = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/roof.png");
+			tile = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/red_tile_128.png");
 
 			for (int i = 0; i < 20; i++)
 			{
-				createTile(i*10, i*10, i*10);
+				createTile(i*128, i*128, i*50);
 			}			
 		}
 
@@ -67,12 +67,26 @@ namespace Engin
 				engine->getSceneManager().pop();
 			}
 
+			camera->setPositionRotationOrigin(500, 500);
+
+			// Translation test
+			for (int i = 0; i < gameObjects.size(); i++)
+			{
+				int x = 20 * glm::cos(alpha + i);
+				int y = 20 * glm::sin(alpha + i);
+				gameObjects[i]->accessComponent<Transform>()->setPosition(glm::vec2(gameObjects[i]->accessComponent<Transform>()->getPosition().x + x, gameObjects[i]->accessComponent<Transform>()->getPosition().y + y));
+			}
+
 			// Physics
 		
+
+			//
+
 			for (int i = 0; i < gameObjects.size(); i++)
 			{
 				gameObjects[i]->update();
 			}
+			
 			alpha += step;
 		}
 
