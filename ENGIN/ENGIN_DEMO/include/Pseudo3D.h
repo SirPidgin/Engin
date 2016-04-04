@@ -49,146 +49,6 @@ namespace Engin
 			void createHitFireball(Game::Transform* furbalGameobjectTransform);
 			void createTree(float x, float y, float rotation);
 
-			class Projectile : public Component
-			{
-			public:
-				Projectile(GameObject* o) : 
-					Component(o),
-					speed(0.10f),
-					spread(5.0f)
-				{
-				}
-
-				void update();
-
-			private:
-				float speed;
-				float spread;
-				Core::RNG rng;
-			};
-
-			class UserData : public Component
-			{
-			public:
-				UserData(GameObject* o) :
-					Component(o),
-					sides(0),
-					transformY(0),
-					animationIndex(0),
-					spriteXout(0),
-					spriteYout(0),
-					isFireball(false),
-					hasShadow(false),
-					animationLoopStartFrame(0),
-					animationLoopEndFrame(0),
-					shadow(nullptr),
-					cooldownLenght(0.0f),
-					tileOverSize(0),
-					isTree(false),
-					spriteColorR(0.0f),
-					spriteColorG(0.0f),
-					spriteColorB(0.0f),
-					spriteColorA(1.0f),
-					isHitAnimation(false),
-					depthAdd(0.0f),
-					furbalGameobjectTransform(nullptr) {}
-
-				int sides; 
-				double transformY;
-				int animationIndex;
-				double spriteXout;
-				double spriteYout;
-				bool isFireball;
-				bool hasShadow ;
-				int animationLoopStartFrame;
-				int animationLoopEndFrame;
-				Resources::Texture* shadow;
-				Core::Timer hitCoolDown;
-				float cooldownLenght;
-				int tileOverSize;
-				bool isTree;
-				float spriteColorR;
-				float spriteColorG;
-				float spriteColorB;
-				float spriteColorA;
-				bool isHitAnimation;
-				float depthAdd; // To render things over objects depth wise.
-
-				Game::Transform* furbalGameobjectTransform;
-
-				void hitAnimationUpdate()
-				{
-					ownerObject->accessComponent<Transform>()->setPosition(furbalGameobjectTransform->getPosition());
-				}
-			};
-
-			class PseudoSpriteDraw : public Component
-			{
-			public:
-				PseudoSpriteDraw(GameObject* o) :
-					Component(o),
-					textureBatch(nullptr),
-					raycastW(0),
-					limitLeft(0),
-					limitRight(0) {}
-				void setTextureBatch(Renderer::TextureBatch* newTextrBatch) { textureBatch = newTextrBatch; }
-				void setRaycastW(int W) { raycastW = W; limitLeft = -raycastW - 2656; limitRight = raycastW - 2400; }
-				void drawPseudoSprite()				   
-				{					
-					
-					static float colorValue = 0;
-					if (ownerObject->accessComponent<UserData>()->isFireball || ownerObject->accessComponent<UserData>()->isHitAnimation)
-					{
-						colorValue = 1.0f;
-					}
-					else
-					{
-						colorValue = (ownerObject->accessComponent<Transform>()->getDepth()) * 6;
-						if (colorValue > 0.8f)
-						{
-							colorValue = 0.8f;
-						}
-						else if (colorValue < 0.4f)
-						{
-							colorValue = 0.4f;
-						}
-					}				
-
-					if (ownerObject->accessComponent<UserData>()->spriteXout > limitLeft
-						&& ownerObject->accessComponent<UserData>()->spriteXout < limitRight
-						&& ownerObject->accessComponent<UserData>()->transformY > 0)
-					{
-						textureBatch->draw(ownerObject->accessComponent<AnimationPlayer>()->getTexture(), ownerObject->accessComponent<AnimationPlayer>()->getCurrentFrameTexCoords(),
-							static_cast<float>(ownerObject->accessComponent<UserData>()->spriteXout), static_cast<float>(ownerObject->accessComponent<UserData>()->spriteYout),
-							ownerObject->accessComponent<AnimationPlayer>()->getFrameWidth(), ownerObject->accessComponent<AnimationPlayer>()->getFrameHeight(),
-							0.0f, 0.0f,	0.0f, 
-							ownerObject->accessComponent<Transform>()->getScale(), 
-							Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } * colorValue,
-							ownerObject->accessComponent<UserData>()->spriteColorA, ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthAdd);
-
-						//shadow
-						if (ownerObject->accessComponent<UserData>()->hasShadow == true)
-						{
-							textureBatch->draw(ownerObject->accessComponent<UserData>()->shadow, &glm::vec4(0.0f, 0.0f, ownerObject->accessComponent<UserData>()->shadow->getWidth(), ownerObject->accessComponent<UserData>()->shadow->getHeight()),
-								static_cast<float>(ownerObject->accessComponent<UserData>()->spriteXout), static_cast<float>(ownerObject->accessComponent<UserData>()->spriteYout),
-								ownerObject->accessComponent<UserData>()->shadow->getWidth(), (ownerObject->accessComponent<UserData>()->shadow->getHeight() + ownerObject->accessComponent<Transform>()->getDepth() * 50),
-								0.0f, 0.0f, 0.0f,
-								ownerObject->accessComponent<Transform>()->getScale(), 
-								Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } * colorValue, 
-								ownerObject->accessComponent<UserData>()->spriteColorA,
-								ownerObject->accessComponent<Transform>()->getDepth() - 0.00001f + ownerObject->accessComponent<UserData>()->depthAdd);
-						}						
-					}
-
-				}
-
-			private:
-				Renderer::TextureBatch* textureBatch;
-				int raycastW;
-				int limitLeft;
-				int limitRight;
-			};
-			
 		private:
 			Core::RNG randomGenerator;
 
@@ -230,7 +90,7 @@ namespace Engin
 
 			std::vector<GameObject*> gameObjects;
 			std::vector<GameObject*> deadObjects;
-			
+
 			float alpha;
 
 			int endX;
@@ -294,7 +154,7 @@ namespace Engin
 			int lineHeight;
 
 			//calculate lowest and highest pixel to fill in current stripe
-			int drawStart;			
+			int drawStart;
 			int drawEnd;
 
 			double wallX; //where exactly the wall was hit
@@ -320,6 +180,145 @@ namespace Engin
 
 			float moveSpeed;
 			float rotSpeed;
+		};
+
+		class UserData : public Component
+		{
+		public:
+			UserData(GameObject* o) :
+				Component(o),
+				sides(0),
+				transformY(0),
+				animationIndex(0),
+				spriteXout(0),
+				spriteYout(0),
+				isFireball(false),
+				hasShadow(false),
+				animationLoopStartFrame(0),
+				animationLoopEndFrame(0),
+				shadow(nullptr),
+				cooldownLenght(0.0f),
+				tileOverSize(0),
+				isTree(false),
+				spriteColorR(0.0f),
+				spriteColorG(0.0f),
+				spriteColorB(0.0f),
+				spriteColorA(1.0f),
+				isHitAnimation(false),
+				depthAdd(0.0f),
+				furbalGameobjectTransform(nullptr) {}
+
+			int sides;
+			double transformY;
+			int animationIndex;
+			double spriteXout;
+			double spriteYout;
+			bool isFireball;
+			bool hasShadow;
+			int animationLoopStartFrame;
+			int animationLoopEndFrame;
+			Resources::Texture* shadow;
+			Core::Timer hitCoolDown;
+			float cooldownLenght;
+			int tileOverSize;
+			bool isTree;
+			float spriteColorR;
+			float spriteColorG;
+			float spriteColorB;
+			float spriteColorA;
+			bool isHitAnimation;
+			float depthAdd; // To render things over objects depth wise.
+
+			Game::Transform* furbalGameobjectTransform;
+
+			void hitAnimationUpdate()
+			{
+				ownerObject->accessComponent<Transform>()->setPosition(furbalGameobjectTransform->getPosition());
+			}
+		};
+
+		class PseudoSpriteDraw : public Component
+		{
+		public:
+			PseudoSpriteDraw(GameObject* o) :
+				Component(o),
+				textureBatch(nullptr),
+				raycastW(0),
+				limitLeft(0),
+				limitRight(0) {}
+			void setTextureBatch(Renderer::TextureBatch* newTextrBatch) { textureBatch = newTextrBatch; }
+			void setRaycastW(int W) { raycastW = W; limitLeft = -raycastW - 2656; limitRight = raycastW - 2400; }
+			void drawPseudoSprite()
+			{
+
+				static float colorValue = 0;
+				if (ownerObject->accessComponent<UserData>()->isFireball || ownerObject->accessComponent<UserData>()->isHitAnimation)
+				{
+					colorValue = 1.0f;
+				}
+				else
+				{
+					colorValue = (ownerObject->accessComponent<Transform>()->getDepth()) * 6;
+					if (colorValue > 0.8f)
+					{
+						colorValue = 0.8f;
+					}
+					else if (colorValue < 0.4f)
+					{
+						colorValue = 0.4f;
+					}
+				}
+
+				if (ownerObject->accessComponent<UserData>()->spriteXout > limitLeft
+					&& ownerObject->accessComponent<UserData>()->spriteXout < limitRight
+					&& ownerObject->accessComponent<UserData>()->transformY > 0)
+				{
+					textureBatch->draw(ownerObject->accessComponent<AnimationPlayer>()->getTexture(), ownerObject->accessComponent<AnimationPlayer>()->getCurrentFrameTexCoords(),
+						static_cast<float>(ownerObject->accessComponent<UserData>()->spriteXout), static_cast<float>(ownerObject->accessComponent<UserData>()->spriteYout),
+						ownerObject->accessComponent<AnimationPlayer>()->getFrameWidth(), ownerObject->accessComponent<AnimationPlayer>()->getFrameHeight(),
+						0.0f, 0.0f, 0.0f,
+						ownerObject->accessComponent<Transform>()->getScale(),
+						Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } *colorValue,
+						ownerObject->accessComponent<UserData>()->spriteColorA, ownerObject->accessComponent<Transform>()->getDepth() + ownerObject->accessComponent<UserData>()->depthAdd);
+
+					//shadow
+					if (ownerObject->accessComponent<UserData>()->hasShadow == true)
+					{
+						textureBatch->draw(ownerObject->accessComponent<UserData>()->shadow, &glm::vec4(0.0f, 0.0f, ownerObject->accessComponent<UserData>()->shadow->getWidth(), ownerObject->accessComponent<UserData>()->shadow->getHeight()),
+							static_cast<float>(ownerObject->accessComponent<UserData>()->spriteXout), static_cast<float>(ownerObject->accessComponent<UserData>()->spriteYout),
+							ownerObject->accessComponent<UserData>()->shadow->getWidth(), (ownerObject->accessComponent<UserData>()->shadow->getHeight() + ownerObject->accessComponent<Transform>()->getDepth() * 50),
+							0.0f, 0.0f, 0.0f,
+							ownerObject->accessComponent<Transform>()->getScale(),
+							Renderer::Color{ ownerObject->accessComponent<UserData>()->spriteColorR, ownerObject->accessComponent<UserData>()->spriteColorG, ownerObject->accessComponent<UserData>()->spriteColorB } *colorValue,
+							ownerObject->accessComponent<UserData>()->spriteColorA,
+							ownerObject->accessComponent<Transform>()->getDepth() - 0.00001f + ownerObject->accessComponent<UserData>()->depthAdd);
+					}
+				}
+			}
+
+		private:
+			Renderer::TextureBatch* textureBatch;
+			int raycastW;
+			int limitLeft;
+			int limitRight;
+		};
+
+		class Projectile : public Component
+		{
+		public:
+			Projectile(GameObject* o) :
+				Component(o),
+				speed(0.10f),
+				spread(5.0f)
+			{
+			}
+
+			void update();
+
+		private:
+			float speed;
+			float spread;
+			Core::RNG rng;
 		};
 	}
 }

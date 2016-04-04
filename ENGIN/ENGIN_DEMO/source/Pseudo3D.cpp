@@ -146,8 +146,6 @@ namespace Engin
 					
 			//2d tilesize
 			tileSize2d = 64;
-			//alpha used for rotating things
-			alpha = 0.0f;
 
 			//----------------------
 			//Raycast init
@@ -355,7 +353,6 @@ namespace Engin
 
 			gameObjects[1]->accessComponent<Transform>()->setXPosition(8.0f + 4.0f * glm::cos(alpha));
 
-#pragma region Launchers
 			// Fireball launchers.
 			if (turretCoolDown.getLocalTime() > 2500.0f)
 			{
@@ -364,7 +361,6 @@ namespace Engin
 				createProjectile(7.0f, 24.0f, glm::radians(270.0f));
 				turretCoolDown.start();
 			}
-#pragma endregion
 
 			// Information display.		
 			textCreator3.createTextTexture(font, "WASD + arrows " + std::to_string(player[0]) + " " + std::to_string(player[1]) + " angle: " + std::to_string(glm::degrees(player[2])) + " angle2: " + std::to_string(glm::degrees(gameObjects[2]->accessComponent<Transform>()->getRotation())), 255, 100, 0);
@@ -438,7 +434,8 @@ namespace Engin
 			
 			// Printing time
 			textCreator.createTextTexture(font, "Time: " + std::to_string(myTimer.getLocalTime() / 1000.0f) + " s", 255, 100, 0);
-			text = textCreator.getTexture();		
+			text = textCreator.getTexture();
+			alpha += 0.01f;
 		}
 
 		void Pseudo3D::interpolate(GLfloat alpha)
@@ -807,54 +804,7 @@ namespace Engin
 		}
 
 
-		// Player 1 movement works straight for the raycasting. Has gamepad and mouse controls. TODO: make cleaner code.
-#pragma region RaycastMovement
-		// Moves player
-		void Pseudo3D::movePlayer(float multiplier)
-		{
-			if (wallTiles[mapY - static_cast<int>(player[1])][static_cast<int>(player[0] + dirX * moveSpeed * multiplier)] == false)
-			{
-				player[0] += dirX * moveSpeed * multiplier;
-			}
-
-			if (wallTiles[mapY - static_cast<int>(player[1] + dirY * moveSpeed * multiplier)][static_cast<int>(player[0])] == false)
-			{
-				player[1] += dirY * moveSpeed * multiplier;
-			}
-		}
-
-		// Strafes player.
-		void Pseudo3D::strafePlayer(float multiplier)
-		{
-			if (wallTiles[mapY - static_cast<int>(player[1])][static_cast<int>(player[0] + planeX * moveSpeed * multiplier)] == false)
-			{
-				player[0] += planeX * moveSpeed * multiplier;
-			}
-
-			if (wallTiles[mapY - static_cast<int>(player[1] + planeY * moveSpeed * multiplier)][static_cast<int>(player[0])] == false)
-			{
-				player[1] += planeY * moveSpeed * multiplier;
-			}
-		}
-
-		// Rotates player.
-		void Pseudo3D::rotatePlayer(float speed)
-		{
-			// Both camera direction and camera plane must be rotated.
-			double oldDirX = dirX;
-			dirX = dirX * cos(speed) - dirY * sin(speed);
-			dirY = oldDirX * sin(speed) + dirY * cos(speed);
-			double oldPlaneX = planeX;
-			planeX = planeX * cos(speed) - planeY * sin(speed);
-			planeY = oldPlaneX * sin(speed) + planeY * cos(speed);
-		}
-
-		// Get requested axis multiplier of given gamepad.
-		float Pseudo3D::getAxisMultiplier(HID::GamepadAxis axis, int GPIndex)
-		{
-			return engine->gamepadInput->getAxisValue(axis, GPIndex) / HID::AXIS_MAX;
-		}
-
+		// Player 1 movement TODO: make cleaner code.
 		void Pseudo3D::player1Movement()
 		{
 			// Player movement.
@@ -961,8 +911,6 @@ namespace Engin
 
 			engine->mouseInput->getRelativeMouseState(&lastMouseX, &lastMouseY);
 
-			alpha += 0.01f;
-
 			// Saving player rotation.
 			player[2] = glm::atan(dirY, dirX);
 			if (player[2] < 0)
@@ -988,12 +936,10 @@ namespace Engin
 				}
 			}
 		}
-#pragma endregion
 
-		// Player 2 movement works for gameobjects. If using this for pseudo3d movement you have to change raycasting function to calculate rotX, rotY, planeX and planeY.
+		// Player 2 movement
 		void Pseudo3D::player2Movement()
 		{
-#pragma region Player2
 				{ // Moving player 2. TODO change player 1 to gameobject...
 					float multiplier = 0.0f;
 
@@ -1081,7 +1027,52 @@ namespace Engin
 				camera2->setZoomLevel(zoomByInput);
 				camera2->setPositionRotationOrigin(gameObjects[2]->accessComponent<Transform>()->getXPosition()*tileSize2d, gameObjects[2]->accessComponent<Transform>()->getYPosition()*tileSize2d);
 				camera2->setRotation(gameObjects[2]->accessComponent<Transform>()->getRotation() - glm::radians(90.0f));
-#pragma endregion
+		}
+
+		// Moves player
+		void Pseudo3D::movePlayer(float multiplier)
+		{
+			if (wallTiles[mapY - static_cast<int>(player[1])][static_cast<int>(player[0] + dirX * moveSpeed * multiplier)] == false)
+			{
+				player[0] += dirX * moveSpeed * multiplier;
+			}
+
+			if (wallTiles[mapY - static_cast<int>(player[1] + dirY * moveSpeed * multiplier)][static_cast<int>(player[0])] == false)
+			{
+				player[1] += dirY * moveSpeed * multiplier;
+			}
+		}
+
+		// Strafes player.
+		void Pseudo3D::strafePlayer(float multiplier)
+		{
+			if (wallTiles[mapY - static_cast<int>(player[1])][static_cast<int>(player[0] + planeX * moveSpeed * multiplier)] == false)
+			{
+				player[0] += planeX * moveSpeed * multiplier;
+			}
+
+			if (wallTiles[mapY - static_cast<int>(player[1] + planeY * moveSpeed * multiplier)][static_cast<int>(player[0])] == false)
+			{
+				player[1] += planeY * moveSpeed * multiplier;
+			}
+		}
+
+		// Rotates player.
+		void Pseudo3D::rotatePlayer(float speed)
+		{
+			// Both camera direction and camera plane must be rotated.
+			double oldDirX = dirX;
+			dirX = dirX * cos(speed) - dirY * sin(speed);
+			dirY = oldDirX * sin(speed) + dirY * cos(speed);
+			double oldPlaneX = planeX;
+			planeX = planeX * cos(speed) - planeY * sin(speed);
+			planeY = oldPlaneX * sin(speed) + planeY * cos(speed);
+		}
+
+		// Get requested axis multiplier of given gamepad.
+		float Pseudo3D::getAxisMultiplier(HID::GamepadAxis axis, int GPIndex)
+		{
+			return engine->gamepadInput->getAxisValue(axis, GPIndex) / HID::AXIS_MAX;
 		}
 
 		// Raycast furball sprite.
@@ -1234,13 +1225,6 @@ namespace Engin
 			gameObjects.back()->accessComponent<RigidBody>()->setCollisionRadius(0.2f);
 		}
 
-		void Pseudo3D::Projectile::update()
-		{
-			Transform* t = ownerObject->accessComponent<Transform>();
-			t->setXPosition(t->getXPosition() + speed * cosf(t->getRotation()));
-			t->setYPosition(t->getYPosition() + speed * sinf(t->getRotation()));
-		}
-
 		// Deletes killed objects from the gameObjects vector.
 		void Pseudo3D::deleteDeadObjects()
 		{
@@ -1260,6 +1244,13 @@ namespace Engin
 			}
 
 			deadObjects.clear();
+		}
+
+		void Projectile::update()
+		{
+			Transform* t = ownerObject->accessComponent<Transform>();
+			t->setXPosition(t->getXPosition() + speed * cosf(t->getRotation()));
+			t->setYPosition(t->getYPosition() + speed * sinf(t->getRotation()));
 		}
 	}
 }

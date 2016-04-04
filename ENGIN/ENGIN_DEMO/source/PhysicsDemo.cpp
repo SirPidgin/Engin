@@ -72,9 +72,10 @@ namespace Engin
 			// Translation test
 			for (int i = 0; i < gameObjects.size(); i++)
 			{
-				int x = 20 * glm::cos(alpha + i);
-				int y = 20 * glm::sin(alpha + i);
-				gameObjects[i]->accessComponent<Transform>()->setPosition(glm::vec2(gameObjects[i]->accessComponent<Transform>()->getPosition().x + x, gameObjects[i]->accessComponent<Transform>()->getPosition().y + y));
+				float radius = 200;
+				float x = gameObjects[i]->accessComponent<Transform>()->getPosition().x + radius * glm::cos(alpha + i) * step;
+				float y = gameObjects[i]->accessComponent<Transform>()->getPosition().y + radius * glm::sin(alpha + i) * step;
+				gameObjects[i]->accessComponent<Transform>()->setPosition(glm::vec2(x, y));
 			}
 
 			// Physics
