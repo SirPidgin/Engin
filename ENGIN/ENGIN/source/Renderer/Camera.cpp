@@ -90,22 +90,13 @@ namespace Engin
 		void Camera::setRotation(GLfloat rotation)
 		{
 			this->rotation = -rotation; // Camera rotates to the opposite direction.
-			rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));			
+			rotationMatrix = glm::rotate(this->rotation, glm::vec3(0.0f, 0.0f, 1.0f));
+
+			rotationMatrix = glm::translate(glm::vec3(worldX + rotationOriginX, worldY + rotationOriginY, 0)) * rotationMatrix * glm::translate(glm::vec3(-(worldX + rotationOriginX), -(worldY+ rotationOriginY), 0));
 		}
 
 		void Camera::calculateVP()
 		{
-			// Check manual for information.
-			if (rotation != 0.0f)
-			{
-				root = glm::sqrt(glm::pow(worldX + rotationOriginX, 2.0f) + glm::pow(worldY + rotationOriginY, 2.0f));
-				atani = glm::atan(worldY + rotationOriginY, worldX + rotationOriginX);
-
-				tempX = (root * glm::cos(this->rotation + atani) - rotationOriginX);
-				tempY = (root * glm::sin(this->rotation + atani) - rotationOriginY);
-
-				positionMatrix = glm::translate(glm::vec3(-tempX, -tempY, 0.0f));
-			}			
 			VPmatrix = P*positionMatrix*rotationMatrix*scaleMatrix;
 		}
 

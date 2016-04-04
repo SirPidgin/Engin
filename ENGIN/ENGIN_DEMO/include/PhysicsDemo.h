@@ -29,6 +29,7 @@ namespace Engin
 			void draw();
 
 			void createTile(GLfloat x, GLfloat y, GLfloat r);
+			void cameraMovement(GLfloat step);
 
 		private:
 			GLfloat alpha;

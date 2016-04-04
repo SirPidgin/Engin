@@ -19,7 +19,7 @@ namespace Engin
 			alpha(0),
 			useGamePad(false)
 		{
-			camera->initCamera(0.0f, 0.0f, static_cast<GLfloat>(engine->getWindow().getWindowWidth()), static_cast<GLfloat>(engine->getWindow().getWindowHeight()), 0.0f, 0.0f, engine->getWindow().getWindowWidth() / 2.0f, engine->getWindow().getWindowHeight() / 2.0f);
+			camera->initCamera(0.0f, 0.0f, static_cast<GLfloat>(engine->getWindow().getWindowWidth()), static_cast<GLfloat>(engine->getWindow().getWindowHeight()), 500.0f, 500.0f, engine->getWindow().getWindowWidth() / 2.0f, engine->getWindow().getWindowHeight() / 2.0f);
 			engine->mouseInput->enableRelativeMousPosition();
 
 			if (engine->gamepadInput->getNumGamepads() > 0)
@@ -67,12 +67,12 @@ namespace Engin
 				engine->getSceneManager().pop();
 			}
 
-			camera->setPositionRotationOrigin(500, 500);
+			cameraMovement(step);
 
 			// Translation test
 			for (int i = 0; i < gameObjects.size(); i++)
 			{
-				float radius = 200;
+				float radius = 128;
 				float x = gameObjects[i]->accessComponent<Transform>()->getPosition().x + radius * glm::cos(alpha + i) * step;
 				float y = gameObjects[i]->accessComponent<Transform>()->getPosition().y + radius * glm::sin(alpha + i) * step;
 				gameObjects[i]->accessComponent<Transform>()->setPosition(glm::vec2(x, y));
@@ -112,6 +112,54 @@ namespace Engin
 
 			gameObjects.back()->accessComponent<Transform>()->setPosition(glm::vec2(x, y));
 			gameObjects.back()->accessComponent<Transform>()->setRotation(r);
+		}
+
+		void PhysicsDemo::cameraMovement(GLfloat step)
+		{
+			static float zoomByInput = 1.0f;
+			static float moveByInputX = 0.0f;
+			static float moveByInputY = 0.0f;
+			static float moveSpeed = 300.0f;
+
+			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_UP) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_RIGHTSHOULDER, 0)))
+			{
+				if (zoomByInput > 0.0f)
+					zoomByInput -= 0.034;
+			}
+			if (engine->mouseInput->mouseWheelWasMoved(HID::MOUSEWHEEL_DOWN) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_LEFTSHOULDER, 0)))
+			{
+				zoomByInput += 0.034;
+			}
+
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_W) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_DPAD_UP, 0)))
+			{
+				//std::cout << "W" << std::endl;
+				moveByInputY += moveSpeed;
+			}
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_A) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_DPAD_LEFT, 0)))
+			{
+				//std::cout << "A" << std::endl;
+				moveByInputX -= moveSpeed;
+			}
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_S) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_DPAD_DOWN, 0)))
+			{
+				//std::cout << "S" << std::endl;
+				moveByInputY -= moveSpeed;
+			}
+			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_D) ||
+				(useGamePad && engine->gamepadInput->buttonIsPressed(HID::GAMEPAD_BUTTON_DPAD_RIGHT, 0)))
+			{
+				//std::cout << "D" << std::endl;
+				moveByInputX += moveSpeed;
+			}
+
+			camera->setZoomLevel(zoomByInput); //by input
+			camera->setPositionRotationOrigin(moveByInputX*step, moveByInputY*step); //by input
 		}
 	}
 }
