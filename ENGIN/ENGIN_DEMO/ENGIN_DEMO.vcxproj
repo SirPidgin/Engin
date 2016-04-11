@@ -96,6 +96,8 @@
     <ClCompile Include="source\MenuScene.cpp" />
     <ClCompile Include="source\PhysicsDemo.cpp" />
     <ClCompile Include="source\Pseudo3D.cpp" />
+    <ClCompile Include="source\PTPhysicsWorld.cpp" />
+    <ClCompile Include="source\PTRigidBody.cpp" />
     <ClCompile Include="source\TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +117,8 @@
     <ClInclude Include="include\MenuScene.h" />
     <ClInclude Include="include\PhysicsDemo.h" />
     <ClInclude Include="include\Pseudo3D.h" />
+    <ClInclude Include="include\PTPhysicsWorld.h" />
+    <ClInclude Include="include\PTRigidBody.h" />
     <ClInclude Include="include\TitleScene.h" />
   </ItemGroup>
   <ItemGroup>

@@ -39,10 +39,18 @@ namespace Engin
 
 			tile = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/red_tile_128.png");
 
+			physicsWorld = new PTPhysicsWorld();
+			physicsWorld->setGravity(glm::vec2(0, -10));
+			// physics bodies
+			for (int i = 0; i < 20; i++)
+			{
+				physicsWorld->addRigidBody(new PTRigidBody(physicsWorld), glm::vec2(i*128, i*128));
+			}
+			// for drawing
 			for (int i = 0; i < 20; i++)
 			{
 				createTile(i*128, i*128, i*50);
-			}			
+			}
 		}
 
 		PhysicsDemo::~PhysicsDemo()
@@ -69,19 +77,15 @@ namespace Engin
 
 			cameraMovement(step);
 
-			// Translation test
+			// Translation physics test
 			for (int i = 0; i < gameObjects.size(); i++)
 			{
-				float radius = 128;
-				float x = gameObjects[i]->accessComponent<Transform>()->getPosition().x + radius * glm::cos(alpha + i) * step;
-				float y = gameObjects[i]->accessComponent<Transform>()->getPosition().y + radius * glm::sin(alpha + i) * step;
-				gameObjects[i]->accessComponent<Transform>()->setPosition(glm::vec2(x, y));
+				physicsWorld->update(step);
+				
+				glm::vec2 newPos = physicsWorld->getBodies()[i]->getPosition();
+
+				gameObjects[i]->accessComponent<Transform>()->setPosition(newPos);
 			}
-
-			// Physics
-		
-
-			//
 
 			for (int i = 0; i < gameObjects.size(); i++)
 			{

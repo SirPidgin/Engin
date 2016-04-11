@@ -14,6 +14,9 @@
 #include <array>
 #include <vector>
 
+#include "PTPhysicsWorld.h"
+#include "PTRigidBody.h"
+
 namespace Engin
 {
 	namespace Game
@@ -49,6 +52,8 @@ namespace Engin
 			GameObject* gameObject;
 
 			std::vector<GameObject*> gameObjects;
+
+			PTPhysicsWorld* physicsWorld;
 		};
 	}
 }
