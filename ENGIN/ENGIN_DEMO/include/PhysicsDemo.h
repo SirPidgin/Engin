@@ -17,6 +17,8 @@
 #include "PTPhysicsWorld.h"
 #include "PTRigidBody.h"
 
+#include "Engin\Core\Timer.h""
+
 namespace Engin
 {
 	namespace Game
@@ -33,6 +35,8 @@ namespace Engin
 
 			void createTile(GLfloat x, GLfloat y, GLfloat r);
 			void cameraMovement(GLfloat step);
+
+			void fireTile();
 
 		private:
 			GLfloat alpha;
@@ -54,6 +58,9 @@ namespace Engin
 			std::vector<GameObject*> gameObjects;
 
 			PTPhysicsWorld* physicsWorld;
+
+			Core::Timer* fireTimer;
+			Core::RNG randomGenerator;
 		};
 	}
 }

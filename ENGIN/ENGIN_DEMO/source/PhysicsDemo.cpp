@@ -51,6 +51,8 @@ namespace Engin
 			{
 				createTile(i*128, i*128, i*50);
 			}
+
+			fireTimer->start();
 		}
 
 		PhysicsDemo::~PhysicsDemo()
@@ -76,6 +78,7 @@ namespace Engin
 			}
 
 			cameraMovement(step);
+			fireTile();
 
 			// Translation physics test
 			for (int i = 0; i < gameObjects.size(); i++)
@@ -93,6 +96,8 @@ namespace Engin
 			}
 			
 			alpha += step;
+			randomGenerator.setSeed(step);
+			fireTimer->update();
 		}
 
 		void PhysicsDemo::interpolate(GLfloat alpha)
@@ -164,6 +169,23 @@ namespace Engin
 
 			camera->setZoomLevel(zoomByInput); //by input
 			camera->setPositionRotationOrigin(moveByInputX*step, moveByInputY*step); //by input
+		}
+
+		void PhysicsDemo::fireTile()
+		{
+			if (fireTimer->getLocalTime() > 2000.0f)
+			{
+				physicsWorld->addRigidBody(new PTRigidBody(physicsWorld), glm::vec2(0.0f));
+				createTile(0.0f, 0.0f, 0.0f);
+
+				float x = randomGenerator.getRandomFloat(10.0f, 40.0f);
+				float y = randomGenerator.getRandomFloat(10.0f, 40.0f);
+				glm::vec2 velocity = glm::vec2(x,y);
+
+				physicsWorld->getBodies().back()->setVelocity(velocity);
+
+				fireTimer->start();
+			}
 		}
 	}
 }
