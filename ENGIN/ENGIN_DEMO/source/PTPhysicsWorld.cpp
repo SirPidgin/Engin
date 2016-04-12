@@ -1,6 +1,6 @@
 #include "PTPhysicsWorld.h"
 
-PTPhysicsWorld::PTPhysicsWorld() : scale(1)
+PTPhysicsWorld::PTPhysicsWorld(GLfloat scale) : scale(scale)
 {
 	
 }

@@ -39,19 +39,20 @@ namespace Engin
 
 			tile = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/red_tile_128.png");
 
-			physicsWorld = new PTPhysicsWorld();
+			physicsWorld = new PTPhysicsWorld(128.0f);
 			physicsWorld->setGravity(glm::vec2(0, -10));
-			// physics bodies
-			for (int i = 0; i < 20; i++)
-			{
-				physicsWorld->addRigidBody(new PTRigidBody(physicsWorld), glm::vec2(i*128, i*128));
-			}
-			// for drawing
-			for (int i = 0; i < 20; i++)
-			{
-				createTile(i*128, i*128, i*50);
-			}
+			//// physics bodies
+			//for (int i = 0; i < 20; i++)
+			//{
+			//	physicsWorld->addRigidBody(new PTRigidBody(physicsWorld), glm::vec2(i*128, i*128));
+			//}
+			//// for drawing
+			//for (int i = 0; i < 20; i++)
+			//{
+			//	createTile(i*128, i*128, i*50);
+			//}
 
+			fireTimer = new Core::Timer();
 			fireTimer->start();
 		}
 
@@ -80,11 +81,11 @@ namespace Engin
 			cameraMovement(step);
 			fireTile();
 
+			physicsWorld->update(step);
+
 			// Translation physics test
 			for (int i = 0; i < gameObjects.size(); i++)
-			{
-				physicsWorld->update(step);
-				
+			{				
 				glm::vec2 newPos = physicsWorld->getBodies()[i]->getPosition();
 
 				gameObjects[i]->accessComponent<Transform>()->setPosition(newPos);
@@ -97,7 +98,6 @@ namespace Engin
 			
 			alpha += step;
 			randomGenerator.setSeed(step);
-			fireTimer->update();
 		}
 
 		void PhysicsDemo::interpolate(GLfloat alpha)
@@ -175,11 +175,11 @@ namespace Engin
 		{
 			if (fireTimer->getLocalTime() > 2000.0f)
 			{
-				physicsWorld->addRigidBody(new PTRigidBody(physicsWorld), glm::vec2(0.0f));
-				createTile(0.0f, 0.0f, 0.0f);
+				physicsWorld->addRigidBody(new PTRigidBody(physicsWorld), glm::vec2(0.0f, 200.0f));
+				createTile(0.0f, 200.0f, 0.0f);
 
-				float x = randomGenerator.getRandomFloat(10.0f, 40.0f);
-				float y = randomGenerator.getRandomFloat(10.0f, 40.0f);
+				float x = randomGenerator.getRandomFloat(-100.0f, 600.0f);
+				float y = randomGenerator.getRandomFloat(40.0f, 100.0f);
 				glm::vec2 velocity = glm::vec2(x,y);
 
 				physicsWorld->getBodies().back()->setVelocity(velocity);

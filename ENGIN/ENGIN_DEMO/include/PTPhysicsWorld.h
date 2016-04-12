@@ -10,7 +10,7 @@ class PTRigidBody;
 class PTPhysicsWorld
 {
 public:
-	PTPhysicsWorld();
+	PTPhysicsWorld(GLfloat scale);
 	~PTPhysicsWorld();
 
 	void update(GLfloat step);
