@@ -41,16 +41,6 @@ namespace Engin
 
 			physicsWorld = new PTPhysicsWorld(128.0f);
 			physicsWorld->setGravity(glm::vec2(0, -10));
-			//// physics bodies
-			//for (int i = 0; i < 20; i++)
-			//{
-			//	physicsWorld->addRigidBody(new PTRigidBody(physicsWorld), glm::vec2(i*128, i*128));
-			//}
-			//// for drawing
-			//for (int i = 0; i < 20; i++)
-			//{
-			//	createTile(i*128, i*128, i*50);
-			//}
 
 			fireTimer = new Core::Timer();
 			fireTimer->start();
