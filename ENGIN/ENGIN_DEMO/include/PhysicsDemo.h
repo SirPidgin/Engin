@@ -62,5 +62,25 @@ namespace Engin
 			Core::Timer* fireTimer;
 			Core::RNG randomGenerator;
 		};
+
+		class PhysicsComponent : public Component
+		{
+		public:
+			PhysicsComponent(GameObject* o) : Component(o){}
+			void setBody(PTRigidBody* body)
+			{
+				this->body = body;
+			}
+			PTRigidBody* getBody()
+			{
+				return body;
+			}
+			void update()
+			{
+				ownerObject->accessComponent<Transform>()->setPosition(body->getPosition());
+			}
+		private:
+			PTRigidBody* body;
+		};
 	}
 }

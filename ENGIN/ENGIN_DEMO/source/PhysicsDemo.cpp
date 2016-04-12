@@ -83,14 +83,7 @@ namespace Engin
 
 			physicsWorld->update(step);
 
-			// Translation physics test
-			for (int i = 0; i < gameObjects.size(); i++)
-			{				
-				glm::vec2 newPos = physicsWorld->getBodies()[i]->getPosition();
-
-				gameObjects[i]->accessComponent<Transform>()->setPosition(newPos);
-			}
-
+			// Looping trough gameObjects update
 			for (int i = 0; i < gameObjects.size(); i++)
 			{
 				gameObjects[i]->update();
@@ -121,6 +114,9 @@ namespace Engin
 
 			gameObjects.back()->accessComponent<Transform>()->setPosition(glm::vec2(x, y));
 			gameObjects.back()->accessComponent<Transform>()->setRotation(r);
+			physicsWorld->addRigidBody(new PTRigidBody(physicsWorld), glm::vec2(x, y));
+			gameObjects.back()->addComponent<PhysicsComponent>();
+			gameObjects.back()->accessComponent<PhysicsComponent>()->setBody(physicsWorld->getBodies().back());
 		}
 
 		void PhysicsDemo::cameraMovement(GLfloat step)
@@ -175,14 +171,13 @@ namespace Engin
 		{
 			if (fireTimer->getLocalTime() > 2000.0f)
 			{
-				physicsWorld->addRigidBody(new PTRigidBody(physicsWorld), glm::vec2(0.0f, 200.0f));
 				createTile(0.0f, 200.0f, 0.0f);
 
 				float x = randomGenerator.getRandomFloat(-100.0f, 600.0f);
-				float y = randomGenerator.getRandomFloat(40.0f, 100.0f);
+				float y = randomGenerator.getRandomFloat(40.0f, 600.0f);
 				glm::vec2 velocity = glm::vec2(x,y);
 
-				physicsWorld->getBodies().back()->setVelocity(velocity);
+				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(velocity);
 
 				fireTimer->start();
 			}

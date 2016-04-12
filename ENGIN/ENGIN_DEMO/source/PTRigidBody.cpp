@@ -25,7 +25,9 @@ void PTRigidBody::update(GLfloat step)
 	}
 	else
 	{
-		velocity = glm::vec2(0.0f);
+		velocity.y = 0.0f;
+		position.y = 0.0f;
+		position = positionOld + velocityOld*step;
 	}
 }
 
