@@ -38,12 +38,17 @@ namespace Engin
 			guiBatch.setShader(alphaShader);
 
 			tile = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/red_tile_128.png");
+			tile2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/green_tile_128.png");
 
 			physicsWorld = new PTPhysicsWorld(128.0f);
 			physicsWorld->setGravity(glm::vec2(0, -10));
 
 			fireTimer = new Core::Timer();
 			fireTimer->start();
+
+			createTile(600.0f, 0.0f, 0.0f);
+			createTile(1600.0f, 0.0f, 0.0f);
+			createTile(3600.0f, 0.0f, 0.0f);
 		}
 
 		PhysicsDemo::~PhysicsDemo()
@@ -77,10 +82,20 @@ namespace Engin
 			for (int i = 0; i < gameObjects.size(); i++)
 			{
 				gameObjects[i]->update();
+
+				// Paras debug draw ikinä
+				if(gameObjects[i]->accessComponent<PhysicsComponent>()->getBody()->isColliding())
+				{
+					gameObjects[i]->accessComponent<Sprite>()->setCurrentSprite(tile2);
+				}
+				if (!gameObjects[i]->accessComponent<PhysicsComponent>()->getBody()->isColliding())
+				{
+					gameObjects[i]->accessComponent<Sprite>()->setCurrentSprite(tile);
+				}
 			}
 			
 			alpha += step;
-			randomGenerator.setSeed(step);
+			
 		}
 
 		void PhysicsDemo::interpolate(GLfloat alpha)
@@ -107,6 +122,7 @@ namespace Engin
 			physicsWorld->addRigidBody(new PTRigidBody(physicsWorld), glm::vec2(x, y));
 			gameObjects.back()->addComponent<PhysicsComponent>();
 			gameObjects.back()->accessComponent<PhysicsComponent>()->setBody(physicsWorld->getBodies().back());
+			gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setHalfSize(glm::vec2(64.0f));
 		}
 
 		void PhysicsDemo::cameraMovement(GLfloat step)

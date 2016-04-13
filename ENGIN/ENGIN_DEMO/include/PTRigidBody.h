@@ -17,6 +17,12 @@ public:
 	glm::vec2 getPosition() const;
 
 	void setVelocity(glm::vec2& velocity);
+	void setHalfSize(glm::vec2& halfSize);
+	glm::vec2 getHalfSize();
+
+	void setCollisionOn();
+	void setCollisionOff();
+	bool isColliding();
 private:
 	glm::vec2 position;
 	glm::vec2 velocity;
@@ -26,5 +32,7 @@ private:
 
 	PTPhysicsWorld* world;
 
-	glm::vec2 size;
+	glm::vec2 halfSize;
+
+	bool colliding;
 };

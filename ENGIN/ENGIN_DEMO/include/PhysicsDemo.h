@@ -53,6 +53,7 @@ namespace Engin
 			bool useGamePad;
 
 			Resources::Texture* tile;
+			Resources::Texture* tile2;
 			GameObject* gameObject;
 
 			std::vector<GameObject*> gameObjects;

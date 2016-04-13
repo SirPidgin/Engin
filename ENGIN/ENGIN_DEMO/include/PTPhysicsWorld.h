@@ -21,7 +21,7 @@ public:
 
 	std::vector<PTRigidBody*> getBodies();
 
-	bool isColliding();
+	bool isCollidingAABB(PTRigidBody* body1, PTRigidBody* body2);
 
 private:
 	glm::vec2 gravity;

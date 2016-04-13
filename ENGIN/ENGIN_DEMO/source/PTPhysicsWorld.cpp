@@ -14,6 +14,26 @@ void PTPhysicsWorld::update(GLfloat step)
 {
 	for (int i = 0; i < rigidBodies.size(); i++)
 	{
+		rigidBodies[i]->setCollisionOff();
+	}
+
+	for (int i = 0; i < rigidBodies.size(); i++)
+	{
+		for (int j = 0; j < rigidBodies.size(); j++)
+		{
+			if (i != j)
+			{
+				if (isCollidingAABB(rigidBodies[i], rigidBodies[j]))
+				{
+					rigidBodies[i]->setCollisionOn();
+					rigidBodies[j]->setCollisionOn();
+				}
+			}	
+		}		
+	}
+
+	for (int i = 0; i < rigidBodies.size(); i++)
+	{
 		rigidBodies[i]->update(step);
 	}
 }
@@ -39,9 +59,16 @@ std::vector<PTRigidBody*> PTPhysicsWorld::getBodies()
 	return rigidBodies;
 }
 
-bool PTPhysicsWorld::isColliding()
+bool PTPhysicsWorld::isCollidingAABB(PTRigidBody* body1, PTRigidBody* body2)
 {
+	if (glm::abs(body1->getPosition().x - body2->getPosition().x) > (body1->getHalfSize().x + body2->getHalfSize().x))
+	{
+		return false;
+	}
+	if (glm::abs(body1->getPosition().y - body2->getPosition().y) > (body1->getHalfSize().y + body2->getHalfSize().y))
+	{
+		return false;
+	}
 
-
-	return 0;
+	return true;
 }
