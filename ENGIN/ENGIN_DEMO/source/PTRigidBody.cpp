@@ -12,8 +12,8 @@ PTRigidBody::~PTRigidBody()
 
 void PTRigidBody::update(GLfloat step)
 {
-	velocityOld = velocity;
 	positionOld = position;
+	rotationOld = rotation;
 
 	// gravity
 	velocity = velocity + world->getGravity() * step / 2.0f;
@@ -31,6 +31,9 @@ void PTRigidBody::update(GLfloat step)
 	}
 
 	velocity = velocity + world->getGravity() * step / 2.0f;
+
+	// Torque
+	
 }
 
 void PTRigidBody::setPosition(glm::vec2& pos)
@@ -41,6 +44,16 @@ void PTRigidBody::setPosition(glm::vec2& pos)
 glm::vec2 PTRigidBody::getPosition() const
 {
 	return position;
+}
+
+void PTRigidBody::setRotation(GLfloat& rotation)
+{
+	this->rotation = rotation;
+}
+
+GLfloat PTRigidBody::getRotation() const
+{
+	return rotation;
 }
 
 void PTRigidBody::setVelocity(glm::vec2& veloc)

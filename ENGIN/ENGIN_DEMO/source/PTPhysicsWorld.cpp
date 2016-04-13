@@ -1,4 +1,5 @@
 #include "PTPhysicsWorld.h"
+#include "glm\gtc\matrix_transform.hpp"
 
 PTPhysicsWorld::PTPhysicsWorld(GLfloat scale) : scale(scale)
 {
@@ -68,6 +69,32 @@ bool PTPhysicsWorld::isCollidingAABB(PTRigidBody* body1, PTRigidBody* body2)
 	if (glm::abs(body1->getPosition().y - body2->getPosition().y) > (body1->getHalfSize().y + body2->getHalfSize().y))
 	{
 		return false;
+	}
+	return true;
+}
+
+bool PTPhysicsWorld::isCollidingSAT(PTRigidBody* body1, PTRigidBody* body2)
+{
+	float body1Min = 0.0f;
+	float body1Max = 0.0f;
+	float body2Min = 0.0f;
+	float body2Max = 0.0f;
+
+	glm::vec2 normal;
+	glm::vec2 slope;
+
+	float angle1 = body1->getRotation();
+	float angle2 = body2->getRotation();
+
+	for (int i = 0; i < 8; i++)
+	{
+		body1Min = 0.0f;
+		body1Max = 0.0f;
+		body2Min = 0.0f;
+		body2Max = 0.0f;
+
+		
+
 	}
 
 	return true;

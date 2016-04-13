@@ -185,6 +185,9 @@ namespace Engin
 
 				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(velocity);
 
+				float r = randomGenerator.getRandomFloat(glm::radians(-45.0f), glm::radians(45.0f));
+				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setRotation(r);
+
 				fireTimer->start();
 			}
 		}

@@ -79,6 +79,7 @@ namespace Engin
 			void update()
 			{
 				ownerObject->accessComponent<Transform>()->setPosition(body->getPosition());
+				ownerObject->accessComponent<Transform>()->setRotation(body->getRotation());
 			}
 		private:
 			PTRigidBody* body;

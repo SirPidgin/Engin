@@ -16,6 +16,9 @@ public:
 	void setPosition(glm::vec2 &position);
 	glm::vec2 getPosition() const;
 
+	void setRotation(GLfloat &rotation);
+	GLfloat getRotation() const;
+
 	void setVelocity(glm::vec2& velocity);
 	void setHalfSize(glm::vec2& halfSize);
 	glm::vec2 getHalfSize();
@@ -25,10 +28,11 @@ public:
 	bool isColliding();
 private:
 	glm::vec2 position;
+	GLfloat rotation;
 	glm::vec2 velocity;
 	glm::vec2 positionOld;
-	glm::vec2 velocityOld;
-	glm::vec2 angularVelocity;
+	GLfloat rotationOld;
+	GLfloat angularVelocity;
 
 	PTPhysicsWorld* world;
 
