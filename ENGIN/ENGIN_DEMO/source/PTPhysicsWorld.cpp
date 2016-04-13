@@ -81,7 +81,7 @@ bool PTPhysicsWorld::isCollidingSAT(PTRigidBody* body1, PTRigidBody* body2)
 	float body2Max = 0.0f;
 
 	glm::vec2 normal;
-	glm::vec2 slope;
+	glm::vec2 lineSlope;
 
 	float angle1 = body1->getRotation();
 	float angle2 = body2->getRotation();
@@ -92,7 +92,7 @@ bool PTPhysicsWorld::isCollidingSAT(PTRigidBody* body1, PTRigidBody* body2)
 		body1Max = 0.0f;
 		body2Min = 0.0f;
 		body2Max = 0.0f;
-
+		// http://www.cplusplus.com/forum/general/168366/
 		
 
 	}
