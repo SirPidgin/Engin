@@ -21,8 +21,17 @@ public:
 
 	std::vector<PTRigidBody*> getBodies();
 
-	bool isCollidingAABB(PTRigidBody* body1, PTRigidBody* body2);
 	bool isCollidingSAT(PTRigidBody* body1, PTRigidBody* body2);
+
+	float projectedPoint(glm::vec2 point, glm::vec2 slope)
+	{
+		return (point.x * slope.x) + (point.y * slope.y);
+	}
+
+	glm::vec2 slope(glm::vec2 P1, glm::vec2 P2)
+	{
+		return glm::vec2((P2.x - P1.x), (P2.y - P1.y));
+	}
 
 private:
 	glm::vec2 gravity;

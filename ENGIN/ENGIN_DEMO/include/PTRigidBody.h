@@ -16,7 +16,7 @@ public:
 	void setPosition(glm::vec2 &position);
 	glm::vec2 getPosition() const;
 
-	void setRotation(GLfloat &rotation);
+	void setRotation(GLfloat rotation);
 	GLfloat getRotation() const;
 
 	void setVelocity(glm::vec2& velocity);

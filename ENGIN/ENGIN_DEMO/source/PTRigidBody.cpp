@@ -1,6 +1,6 @@
 #include "PTRigidBody.h"
 
-PTRigidBody::PTRigidBody(PTPhysicsWorld* world) : world(world), colliding(false)
+PTRigidBody::PTRigidBody(PTPhysicsWorld* world) : world(world), colliding(false), rotation(0)
 {
 
 }
@@ -46,7 +46,7 @@ glm::vec2 PTRigidBody::getPosition() const
 	return position;
 }
 
-void PTRigidBody::setRotation(GLfloat& rotation)
+void PTRigidBody::setRotation(GLfloat rotation)
 {
 	this->rotation = rotation;
 }

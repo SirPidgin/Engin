@@ -60,6 +60,7 @@ namespace Engin
 
 			PTPhysicsWorld* physicsWorld;
 
+			int maxObjects;
 			Core::Timer* fireTimer;
 			Core::RNG randomGenerator;
 		};
