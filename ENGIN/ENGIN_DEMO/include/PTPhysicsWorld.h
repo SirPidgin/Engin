@@ -27,6 +27,7 @@ private:
 	glm::vec2 gravity;
 	std::vector<PTRigidBody*> rigidBodies;
 	GLfloat scale;
+	float e;
 
 	bool isCollidingSAT(PTRigidBody* body1, PTRigidBody* body2);
 
@@ -43,4 +44,6 @@ private:
 	}
 
 	bool pointInside(glm::vec2 P, glm::vec2 box_point[]);
+
+	GLfloat calculateJ(glm::vec2 box1_point[], glm::vec2 box2_point[], PTRigidBody* body1, PTRigidBody* body2, glm::vec2 n, glm::vec2 r_AP);
 };

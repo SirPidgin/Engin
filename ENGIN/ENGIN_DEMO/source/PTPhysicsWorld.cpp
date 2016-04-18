@@ -1,7 +1,7 @@
 #include "PTPhysicsWorld.h"
 #include "glm\gtc\matrix_transform.hpp"
 
-PTPhysicsWorld::PTPhysicsWorld(GLfloat scale) : scale(scale)
+PTPhysicsWorld::PTPhysicsWorld(GLfloat scale) : scale(scale), e(0.7)
 {
 
 }
@@ -190,8 +190,16 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 	for (int i = 0; i < box1_point->length(); i++)
 	{
 		if (pointInside(box1_point[i], box2_point))
-		{
+		{			
+			//box1 point collidies with box2
+			glm::vec2 n = glm::normalize(glm::vec2(glm::cos(body2->getRotation()), glm::sin(body2->getRotation())));
+			glm::vec2 rAP = glm::vec2(box1_point[i].x - body1->getPosition().x, box1_point[i].y - body1->getPosition().y);
+			glm::vec2 r_AP = glm::inverse(rAP);
 
+			GLfloat J = calculateJ(box1_point, box2_point, body1, body2, n, r_AP);
+
+			glm::vec2 newVeloc = body1->getVelocity() + (J / body1->getMass())*n;
+			body1->setVelocity(newVeloc);
 		}
 	}
 	for (int i = 0; i < box2_point->length(); i++)
@@ -205,16 +213,29 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 
 bool PTPhysicsWorld::pointInside(glm::vec2 P, glm::vec2 box_point[])
 {
-	bool inside = false;
-
 	int i;
 	int j;
 
-	for (i = 0, j = box_point->length() - 1; i < box_point->length(); j = i++) {
+	int maxSides = 4;
+
+	for (i = 0, j = maxSides - 1; i < maxSides; j = i++) {
 		if (((box_point[i].y > P.y) != (box_point[j].y > P.y)) && (P.x < (box_point[j].x - box_point[i].x) * (P.y - box_point[i].y) / (box_point[j].y - box_point[i].y) + box_point[i].x))
 		{
-			inside = !inside;
+			return true;
 		}
 	}
-	return inside;
+	return false;
+}
+
+GLfloat PTPhysicsWorld::calculateJ(glm::vec2 box1_point[], glm::vec2 box2_point[], PTRigidBody* body1, PTRigidBody* body2, glm::vec2 n , glm::vec2 r_AP)
+{
+	GLfloat J;
+
+	glm::vec2 vAB;
+
+	glm::vec2 r_BP;
+
+	J = (-(1.0f + e) * glm::dot(vAB,  n)) / (glm::dot(n,n)*(1.0f / body1->getMass() + 1.0f / body2->getMass()) + ((glm::dot(r_AP,n))*(glm::dot(r_AP,n)) / body1->getI()) + (((glm::dot(r_BP,n))*(glm::dot(r_BP,n))) / body2->getI()));
+
+	return J;
 }

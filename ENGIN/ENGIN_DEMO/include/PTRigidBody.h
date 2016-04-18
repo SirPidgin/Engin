@@ -20,12 +20,18 @@ public:
 	GLfloat getRotation() const;
 
 	void setVelocity(glm::vec2& velocity);
+	glm::vec2& getVelocity();
 	void setHalfSize(glm::vec2& halfSize);
 	glm::vec2 getHalfSize();
 
 	void setCollisionOn();
 	void setCollisionOff();
 	bool isColliding();
+
+	void setMass(GLfloat mass);
+	GLfloat getMass();
+
+	GLfloat getI();
 private:
 	glm::vec2 position;
 	GLfloat rotation;
@@ -39,4 +45,8 @@ private:
 	glm::vec2 halfSize;
 
 	bool colliding;
+
+	GLfloat mass;
+
+	GLfloat I;
 };

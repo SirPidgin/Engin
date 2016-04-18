@@ -1,6 +1,6 @@
 #include "PTRigidBody.h"
 
-PTRigidBody::PTRigidBody(PTPhysicsWorld* world) : world(world), colliding(false), rotation(0)
+PTRigidBody::PTRigidBody(PTPhysicsWorld* world) : world(world), colliding(false), rotation(0), angularVelocity(0)
 {
 
 }
@@ -33,7 +33,7 @@ void PTRigidBody::update(GLfloat step)
 	velocity = velocity + world->getGravity() * step / 2.0f;
 
 	// Torque
-	
+	rotation = rotationOld + angularVelocity*step;
 }
 
 void PTRigidBody::setPosition(glm::vec2& pos)
@@ -61,9 +61,17 @@ void PTRigidBody::setVelocity(glm::vec2& veloc)
 	velocity = veloc;
 }
 
+glm::vec2& PTRigidBody::getVelocity()
+{
+	return velocity;
+}
+
+// TODO make one init...
 void PTRigidBody::setHalfSize(glm::vec2& halfSize)
 {
 	this->halfSize = halfSize;
+
+	I = (1.0f / 12.0f) * mass * (halfSize.x * halfSize.x + halfSize.y * halfSize.y);
 }
 
 glm::vec2 PTRigidBody::getHalfSize()
@@ -83,4 +91,19 @@ void PTRigidBody::setCollisionOff()
 bool PTRigidBody::isColliding()
 {
 	return colliding;
+}
+
+void PTRigidBody::setMass(GLfloat mass)
+{
+	this->mass = mass;
+}
+
+GLfloat PTRigidBody::getMass()
+{
+	return mass;
+}
+
+GLfloat PTRigidBody::getI()
+{
+	return I;
 }

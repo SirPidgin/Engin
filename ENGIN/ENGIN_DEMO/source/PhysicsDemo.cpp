@@ -156,7 +156,8 @@ namespace Engin
 			physicsWorld->addRigidBody(new PTRigidBody(physicsWorld), glm::vec2(x, y));
 			gameObjects.back()->addComponent<PhysicsComponent>();
 			gameObjects.back()->accessComponent<PhysicsComponent>()->setBody(physicsWorld->getBodies().back());
-			gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setHalfSize(glm::vec2(64.0f));
+			gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setMass(10);
+			gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setHalfSize(glm::vec2(64.0f));			
 		}
 
 		void PhysicsDemo::cameraMovement(GLfloat step)
