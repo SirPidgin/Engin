@@ -21,7 +21,16 @@ public:
 
 	std::vector<PTRigidBody*> getBodies();
 
+
+
+private:
+	glm::vec2 gravity;
+	std::vector<PTRigidBody*> rigidBodies;
+	GLfloat scale;
+
 	bool isCollidingSAT(PTRigidBody* body1, PTRigidBody* body2);
+
+	void collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_point[], PTRigidBody* body1, PTRigidBody* body2);
 
 	float projectedPoint(glm::vec2 point, glm::vec2 slope)
 	{
@@ -33,8 +42,5 @@ public:
 		return glm::vec2((P2.x - P1.x), (P2.y - P1.y));
 	}
 
-private:
-	glm::vec2 gravity;
-	std::vector<PTRigidBody*> rigidBodies;
-	GLfloat scale;
+	bool pointInside(glm::vec2 P, glm::vec2 box_point[]);
 };

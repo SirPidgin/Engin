@@ -62,7 +62,7 @@ std::vector<PTRigidBody*> PTPhysicsWorld::getBodies()
 
 bool PTPhysicsWorld::isCollidingSAT(PTRigidBody* body1, PTRigidBody* body2)
 {
-	// On kevyt... not
+	// On kevyt...
 	
 	// first
 	glm::mat4 T = glm::translate(glm::mat4(), glm::vec3(body1->getPosition().x, body1->getPosition().y, 1.0f));
@@ -180,7 +180,41 @@ bool PTPhysicsWorld::isCollidingSAT(PTRigidBody* body1, PTRigidBody* body2)
 		}
 
 	}
-	return true;
 
+	collisionResolution(box1_point, box2_point, body1, body2);
 	return true;
+}
+
+void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_point[], PTRigidBody* body1, PTRigidBody* body2)
+{
+	for (int i = 0; i < box1_point->length(); i++)
+	{
+		if (pointInside(box1_point[i], box2_point))
+		{
+
+		}
+	}
+	for (int i = 0; i < box2_point->length(); i++)
+	{
+		if (pointInside(box2_point[i], box1_point))
+		{
+
+		}
+	}	
+}
+
+bool PTPhysicsWorld::pointInside(glm::vec2 P, glm::vec2 box_point[])
+{
+	bool inside = false;
+
+	int i;
+	int j;
+
+	for (i = 0, j = box_point->length() - 1; i < box_point->length(); j = i++) {
+		if (((box_point[i].y > P.y) != (box_point[j].y > P.y)) && (P.x < (box_point[j].x - box_point[i].x) * (P.y - box_point[i].y) / (box_point[j].y - box_point[i].y) + box_point[i].x))
+		{
+			inside = !inside;
+		}
+	}
+	return inside;
 }
