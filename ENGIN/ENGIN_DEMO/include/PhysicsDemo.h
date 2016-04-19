@@ -36,7 +36,7 @@ namespace Engin
 			void createTile(GLfloat x, GLfloat y, GLfloat r);
 			void cameraMovement(GLfloat step);
 
-			void fireTile();
+			void fireTile(GLfloat x, GLfloat y, GLfloat r, glm::vec2 veloc);
 
 		private:
 			GLfloat alpha;
@@ -63,6 +63,9 @@ namespace Engin
 			int maxObjects;
 			Core::Timer* fireTimer;
 			Core::RNG randomGenerator;
+
+			bool firstTime;
+			bool secondTime;
 		};
 
 		class PhysicsComponent : public Component

@@ -24,6 +24,9 @@ public:
 	void setHalfSize(glm::vec2& halfSize);
 	glm::vec2 getHalfSize();
 
+	void setAngularVelocity(GLfloat& velocity);
+	GLfloat& getAngularVelocity();
+
 	void setCollisionOn();
 	void setCollisionOff();
 	bool isColliding();

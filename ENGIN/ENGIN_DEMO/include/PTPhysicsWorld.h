@@ -21,7 +21,10 @@ public:
 
 	std::vector<PTRigidBody*> getBodies();
 
-
+	GLfloat getScale()
+	{
+		return scale;
+	}
 
 private:
 	glm::vec2 gravity;
@@ -45,5 +48,5 @@ private:
 
 	bool pointInside(glm::vec2 P, glm::vec2 box_point[]);
 
-	GLfloat calculateJ(glm::vec2 box1_point[], glm::vec2 box2_point[], PTRigidBody* body1, PTRigidBody* body2, glm::vec2 n, glm::vec2 r_AP);
+	GLfloat calculateJ(glm::vec2 colPoint, PTRigidBody* body1, PTRigidBody* body2, glm::vec2 n, glm::vec2 r_AP, glm::vec2 r_BP);
 };

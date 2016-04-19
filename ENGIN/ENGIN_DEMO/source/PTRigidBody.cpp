@@ -19,16 +19,16 @@ void PTRigidBody::update(GLfloat step)
 	velocity = velocity + world->getGravity() * step / 2.0f;
 
 	// update position
-	if (position.y > 0)
-	{
-		position = positionOld + velocity*step;
-	}
-	else
-	{
-		velocity.y = 0.0f;
-		position.y = 0.0f;
-		position = positionOld + velocity*step;
-	}
+	//if (position.y > 0)
+	//{
+	position = positionOld + velocity*step;
+	//}
+	//else
+	//{
+	//	velocity.y = 0.0f;
+	//	position.y = 0.0f;
+	//	position = positionOld + velocity*step;
+	//}
 
 	velocity = velocity + world->getGravity() * step / 2.0f;
 
@@ -77,6 +77,16 @@ void PTRigidBody::setHalfSize(glm::vec2& halfSize)
 glm::vec2 PTRigidBody::getHalfSize()
 {
 	return halfSize;
+}
+
+void PTRigidBody::setAngularVelocity(GLfloat& velocity)
+{
+	angularVelocity = velocity;
+}
+
+GLfloat& PTRigidBody::getAngularVelocity()
+{
+	return angularVelocity;
 }
 
 void PTRigidBody::setCollisionOn()

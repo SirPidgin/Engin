@@ -18,7 +18,9 @@ namespace Engin
 			tile(nullptr),
 			alpha(0),
 			useGamePad(false),
-			maxObjects(0)
+			maxObjects(0),
+			firstTime(true),
+			secondTime(true)
 		{
 			camera->initCamera(0.0f, 0.0f, static_cast<GLfloat>(engine->getWindow().getWindowWidth()), static_cast<GLfloat>(engine->getWindow().getWindowHeight()), 500.0f, 500.0f, engine->getWindow().getWindowWidth() / 2.0f, engine->getWindow().getWindowHeight() / 2.0f);
 			engine->mouseInput->enableRelativeMousPosition();
@@ -42,15 +44,10 @@ namespace Engin
 			tile2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/green_tile_128.png");
 
 			physicsWorld = new PTPhysicsWorld(128.0f);
-			physicsWorld->setGravity(glm::vec2(0, -10));
+			physicsWorld->setGravity(glm::vec2(0, 0));
 
 			fireTimer = new Core::Timer();
 			fireTimer->start();
-
-			createTile(600.0f, 0.0f, 0.0f);
-			gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setRotation(glm::radians(45.0f));
-			createTile(1600.0f, 0.0f, 0.0f);
-			createTile(3600.0f, 0.0f, 0.0f);
 		}
 
 		PhysicsDemo::~PhysicsDemo()
@@ -76,41 +73,15 @@ namespace Engin
 			}
 
 			cameraMovement(step);
-			fireTile();
+			fireTile(600.0f, 0.0f, glm::radians(5.0f), glm::vec2(-100.0f, 0.0f));
+			fireTile(-300.0f, 0.0f, glm::radians(0.0f), glm::vec2(100.0f, 0.0f));
+			
+			if (fireTimer->getLocalTime() > 10000)
+			{
+				fireTimer->start();
+			}			
 
 			physicsWorld->update(step);
-
-			// for collision debug
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_F))			
-			{
-				glm::vec2 temp = gameObjects[0]->accessComponent<PhysicsComponent>()->getBody()->getPosition();
-				gameObjects[0]->accessComponent<PhysicsComponent>()->getBody()->setPosition(temp + glm::vec2(-10.0f, 0.0f));
-			}
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_H))
-			{
-				glm::vec2 temp = gameObjects[0]->accessComponent<PhysicsComponent>()->getBody()->getPosition();
-				gameObjects[0]->accessComponent<PhysicsComponent>()->getBody()->setPosition(temp + glm::vec2(10.0f, 0.0f));
-			}
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_T))
-			{
-				glm::vec2 temp = gameObjects[0]->accessComponent<PhysicsComponent>()->getBody()->getPosition();
-				gameObjects[0]->accessComponent<PhysicsComponent>()->getBody()->setPosition(temp + glm::vec2(0.0f, 10.0f));
-			}
-			if (engine->keyboardInput->keyIsPressed(HID::KEYBOARD_G))
-			{
-				glm::vec2 temp = gameObjects[0]->accessComponent<PhysicsComponent>()->getBody()->getPosition();
-				gameObjects[0]->accessComponent<PhysicsComponent>()->getBody()->setPosition(temp + glm::vec2(0.0f, -10.0f));
-			}
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_R))
-			{
-				GLfloat temp = gameObjects[0]->accessComponent<PhysicsComponent>()->getBody()->getRotation();
-				gameObjects[0]->accessComponent<PhysicsComponent>()->getBody()->setRotation(temp - glm::radians(5.f));
-			}
-			if (engine->keyboardInput->keyWasPressed(HID::KEYBOARD_Y))
-			{
-				GLfloat temp = gameObjects[0]->accessComponent<PhysicsComponent>()->getBody()->getRotation();
-				gameObjects[0]->accessComponent<PhysicsComponent>()->getBody()->setRotation(temp + glm::radians(5.f));
-			}
 
 			// Looping trough gameObjects update
 			for (int i = 0; i < gameObjects.size(); i++)
@@ -208,23 +179,21 @@ namespace Engin
 			camera->setPositionRotationOrigin(moveByInputX*step, moveByInputY*step); //by input
 		}
 
-		void PhysicsDemo::fireTile()
+		void PhysicsDemo::fireTile(GLfloat x, GLfloat y, GLfloat r, glm::vec2 veloc)
 		{
-			if (fireTimer->getLocalTime() > 2000.0f && maxObjects < 45)
+			if (firstTime || secondTime || fireTimer->getLocalTime() > 10000.0f && maxObjects < 45)
 			{
-				createTile(0.0f, 200.0f, 0.0f);
-
-				float x = randomGenerator.getRandomFloat(-100.0f, 600.0f);
-				float y = randomGenerator.getRandomFloat(40.0f, 600.0f);
-				glm::vec2 velocity = glm::vec2(x,y);
-
-				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(velocity);
-
-				float r = randomGenerator.getRandomFloat(glm::radians(-45.0f), glm::radians(45.0f));
+				createTile(x, y, r);
+				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(veloc);
 				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setRotation(r);
-
-				fireTimer->start();
 				maxObjects++;
+				
+				if (!firstTime)
+				{
+					secondTime = false;
+				}
+
+				firstTime = false;
 			}
 		}
 	}
