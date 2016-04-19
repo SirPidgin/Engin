@@ -73,10 +73,11 @@ namespace Engin
 			}
 
 			cameraMovement(step);
-			fireTile(600.0f, 0.0f, glm::radians(5.0f), glm::vec2(-100.0f, 0.0f));
-			fireTile(-300.0f, 0.0f, glm::radians(0.0f), glm::vec2(100.0f, 0.0f));
+			fireTile(600.0f, 0.0f, glm::radians(0.0f), glm::vec2(-100.0f, 0.0f));
+			fireTile(-300.0f, 0.0f, glm::radians(45.0f), glm::vec2(100.0f, 0.0f));
 			
-			if (fireTimer->getLocalTime() > 10000)
+			// TODO: make fireTile into class with own timer.
+			if (fireTimer->getLocalTime() > 20000)
 			{
 				fireTimer->start();
 			}			
@@ -179,9 +180,10 @@ namespace Engin
 			camera->setPositionRotationOrigin(moveByInputX*step, moveByInputY*step); //by input
 		}
 
+		// TODO: make fireTile into class with own timer.
 		void PhysicsDemo::fireTile(GLfloat x, GLfloat y, GLfloat r, glm::vec2 veloc)
 		{
-			if (firstTime || secondTime || fireTimer->getLocalTime() > 10000.0f && maxObjects < 45)
+			if (firstTime || secondTime || fireTimer->getLocalTime() > 20000.0f && maxObjects < 45)
 			{
 				createTile(x, y, r);
 				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(veloc);
