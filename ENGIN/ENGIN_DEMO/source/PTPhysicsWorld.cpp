@@ -184,7 +184,7 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 
 	for (int i = 0; i < maxSides; i++)
 	{
-		if (pointInside(box1_point[i], body2, R2))
+		if (pointInside(box1_point[i], box2_point, R2))
 		{
 			//box1 point collidies with box2
 
@@ -223,7 +223,7 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 
 	for (int i = 0; i < maxSides; i++)
 	{
-		if (pointInside(box2_point[i], body1, R1))
+		if (pointInside(box2_point[i], box1_point, R1))
 		{
 			//box2 point collidies with box1
 
@@ -261,31 +261,15 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 	}
 }
 
-bool PTPhysicsWorld::pointInside(glm::vec2 P, PTRigidBody* body, glm::mat4 R)
+bool PTPhysicsWorld::pointInside(glm::vec2 P, glm::vec2 box_point[], glm::mat4 R)
 {
 	int i;
 	int j;
 
-	int maxSides = 4;
-
-	// TODO rotate coordinates to nt
-	glm::mat4 T = glm::translate(glm::mat4(), glm::vec3(P.x, P.y, 1.0f));
-	glm::mat4 T_1 = glm::translate(glm::mat4(), glm::vec3(-P.x, -P.y, 1.0f));
-	glm::mat4 muunnos = T*R*T_1;
-
-	glm::vec4 temp = glm::vec4(P.x, P.y, 0.0f, 0.0f);
-	temp = muunnos * temp;
-	glm::vec2 ntP = glm::vec2(temp.x, temp.y);
-
-	glm::vec2 ntBox1;
-	glm::vec2 ntBox2;
-	glm::vec2 ntBox3;
-	glm::vec2 ntBox4;
-
-	glm::vec2 ntBox[]{ntBox1, ntBox2, ntBox3, ntBox4};
+	int maxSides = 4;	
 
 	for (i = 0, j = maxSides - 1; i < maxSides; j = i++) {
-		if (((ntBox[i].y > ntP.y) != (ntBox[j].y > ntP.y)) && (ntP.x < (ntBox[j].x - ntBox[i].x) * (ntP.y - ntBox[i].y) / (ntBox[j].y - ntBox[i].y) + ntBox[i].x))
+		if (((box_point[i].y > P.y) != (box_point[j].y > P.y)) && (P.x < glm::dot((box_point[j].x - box_point[i].x) , (P.y - box_point[i].y)) / (box_point[j].y - box_point[i].y) + box_point[i].x))
 		{
 			return true;
 		}

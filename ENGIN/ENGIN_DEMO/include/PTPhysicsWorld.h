@@ -46,7 +46,7 @@ private:
 		return glm::vec2((P2.x - P1.x), (P2.y - P1.y));
 	}
 
-	bool pointInside(glm::vec2 P, PTRigidBody* body, glm::mat4 R);
+	bool pointInside(glm::vec2 P, glm::vec2 box_point[], glm::mat4 R);
 
 	GLfloat calculateJ(glm::vec2 colPoint, PTRigidBody* body1, PTRigidBody* body2, glm::vec2 n, glm::vec2 r_AP, glm::vec2 r_BP);
 };
