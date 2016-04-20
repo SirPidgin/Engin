@@ -73,8 +73,8 @@ namespace Engin
 			}
 
 			cameraMovement(step);
-			fireTile(600.0f, 0.0f, glm::radians(0.0f), glm::vec2(-100.0f, 0.0f));
-			fireTile(-300.0f, 0.0f, glm::radians(45.0f), glm::vec2(100.0f, 0.0f));
+			fireTile(3.0f, 0.0f, glm::radians(0.0f), glm::vec2(-200.0f, 0.0f));
+			fireTile(-1.0f, 0.0f, glm::radians(45.0f), glm::vec2(200.0f, 0.0f));
 			
 			// TODO: make fireTile into class with own timer.
 			if (fireTimer->getLocalTime() > 20000)
@@ -183,6 +183,9 @@ namespace Engin
 		// TODO: make fireTile into class with own timer.
 		void PhysicsDemo::fireTile(GLfloat x, GLfloat y, GLfloat r, glm::vec2 veloc)
 		{
+			x *= physicsWorld->getScale();
+			y *= physicsWorld->getScale();
+
 			if (firstTime || secondTime || fireTimer->getLocalTime() > 20000.0f && maxObjects < 45)
 			{
 				createTile(x, y, r);

@@ -35,6 +35,11 @@ public:
 	GLfloat getMass();
 
 	GLfloat getI();
+
+	PTPhysicsWorld* getWorld()
+	{
+		return world;
+	}
 private:
 	glm::vec2 position;
 	GLfloat rotation;

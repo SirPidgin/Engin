@@ -34,7 +34,7 @@ private:
 
 	bool isCollidingSAT(PTRigidBody* body1, PTRigidBody* body2);
 
-	void collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_point[], PTRigidBody* body1, PTRigidBody* body2);
+	void collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_point[], PTRigidBody* body1, PTRigidBody* body2, glm::mat4 R1, glm::mat4 R2);
 
 	float projectedPoint(glm::vec2 point, glm::vec2 slope)
 	{
@@ -46,7 +46,7 @@ private:
 		return glm::vec2((P2.x - P1.x), (P2.y - P1.y));
 	}
 
-	bool pointInside(glm::vec2 P, glm::vec2 box_point[]);
+	bool pointInside(glm::vec2 P, PTRigidBody* body, glm::mat4 R);
 
 	GLfloat calculateJ(glm::vec2 colPoint, PTRigidBody* body1, PTRigidBody* body2, glm::vec2 n, glm::vec2 r_AP, glm::vec2 r_BP);
 };

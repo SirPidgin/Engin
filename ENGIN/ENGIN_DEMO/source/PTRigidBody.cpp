@@ -17,18 +17,8 @@ void PTRigidBody::update(GLfloat step)
 
 	// gravity
 	velocity = velocity + world->getGravity() * step / 2.0f;
-
-	// update position
-	//if (position.y > 0)
-	//{
+	
 	position = positionOld + velocity*step;
-	//}
-	//else
-	//{
-	//	velocity.y = 0.0f;
-	//	position.y = 0.0f;
-	//	position = positionOld + velocity*step;
-	//}
 
 	velocity = velocity + world->getGravity() * step / 2.0f;
 
