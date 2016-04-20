@@ -81,8 +81,8 @@ namespace Engin
 			}
 
 			cameraMovement(step);
-			fireTile(600.0f, 0.0f, glm::radians(25.0f), glm::vec2(-400.0f, 500.0f));
-			fireTile(-300.0f, 0.0f, glm::radians(45.0f), glm::vec2(400.0f, 500.0f));
+			fireTile(600.0f, 400.0f, glm::radians(25.0f), glm::vec2(-600.0f, 500.0f));
+			fireTile(-600.0f, 400.0f, glm::radians(45.0f), glm::vec2(400.0f, 500.0f));
 			
 			// TODO: make fireTile into class with own timer.
 			if (fireTimer->getLocalTime() > timeToShoot)

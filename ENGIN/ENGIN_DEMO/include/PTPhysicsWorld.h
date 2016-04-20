@@ -32,6 +32,34 @@ private:
 	GLfloat scale;
 	float e;
 
+	glm::mat4 T;
+	glm::mat4 R1;
+	glm::mat4 T_1;
+	glm::mat4 muunnos;
+
+	glm::vec4 temp;
+	glm::vec2 topLeft;
+
+	glm::vec2 topRight;
+
+	glm::vec2 bottomRight;
+
+	glm::vec2 bottomLeft;
+
+	glm::vec2 box1_point[4];
+
+	glm::mat4 R2;
+
+	glm::vec2 topLeft1;
+
+	glm::vec2 topRight1;
+
+	glm::vec2 bottomRight1;
+
+	glm::vec2 bottomLeft1;
+
+	glm::vec2 box2_point[4];
+
 	bool isCollidingSAT(PTRigidBody* body1, PTRigidBody* body2);
 
 	void collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_point[], PTRigidBody* body1, PTRigidBody* body2);

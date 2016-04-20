@@ -66,48 +66,53 @@ std::vector<PTRigidBody*> PTPhysicsWorld::getBodies()
 
 bool PTPhysicsWorld::isCollidingSAT(PTRigidBody* body1, PTRigidBody* body2)
 {
-	// On kevyt...
+	// TODO tee optimointeja...
 
 	// first
-	glm::mat4 T = glm::translate(glm::mat4(), glm::vec3(body1->getPosition().x, body1->getPosition().y, 1.0f));
-	glm::mat4 R1 = glm::rotate(glm::mat4(), body1->getRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
-	glm::mat4 T_1 = glm::translate(glm::mat4(), glm::vec3(-body1->getPosition().x, -body1->getPosition().y, 1.0f));
-	glm::mat4 muunnos = T*R1*T_1;
+	T = glm::translate(glm::mat4(), glm::vec3(body1->getPosition().x, body1->getPosition().y, 1.0f));
+	R1 = glm::rotate(glm::mat4(), body1->getRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
+	T_1 = glm::translate(glm::mat4(), glm::vec3(-body1->getPosition().x, -body1->getPosition().y, 1.0f));
+	muunnos = T*R1*T_1;
 
-	glm::vec4 temp = (muunnos*glm::vec4(body1->getPosition().x - body1->getHalfSize().x, body1->getPosition().y + body1->getHalfSize().y, 0.0f, 1.0f));
-	glm::vec2 topLeft = glm::vec2(temp.x, temp.y);
+	temp = (muunnos*glm::vec4(body1->getPosition().x - body1->getHalfSize().x, body1->getPosition().y + body1->getHalfSize().y, 0.0f, 1.0f));
+	topLeft = glm::vec2(temp.x, temp.y);
 
 	temp = (muunnos*glm::vec4(body1->getPosition().x + body1->getHalfSize().x, body1->getPosition().y + body1->getHalfSize().y, 0.0f, 1.0f));
-	glm::vec2 topRight = glm::vec2(temp.x, temp.y);
+	topRight = glm::vec2(temp.x, temp.y);
 
 	temp = (muunnos*glm::vec4(body1->getPosition().x + body1->getHalfSize().x, body1->getPosition().y - body1->getHalfSize().y, 0.0f, 1.0f));
-	glm::vec2 bottomRight = glm::vec2(temp.x, temp.y);
+	bottomRight = glm::vec2(temp.x, temp.y);
 
 	temp = (muunnos*glm::vec4(body1->getPosition().x - body1->getHalfSize().x, body1->getPosition().y - body1->getHalfSize().y, 0.0f, 1.0f));
-	glm::vec2 bottomLeft = glm::vec2(temp.x, temp.y);
+	bottomLeft = glm::vec2(temp.x, temp.y);
 
-	glm::vec2 box1_point[]{topLeft, topRight, bottomRight, bottomLeft };
+	box1_point[0] = topLeft;
+	box1_point[1] = topRight;
+	box1_point[2] = bottomRight;
+	box1_point[3] = bottomLeft;
 
 	// second
 	T = glm::translate(glm::mat4(), glm::vec3(body2->getPosition().x, body2->getPosition().y, 1.0f));
-	glm::mat4 R2 = glm::rotate(glm::mat4(), body2->getRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
+	R2 = glm::rotate(glm::mat4(), body2->getRotation(), glm::vec3(0.0f, 0.0f, 1.0f));
 	T_1 = glm::translate(glm::mat4(), glm::vec3(-body2->getPosition().x, -body2->getPosition().y, 1.0f));
 	muunnos = T*R2*T_1;
 
 	temp = (muunnos*glm::vec4(body2->getPosition().x - body2->getHalfSize().x, body2->getPosition().y + body2->getHalfSize().y, 0.0f, 1.0f));
-	glm::vec2 topLeft1 = glm::vec2(temp.x, temp.y);
+	topLeft1 = glm::vec2(temp.x, temp.y);
 
 	temp = (muunnos*glm::vec4(body2->getPosition().x + body2->getHalfSize().x, body2->getPosition().y + body2->getHalfSize().y, 0.0f, 1.0f));
-	glm::vec2 topRight1 = glm::vec2(temp.x, temp.y);
+	topRight1 = glm::vec2(temp.x, temp.y);
 
 	temp = (muunnos*glm::vec4(body2->getPosition().x + body2->getHalfSize().x, body2->getPosition().y - body2->getHalfSize().y, 0.0f, 1.0f));
-	glm::vec2 bottomRight1 = glm::vec2(temp.x, temp.y);
+	bottomRight1 = glm::vec2(temp.x, temp.y);
 
 	temp = (muunnos*glm::vec4(body2->getPosition().x - body2->getHalfSize().x, body2->getPosition().y - body2->getHalfSize().y, 0.0f, 1.0f));
-	glm::vec2 bottomLeft1 = glm::vec2(temp.x, temp.y);
+	bottomLeft1 = glm::vec2(temp.x, temp.y);
 
-	glm::vec2 box2_point[]{topLeft1, topRight1, bottomRight1, bottomLeft1 };
-
+	box2_point[0] = topLeft1;
+	box2_point[1] = topRight1;
+	box2_point[2] = bottomRight1;
+	box2_point[3] = bottomLeft1;
 
 	float box1_min = 0;
 	float box1_max = 0;
@@ -197,13 +202,12 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 			//box1 point collidies with box2
 
 			//TODO tarkista rAP ja rBP
-			glm::vec2 rAP = glm::vec2(box1_point[i].x - body1->getPosition().x, box1_point[i].y - body1->getPosition().y);
+			glm::vec2 rAP = slope(body1->getPosition(), box1_point[i]);
 			glm::vec2 r_AP = glm::vec2(-rAP.y, rAP.x);
 
-			glm::vec2 rBP = glm::vec2(box1_point[i].x - body2->getPosition().x, box1_point[i].y - body2->getPosition().y);
+			glm::vec2 rBP = slope(body2->getPosition(), box1_point[i]);
 			glm::vec2 r_BP = glm::vec2(-rBP.y, rBP.x);
 
-			//TODO normal
 			GLfloat alpha2 = glm::atan(rBP.y / rBP.x);
 			GLfloat alphaNormal = glm::radians(180.0f) - body2->getRotation() - alpha2;
 
@@ -236,13 +240,12 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 			//box2 point collidies with box1
 
 			//TODO tarkista rAP ja rBP
-			glm::vec2 rAP = glm::vec2(box2_point[i].x - body2->getPosition().x, box2_point[i].y - body2->getPosition().y);
+			glm::vec2 rAP = slope(body2->getPosition(), box2_point[i]);
 			glm::vec2 r_AP = glm::vec2(-rAP.y, rAP.x);
 
-			glm::vec2 rBP = glm::vec2(box2_point[i].x - body1->getPosition().x, box2_point[i].y - body1->getPosition().y);
+			glm::vec2 rBP = slope(body1->getPosition(), box2_point[i]);
 			glm::vec2 r_BP = glm::vec2(-rBP.y, rBP.x);
 
-			//TODO normal
 			GLfloat alpha2 = glm::atan(rBP.y / rBP.x);
 			GLfloat alphaNormal = glm::radians(180.0f) - body1->getRotation() - alpha2;
 
@@ -279,7 +282,7 @@ bool PTPhysicsWorld::pointInside(glm::vec2 P, glm::vec2 box_point[])
 	for (i = 0, j = maxSides - 1; i < maxSides; j = i++) {
 		if (((box_point[i].y > P.y) != (box_point[j].y > P.y)) && (P.x < ((box_point[j].x - box_point[i].x) * (P.y - box_point[i].y) / (box_point[j].y - box_point[i].y) + box_point[i].x)))
 		{
-			inside = !inside;
+			inside = !inside; // Dont touch this
 		}
 	}
 	return inside;
