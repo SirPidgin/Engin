@@ -38,6 +38,8 @@ namespace Engin
 
 			void fireTile(GLfloat x, GLfloat y, GLfloat r, glm::vec2 veloc);
 
+			void deleteDeadObjects();
+
 		private:
 			GLfloat alpha;
 			Resources::ShaderProgram* shader;
@@ -57,21 +59,27 @@ namespace Engin
 			GameObject* gameObject;
 
 			std::vector<GameObject*> gameObjects;
+			std::vector<GameObject*> deadObjects;
 
 			PTPhysicsWorld* physicsWorld;
 
-			int maxObjects;
 			Core::Timer* fireTimer;
 			Core::RNG randomGenerator;
 
 			bool firstTime;
 			bool secondTime;
+
+			GLfloat timeToShoot;
 		};
 
 		class PhysicsComponent : public Component
 		{
 		public:
 			PhysicsComponent(GameObject* o) : Component(o){}
+			~PhysicsComponent()
+			{
+				body->kill();
+			}
 			void setBody(PTRigidBody* body)
 			{
 				this->body = body;
@@ -82,6 +90,10 @@ namespace Engin
 			}
 			void update()
 			{
+				if (body->getPosition().y < -400)
+				{
+					ownerObject->kill();
+				}
 				ownerObject->accessComponent<Transform>()->setPosition(body->getPosition());
 				ownerObject->accessComponent<Transform>()->setRotation(body->getRotation());
 			}

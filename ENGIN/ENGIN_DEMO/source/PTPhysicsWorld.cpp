@@ -33,6 +33,14 @@ void PTPhysicsWorld::update(GLfloat step)
 	{
 		rigidBodies[i]->update(step);
 	}
+
+	for (int i = 0; i < rigidBodies.size(); i++)
+	{
+		if (rigidBodies[i]->isAliveOrDead() == false) // kyllä on selkeä
+		{
+			rigidBodies.erase(rigidBodies.begin() + i);
+		}
+	}
 }
 
 void PTPhysicsWorld::addRigidBody(PTRigidBody* body, glm::vec2& position)
@@ -173,18 +181,18 @@ bool PTPhysicsWorld::isCollidingSAT(PTRigidBody* body1, PTRigidBody* body2)
 
 	}
 
-	collisionResolution(box1_point, box2_point, body1, body2, R1, R2);
+	collisionResolution(box1_point, box2_point, body1, body2);
 	return true;
 }
 
-void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_point[], PTRigidBody* body1, PTRigidBody* body2, glm::mat4 R1, glm::mat4 R2)
+void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_point[], PTRigidBody* body1, PTRigidBody* body2)
 {
 	glm::vec2 normal;
-	int maxSides = 3;
+	int maxSides = 4;
 
 	for (int i = 0; i < maxSides; i++)
 	{
-		if (pointInside(box1_point[i], box2_point, R2))
+		if (pointInside(box1_point[i], box2_point))
 		{
 			//box1 point collidies with box2
 
@@ -223,36 +231,36 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 
 	for (int i = 0; i < maxSides; i++)
 	{
-		if (pointInside(box2_point[i], box1_point, R1))
+		if (pointInside(box2_point[i], box1_point))
 		{
 			//box2 point collidies with box1
 
 			//TODO tarkista rAP ja rBP
-			glm::vec2 rAP = glm::vec2(box2_point[i].x - body1->getPosition().x, box2_point[i].y - body1->getPosition().y);
+			glm::vec2 rAP = glm::vec2(box2_point[i].x - body2->getPosition().x, box2_point[i].y - body2->getPosition().y);
 			glm::vec2 r_AP = glm::vec2(-rAP.y, rAP.x);
 
-			glm::vec2 rBP = glm::vec2(box2_point[i].x - body2->getPosition().x, box2_point[i].y - body2->getPosition().y);
+			glm::vec2 rBP = glm::vec2(box2_point[i].x - body1->getPosition().x, box2_point[i].y - body1->getPosition().y);
 			glm::vec2 r_BP = glm::vec2(-rBP.y, rBP.x);
 
 			//TODO normal
-			GLfloat alpha2 = glm::atan(rAP.y / rAP.x);
+			GLfloat alpha2 = glm::atan(rBP.y / rBP.x);
 			GLfloat alphaNormal = glm::radians(180.0f) - body1->getRotation() - alpha2;
 
 			normal = glm::vec2(glm::cos(alphaNormal), glm::sin(alphaNormal));
 			normal = glm::normalize(normal);
 
-			GLfloat J = calculateJ(box2_point[i], body1, body2, normal, r_AP, r_BP);
+			GLfloat J = calculateJ(box2_point[i], body2, body1, normal, r_AP, r_BP);
 
 			glm::vec2 newVeloc = body1->getVelocity() + (-J / body1->getMass())*normal;
 			body1->setVelocity(newVeloc);
 
-			GLfloat newAngularVelocity = body1->getAngularVelocity() + (glm::dot(r_AP, -J*normal) / body1->getI());
+			GLfloat newAngularVelocity = body1->getAngularVelocity() + (glm::dot(r_BP, -J*normal) / body1->getI());
 			body1->setAngularVelocity(newAngularVelocity);
 
 			glm::vec2 newVeloc2 = body2->getVelocity() + (J / body2->getMass())*normal;
 			body2->setVelocity(newVeloc2);
 
-			GLfloat newAngularVelocity2 = body2->getAngularVelocity() + (glm::dot(r_BP, J*normal) / body2->getI());
+			GLfloat newAngularVelocity2 = body2->getAngularVelocity() + (glm::dot(r_AP, J*normal) / body2->getI());
 			body2->setAngularVelocity(newAngularVelocity2);
 
 			body1->setCollisionOn();
@@ -261,20 +269,20 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 	}
 }
 
-bool PTPhysicsWorld::pointInside(glm::vec2 P, glm::vec2 box_point[], glm::mat4 R)
+bool PTPhysicsWorld::pointInside(glm::vec2 P, glm::vec2 box_point[])
 {
 	int i;
 	int j;
 
 	int maxSides = 4;	
-
+	bool inside = false;
 	for (i = 0, j = maxSides - 1; i < maxSides; j = i++) {
-		if (((box_point[i].y > P.y) != (box_point[j].y > P.y)) && (P.x < glm::dot((box_point[j].x - box_point[i].x) , (P.y - box_point[i].y)) / (box_point[j].y - box_point[i].y) + box_point[i].x))
+		if (((box_point[i].y > P.y) != (box_point[j].y > P.y)) && (P.x < ((box_point[j].x - box_point[i].x) * (P.y - box_point[i].y) / (box_point[j].y - box_point[i].y) + box_point[i].x)))
 		{
-			return true;
+			inside = !inside;
 		}
 	}
-	return false;
+	return inside;
 }
 
 GLfloat PTPhysicsWorld::calculateJ(glm::vec2 colPoint, PTRigidBody* body1, PTRigidBody* body2, glm::vec2 n, glm::vec2 r_AP, glm::vec2 r_BP)

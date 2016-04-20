@@ -40,6 +40,21 @@ public:
 	{
 		return world;
 	}
+
+	void rivetFromMidle()
+	{
+		rivet = true;
+	}
+
+	void kill()
+	{
+		isAlive = false;
+	}
+
+	bool isAliveOrDead()
+	{
+		return isAlive;
+	}
 private:
 	glm::vec2 position;
 	GLfloat rotation;
@@ -53,8 +68,11 @@ private:
 	glm::vec2 halfSize;
 
 	bool colliding;
+	bool rivet;
 
 	GLfloat mass;
 
 	GLfloat I;
+
+	bool isAlive;
 };

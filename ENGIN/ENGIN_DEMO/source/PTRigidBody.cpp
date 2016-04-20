@@ -1,6 +1,6 @@
 #include "PTRigidBody.h"
 
-PTRigidBody::PTRigidBody(PTPhysicsWorld* world) : world(world), colliding(false), rotation(0), angularVelocity(0)
+PTRigidBody::PTRigidBody(PTPhysicsWorld* world) : world(world), colliding(false), rotation(0), angularVelocity(0), rivet(false), isAlive(true)
 {
 
 }
@@ -16,11 +16,14 @@ void PTRigidBody::update(GLfloat step)
 	rotationOld = rotation;
 
 	// gravity
-	velocity = velocity + world->getGravity() * step / 2.0f;
-	
-	position = positionOld + velocity*step;
+	if (!rivet)
+	{
+		velocity = velocity + world->getGravity() * step / 2.0f;
 
-	velocity = velocity + world->getGravity() * step / 2.0f;
+		position = positionOld + velocity*step;
+
+		velocity = velocity + world->getGravity() * step / 2.0f;
+	}	
 
 	// Torque
 	rotation = rotationOld + angularVelocity*step;
@@ -48,7 +51,10 @@ GLfloat PTRigidBody::getRotation() const
 
 void PTRigidBody::setVelocity(glm::vec2& veloc)
 {
-	velocity = veloc;
+	if (!rivet)
+	{
+		velocity = veloc;
+	}	
 }
 
 glm::vec2& PTRigidBody::getVelocity()
