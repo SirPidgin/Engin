@@ -195,6 +195,8 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 	glm::vec2 normal;
 	int maxSides = 4;
 
+	bool hasHit = false;
+
 	for (int i = 0; i < maxSides; i++)
 	{
 		if (pointInside(box1_point[i], box2_point))
@@ -230,46 +232,51 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 
 			body1->setCollisionOn();
 			body2->setCollisionOn();
+
+			hasHit = true;
 		}
 	}
 
-	for (int i = 0; i < maxSides; i++)
+	if (!hasHit)
 	{
-		if (pointInside(box2_point[i], box1_point))
+		for (int i = 0; i < maxSides; i++)
 		{
-			//box2 point collidies with box1
+			if (pointInside(box2_point[i], box1_point))
+			{
+				//box2 point collidies with box1
 
-			//TODO tarkista rAP ja rBP
-			glm::vec2 rAP = slope(body2->getPosition(), box2_point[i]);
-			glm::vec2 r_AP = glm::vec2(-rAP.y, rAP.x);
+				//TODO tarkista rAP ja rBP
+				glm::vec2 rAP = slope(body2->getPosition(), box2_point[i]);
+				glm::vec2 r_AP = glm::vec2(-rAP.y, rAP.x);
 
-			glm::vec2 rBP = slope(body1->getPosition(), box2_point[i]);
-			glm::vec2 r_BP = glm::vec2(-rBP.y, rBP.x);
+				glm::vec2 rBP = slope(body1->getPosition(), box2_point[i]);
+				glm::vec2 r_BP = glm::vec2(-rBP.y, rBP.x);
 
-			GLfloat alpha2 = glm::atan(rBP.y / rBP.x);
-			GLfloat alphaNormal = glm::radians(180.0f) - body1->getRotation() - alpha2;
+				GLfloat alpha2 = glm::atan(rBP.y / rBP.x);
+				GLfloat alphaNormal = glm::radians(180.0f) - body1->getRotation() - alpha2;
 
-			normal = glm::vec2(glm::cos(alphaNormal), glm::sin(alphaNormal));
-			normal = glm::normalize(normal);
+				normal = glm::vec2(glm::cos(alphaNormal), glm::sin(alphaNormal));
+				normal = glm::normalize(normal);
 
-			GLfloat J = calculateJ(box2_point[i], body2, body1, normal, r_AP, r_BP);
+				GLfloat J = calculateJ(box2_point[i], body2, body1, normal, r_AP, r_BP);
 
-			glm::vec2 newVeloc = body1->getVelocity() + (-J / body1->getMass())*normal;
-			body1->setVelocity(newVeloc);
+				glm::vec2 newVeloc = body1->getVelocity() + (-J / body1->getMass())*normal;
+				body1->setVelocity(newVeloc);
 
-			GLfloat newAngularVelocity = body1->getAngularVelocity() + (glm::dot(r_BP, -J*normal) / body1->getI());
-			body1->setAngularVelocity(newAngularVelocity);
+				GLfloat newAngularVelocity = body1->getAngularVelocity() + (glm::dot(r_BP, -J*normal) / body1->getI());
+				body1->setAngularVelocity(newAngularVelocity);
 
-			glm::vec2 newVeloc2 = body2->getVelocity() + (J / body2->getMass())*normal;
-			body2->setVelocity(newVeloc2);
+				glm::vec2 newVeloc2 = body2->getVelocity() + (J / body2->getMass())*normal;
+				body2->setVelocity(newVeloc2);
 
-			GLfloat newAngularVelocity2 = body2->getAngularVelocity() + (glm::dot(r_AP, J*normal) / body2->getI());
-			body2->setAngularVelocity(newAngularVelocity2);
+				GLfloat newAngularVelocity2 = body2->getAngularVelocity() + (glm::dot(r_AP, J*normal) / body2->getI());
+				body2->setAngularVelocity(newAngularVelocity2);
 
-			body1->setCollisionOn();
-			body2->setCollisionOn();
+				body1->setCollisionOn();
+				body2->setCollisionOn();
+			}
 		}
-	}
+	}	
 }
 
 bool PTPhysicsWorld::pointInside(glm::vec2 P, glm::vec2 box_point[])
