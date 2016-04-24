@@ -18,9 +18,9 @@ void PTPhysicsWorld::update(GLfloat step)
 		rigidBodies[i]->setCollisionOff();
 	}
 
-	for (int i = 0; i < rigidBodies.size(); i++)
+	for (int i = 0; i < rigidBodies.size() - 1; i++)
 	{
-		for (int j = 0; j < rigidBodies.size(); j++)
+		for (int j = i + 1; j < rigidBodies.size(); j++)
 		{
 			if (i != j)
 			{
