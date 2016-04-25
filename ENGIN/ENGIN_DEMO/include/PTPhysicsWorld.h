@@ -76,5 +76,9 @@ private:
 
 	bool pointInside(glm::vec2 P, glm::vec2 box_point[]);
 
-	GLfloat calculateJ(glm::vec2 colPoint, PTRigidBody* body1, PTRigidBody* body2, glm::vec2 n, glm::vec2 r_AP, glm::vec2 r_BP);
+	GLfloat calculateJ(glm::vec2 colPoint, PTRigidBody* body1, PTRigidBody* body2, glm::vec2 n, glm::vec2 r_AP, glm::vec2 r_BP, glm::vec2 vAB);
+
+	std::vector<glm::vec2> closestPoints;
+	GLfloat pointDistances[4];
+	GLfloat calculatePointDistance(glm::vec2 P1, glm::vec2 P2);
 };

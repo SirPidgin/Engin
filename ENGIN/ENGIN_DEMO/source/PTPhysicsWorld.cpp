@@ -210,13 +210,47 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 			glm::vec2 rBP = slope(body2->getPosition(), box1_point[i]);
 			glm::vec2 r_BP = glm::vec2(-rBP.y, rBP.x);
 
-			GLfloat alpha2 = glm::atan(rBP.y / rBP.x);
-			GLfloat alphaNormal = glm::radians(180.0f) - body2->getRotation() - alpha2;
+			// Calculate normal TODO fix
+			for (int j = 0; j < maxSides; j++)
+			{
+				GLfloat distance = calculatePointDistance(box1_point[i], box2_point[j]);
+				pointDistances[j] = distance;
+				closestPoints.push_back(box2_point[j]);
+			}
 
-			normal = glm::vec2(glm::sin(alphaNormal), -glm::cos(alphaNormal));
-			normal = glm::normalize(normal);
+			for (int j = 0; j < maxSides; ++j)
+			{
+				for (int k = 0; k < maxSides; ++k)
+				{
+					if (pointDistances[j] < pointDistances[k])
+					{
+						GLfloat temp = pointDistances[j];
+						pointDistances[j] = pointDistances[k];
+						pointDistances[k] = temp;
 
-			GLfloat J = calculateJ(box1_point[i], body1, body2, normal, r_AP, r_BP);
+						glm::vec2 temp2 = closestPoints[j];
+						closestPoints[j] = closestPoints[k];
+						closestPoints[k] = temp2;
+					}
+				}
+			}
+
+			glm::vec2 side = slope(closestPoints.back(), closestPoints[closestPoints.size() - 2]);
+			glm::vec2 normal = glm::normalize(glm::vec2(-side.y, side.x));
+
+			closestPoints.clear();
+
+			glm::vec2 vAP = body1->getVelocity() + body1->getAngularVelocity()*r_AP;
+			glm::vec2 vBP = body2->getVelocity() + body2->getAngularVelocity()*r_BP;
+
+			glm::vec2 vAB = vAP - vBP;
+
+			if (glm::dot(vAB, normal) > 0)
+			{
+				continue;
+			}
+
+			GLfloat J = calculateJ(box1_point[i], body1, body2, normal, r_AP, r_BP, vAB);
 
 			glm::vec2 newVeloc = body1->getVelocity() + (J / body1->getMass())*normal;
 			body1->setVelocity(newVeloc);
@@ -252,13 +286,47 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 				glm::vec2 rBP = slope(body1->getPosition(), box2_point[i]);
 				glm::vec2 r_BP = glm::vec2(-rBP.y, rBP.x);
 
-				GLfloat alpha2 = glm::atan(rBP.y / rBP.x);
-				GLfloat alphaNormal = glm::radians(180.0f) - body1->getRotation() - alpha2;
+				// Calculate normal TODO fix
+				for (int j = 0; j < maxSides; j++)
+				{
+					GLfloat distance = calculatePointDistance(box2_point[i], box1_point[j]);
+					pointDistances[j] = distance;
+					closestPoints.push_back(box1_point[j]);
+				}
 
-				normal = glm::vec2(glm::cos(alphaNormal), glm::sin(alphaNormal));
-				normal = glm::normalize(normal);
+				for (int j = 0; j < maxSides; ++j)
+				{
+					for (int k = 0; k < maxSides; ++k)
+					{
+						if (pointDistances[j] < pointDistances[k])
+						{
+							GLfloat temp = pointDistances[j];
+							pointDistances[j] = pointDistances[k];
+							pointDistances[k] = temp;
 
-				GLfloat J = calculateJ(box2_point[i], body2, body1, normal, r_AP, r_BP);
+							glm::vec2 temp2 = closestPoints[j];
+							closestPoints[j] = closestPoints[k];
+							closestPoints[k] = temp2;
+						}
+					}
+				}
+
+				glm::vec2 side = slope(closestPoints.back(), closestPoints[closestPoints.size() - 2]);
+				glm::vec2 normal = glm::normalize(glm::vec2(-side.y, side.x));
+
+				closestPoints.clear();
+
+				glm::vec2 vAP = body2->getVelocity() + body2->getAngularVelocity()*r_AP;
+				glm::vec2 vBP = body1->getVelocity() + body1->getAngularVelocity()*r_BP;
+
+				glm::vec2 vAB = vAP - vBP;
+
+				if (glm::dot(vAB, normal) > 0)
+				{
+					continue;
+				}
+
+				GLfloat J = calculateJ(box2_point[i], body2, body1, normal, r_AP, r_BP, vAB);
 
 				glm::vec2 newVeloc = body1->getVelocity() + (-J / body1->getMass())*normal;
 				body1->setVelocity(newVeloc);
@@ -295,16 +363,20 @@ bool PTPhysicsWorld::pointInside(glm::vec2 P, glm::vec2 box_point[])
 	return inside;
 }
 
-GLfloat PTPhysicsWorld::calculateJ(glm::vec2 colPoint, PTRigidBody* body1, PTRigidBody* body2, glm::vec2 n, glm::vec2 r_AP, glm::vec2 r_BP)
+GLfloat PTPhysicsWorld::calculateJ(glm::vec2 colPoint, PTRigidBody* body1, PTRigidBody* body2, glm::vec2 n, glm::vec2 r_AP, glm::vec2 r_BP,	glm::vec2 vAB)
 {
 	GLfloat J;
-
-	glm::vec2 vAP = body1->getVelocity() + body1->getAngularVelocity()*r_AP;
-	glm::vec2 vBP = body2->getVelocity() + body2->getAngularVelocity()*r_BP;
-
-	glm::vec2 vAB = vAP - vBP;
 
 	J = (-(1.0f + e) * glm::dot(vAB, n)) / (glm::dot(n, n)*(1.0f / body1->getMass() + 1.0f / body2->getMass()) + ((glm::dot(r_AP, n))*(glm::dot(r_AP, n)) / body1->getI()) + (((glm::dot(r_BP, n))*(glm::dot(r_BP, n))) / body2->getI()));
 
 	return J;
+}
+
+GLfloat PTPhysicsWorld::calculatePointDistance(glm::vec2 P1, glm::vec2 P2)
+{
+	GLfloat A = P1.x - P2.x;
+	GLfloat B = P1.y - P2.y;
+	A = A*A;
+	B = B*B;
+	return glm::sqrt(A+B);
 }
