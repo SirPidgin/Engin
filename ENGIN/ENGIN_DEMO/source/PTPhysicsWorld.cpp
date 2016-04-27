@@ -211,34 +211,26 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 			glm::vec2 r_BP = glm::vec2(-rBP.y, rBP.x);
 
 			// Calculate normal TODO fix
-			for (int j = 0; j < maxSides; j++)
-			{
-				GLfloat distance = calculatePointDistance(box1_point[i], box2_point[j]);
-				pointDistances[j] = distance;
-				closestPoints.push_back(box2_point[j]);
-			}
-
+			int side = -1;
 			for (int j = 0; j < maxSides; ++j)
 			{
-				for (int k = 0; k < maxSides; ++k)
-				{
-					if (pointDistances[j] < pointDistances[k])
-					{
-						GLfloat temp = pointDistances[j];
-						pointDistances[j] = pointDistances[k];
-						pointDistances[k] = temp;
+				glm::vec2 A = box1_point[i];
+				glm::vec2 B = box1_point[(i - 1 + maxSides) % maxSides];			
 
-						glm::vec2 temp2 = closestPoints[j];
-						closestPoints[j] = closestPoints[k];
-						closestPoints[k] = temp2;
-					}
+				glm::vec2 C = box2_point[j];
+				glm::vec2 D = box2_point[j + 1];
+
+				if (areLinesIntersecting(A, B, C, D))
+				{
+					side = j;
+					break;
 				}
 			}
-
-			glm::vec2 side = slope(closestPoints.back(), closestPoints[closestPoints.size() - 2]);
-			glm::vec2 normal = glm::normalize(glm::vec2(-side.y, side.x));
-
-			closestPoints.clear();
+			if (side != -1)
+			{
+				glm::vec2 slide = slope(box2_point[side], box2_point[(side + 1) % maxSides]);
+				normal = glm::normalize(glm::vec2(-slide.y, slide.x));
+			}
 
 			glm::vec2 vAP = body1->getVelocity() + body1->getAngularVelocity()*r_AP;
 			glm::vec2 vBP = body2->getVelocity() + body2->getAngularVelocity()*r_BP;
@@ -287,39 +279,34 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 				glm::vec2 r_BP = glm::vec2(-rBP.y, rBP.x);
 
 				// Calculate normal TODO fix
-				for (int j = 0; j < maxSides; j++)
-				{
-					GLfloat distance = calculatePointDistance(box2_point[i], box1_point[j]);
-					pointDistances[j] = distance;
-					closestPoints.push_back(box1_point[j]);
-				}
-
+				int side = -1;
 				for (int j = 0; j < maxSides; ++j)
 				{
-					for (int k = 0; k < maxSides; ++k)
-					{
-						if (pointDistances[j] < pointDistances[k])
-						{
-							GLfloat temp = pointDistances[j];
-							pointDistances[j] = pointDistances[k];
-							pointDistances[k] = temp;
+					glm::vec2 A = box2_point[i];
+					glm::vec2 B;
 
-							glm::vec2 temp2 = closestPoints[j];
-							closestPoints[j] = closestPoints[k];
-							closestPoints[k] = temp2;
-						}
+					B = box2_point[(i - 1 + maxSides) % maxSides];
+
+
+					glm::vec2 C = box1_point[j];
+					glm::vec2 D = box1_point[j + 1];
+
+					if (areLinesIntersecting(A, B, C, D))
+					{
+						side = j;
+						break;
 					}
 				}
-
-				glm::vec2 side = slope(closestPoints.back(), closestPoints[closestPoints.size() - 2]);
-				glm::vec2 normal = glm::normalize(glm::vec2(-side.y, side.x));
-
-				closestPoints.clear();
+				if (side != -1)
+				{
+					glm::vec2 slide = slope(box1_point[side], box1_point[(side + 1) % maxSides]);
+					normal = glm::normalize(glm::vec2(-slide.y, slide.x));
+				}				
 
 				glm::vec2 vAP = body2->getVelocity() + body2->getAngularVelocity()*r_AP;
 				glm::vec2 vBP = body1->getVelocity() + body1->getAngularVelocity()*r_BP;
 
-				glm::vec2 vAB = vAP - vBP;
+				glm::vec2 vAB = vBP - vAP;
 
 				if (glm::dot(vAB, normal) > 0)
 				{
@@ -372,11 +359,16 @@ GLfloat PTPhysicsWorld::calculateJ(glm::vec2 colPoint, PTRigidBody* body1, PTRig
 	return J;
 }
 
-GLfloat PTPhysicsWorld::calculatePointDistance(glm::vec2 P1, glm::vec2 P2)
+bool PTPhysicsWorld::areLinesIntersecting(glm::vec2 A, glm::vec2 B, glm::vec2 C, glm::vec2 D)
 {
-	GLfloat A = P1.x - P2.x;
-	GLfloat B = P1.y - P2.y;
-	A = A*A;
-	B = B*B;
-	return glm::sqrt(A+B);
+	glm::vec2 E = slope(A, B);
+	glm::vec2 F = slope(C, D);
+	glm::vec2 P = glm::vec2(-E.y, E.x);
+	GLfloat h = glm::dot((A - C), P) / (glm::dot(F, P));
+
+	if (h < 1.0f && h > 0.0f)
+	{
+		return true;
+	}
+	return false;
 }

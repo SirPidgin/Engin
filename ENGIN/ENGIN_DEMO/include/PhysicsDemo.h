@@ -70,6 +70,7 @@ namespace Engin
 			bool secondTime;
 
 			GLfloat timeToShoot;
+			int maxObjects;
 		};
 
 		class PhysicsComponent : public Component

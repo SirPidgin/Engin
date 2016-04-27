@@ -20,6 +20,7 @@ namespace Engin
 		mouseInput = new HID::MouseInput();
 		gamepadInput = new HID::GamepadInput();
 		eventManager = new Game::EventManager(keyboardInput, mouseInput, gamepadInput);
+		myTimer.start();
 	}
 
 	Engin::~Engin()
@@ -100,7 +101,7 @@ namespace Engin
 		// Variables for deltatime
 		float deltaTime = 0.0f;
 		float newTime = 0.0f;
-		float currentTime = Core::Timer::getGlobalTime() / 1000.0f;
+		float currentTime = myTimer.getLocalTime() / 10000.0f;
 
 		sceneManager.change(scene); // Add scene to scene manager.
 		sceneManager.handleScenes();
@@ -109,7 +110,7 @@ namespace Engin
 		while (running)
 		{
 			// Calculate delta time.
-			newTime = Core::Timer::getGlobalTime() / 1000.0f;
+			newTime = myTimer.getLocalTime() / 10000.0f;
 			deltaTime = std::min(newTime - currentTime, 0.25f);
 			currentTime = newTime;
 

@@ -20,7 +20,8 @@ namespace Engin
 			useGamePad(false),
 			firstTime(true),
 			secondTime(true),
-			timeToShoot(3000)
+			timeToShoot(3000),
+			maxObjects(0)
 		{
 			camera->initCamera(0.0f, 0.0f, static_cast<GLfloat>(engine->getWindow().getWindowWidth()), static_cast<GLfloat>(engine->getWindow().getWindowHeight()), 500.0f, 500.0f, engine->getWindow().getWindowWidth() / 2.0f, engine->getWindow().getWindowHeight() / 2.0f);
 			engine->mouseInput->enableRelativeMousPosition();
@@ -44,18 +45,18 @@ namespace Engin
 			tile2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/green_tile_128.png");
 
 			physicsWorld = new PTPhysicsWorld(64.0f);
-			physicsWorld->setGravity(glm::vec2(0, -10));
+			physicsWorld->setGravity(glm::vec2(0, 0));
 
 			fireTimer = new Core::Timer();
 			fireTimer->start();
 
-			// Pomppulinna =)
-			for (int i = -4; i < 4; i++)
-			{
-				createTile(i * 200.0f, -200.0f, 0.0f);
-				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(glm::vec2(0.0f, 1000.0f));
-				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->rivetFromMidle();
-			}			
+			//// Pomppulinna =)
+			//for (int i = -4; i < 4; i++)
+			//{
+			//	createTile(i * 200.0f, -200.0f, 0.0f);
+			//	//gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(glm::vec2(0.0f, 1000.0f));
+			//	gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->rivetFromMidle();
+			//}
 		}
 
 		PhysicsDemo::~PhysicsDemo()
@@ -81,8 +82,8 @@ namespace Engin
 			}
 
 			cameraMovement(step);
-			fireTile(600.0f, 400.0f, glm::radians(25.0f), glm::vec2(-600.0f, 500.0f));
-			fireTile(-600.0f, 400.0f, glm::radians(45.0f), glm::vec2(400.0f, 500.0f));
+			fireTile(600.0f, 400.0f, glm::radians(0.0f), glm::vec2(-600.0f, 0.0f));
+			fireTile(-600.0f, 423.0f, glm::radians(145.0f), glm::vec2(600.0f, 0.0f));
 			
 			// TODO: make fireTile into class with own timer.
 			if (fireTimer->getLocalTime() > timeToShoot)
@@ -142,7 +143,7 @@ namespace Engin
 
 		void PhysicsDemo::cameraMovement(GLfloat step)
 		{
-			static float zoomByInput = 1.0f;
+			static float zoomByInput = 0.5f;
 			static float moveByInputX = 0.0f;
 			static float moveByInputY = 0.0f;
 			static float moveSpeed = 300.0f;
@@ -191,13 +192,13 @@ namespace Engin
 		// TODO: make fireTile into class with own timer.
 		void PhysicsDemo::fireTile(GLfloat x, GLfloat y, GLfloat r, glm::vec2 veloc)
 		{
-			if (firstTime || secondTime || fireTimer->getLocalTime() > timeToShoot)
+			if (firstTime || secondTime || fireTimer->getLocalTime() > timeToShoot && maxObjects < 2)
 			{
 				createTile(x, y, r);
 				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(veloc);
 				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setRotation(r);
-				float rand = randomGenerator.getRandomFloat(-3.0f, 3.0f);
-				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setAngularVelocity(rand);
+				//float rand = randomGenerator.getRandomFloat(-3.0f, 3.0f);
+				//gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setAngularVelocity(rand);
 				
 				if (!firstTime)
 				{
@@ -205,6 +206,7 @@ namespace Engin
 				}
 
 				firstTime = false;
+				maxObjects++;
 			}
 		}
 

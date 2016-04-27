@@ -78,7 +78,5 @@ private:
 
 	GLfloat calculateJ(glm::vec2 colPoint, PTRigidBody* body1, PTRigidBody* body2, glm::vec2 n, glm::vec2 r_AP, glm::vec2 r_BP, glm::vec2 vAB);
 
-	std::vector<glm::vec2> closestPoints;
-	GLfloat pointDistances[4];
-	GLfloat calculatePointDistance(glm::vec2 P1, glm::vec2 P2);
+	bool areLinesIntersecting(glm::vec2 A, glm::vec2 B, glm::vec2 C, glm::vec2 D);
 };
