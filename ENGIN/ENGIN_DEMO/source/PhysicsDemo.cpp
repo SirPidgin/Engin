@@ -20,7 +20,7 @@ namespace Engin
 			useGamePad(false),
 			firstTime(true),
 			secondTime(true),
-			timeToShoot(3000),
+			timeToShoot(2000),
 			maxObjects(0)
 		{
 			camera->initCamera(0.0f, 0.0f, static_cast<GLfloat>(engine->getWindow().getWindowWidth()), static_cast<GLfloat>(engine->getWindow().getWindowHeight()), 500.0f, 500.0f, engine->getWindow().getWindowWidth() / 2.0f, engine->getWindow().getWindowHeight() / 2.0f);
@@ -50,13 +50,34 @@ namespace Engin
 			fireTimer = new Core::Timer();
 			fireTimer->start();
 
-			//// Pomppulinna =)
-			//for (int i = -4; i < 4; i++)
-			//{
-			//	createTile(i * 200.0f, -200.0f, 0.0f);
-			//	//gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(glm::vec2(0.0f, 1000.0f));
-			//	gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->rivetFromMidle();
-			//}
+			// Pomppulinna =)
+			for (int i = -4; i < 4; i++)
+			{
+				createTile(i * 200.0f, -200.0f, 0.0f);
+				//gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(glm::vec2(0.0f, 1000.0f));
+				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->rivetFromMidle();
+			}
+			// Pomppulinna =)
+			for (int i = -4; i < 4; i++)
+			{
+				createTile(i * 200.0f, 900.0f, 0.0f);
+				//gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(glm::vec2(0.0f, -1000.0f));
+				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->rivetFromMidle();
+			}
+			// Pomppulinna =)
+			for (int i = -5; i < 3; i++)
+			{
+				createTile(800.0f, i*-200.0f, 0.0f);
+				//gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(glm::vec2(-1000.0f, 0.0f));
+				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->rivetFromMidle();
+			}
+			// Pomppulinna =)
+			for (int i = -5; i < 3; i++)
+			{
+				createTile(-1000.0f, i* -200.0f, 0.0f);
+				//gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(glm::vec2(1000.0f, 0.0f));
+				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->rivetFromMidle();
+			}
 		}
 
 		PhysicsDemo::~PhysicsDemo()
@@ -82,8 +103,8 @@ namespace Engin
 			}
 
 			cameraMovement(step);
-			fireTile(300.0f, 400.0f, glm::radians(85.0f), glm::vec2(-100.0f, 0.0f));
-			fireTile(-300.0f, 423.0f, glm::radians(0.0f), glm::vec2(100.0f, 0.0f));
+			fireTile(600.0f, 400.0f, glm::radians(90.0f), glm::vec2(-100.0f, 0.0f));
+			fireTile(-600.0f, 400.0f, glm::radians(25.0f), glm::vec2(100.0f, 0.0f));
 			
 			// TODO: make fireTile into class with own timer.
 			if (fireTimer->getLocalTime() > timeToShoot)
@@ -192,13 +213,13 @@ namespace Engin
 		// TODO: make fireTile into class with own timer.
 		void PhysicsDemo::fireTile(GLfloat x, GLfloat y, GLfloat r, glm::vec2 veloc)
 		{
-			if (firstTime || secondTime || fireTimer->getLocalTime() > timeToShoot && maxObjects < 2)
+			if (firstTime || secondTime || fireTimer->getLocalTime() > timeToShoot && maxObjects < 8)
 			{
 				createTile(x, y, r);
 				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(veloc);
 				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setRotation(r);
-				//float rand = randomGenerator.getRandomFloat(-3.0f, 3.0f);
-				//gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setAngularVelocity(rand);
+				float rand = randomGenerator.getRandomFloat(-3.0f, 3.0f);
+				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setAngularVelocity(rand);
 				
 				if (!firstTime)
 				{

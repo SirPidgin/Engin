@@ -30,7 +30,7 @@ private:
 	glm::vec2 gravity;
 	std::vector<PTRigidBody*> rigidBodies;
 	GLfloat scale;
-	float e;
+	float epsi;
 
 	glm::mat4 T;
 	glm::mat4 R1;
