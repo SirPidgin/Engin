@@ -5,7 +5,6 @@
 #include "Engin\Game\EventManager.h"
 #include "Engin\HID\KeyboardInput.h"
 #include "Engin\HID\MouseInput.h"
-#include "Core\Timer.h"s
 
 namespace Engin
 {
@@ -54,6 +53,5 @@ namespace Engin
 		bool running;
 		float step;
 		float accumulator;
-		Core::Timer myTimer;
 	};
 }

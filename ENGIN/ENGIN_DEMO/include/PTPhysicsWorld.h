@@ -79,4 +79,9 @@ private:
 	GLfloat calculateJ(glm::vec2 colPoint, PTRigidBody* body1, PTRigidBody* body2, glm::vec2 n, glm::vec2 r_AP, glm::vec2 r_BP, glm::vec2 vAB);
 
 	bool areLinesIntersecting(glm::vec2 A, glm::vec2 B, glm::vec2 C, glm::vec2 D);
+
+	GLfloat PerpDot(glm::vec2 PointA, glm::vec2 PointB)                    
+	{ 
+		return (PointA.y*PointB.x) - (PointA.x*PointB.y);
+	}
 };
