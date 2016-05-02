@@ -1,7 +1,7 @@
 #include "PTPhysicsWorld.h"
 #include "glm\gtc\matrix_transform.hpp"
 
-PTPhysicsWorld::PTPhysicsWorld(GLfloat scale) : scale(scale), epsi(1.05)
+PTPhysicsWorld::PTPhysicsWorld(GLfloat scale) : scale(scale), epsi(1.0)
 {
 
 }

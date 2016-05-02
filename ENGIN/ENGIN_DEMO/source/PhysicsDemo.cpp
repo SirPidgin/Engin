@@ -43,8 +43,9 @@ namespace Engin
 
 			tile = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/red_tile_128.png");
 			tile2 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/green_tile_128.png");
+			tile256 = Resources::ResourceManager::getInstance().load<Resources::Texture>("resources/red_tile_128_256.png");
 
-			physicsWorld = new PTPhysicsWorld(64.0f);
+			physicsWorld = new PTPhysicsWorld(1.0f);
 			physicsWorld->setGravity(glm::vec2(0, 0));
 
 			fireTimer = new Core::Timer();
@@ -78,6 +79,12 @@ namespace Engin
 				//gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setVelocity(glm::vec2(1000.0f, 0.0f));
 				gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->rivetFromMidle();
 			}
+
+			createTile256(0.0f, 500.0f, 0.0f);
+			gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->rivetFromMidle();
+			createTile256(150.0f, 300.0f, 0.0f);
+			gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->rivetFromMidle();
+			createTile256(300.0f, 200.0f, 0.0f);
 		}
 
 		PhysicsDemo::~PhysicsDemo()
@@ -103,7 +110,7 @@ namespace Engin
 			}
 
 			cameraMovement(step);
-			fireTile(600.0f, 400.0f, glm::radians(90.0f), glm::vec2(-100.0f, 0.0f));
+			fireTile(600.0f, 400.0f, glm::radians(90.0f), glm::vec2(-200.0f, 0.0f));
 			fireTile(-600.0f, 400.0f, glm::radians(25.0f), glm::vec2(100.0f, 0.0f));
 			
 			// TODO: make fireTile into class with own timer.
@@ -118,16 +125,6 @@ namespace Engin
 			for (int i = 0; i < gameObjects.size(); i++)
 			{
 				gameObjects[i]->update();
-
-				// Paras debug draw ikinä
-				if(gameObjects[i]->accessComponent<PhysicsComponent>()->getBody()->isColliding())
-				{
-					gameObjects[i]->accessComponent<Sprite>()->setCurrentSprite(tile2);
-				}
-				if (!gameObjects[i]->accessComponent<PhysicsComponent>()->getBody()->isColliding())
-				{
-					gameObjects[i]->accessComponent<Sprite>()->setCurrentSprite(tile);
-				}
 			}
 			
 			alpha += step;
@@ -160,6 +157,22 @@ namespace Engin
 			gameObjects.back()->accessComponent<PhysicsComponent>()->setBody(physicsWorld->getBodies().back());
 			gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setMass(1000);
 			gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setHalfSize(glm::vec2(64.0f));			
+		}
+
+		void PhysicsDemo::createTile256(GLfloat x, GLfloat y, GLfloat r)
+		{
+			gameObjects.push_back(new GameObject(&alphaBatch));
+			gameObjects.back()->addComponent<Sprite>();
+			gameObjects.back()->addComponent<Transform>();
+			gameObjects.back()->accessComponent<Sprite>()->setCurrentSprite(tile256);
+
+			gameObjects.back()->accessComponent<Transform>()->setPosition(glm::vec2(x, y));
+			gameObjects.back()->accessComponent<Transform>()->setRotation(r);
+			physicsWorld->addRigidBody(new PTRigidBody(physicsWorld), glm::vec2(x, y));
+			gameObjects.back()->addComponent<PhysicsComponent>();
+			gameObjects.back()->accessComponent<PhysicsComponent>()->setBody(physicsWorld->getBodies().back());
+			gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setMass(1000);
+			gameObjects.back()->accessComponent<PhysicsComponent>()->getBody()->setHalfSize(glm::vec2(64.0f, 128.0f));
 		}
 
 		void PhysicsDemo::cameraMovement(GLfloat step)

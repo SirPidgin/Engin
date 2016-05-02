@@ -34,6 +34,7 @@ namespace Engin
 			void draw();
 
 			void createTile(GLfloat x, GLfloat y, GLfloat r);
+			void createTile256(GLfloat x, GLfloat y, GLfloat r);
 			void cameraMovement(GLfloat step);
 
 			void fireTile(GLfloat x, GLfloat y, GLfloat r, glm::vec2 veloc);
@@ -56,6 +57,7 @@ namespace Engin
 
 			Resources::Texture* tile;
 			Resources::Texture* tile2;
+			Resources::Texture* tile256;
 			GameObject* gameObject;
 
 			std::vector<GameObject*> gameObjects;
