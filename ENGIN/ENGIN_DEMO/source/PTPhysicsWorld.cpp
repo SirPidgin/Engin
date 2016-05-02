@@ -358,6 +358,7 @@ GLfloat PTPhysicsWorld::calculateJ(glm::vec2 colPoint, PTRigidBody* body1, PTRig
 
 bool PTPhysicsWorld::areLinesIntersecting(glm::vec2 A, glm::vec2 B, glm::vec2 C, glm::vec2 D)
 {
+	//http://www.cplusplus.com/forum/beginner/49408/
 	glm::vec2 a = glm::vec2(A - B);
 	glm::vec2 b = glm::vec2(C - D);
 
