@@ -1,7 +1,7 @@
 #include "PTPhysicsWorld.h"
 #include "glm\gtc\matrix_transform.hpp"
 
-PTPhysicsWorld::PTPhysicsWorld(GLfloat scale) : scale(scale), epsi(1.0)
+PTPhysicsWorld::PTPhysicsWorld(GLfloat scale) : scale(scale), epsi(0.8)
 {
 
 }
@@ -192,7 +192,6 @@ bool PTPhysicsWorld::isCollidingSAT(PTRigidBody* body1, PTRigidBody* body2)
 
 void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_point[], PTRigidBody* body1, PTRigidBody* body2)
 {
-	glm::vec2 normal;
 	int maxSides = 4;
 
 	bool hasHit = false;
@@ -201,65 +200,7 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 	{
 		if (pointInside(box1_point[i], box2_point))
 		{
-			//box1 point collidies with box2
-
-			//TODO tarkista rAP ja rBP
-			glm::vec2 rAP = slope(body1->getPosition(), box1_point[i]);
-			glm::vec2 r_AP = glm::vec2(-rAP.y, rAP.x);
-
-			glm::vec2 rBP = slope(body2->getPosition(), box1_point[i]);
-			glm::vec2 r_BP = glm::vec2(-rBP.y, rBP.x);
-
-			// Calculate normal TODO fix
-			int side = -1;
-			for (int j = maxSides - 1; j >= 0; --j)
-			{
-				glm::vec2 A = box1_point[i];
-				glm::vec2 B = box1_point[(i + 1) % maxSides];
-
-				glm::vec2 C = box2_point[j];
-				glm::vec2 D = box2_point[(j - 1 + maxSides) % maxSides];
-
-				if (areLinesIntersecting(A, B, C, D))
-				{
-					side = j;
-					break;
-				}
-			}
-			if (side != -1)
-			{
-				glm::vec2 slide = slope(box2_point[(side - 1 + maxSides) % maxSides], box2_point[side]);
-				normal = glm::normalize(glm::vec2(-slide.y, slide.x));
-			}
-
-			glm::vec2 vAP = body1->getVelocity() + body1->getAngularVelocity()*r_AP;
-			glm::vec2 vBP = body2->getVelocity() + body2->getAngularVelocity()*r_BP;
-
-			glm::vec2 vAB = vAP - vBP;
-
-			if (glm::dot(vAB, normal) > 0)
-			{
-				continue;
-			}
-
-			GLfloat J = calculateJ(box1_point[i], body1, body2, normal, r_AP, r_BP, vAB);
-
-			glm::vec2 newVeloc = body1->getVelocity() + (J / body1->getMass())*normal;
-			body1->setVelocity(newVeloc);
-
-			GLfloat newAngularVelocity = body1->getAngularVelocity() + (glm::dot(r_AP, J*normal) / body1->getI());
-			body1->setAngularVelocity(newAngularVelocity);
-
-			glm::vec2 newVeloc2 = body2->getVelocity() + (-J / body2->getMass())*normal;
-			body2->setVelocity(newVeloc2);
-
-			GLfloat newAngularVelocity2 = body2->getAngularVelocity() + (glm::dot(r_BP, -J*normal) / body2->getI());
-			body2->setAngularVelocity(newAngularVelocity2);
-
-			body1->setCollisionOn();
-			body2->setCollisionOn();
-
-			hasHit = true;
+			hasHit = wasHitCalc(box1_point, i, box2_point, body1, body2, maxSides);
 		}
 	}
 
@@ -269,63 +210,7 @@ void PTPhysicsWorld::collisionResolution(glm::vec2 box1_point[], glm::vec2 box2_
 		{
 			if (pointInside(box2_point[i], box1_point))
 			{
-				//box2 point collidies with box1
-
-				//TODO tarkista rAP ja rBP
-				glm::vec2 rAP = slope(body2->getPosition(), box2_point[i]);
-				glm::vec2 r_AP = glm::vec2(-rAP.y, rAP.x);
-
-				glm::vec2 rBP = slope(body1->getPosition(), box2_point[i]);
-				glm::vec2 r_BP = glm::vec2(-rBP.y, rBP.x);
-
-				// Calculate normal TODO fix
-				int side = -1;
-				for (int j = maxSides-1; j >= 0; --j)
-				{
-					glm::vec2 A = box2_point[i];
-					glm::vec2 B = box2_point[(i + 1) % maxSides];
-
-					glm::vec2 C = box1_point[j];
-					glm::vec2 D = box1_point[(j - 1 + maxSides) % maxSides];
-
-					if (areLinesIntersecting(A, B, C, D))
-					{
-						side = j;
-						break;
-					}
-				}
-				if (side != -1)
-				{
-					glm::vec2 slide = slope(box1_point[(side - 1 + maxSides) % maxSides], box1_point[side]);
-					normal = glm::normalize(glm::vec2(-slide.y, slide.x));
-				}	
-
-				glm::vec2 vAP = body2->getVelocity() + body2->getAngularVelocity()*r_AP;
-				glm::vec2 vBP = body1->getVelocity() + body1->getAngularVelocity()*r_BP;
-
-				glm::vec2 vAB = vAP - vBP;
-
-				if (glm::dot(vAB, normal) > 0)
-				{
-					continue;
-				}
-
-				GLfloat J = calculateJ(box2_point[i], body2, body1, normal, r_AP, r_BP, vAB);
-
-				glm::vec2 newVeloc = body1->getVelocity() + (-J / body1->getMass())*normal;
-				body1->setVelocity(newVeloc);
-
-				GLfloat newAngularVelocity = body1->getAngularVelocity() + (glm::dot(r_BP, -J*normal) / body1->getI());
-				body1->setAngularVelocity(newAngularVelocity);
-
-				glm::vec2 newVeloc2 = body2->getVelocity() + (J / body2->getMass())*normal;
-				body2->setVelocity(newVeloc2);
-
-				GLfloat newAngularVelocity2 = body2->getAngularVelocity() + (glm::dot(r_AP, J*normal) / body2->getI());
-				body2->setAngularVelocity(newAngularVelocity2);
-
-				body1->setCollisionOn();
-				body2->setCollisionOn();
+				wasHitCalc(box2_point, i, box1_point, body2, body1, maxSides);
 			}
 		}
 	}	
@@ -384,6 +269,69 @@ bool PTPhysicsWorld::areLinesIntersecting(glm::vec2 A, glm::vec2 B, glm::vec2 C,
 		if (aa > f)     return false;
 		if (bb > f)     return false;
 	}
+
+	return true;
+}
+
+bool PTPhysicsWorld::wasHitCalc(glm::vec2 box1_point[], int index, glm::vec2 box2_point[], PTRigidBody* body1, PTRigidBody* body2, int maxSides)
+{
+	//box1 point collidies with box2
+
+	//TODO tarkista rAP ja rBP
+	glm::vec2 rAP = slope(body1->getPosition(), box1_point[index]);
+	glm::vec2 r_AP = glm::vec2(-rAP.y, rAP.x);
+
+	glm::vec2 rBP = slope(body2->getPosition(), box1_point[index]);
+	glm::vec2 r_BP = glm::vec2(-rBP.y, rBP.x);
+
+	// Calculate normal TODO fix
+	int side = -1;
+	for (int j = maxSides - 1; j >= 0; --j)
+	{
+		glm::vec2 A = box1_point[index];
+		glm::vec2 B = box1_point[(index + 1) % maxSides];
+
+		glm::vec2 C = box2_point[j];
+		glm::vec2 D = box2_point[(j - 1 + maxSides) % maxSides];
+
+		if (areLinesIntersecting(A, B, C, D))
+		{
+			side = j;
+			break;
+		}
+	}
+	if (side != -1)
+	{
+		glm::vec2 slide = slope(box2_point[(side - 1 + maxSides) % maxSides], box2_point[side]);
+		colNormal = glm::normalize(glm::vec2(-slide.y, slide.x));
+	}
+
+	glm::vec2 vAP = body1->getVelocity() + body1->getAngularVelocity()*r_AP;
+	glm::vec2 vBP = body2->getVelocity() + body2->getAngularVelocity()*r_BP;
+
+	glm::vec2 vAB = vAP - vBP;
+
+	if (glm::dot(vAB, colNormal) > 0)
+	{
+		return false;
+	}
+
+	GLfloat J = calculateJ(box1_point[index], body1, body2, colNormal, r_AP, r_BP, vAB);
+
+	glm::vec2 newVeloc = body1->getVelocity() + (J / body1->getMass())*colNormal;
+	body1->setVelocity(newVeloc);
+
+	GLfloat newAngularVelocity = body1->getAngularVelocity() + (glm::dot(r_AP, J*colNormal) / body1->getI());
+	body1->setAngularVelocity(newAngularVelocity);
+
+	glm::vec2 newVeloc2 = body2->getVelocity() + (-J / body2->getMass())*colNormal;
+	body2->setVelocity(newVeloc2);
+
+	GLfloat newAngularVelocity2 = body2->getAngularVelocity() + (glm::dot(r_BP, -J*colNormal) / body2->getI());
+	body2->setAngularVelocity(newAngularVelocity2);
+
+	body1->setCollisionOn();
+	body2->setCollisionOn();
 
 	return true;
 }

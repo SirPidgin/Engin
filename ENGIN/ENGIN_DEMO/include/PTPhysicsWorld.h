@@ -84,4 +84,8 @@ private:
 	{ 
 		return (PointA.y*PointB.x) - (PointA.x*PointB.y);
 	}
+
+	glm::vec2 colNormal;
+
+	bool wasHitCalc(glm::vec2 box1_point[], int index, glm::vec2 box2_point[], PTRigidBody* body1, PTRigidBody* body2, int maxSides);
 };
